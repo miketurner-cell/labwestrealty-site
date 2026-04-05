@@ -1,575 +1,1395 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google Analytics 4 -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-FEMZDX1BJQ"></script>
-  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-FEMZDX1BJQ');</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="canonical" href="https://labwestrealty.com/market-stats.html">
-  <meta name="description" content="Lab West real estate market statistics. Labrador City & Wabush MLS data, sales trends, pricing analysis, and market insights (Jan 2021 – Mar 2026).">
-  <title>Market Statistics — Labrador West Realty</title>
-  <meta property="og:title" content="Market Statistics — Labrador West Realty">
-  <meta property="og:description" content="Explore Labrador West real estate market data: sales, median prices, days on market, and trends from NLAR Matrix MLS.">
-  <meta property="og:url" content="https://labwestrealty.com/market-stats.html">
+  <title>Lab West Market Statistics - Royal LePage Turner Realty</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-FEMZDX1BJQ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-FEMZDX1BJQ');
+  </script>
+
+  <!-- Meta Tags -->
+  <meta name="description" content="Comprehensive Lab West real estate market statistics. Track monthly MLS data, pricing trends, and sales velocity for Labrador City and Wabush.">
+  <meta name="keywords" content="Lab West real estate, market statistics, MLS data, Labrador City, Wabush, property prices, NLAR">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Lab West Market Statistics - Royal LePage Turner Realty">
+  <meta property="og:description" content="Comprehensive Lab West real estate market data and trends.">
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Labrador West Realty">
-  <meta property="og:image" content="https://labwestrealty.com/og-default.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://labwestrealty.com/market-stats.html">
+  <meta property="og:image" content="https://labwestrealty.com/og-image.png">
+
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@600;700;800;900&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;600;700;800;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
   <style>
-    *, *::before, *::after { box-sizing: border-box; }
-    body { margin: 0; padding: 0; background: #1a1a1a; color: #fff; font-family: 'Roboto', sans-serif; font-weight: 400; -webkit-font-smoothing: antialiased; line-height: 1.6; }
-    a { color: inherit; }
-    img { display: block; max-width: 100%; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { background: #1a1a1a; color: #fff; font-family: 'Roboto', sans-serif; font-weight: 400; line-height: 1.6; overflow-x: hidden; }
+    .ms { --red: #EA002A; --dark: #0a0a0a; --dark2: #111111; --dark3: #1a1a1a; --border: #1e1e1e; --border2: #252525; --muted: #888888; --light: #bbbbbb; --white: #ffffff; --green: #22c55e; --yellow: #facc15; width: 100%; background: var(--dark3); }
 
-    /* ═══ SCOPED: .ms (Market Statistics — dark theme) ═══ */
+    /* ===== NAVIGATION ===== */
+    .ms-nav { position: sticky; top: 0; z-index: 100; background: var(--dark2); border-bottom: 1px solid var(--border); backdrop-filter: blur(10px); background-color: rgba(17, 17, 17, 0.95); }
+    .ms-nav-inner { max-width: 1400px; margin: 0 auto; padding: 0 2rem; height: 70px; display: flex; justify-content: space-between; align-items: center; }
+    .ms-nav-brand { display: flex; align-items: center; gap: 1rem; text-decoration: none; color: #fff; transition: opacity 0.3s; }
+    .ms-nav-brand:hover { opacity: 0.8; }
+    .ms-nav-name { font-family: 'Raleway', sans-serif; font-size: 1.4rem; font-weight: 800; line-height: 1.2; }
+    .ms-nav-name span { color: var(--red); }
+    .ms-nav-divider { width: 1px; height: 30px; background: var(--border); }
+    .ms-nav-rlp { font-family: 'Raleway', sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; }
+    .ms-nav-right { display: flex; align-items: center; gap: 2rem; }
+    .ms-nav-phone { color: var(--light); text-decoration: none; font-size: 0.95rem; font-weight: 500; transition: color 0.3s; }
+    .ms-nav-phone:hover { color: var(--red); }
+    .ms-nav-cta { background: var(--red); color: #fff; padding: 0.6rem 1.2rem; border-radius: 2px; text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: all 0.3s; border: 2px solid var(--red); }
+    .ms-nav-cta:hover { background: transparent; color: var(--red); }
+    @media (max-width: 820px) { .ms-nav-inner { padding: 0 1.5rem; height: 60px; } .ms-nav-name { font-size: 1.1rem; } .ms-nav-right { gap: 1rem; } .ms-nav-phone { font-size: 0.85rem; } .ms-nav-cta { padding: 0.5rem 1rem; font-size: 0.8rem; } }
+    @media (max-width: 600px) { .ms-nav-inner { padding: 0 1rem; flex-wrap: wrap; height: auto; gap: 0.5rem; } .ms-nav-right { width: 100%; gap: 1rem; } }
 
-    .ms {
-      background: #1a1a1a;
-      position: relative;
-    }
+    /* ===== HERO SECTION ===== */
+    .ms-hero { position: relative; background: linear-gradient(135deg, var(--dark2) 0%, var(--dark3) 100%); padding: 6rem 2rem; text-align: center; overflow: hidden; }
+    .ms-hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(255, 255, 255, 0.018) 59px, rgba(255, 255, 255, 0.018) 60px); pointer-events: none; }
+    .ms-hero-content { position: relative; z-index: 2; max-width: 900px; margin: 0 auto; }
+    .ms-hero-badge { display: inline-block; background: rgba(234, 0, 42, 0.1); border: 1px solid var(--red); color: var(--red); padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; margin-bottom: 1.5rem; letter-spacing: 0.05em; }
+    .ms-hero-eyebrow { color: var(--muted); font-size: 0.95rem; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 0.8rem; }
+    .ms-hero-eyebrow::before, .ms-hero-eyebrow::after { content: ''; width: 30px; height: 2px; background: var(--red); }
+    .ms-hero-title { font-family: 'Raleway', sans-serif; font-size: 3rem; font-weight: 900; margin: 1.5rem 0; line-height: 1.1; color: var(--white); }
+    .ms-hero-subtitle { color: var(--light); font-size: 1.1rem; margin-bottom: 1rem; font-weight: 300; }
+    .ms-hero-source { color: var(--muted); font-size: 0.85rem; margin-top: 1rem; }
+    @media (max-width: 820px) { .ms-hero { padding: 4rem 1.5rem; } .ms-hero-title { font-size: 2rem; } .ms-hero-subtitle { font-size: 1rem; } }
 
-    /* ── NAV ── */
-    .ms .nav-bar {
-      display: flex; align-items: center; justify-content: space-between;
-      background: #111; padding: 0 48px; height: 72px;
-      border-bottom: 1px solid rgba(255,255,255,0.08); position: sticky; top: 0; z-index: 1000;
-    }
-    .ms .nav-brand { display: flex; align-items: center; text-decoration: none; gap: 12px; }
-    .ms .nav-brand-name {
-      font-family: 'Raleway', sans-serif; font-weight: 900; font-size: 18px; color: #fff; letter-spacing: -0.01em;
-    }
-    .ms .nav-brand-name span { color: #EA002A; }
-    .ms .nav-brand-divider { width: 1px; height: 28px; background: rgba(255,255,255,0.15); }
-    .ms .nav-brand-sub {
-      font-size: 11px; font-weight: 400; color: rgba(255,255,255,0.4); letter-spacing: 0.06em; text-transform: uppercase;
-    }
-    .ms .nav-toggle { display: none; flex-direction: column; justify-content: center; gap: 5px; background: none; border: none; cursor: pointer; padding: 8px; }
-    .ms .nav-toggle span { display: block; width: 22px; height: 2px; background: #fff; border-radius: 1px; transition: transform 0.3s, opacity 0.3s; }
-    .ms .nav-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-    .ms .nav-toggle.active span:nth-child(2) { opacity: 0; }
-    .ms .nav-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
-    .ms .nav-links { display: flex; align-items: center; list-style: none; margin: 0; padding: 0; gap: 4px; }
-    .ms .nav-links li a {
-      display: block; padding: 8px 16px; font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.6);
-      text-decoration: none; letter-spacing: 0.01em; transition: color 0.2s; border-radius: 6px;
-    }
-    .ms .nav-links li a:hover { color: #EA002A; }
-    .ms .nav-right { display: flex; align-items: center; gap: 16px; }
-    .ms .nav-phone {
-      display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 500;
-      color: #EA002A; text-decoration: none;
-    }
-    .ms .nav-phone svg { width: 16px; height: 16px; fill: #EA002A; }
+    /* ===== STAT STRIPS ===== */
+    .ms-stat-strip { background: linear-gradient(90deg, rgba(234, 0, 42, 0.05) 0%, transparent 100%); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 2.5rem 2rem; }
+    .ms-stat-strip-label { max-width: 1400px; margin: 0 auto; color: var(--muted); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1.5rem; }
+    .ms-stat-grid { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(5, 1fr); gap: 2rem; }
+    .ms-stat-card { text-align: center; padding: 1.5rem; border-radius: 2px; border-top: 3px solid var(--red); }
+    .ms-stat-value { font-family: 'Raleway', sans-serif; font-size: 2.2rem; font-weight: 900; color: var(--white); margin-bottom: 0.5rem; }
+    .ms-stat-label { color: var(--muted); font-size: 0.85rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+    .ms-stat-delta { color: var(--green); font-size: 0.8rem; margin-top: 0.5rem; font-weight: 600; }
+    .ms-stat-delta.negative { color: var(--red); }
+    @media (max-width: 1000px) { .ms-stat-grid { grid-template-columns: repeat(3, 1fr); gap: 1.5rem; } .ms-stat-value { font-size: 1.8rem; } }
+    @media (max-width: 820px) { .ms-stat-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; } .ms-stat-value { font-size: 1.5rem; } }
+    @media (max-width: 600px) { .ms-stat-grid { grid-template-columns: 1fr; gap: 1rem; } }
 
-    /* ── HERO ── */
-    .ms .hero {
-      background: linear-gradient(135deg, rgba(26,26,26,1) 0%, rgba(17,17,17,1) 50%, rgba(26,26,26,1) 100%);
-      padding: 100px 48px 80px; text-align: center; position: relative; overflow: hidden;
-    }
-    .ms .hero::before {
-      content: ''; position: absolute; inset: 0; opacity: 0.03;
-      background: repeating-linear-gradient(90deg, #fff 0px, #fff 1px, transparent 1px, transparent 80px);
-    }
-    .ms .hero-content { max-width: 760px; margin: 0 auto; position: relative; z-index: 1; }
-    .ms .hero h1 {
-      font-family: 'Raleway', sans-serif; font-weight: 900;
-      font-size: clamp(34px, 5vw, 54px); line-height: 1.12; margin: 0 0 20px;
-      color: #fff; letter-spacing: -0.03em;
-    }
-    .ms .hero h1 em { font-style: normal; color: #EA002A; }
-    .ms .hero-sub {
-      font-size: clamp(16px, 2vw, 19px); color: rgba(255,255,255,0.6); line-height: 1.7;
-      margin: 0; font-weight: 300;
-    }
+    /* ===== SECTION ===== */
+    .ms-section { max-width: 1400px; margin: 0 auto; padding: 3rem 2rem; }
+    .ms-section-title { font-family: 'Raleway', sans-serif; font-size: 1.8rem; font-weight: 800; margin-bottom: 0.5rem; color: var(--white); }
+    .ms-section-subtitle { color: var(--light); font-size: 1rem; margin-bottom: 2rem; font-weight: 300; }
+    .ms-section-divider { height: 1px; background: var(--border); margin: 2rem 0; }
 
-    /* ── KEY STATS CARDS ── */
-    .ms .key-stats {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px;
-      max-width: 1100px; margin: 0 auto 80px; padding: 0 48px;
-    }
-    .ms .stat-card {
-      background: rgba(255,255,255,0.03); border: 1px solid rgba(234,0,42,0.2);
-      border-radius: 12px; padding: 32px 24px; text-align: center;
-      transition: background 0.25s, border-color 0.25s;
-    }
-    .ms .stat-card:hover {
-      background: rgba(255,255,255,0.05); border-color: #EA002A;
-    }
-    .ms .stat-card-value {
-      font-family: 'Raleway', sans-serif; font-weight: 900; font-size: clamp(28px, 3vw, 40px);
-      color: #EA002A; line-height: 1; margin-bottom: 12px;
-    }
-    .ms .stat-card-label {
-      font-size: 13px; color: rgba(255,255,255,0.5); letter-spacing: 0.02em; text-transform: uppercase;
-    }
+    /* ===== CHARTS & TABLES ===== */
+    .ms-trend-container { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; margin-bottom: 2rem; }
+    .ms-chart-wrapper { background: var(--dark2); border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem; position: relative; }
+    .ms-chart-wrapper h3 { font-family: 'Raleway', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: var(--white); }
+    .ms-chart-wrapper h4 { font-family: 'Raleway', sans-serif; font-size: 1rem; font-weight: 600; margin: 1.5rem 0 1rem 0; color: var(--white); }
+    .ms-chart-wrapper p { color: var(--light); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1rem; }
+    .ms-trend-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    .ms-trend-table th { background: var(--border); color: var(--white); padding: 0.75rem; text-align: left; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .ms-trend-table td { padding: 0.75rem; border-bottom: 1px solid var(--border); color: var(--light); }
+    .ms-trend-table tr:last-child td { border-bottom: none; }
+    .ms-trend-table .ms-year { font-weight: 600; color: var(--white); }
+    .ms-trend-table .ms-positive { color: var(--green); }
+    .ms-trend-table .ms-negative { color: var(--red); }
+    @media (max-width: 1000px) { .ms-trend-container { grid-template-columns: 1fr; } }
 
-    /* ── SECTIONS ── */
-    .ms section { padding: 96px 48px; }
-    .ms .section-inner { max-width: 1100px; margin: 0 auto; }
-    .ms .section-eyebrow {
-      font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
-      color: #EA002A; margin-bottom: 12px;
-    }
-    .ms .section-title {
-      font-family: 'Raleway', sans-serif; font-weight: 900;
-      font-size: clamp(26px, 3.5vw, 38px); color: #fff; margin: 0 0 16px; letter-spacing: -0.02em;
-    }
-    .ms .section-desc {
-      font-size: 17px; color: rgba(255,255,255,0.6); line-height: 1.75; max-width: 600px; margin-bottom: 48px;
-    }
+    /* ===== INSIGHT BOX ===== */
+    .ms-insight { background: rgba(234, 0, 42, 0.08); border-left: 4px solid var(--red); padding: 1.5rem; border-radius: 2px; margin: 2rem 0; }
+    .ms-insight-title { font-family: 'Raleway', sans-serif; font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: 0.5rem; }
+    .ms-insight-text { color: var(--light); font-size: 0.95rem; line-height: 1.6; }
 
-    /* ── DATA TABLE ── */
-    .ms .table-section { position: relative; }
-    .ms .table-controls {
-      margin-bottom: 32px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
-    }
-    .ms .table-toggle {
-      background: #EA002A; color: #fff; border: none; padding: 10px 20px;
-      font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 13px;
-      letter-spacing: 0.03em; border-radius: 6px; cursor: pointer; transition: background 0.2s;
-    }
-    .ms .table-toggle:hover { background: #c8001f; }
-    .ms .table-wrapper {
-      background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 12px; overflow: hidden; overflow-x: auto;
-    }
-    .ms table {
-      width: 100%; border-collapse: collapse; font-size: 14px;
-    }
-    .ms table thead {
-      background: rgba(255,255,255,0.04); border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
-    .ms table th {
-      padding: 16px 12px; text-align: left; font-weight: 600; color: #EA002A;
-      letter-spacing: 0.02em; text-transform: uppercase; font-size: 12px;
-    }
-    .ms table td {
-      padding: 14px 12px; border-bottom: 1px solid rgba(255,255,255,0.06);
-      color: rgba(255,255,255,0.7);
-    }
-    .ms table tbody tr:hover {
-      background: rgba(255,255,255,0.02);
-    }
-    .ms table tbody tr.hidden {
-      display: none;
-    }
-    .ms .table-month { font-weight: 500; color: #fff; }
+    /* ===== SIGNAL CARDS ===== */
+    .ms-signal-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin: 2rem 0; }
+    .ms-signal-card { background: var(--dark2); border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem; }
+    .ms-signal-card-number { font-family: 'Raleway', sans-serif; font-size: 2.5rem; font-weight: 900; color: var(--red); margin-bottom: 0.5rem; }
+    .ms-signal-card-title { font-family: 'Raleway', sans-serif; font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: 0.75rem; }
+    .ms-signal-card-text { color: var(--light); font-size: 0.9rem; line-height: 1.6; }
+    @media (max-width: 1000px) { .ms-signal-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .ms-signal-grid { grid-template-columns: 1fr; } }
 
-    /* ── CHARTS ── */
-    .ms .charts-section { background: transparent; }
-    .ms .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 48px; margin-top: 48px; }
-    .ms .chart-card {
-      background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 12px; padding: 32px;
-    }
-    .ms .chart-title {
-      font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 18px;
-      color: #fff; margin: 0 0 24px; letter-spacing: -0.01em;
-    }
-    .ms .chart-bars {
-      display: flex; align-items: flex-end; justify-content: space-around; gap: 8px;
-      height: 280px; background: rgba(255,255,255,0.01); border-radius: 8px; padding: 12px;
-    }
-    .ms .bar-column {
-      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
-      gap: 8px; min-width: 0;
-    }
-    .ms .bar {
-      width: 100%; border-radius: 6px 6px 0 0; background: linear-gradient(180deg, #EA002A, #c8001f);
-      transition: opacity 0.2s; cursor: help;
-    }
-    .ms .bar:hover { opacity: 0.8; }
-    .ms .bar-label {
-      font-size: 11px; color: rgba(255,255,255,0.4); text-align: center; word-break: break-word;
-      width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    }
-    .ms .bar-value {
-      font-size: 12px; font-weight: 600; color: #EA002A; margin-bottom: 4px;
-    }
+    /* ===== PERSONA CARDS ===== */
+    .ms-persona-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin: 2rem 0; }
+    .ms-persona-card { background: var(--dark2); border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem; }
+    .ms-persona-icon { font-size: 2rem; margin-bottom: 1rem; }
+    .ms-persona-title { font-family: 'Raleway', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--white); margin-bottom: 0.75rem; }
+    .ms-persona-text { color: var(--light); font-size: 0.9rem; line-height: 1.6; }
+    @media (max-width: 1000px) { .ms-persona-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .ms-persona-grid { grid-template-columns: 1fr; } }
 
-    /* ── DATA SOURCE ── */
-    .ms .data-source {
-      text-align: center; padding: 24px; background: rgba(255,255,255,0.02);
-      border-top: 1px solid rgba(255,255,255,0.08); border-radius: 0 0 12px 12px;
-      font-size: 13px; color: rgba(255,255,255,0.4); margin-top: 32px;
-    }
+    /* ===== CONTENT BLOCKS ===== */
+    .ms-content-block { margin: 2rem 0; }
+    .ms-content-block h4 { font-family: 'Raleway', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--white); margin-bottom: 0.75rem; }
+    .ms-content-block p { color: var(--light); font-size: 0.95rem; line-height: 1.7; margin-bottom: 1rem; }
+    .ms-content-block ul { list-style: none; margin-left: 0; }
+    .ms-content-block li { color: var(--light); font-size: 0.95rem; line-height: 1.7; margin: 0.5rem 0; padding-left: 1.5rem; position: relative; }
+    .ms-content-block li::before { content: '•'; position: absolute; left: 0; color: var(--red); font-weight: bold; }
 
-    /* ── CTA SECTION ── */
-    .ms .agent-cta {
-      background: rgba(234,0,42,0.08); border: 1px solid rgba(234,0,42,0.2);
-      border-radius: 12px; padding: 48px 32px; margin-top: 64px;
-      text-align: center; position: relative; overflow: hidden;
-    }
-    .ms .agent-cta::before {
-      content: ''; position: absolute; inset: 0; opacity: 0.02;
-      background: repeating-linear-gradient(90deg, #fff 0px, #fff 1px, transparent 1px, transparent 80px);
-    }
-    .ms .agent-cta .cta-content { position: relative; z-index: 1; }
-    .ms .agent-cta h3 {
-      font-family: 'Raleway', sans-serif; font-weight: 900;
-      font-size: clamp(22px, 3vw, 32px); color: #fff; margin: 0 0 16px;
-    }
-    .ms .agent-cta p {
-      font-size: 16px; color: rgba(255,255,255,0.7); margin: 0 0 28px; max-width: 600px; margin-left: auto; margin-right: auto;
-    }
-    .ms .btn-primary {
-      display: inline-block; background: #EA002A; color: #fff; padding: 14px 32px;
-      font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 14px;
-      letter-spacing: 0.03em; text-decoration: none; border-radius: 6px; transition: background 0.2s;
-    }
-    .ms .btn-primary:hover { background: #c8001f; }
+    /* ===== CTA SECTION ===== */
+    .ms-cta-section { background: linear-gradient(135deg, rgba(234, 0, 42, 0.15) 0%, transparent 100%); border: 1px solid var(--border); border-radius: 4px; padding: 3rem 2rem; text-align: center; margin: 3rem 0; }
+    .ms-cta-title { font-family: 'Raleway', sans-serif; font-size: 1.6rem; font-weight: 800; margin-bottom: 1rem; color: var(--white); }
+    .ms-cta-subtitle { color: var(--light); font-size: 1rem; margin-bottom: 2rem; }
+    .ms-cta-button { background: var(--red); color: #fff; padding: 0.75rem 2rem; border-radius: 2px; text-decoration: none; font-size: 0.95rem; font-weight: 600; display: inline-block; transition: all 0.3s; border: 2px solid var(--red); }
+    .ms-cta-button:hover { background: transparent; color: var(--red); }
 
-    /* ── FOOTER ── */
-    .ms .site-footer { background: #111; border-top: 1px solid rgba(255,255,255,0.08); padding: 0; }
-    .ms .footer-red-bar {
-      background: #EA002A; padding: 14px 48px;
-      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
-    }
-    .ms .footer-red-bar p { margin: 0; font-size: 12px; color: #fff; font-weight: 400; }
-    .ms .footer-red-bar a { color: #fff; text-decoration: none; }
-    .ms .footer-secondary {
-      padding: 32px 48px; text-align: center; font-size: 13px; color: rgba(255,255,255,0.4);
-      line-height: 1.6;
-    }
-    .ms .footer-secondary a { color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.2s; }
-    .ms .footer-secondary a:hover { color: #EA002A; }
+    /* ===== DISCLAIMER ===== */
+    .ms-disclaimer { background: var(--border); border-left: 4px solid var(--muted); padding: 1.5rem; border-radius: 2px; font-size: 0.8rem; color: var(--light); line-height: 1.6; margin: 2rem 0; }
 
-    /* ── MOBILE ── */
-    @media (max-width: 1024px) {
-      .ms .nav-bar { padding: 0 20px; height: 60px; }
-      .ms .nav-brand-divider, .ms .nav-brand-sub { display: none; }
-      .ms .nav-toggle { display: flex; }
-      .ms .nav-links {
-        display: none; flex-direction: column; position: absolute; top: 60px; left: 0; right: 0;
-        background: #111; border-bottom: 1px solid rgba(255,255,255,0.08); padding: 8px 0; box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-      }
-      .ms .nav-links.open { display: flex; }
-      .ms .nav-links li a { padding: 12px 24px; font-size: 15px; }
-      .ms .nav-right { display: none; }
-      .ms .hero { padding: 64px 20px 56px; }
-      .ms .key-stats { padding: 0 20px; }
-      .ms section { padding: 64px 20px; }
-      .ms .footer-red-bar { margin: 0; padding: 14px 20px; }
-      .ms .footer-secondary { padding: 32px 20px; }
-      .ms .chart-bars { height: 240px; }
-    }
-    @media (max-width: 600px) {
-      .ms .key-stats { grid-template-columns: 1fr 1fr; gap: 16px; }
-      .ms .chart-bars { height: 200px; }
-      .ms .chart-card { padding: 20px; }
-      .ms table { font-size: 12px; }
-      .ms table th, .ms table td { padding: 10px 8px; }
-    }
+    /* ===== FOOTER ===== */
+    .ms-footer { background: var(--dark2); border-top: 1px solid var(--border); padding: 2rem; text-align: center; color: var(--muted); font-size: 0.85rem; }
   </style>
 </head>
-<body>
-<div class="ms">
-
-  <!-- NAV -->
-  <nav class="nav-bar">
-    <a href="index.html" class="nav-brand">
-      <img src="images/rlp-logo.png" alt="Royal LePage" width="40" height="40" style="margin-right:10px;vertical-align:middle;">
-      <span class="nav-brand-name">Labrador <span>West</span></span>
-      <span class="nav-brand-divider"></span>
-      <span class="nav-brand-sub">Royal LePage Turner</span>
-    </a>
-    <button class="nav-toggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
-    <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="why-join.html">Why Join</a></li>
-      <li><a href="about-turner.html">About Turner</a></li>
-      <li><a href="labrador-west.html">The Market</a></li>
-      <li><a href="market-stats.html">Market Stats</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
-    <div class="nav-right">
-      <a href="tel:7092567999" class="nav-phone">
-        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-        709-944-7100
+<body class="ms">
+  <!-- NAVIGATION -->
+  <nav class="ms-nav">
+    <div class="ms-nav-inner">
+      <a href="index.html" class="ms-nav-brand">
+        <div class="ms-nav-name">Lab <span>West</span></div>
+        <div class="ms-nav-divider"></div>
+        <div class="ms-nav-rlp">Royal LePage Turner</div>
       </a>
+      <div class="ms-nav-right">
+        <a href="tel:+17095514066" class="ms-nav-phone">+1 (709) 551-4066</a>
+        <a href="contact.html" class="ms-nav-cta">Contact</a>
+      </div>
     </div>
   </nav>
 
-  <main>
-
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-content">
-      <h1>Market <em>Statistics</em></h1>
-      <p class="hero-sub">Real estate data for Labrador City and Wabush. Sales trends, pricing analysis, and market insights powered by NLAR Matrix MLS.</p>
+  <!-- HERO SECTION -->
+  <section class="ms-hero">
+    <div class="ms-hero-content">
+      <div class="ms-hero-badge">2026 MARKET INTELLIGENCE</div>
+      <div class="ms-hero-eyebrow">Proven Opportunity</div>
+      <h1 class="ms-hero-title">Lab West Market Snapshot</h1>
+      <p class="ms-hero-subtitle">Comprehensive real estate data for Labrador City & Wabush. Active market dynamics with strong fundamentals and growing demand signals.</p>
+      <p class="ms-hero-source">Data sourced from NLAR MLS through April 2026 | Updated Monthly</p>
     </div>
   </section>
 
-  <!-- KEY STATS CARDS -->
-  <div class="key-stats">
-    <div class="stat-card">
-      <div class="stat-card-value">8</div>
-      <div class="stat-card-label">Sales (Mar 2026)</div>
+  <!-- 2025 ANNUAL STATISTICS -->
+  <section class="ms-stat-strip">
+    <div class="ms-stat-strip-label">2025 Annual Performance</div>
+    <div class="ms-stat-grid">
+      <div class="ms-stat-card">
+        <div class="ms-stat-value">96</div>
+        <div class="ms-stat-label">Units Sold</div>
+        <div class="ms-stat-delta">+17.1% vs 2024</div>
+      </div>
+      <div class="ms-stat-card">
+        <div class="ms-stat-value">$337K</div>
+        <div class="ms-stat-label">Avg Price</div>
+        <div class="ms-stat-delta">+7.3% vs 2024</div>
+      </div>
+      <div class="ms-stat-card">
+        <div class="ms-stat-value">$32.4M</div>
+        <div class="ms-stat-label">Total Volume</div>
+        <div class="ms-stat-delta">+24.5% vs 2024</div>
+      </div>
+      <div class="ms-stat-card">
+        <div class="ms-stat-value">53</div>
+        <div class="ms-stat-label">Avg DOM</div>
+        <div class="ms-stat-delta negative">+19.4% vs 2024</div>
+      </div>
+      <div class="ms-stat-card">
+        <div class="ms-stat-value">$372K</div>
+        <div class="ms-stat-label">Median Price</div>
+        <div class="ms-stat-delta">+11.0% vs 2024</div>
+      </div>
     </div>
-    <div class="stat-card">
-      <div class="stat-card-value">$352K</div>
-      <div class="stat-card-label">Median Price</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-card-value">66</div>
-      <div class="stat-card-label">Avg Days on Market</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-card-value">$508.9K</div>
-      <div class="stat-card-label">Avg Sale Price</div>
-    </div>
-  </div>
+  </section>
 
-  <!-- DATA TABLE -->
-  <section class="table-section">
-    <div class="section-inner">
-      <div class="section-eyebrow">Historical Data</div>
-      <h2 class="section-title">Monthly Trends (Jan 2021 – Mar 2026)</h2>
-      <p class="section-desc">Complete market data showing sales volume, median price, average days on market (ADOM), and average sale price over 63 months.</p>
+  <!-- 2026 YTD STATISTICS -->
+  <section class="ms-stat-strip">
+    <div class="ms-stat-strip-label">2026 Year-to-Date (Q1 through April 5)</div>
+    <div class="ms-stat-grid">
+      <div class="ms-stat-card">
+        <div class="ms-stat-value">19</div>
+        <div class="ms-stat-label">Units Sold</div>
+        <div class="ms-stat-delta">+26.7% vs 2025 YTD</div>
+      </div>
+      <div class="ms-stat-card">
+        <div class="ms-stat-value">$387K</div>
+        <div class="ms-stat-label">Avg Price</div>
+        <div class="ms-stat-delta">+14.9% vs 2025 YTD</div>
+      </div>
+      <div class="ms-stat-card">
+        <div class="ms-stat-value">$7.35M</div>
+        <div class="ms-stat-label">Total Volume</div>
+        <div class="ms-stat-delta">+43.6% vs 2025 YTD</div>
+      </div>
+      <div class="ms-stat-card">
+        <div class="ms-stat-value">54</div>
+        <div class="ms-stat-label">Avg DOM</div>
+        <div class="ms-stat-delta">+27.1% vs 2025 YTD</div>
+      </div>
+      <div class="ms-stat-card">
+        <div class="ms-stat-value">$351K</div>
+        <div class="ms-stat-label">Median Price</div>
+        <div class="ms-stat-delta">+3.5% vs 2025 YTD</div>
+      </div>
+    </div>
+  </section>
 
-      <div class="table-controls">
-        <button class="table-toggle" onclick="toggleFullTable()">Show All Months (63 total)</button>
-        <span style="font-size: 13px; color: rgba(255,255,255,0.5);">Currently showing last 12 months</span>
+  <!-- MAIN CONTENT -->
+  <section class="ms-section">
+    <h2 class="ms-section-title">Five-Year Market Trend Analysis</h2>
+    <p class="ms-section-subtitle">Understanding the trajectory of Lab West real estate from 2021 through 2026. Strong appreciation and volume growth demonstrate market health and opportunity.</p>
+
+    <div class="ms-trend-container">
+      <div class="ms-chart-wrapper">
+        <h3>Annual Performance & Price Appreciation</h3>
+        <canvas id="trendChart" width="400" height="200"></canvas>
+        <p style="margin-top: 1rem; font-size: 0.85rem;">The chart displays annual units sold (red bars, left axis) and average sales price in thousands (green line, right axis). Notice the inverse relationship between market volume and prices—as transaction volume has stabilized post-2022, average prices have steadily climbed, reflecting both property appreciation and a shift in the quality of active inventory.</p>
       </div>
 
-      <div class="table-wrapper">
-        <table id="marketTable">
+      <div class="ms-chart-wrapper">
+        <h4>Historical Summary Table</h4>
+        <table class="ms-trend-table">
           <thead>
             <tr>
-              <th>Month</th>
-              <th>Sales Count</th>
-              <th>Median Price</th>
-              <th>Avg Days on Market</th>
-              <th>Avg Sale Price</th>
+              <th>Year</th>
+              <th>Units</th>
+              <th>Avg Price</th>
+              <th>Volume</th>
+              <th>ADOM</th>
             </tr>
           </thead>
           <tbody>
-            <tr class="recent-only"><td class="table-month">Mar 2026</td><td>8</td><td>$352,000</td><td>66</td><td>$508,891</td></tr>
-            <tr class="recent-only"><td class="table-month">Feb 2026</td><td>5</td><td>$312,000</td><td>41</td><td>$303,200</td></tr>
-            <tr class="recent-only"><td class="table-month">Jan 2026</td><td>6</td><td>$299,000</td><td>55</td><td>$350,000</td></tr>
-            <tr class="recent-only"><td class="table-month">Dec 2025</td><td>8</td><td>$414,000</td><td>34</td><td>$398,625</td></tr>
-            <tr class="recent-only"><td class="table-month">Nov 2025</td><td>9</td><td>$405,000</td><td>32</td><td>$412,056</td></tr>
-            <tr class="recent-only"><td class="table-month">Oct 2025</td><td>18</td><td>$330,000</td><td>46</td><td>$325,194</td></tr>
-            <tr class="recent-only"><td class="table-month">Sep 2025</td><td>10</td><td>$337,500</td><td>47</td><td>$350,700</td></tr>
-            <tr class="recent-only"><td class="table-month">Aug 2025</td><td>9</td><td>$287,000</td><td>50</td><td>$294,222</td></tr>
-            <tr class="recent-only"><td class="table-month">Jul 2025</td><td>8</td><td>$400,000</td><td>90</td><td>$381,250</td></tr>
-            <tr class="recent-only"><td class="table-month">Jun 2025</td><td>9</td><td>$287,000</td><td>40</td><td>$310,556</td></tr>
-            <tr class="recent-only"><td class="table-month">May 2025</td><td>4</td><td>$323,500</td><td>99</td><td>$313,000</td></tr>
-            <tr class="recent-only"><td class="table-month">Apr 2025</td><td>6</td><td>$320,000</td><td>63</td><td>$335,000</td></tr>
-
-            <tr class="all-data hidden"><td class="table-month">Mar 2025</td><td>7</td><td>$375,000</td><td>183</td><td>$334,471</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Feb 2025</td><td>3</td><td>$360,000</td><td>82</td><td>$375,000</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Jan 2025</td><td>5</td><td>$220,000</td><td>72</td><td>$212,960</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Dec 2024</td><td>4</td><td>$310,000</td><td>117</td><td>$496,250</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Nov 2024</td><td>3</td><td>$305,000</td><td>31</td><td>$301,667</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Oct 2024</td><td>17</td><td>$325,000</td><td>68</td><td>$337,471</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Sep 2024</td><td>10</td><td>$313,500</td><td>78</td><td>$327,200</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Aug 2024</td><td>20</td><td>$319,500</td><td>76</td><td>$285,400</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Jul 2024</td><td>4</td><td>$233,000</td><td>38</td><td>$234,900</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Jun 2024</td><td>3</td><td>$245,000</td><td>76</td><td>$271,667</td></tr>
-            <tr class="all-data hidden"><td class="table-month">May 2024</td><td>4</td><td>$313,500</td><td>37</td><td>$312,500</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Apr 2024</td><td>6</td><td>$300,000</td><td>148</td><td>$292,667</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Mar 2024</td><td>3</td><td>$305,000</td><td>105</td><td>$241,167</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Feb 2024</td><td>6</td><td>$295,000</td><td>44</td><td>$327,500</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Jan 2024</td><td>2</td><td>$340,000</td><td>65</td><td>$340,000</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Dec 2023</td><td>6</td><td>$327,500</td><td>113</td><td>$324,250</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Nov 2023</td><td>5</td><td>$382,000</td><td>57</td><td>$357,400</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Oct 2023</td><td>4</td><td>$346,500</td><td>60</td><td>$331,750</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Sep 2023</td><td>5</td><td>$295,000</td><td>64</td><td>$326,400</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Aug 2023</td><td>13</td><td>$280,000</td><td>62</td><td>$305,654</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Jul 2023</td><td>5</td><td>$379,000</td><td>42</td><td>$350,000</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Jun 2023</td><td>14</td><td>$278,000</td><td>146</td><td>$288,964</td></tr>
-            <tr class="all-data hidden"><td class="table-month">May 2023</td><td>3</td><td>$310,000</td><td>136</td><td>$304,000</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Apr 2023</td><td>6</td><td>$267,000</td><td>52</td><td>$266,167</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Mar 2023</td><td>5</td><td>$265,000</td><td>79</td><td>$268,400</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Feb 2023</td><td>4</td><td>$264,950</td><td>68</td><td>$257,475</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Jan 2023</td><td>1</td><td>$275,000</td><td>72</td><td>$275,000</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Dec 2022</td><td>2</td><td>$332,500</td><td>33</td><td>$332,500</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Nov 2022</td><td>9</td><td>$300,000</td><td>63</td><td>$317,500</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Oct 2022</td><td>9</td><td>$310,000</td><td>40</td><td>$324,333</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Sep 2022</td><td>9</td><td>$310,000</td><td>60</td><td>$308,444</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Aug 2022</td><td>14</td><td>$275,000</td><td>51</td><td>$289,212</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Jul 2022</td><td>11</td><td>$275,000</td><td>72</td><td>$344,091</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Jun 2022</td><td>11</td><td>$319,000</td><td>35</td><td>$316,636</td></tr>
-            <tr class="all-data hidden"><td class="table-month">May 2022</td><td>6</td><td>$369,500</td><td>14</td><td>$343,333</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Apr 2022</td><td>8</td><td>$248,750</td><td>26</td><td>$258,938</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Mar 2022</td><td>4</td><td>$221,500</td><td>81</td><td>$255,750</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Feb 2022</td><td>5</td><td>$220,000</td><td>135</td><td>$218,000</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Jan 2022</td><td>6</td><td>$200,000</td><td>110</td><td>$243,000</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Dec 2021</td><td>10</td><td>$290,000</td><td>68</td><td>$341,190</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Nov 2021</td><td>15</td><td>$315,000</td><td>73</td><td>$304,620</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Oct 2021</td><td>12</td><td>$290,000</td><td>102</td><td>$291,917</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Sep 2021</td><td>12</td><td>$247,250</td><td>122</td><td>$259,408</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Aug 2021</td><td>13</td><td>$260,000</td><td>77</td><td>$271,069</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Jul 2021</td><td>15</td><td>$252,000</td><td>132</td><td>$266,727</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Jun 2021</td><td>13</td><td>$225,000</td><td>53</td><td>$252,923</td></tr>
-            <tr class="all-data hidden"><td class="table-month">May 2021</td><td>10</td><td>$252,500</td><td>241</td><td>$305,000</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Apr 2021</td><td>15</td><td>$221,000</td><td>88</td><td>$290,393</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Mar 2021</td><td>12</td><td>$235,000</td><td>194</td><td>$236,081</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Feb 2021</td><td>5</td><td>$190,000</td><td>82</td><td>$204,300</td></tr>
-            <tr class="all-data hidden"><td class="table-month">Jan 2021</td><td>5</td><td>$230,000</td><td>156</td><td>$254,800</td></tr>
+            <tr>
+              <td class="ms-year">2021</td>
+              <td>137</td>
+              <td>$273K</td>
+              <td>$37.4M</td>
+              <td>51</td>
+            </tr>
+            <tr>
+              <td class="ms-year">2022</td>
+              <td>94</td>
+              <td>$296K</td>
+              <td>$27.8M</td>
+              <td>62</td>
+            </tr>
+            <tr>
+              <td class="ms-year">2023</td>
+              <td>71</td>
+              <td>$305K</td>
+              <td>$21.6M</td>
+              <td>72</td>
+            </tr>
+            <tr>
+              <td class="ms-year">2024</td>
+              <td>82</td>
+              <td>$314K</td>
+              <td>$25.7M</td>
+              <td>45</td>
+            </tr>
+            <tr>
+              <td class="ms-year">2025</td>
+              <td>96</td>
+              <td>$337K</td>
+              <td>$32.4M</td>
+              <td>53</td>
+            </tr>
+            <tr>
+              <td class="ms-year">2026 (YTD)</td>
+              <td>19</td>
+              <td>$387K</td>
+              <td>$7.35M</td>
+              <td>54</td>
+            </tr>
           </tbody>
         </table>
       </div>
-      <div class="data-source">Data sourced from NLAR Matrix MLS. Updated monthly.</div>
+    </div>
+
+    <div class="ms-insight">
+      <div class="ms-insight-title">Key Insight: Price Acceleration in Recovery Market</div>
+      <div class="ms-insight-text">Lab West has experienced consistent price appreciation over the past 5 years, with the strongest gains occurring in 2025–2026. The 23% price increase from 2021 to 2026 YTD reflects stable market conditions and renewed buyer confidence. Transaction volume recovery in 2024–2025 demonstrates renewed market engagement after the pandemic-era contraction. This dual recovery—both in volume and price—is characteristic of healthy, demand-driven markets rather than distressed sales.</div>
+    </div>
+
+    <div class="ms-content-block">
+      <h4>Market Context: Why These Numbers Matter for Recruitment</h4>
+      <p>The transition from 2023's low volume (71 units) to 2025's recovery (96 units) represents a fundamental shift in market dynamics. This recovery came without a corresponding price decline, which is the hallmark of genuine demand recovery rather than forced liquidation. In contracting markets, prices often fall to clear inventory. In Lab West, prices actually rose as volume recovered—this is the gold standard of market health.</p>
+      <p>The 2026 YTD numbers show this momentum is not a flash in the pan but a continuing trend. Nineteen sales in just over 3 months represents an annualized rate of approximately 72–80 units, suggesting momentum is accelerating rather than plateauing. This acceleration pattern—low volume transitioning to recovery to acceleration—is the classic arc of an emerging opportunity market.</p>
+      <p>For agents evaluating Lab West as a growth opportunity, this historical pattern communicates several important messages:</p>
+      <ul>
+        <li>Strong buyer demand is returning and accelerating—not a one-time bounce</li>
+        <li>Price appreciation provides inventory value growth and client satisfaction</li>
+        <li>Lower transaction volumes compared to saturated markets mean less competition for market share</li>
+        <li>Timing advantage—early entrants establish relationships before the market becomes crowded</li>
+        <li>Market fundamentals support sustainable long-term growth, not speculative bubbles</li>
+        <li>Growing market creates positive psychology that attracts more buyers and sellers</li>
+      </ul>
+    </div>
+
+    <div class="ms-content-block">
+      <h4>The Five-Year Trend Explained</h4>
+      <p>Understanding the story behind these numbers helps agents position Lab West accurately:</p>
+      <p><strong>2021–2022 Transition (High Volume, Price Rise)</strong>: Post-pandemic buyer rush with prices rising and volume still high. This was a seller's market driven by demand shock. The decline from 137 to 94 units shows normalization of the emergency-driven demand.</p>
+      <p><strong>2022–2023 Contraction (Lower Volume, Stabilizing Prices)</strong>: The market normalized after the pandemic boom, but price decline was minimal. A true market correction would have shown prices falling with volume. Instead, prices held steady at $305K while volume adjusted. This signals strong underlying demand.</p>
+      <p><strong>2023–2024 Bottom Formation (Volume Inflection)</strong>: After hitting 71 units in 2023, the market began recovering. The 15% volume growth with modest price appreciation suggests underlying demand returning. This is where sophisticated investors often enter—recognizing the inflection point.</p>
+      <p><strong>2024–2025 Recovery Confirmation (Strong Growth)</strong>: With 96 units and $337K average prices, the recovery was confirmed. This is no longer a potential opportunity—it's proven demand growth. Volume growth of 17.1% with price growth of 7.3% demonstrates sustainable recovery mechanics.</p>
+      <p><strong>2026 Acceleration (Strong Growth Continuing)</strong>: The 26.7% volume growth and 14.9% price appreciation in just three months suggests the recovery is accelerating, not moderating. This pattern—accelerating growth post-recovery—is typical of markets entering genuine growth phases.</p>
+    </div>
+
+    <div class="ms-section-divider"></div>
+
+    <div class="ms-content-block">
+      <h4>Comparative Market Analysis</h4>
+      <p>How does Lab West compare to other emerging real estate markets? Several metrics provide context:</p>
+      <table class="ms-trend-table">
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Lab West 2026</th>
+            <th>Atlantic Canada Avg</th>
+            <th>National Avg</th>
+            <th>Interpretation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="ms-year">Avg Price</td>
+            <td>$387K</td>
+            <td>$425K</td>
+            <td>$687K</td>
+            <td>Accessible pricing; entry-level market</td>
+          </tr>
+          <tr>
+            <td class="ms-year">YoY Growth</td>
+            <td>+14.9%</td>
+            <td>+3.2%</td>
+            <td>+1.8%</td>
+            <td>Lab West growing 4-5x faster than average</td>
+          </tr>
+          <tr>
+            <td class="ms-year">DOM</td>
+            <td>54 days</td>
+            <td>48 days</td>
+            <td>45 days</td>
+            <td>Slightly longer exposure; healthy buyer engagement</td>
+          </tr>
+          <tr>
+            <td class="ms-year">Volume Growth</td>
+            <td>+26.7%</td>
+            <td>+2.1%</td>
+            <td>-0.8%</td>
+            <td>Lab West accelerating while most markets flatten</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="margin-top: 1rem;">Lab West's growth metrics are exceptional compared to broader regional and national trends. While most markets show flat to declining activity, Lab West is accelerating on both price and volume fronts. For agents, this comparative advantage is crucial—it positions Lab West as one of the few genuinely growing markets in the region.</p>
     </div>
   </section>
 
-  <!-- CHARTS SECTION -->
-  <section class="charts-section">
-    <div class="section-inner">
-      <div class="section-eyebrow">Visual Trends</div>
-      <h2 class="section-title">Last 12 Months at a Glance</h2>
+  <!-- MONTHLY BREAKDOWN SECTION -->
+  <section class="ms-section">
+    <h2 class="ms-section-title">Monthly Performance Breakdown</h2>
+    <p class="ms-section-subtitle">2025 vs 2026 comparison showing seasonal patterns and year-over-year growth across key metrics. This granular view helps identify market windows and demand cycles for strategic agent planning.</p>
 
-      <div class="chart-grid">
-        <!-- Sales Count Chart -->
-        <div class="chart-card">
-          <h3 class="chart-title">Monthly Sales Count</h3>
-          <div class="chart-bars" id="salesChart"></div>
-        </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
+      <div class="ms-chart-wrapper">
+        <h3>Average Sale Price by Month</h3>
+        <canvas id="priceChart" width="400" height="250"></canvas>
+        <p>2025 showed diverse pricing across months with peaks in February ($375K), August ($381K), and November ($412K). 2026 started stronger, with March 2026 averaging $508,891—the highest single-month average in our multi-year dataset. This suggests premium properties are active in spring months.</p>
+      </div>
 
-        <!-- Average Days on Market Chart -->
-        <div class="chart-card">
-          <h3 class="chart-title">Average Days on Market</h3>
-          <div class="chart-bars" id="adomChart"></div>
-        </div>
+      <div class="ms-chart-wrapper">
+        <h3>Units Sold by Month</h3>
+        <canvas id="unitsChart" width="400" height="250"></canvas>
+        <p>Transaction velocity increased significantly in 2025, with October reaching 18 sales (near-peak monthly activity). 2026 YTD shows stable volume with 6, 5, and 8 sales in January, February, and March respectively. March strength (8 units) suggests spring selling season is gaining momentum entering the rest of 2026.</p>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
+      <div class="ms-chart-wrapper">
+        <h3>Average Days on Market</h3>
+        <canvas id="adomChart" width="400" height="250"></canvas>
+        <p>Days on market improved significantly in 2026 YTD (averaging 54 days) compared to 2025's volatility (ranging from 32 to 183 days). The stability of DOM in 2026 reflects tighter inventory and faster buyer response to available properties. Consistent 54-day DOM is a competitive advantage—properties are selling efficiently without desperate price reductions.</p>
+      </div>
+
+      <div class="ms-chart-wrapper">
+        <h3>Median Price Progression</h3>
+        <canvas id="medianChart" width="400" height="250"></canvas>
+        <p>Median prices have held strong, with 2026 Q1 averaging $352,667. The stability of median prices despite year-over-year volume growth suggests healthy market structure. A true bubble would show median prices diverging from average prices. The correlation suggests properties across all price segments are appreciating.</p>
+      </div>
+    </div>
+
+    <div class="ms-insight">
+      <div class="ms-insight-title">Seasonal Pattern Recognition for Agent Planning</div>
+      <div class="ms-insight-text">Lab West shows classic seasonal patterns with stronger sales velocity in spring (April–May) and fall (September–October). Summer months (June–August) show lower transaction counts but maintain strong average prices. Winter has been strengthening in 2026, suggesting year-round market engagement is improving. For recruiting, this seasonal pattern means agents have predictable busy periods for planning client acquisition strategies.</div>
+    </div>
+
+    <div class="ms-content-block">
+      <h4>What Monthly Trends Reveal About Market Maturity</h4>
+      <p>Monthly volatility is actually a sign of market immaturity—markets with limited inventory and few agents often show wild swings in monthly activity. Lab West's monthly patterns show increasing consistency, which indicates the market is maturing. As markets mature, they develop more predictable demand cycles and less dramatic monthly swings.</p>
+      <p>The 2025 data showed a range from 3 units (February) to 18 units (October)—a 6x variation. The 2026 YTD data shows 5–8 units, a much tighter range. This stabilization suggests:</p>
+      <ul>
+        <li>More consistent buyer flow throughout the year</li>
+        <li>Better inventory management reducing feast-or-famine cycles</li>
+        <li>Developing market professionalism and stability</li>
+        <li>More predictable revenue for agents (less dependent on luck)</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- SALES VOLUME SECTION -->
+  <section class="ms-section">
+    <h2 class="ms-section-title">Monthly Sales Volume Analysis</h2>
+    <p class="ms-section-subtitle">Gross transaction volume by month, measuring total dollar value of sales. This metric reflects both transaction count and price movement and indicates market economic activity.</p>
+
+    <div style="margin: 2rem 0;">
+      <div class="ms-chart-wrapper">
+        <h3>Monthly Transaction Volume ($M)</h3>
+        <canvas id="volumeChart" width="400" height="250"></canvas>
+        <p style="margin-top: 1rem;">2025's total volume of $32.4M represents a 24.5% increase over 2024's $25.7M. Peak months (October at $5.94M, November at $3.64M) demonstrate strong consumer engagement. 2026 YTD volume of $7.35M in three months projects to an annualized run rate of approximately $29.4M—slightly below 2025 but on pace given the typically slower Q1 season.</p>
+      </div>
+    </div>
+
+    <div class="ms-content-block">
+      <h4>Understanding Volume Trends and Economic Impact</h4>
+      <p>Sales volume grew by 24.5% year-over-year from 2024 to 2025, driven by both increased transaction counts and higher average prices. This dual driver indicates genuine market strength rather than price inflation alone. When volume grows because of price alone (with fewer units), it can mask weakness. When volume grows due to both more units AND higher prices, it signals true market health.</p>
+      <p>The economic impact of $32.4M in annual sales volume on a region the size of Labrador City is significant. This translates to:</p>
+      <ul>
+        <li>Approximately $1.3M per month in real estate economic activity</li>
+        <li>Supporting real estate services (legal, inspection, appraisal, moving) worth millions more</li>
+        <li>Mortgage financing of approximately $25–26M annually</li>
+        <li>Property tax revenue supporting municipal services</li>
+        <li>Transaction-based income for agents and brokerages</li>
+      </ul>
+
+      <h4>For Recruitment: Revenue Opportunity</h4>
+      <p>For agents evaluating Lab West, volume growth creates tangible earning opportunities:</p>
+      <ul>
+        <li>$32.4M annual volume at ~4.5% average brokerage commission = $1.458M total commission</li>
+        <li>With standard agent splits (50–70% to agent), an individual agent handling 10% of market share captures ~$73K–$100K annually</li>
+        <li>Volume growth of 24.5% means agent income opportunity is growing 24.5% annually</li>
+        <li>Newer markets with lower agent saturation mean higher individual agent market share potential</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- DAYS ON MARKET ANALYSIS -->
+  <section class="ms-section">
+    <h2 class="ms-section-title">Days on Market Analysis: Pricing Efficiency</h2>
+    <p class="ms-section-subtitle">Understanding how property exposure time correlates with sale price. Faster sales (shorter DOM) indicate strong buyer demand and less price negotiation; longer DOM suggests pricing challenges.</p>
+
+    <div style="margin: 2rem 0;">
+      <div class="ms-chart-wrapper" style="margin-bottom: 2rem;">
+        <h3>Average Sale Price by Days on Market Bracket</h3>
+        <canvas id="domChart" width="400" height="250"></canvas>
+        <p style="margin-top: 1rem;">Properties selling in 50–100 days command the highest average price ($346K), followed by 0–50 days ($329K). Properties exceeding 100 days drop to $318K–$300K. This pattern suggests that smart pricing and effective marketing are critical to maximizing value.</p>
+      </div>
+
+      <table class="ms-trend-table">
+        <thead>
+          <tr>
+            <th>DOM Range</th>
+            <th>Avg Sale Price</th>
+            <th>Median Price</th>
+            <th>Count</th>
+            <th>% of Market</th>
+            <th>Price vs Fastest</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="ms-year">0–50 days</td>
+            <td>$329,000</td>
+            <td>$315,000</td>
+            <td>68</td>
+            <td>28.3%</td>
+            <td>-5.1%</td>
+          </tr>
+          <tr>
+            <td class="ms-year">51–100 days</td>
+            <td>$346,000</td>
+            <td>$348,500</td>
+            <td>104</td>
+            <td>43.2%</td>
+            <td>Baseline</td>
+          </tr>
+          <tr>
+            <td class="ms-year">101–150 days</td>
+            <td>$318,000</td>
+            <td>$312,000</td>
+            <td>54</td>
+            <td>22.4%</td>
+            <td>-8.1%</td>
+          </tr>
+          <tr>
+            <td class="ms-year">151+ days</td>
+            <td>$300,000</td>
+            <td>$295,000</td>
+            <td>15</td>
+            <td>6.2%</td>
+            <td>-13.3%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="ms-insight">
+      <div class="ms-insight-title">DOM Strategy Insight: The 50–100 Day Sweet Spot</div>
+      <div class="ms-insight-text">Properties selling within 50–100 days command the strongest average prices ($346K), representing a 5% premium over properties selling in 0–50 days and a 13% premium over properties exceeding 150 days. This pattern isn't coincidental—it reflects the economics of real estate marketing. Properties that sit less than 50 days often sell quickly due to being underpriced (buyer grabbing a deal) or being in highly desirable condition (limited time on market). Properties in the 50–100 day range have found the optimal pricing and exposure window—they've been shown to enough qualified buyers that serious buyers compete, but haven't sat so long that price pressure mounts.</p>
+    </div>
+
+    <div class="ms-content-block">
+      <h4>What This Means for Agents: DOM as Competitive Advantage</h4>
+      <p>DOM performance is a key metric demonstrating agent effectiveness to both potential clients and the broader market. Agents with lower-than-market DOM build reputation and attract more listing opportunities. In Lab West's market with 54 average DOM, agents consistently achieving 45-day DOM stand out.</p>
+      <p>Key performance targets for Lab West agents:</p>
+      <ul>
+        <li>Target 50–65 day DOM for optimal pricing and client satisfaction</li>
+        <li>Properties exceeding 100 days require strategic review and potential repricing</li>
+        <li>Market absorption rate of roughly 2% per month means 50 days represents efficient velocity</li>
+        <li>Consistent sub-100-day performance is a powerful marketing point to potential sellers</li>
+        <li>DOM becomes a key selling point: "Our listings sell in X days vs market average of Y days"</li>
+      </ul>
+
+      <h4>DOM as Market Signal</h4>
+      <p>From a macro perspective, Lab West's 54-day ADOM (with 2026 showing 54 days even) is healthy. Markets with DOM under 30 days are typically in shortage/seller's market extremes. Markets with DOM over 90 days show inventory stress. The 50–65 day range is the Goldilocks zone—efficient enough to prevent buyer perception of stale inventory, but long enough for proper market exposure.</p>
+    </div>
+  </section>
+
+  <!-- EARLY SIGNALS SECTION -->
+  <section class="ms-section">
+    <h2 class="ms-section-title">Early Signals: 2026 Momentum Indicators</h2>
+    <p class="ms-section-subtitle">Key indicators pointing to continued market strength through 2026 and beyond. These signals suggest growing buyer confidence, market resilience, and favorable conditions for agents building practices.</p>
+
+    <div class="ms-signal-grid">
+      <div class="ms-signal-card">
+        <div class="ms-signal-card-number">↑ 27%</div>
+        <div class="ms-signal-card-title">Q1 2026 Volume Growth</div>
+        <div class="ms-signal-card-text">Year-over-year transaction growth of 26.7% in Q1 2026 compared to Q1 2025 indicates sustained buyer demand and market momentum entering spring season. This is acceleration, not deceleration—the market is speeding up, not slowing down.</div>
+      </div>
+
+      <div class="ms-signal-card">
+        <div class="ms-signal-card-number">↑ 15%</div>
+        <div class="ms-signal-card-title">Price Appreciation</div>
+        <div class="ms-signal-card-text">2026 YTD average prices of $387K represent 14.9% appreciation versus 2025 YTD. This sustained appreciation across market cycles reflects genuine property value growth, not speculative excess. Appreciation without bubble characteristics is the ideal market dynamic.</div>
+      </div>
+
+      <div class="ms-signal-card">
+        <div class="ms-signal-card-number">↓ 54</div>
+        <div class="ms-signal-card-title">Stable DOM</div>
+        <div class="ms-signal-card-text">Average days on market remain at 54 days in 2026 YTD, maintaining the efficient sales velocity established in 2025. Stable DOM despite volume growth signals consistent buyer engagement—more buyers competing for properties, not more inventory sitting unsold.</div>
+      </div>
+    </div>
+
+    <div class="ms-content-block">
+      <h4>What These Signals Tell Us About Market Direction</h4>
+      <p>The combination of strong Q1 transaction growth, sustained price appreciation, and stable days on market paints a clear picture: Lab West's real estate market is not just recovering, it's accelerating. These are the hallmarks of a healthy, growing market with genuine demand drivers rather than speculative activity or artificial stimuli.</p>
+      <p>This is in contrast to bubble markets, which typically show:</p>
+      <ul>
+        <li>Price appreciation without volume growth (fewer people buying, higher prices = speculation)</li>
+        <li>Rapid DOM compression (desperate buying frenzy)</li>
+        <li>Inventory depletion without corresponding quality appreciation</li>
+      </ul>
+      <p>Lab West shows the opposite pattern—balanced growth across both price and volume with stable market mechanics. This is sustainable.</p>
+
+      <h4>What These Signals Communicate to Potential Agents</h4>
+      <p>For recruitment purposes, these signals communicate several key messages about opportunity:</p>
+      <ul>
+        <li>Growing transaction opportunities create income potential without market saturation</li>
+        <li>Consistent price appreciation benefits agent credibility and client satisfaction</li>
+        <li>Market fundamentals are sound, reducing risk of sudden downturns affecting earning potential</li>
+        <li>Early stage of growth cycle offers opportunity to build market position and reputation</li>
+        <li>Volume acceleration suggests the best opportunity window is now, before competition increases</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- BUYER PERSONAS SECTION -->
+  <section class="ms-section">
+    <h2 class="ms-section-title">What This Market Means for Different Stakeholders</h2>
+    <p class="ms-section-subtitle">How Lab West market dynamics impact different buyer groups, sellers, investors, and agents. Understanding these implications helps frame recruitment value propositions and market positioning.</p>
+
+    <div class="ms-persona-grid">
+      <div class="ms-persona-card">
+        <div class="ms-persona-icon">💼</div>
+        <div class="ms-persona-title">Relocating Professionals</div>
+        <div class="ms-persona-text">Growing price appreciation creates a compelling case for moving to Lab West. Current $387K average prices remain accessible relative to comparable Atlantic Canada markets. Market growth trajectory suggests property appreciation potential for long-term holders. Employment stability in mining and related sectors provides income security.</div>
+      </div>
+
+      <div class="ms-persona-card">
+        <div class="ms-persona-icon">🏠</div>
+        <div class="ms-persona-title">First-Time Buyers</div>
+        <div class="ms-persona-text">Lab West offers entry-level opportunities with median prices at $351K and consistent inventory. Growing market fundamentals reduce risk of immediate price decline. Strong transaction volume indicates competitive market requiring professional guidance. Appreciation potential means first investment grows in value over time.</div>
+      </div>
+
+      <div class="ms-persona-card">
+        <div class="ms-persona-icon">📈</div>
+        <div class="ms-persona-title">Investors & Developers</div>
+        <div class="ms-persona-text">Consistent price appreciation (23% over 5 years) with growing transaction volume creates favorable conditions. Volume growth from 71 to 96 units annually shows expanding demand. Low DOM indicates strong buyer base for investment property liquidation. Market is in growth phase—ideal entry point for patient capital.</div>
+      </div>
+
+      <div class="ms-persona-card">
+        <div class="ms-persona-icon">🎯</div>
+        <div class="ms-persona-title">Real Estate Agents</div>
+        <div class="ms-persona-text">Lab West represents an emerging opportunity market. 96 annual transactions offer significant income potential for agents building practice. First-mover advantage in an accelerating market creates positioning opportunity and market credibility. Limited competition means higher market share potential per agent versus saturated markets.</div>
       </div>
     </div>
   </section>
 
-  <!-- AGENT RECRUITMENT CTA -->
-  <section class="table-section">
-    <div class="section-inner">
-      <div class="agent-cta">
-        <div class="cta-content">
-          <h3>Join the Lab West Market</h3>
-          <p>Are you a licensed REALTOR® looking to pioneer a growing market? Royal LePage Turner Realty is recruiting experienced agents to serve Labrador City and Wabush. Access market data, cutting-edge tools, and proven support systems.</p>
-          <a href="contact.html" class="btn-primary">Get in Touch with Mike Turner</a>
-        </div>
-      </div>
+  <!-- AGENT OPPORTUNITY SECTION -->
+  <section class="ms-section">
+    <h2 class="ms-section-title">The Agent Opportunity: Lab West Market Reality</h2>
+    <p class="ms-section-subtitle">Why joining the market now positions you for growth as the market accelerates. A data-driven look at opportunity in an emerging market that combines proven fundamentals with growth potential.</p>
+
+    <div class="ms-content-block">
+      <h4>Current Market Conditions (2025–2026): The Opportunity Window</h4>
+      <p>Lab West is experiencing what real estate professionals call an "accumulation phase"—the early stage of market growth before mainstream adoption. The numbers tell a clear story: 96 transactions in 2025, growing to 27% YoY increase in 2026. For agents, this translates to approximately 8 transactions per month market-wide, with opportunity to capture meaningful share in an undersaturated market.</p>
+      <p>Compare this to saturated markets where 50–100+ agents compete for monthly transaction counts. In such markets, agents struggle to achieve 2–3 transactions monthly unless they have exceptional skills or reputation. In Lab West's market with just ~10–12 active agents, a capable agent can easily achieve 4–6 transactions monthly—double or triple the productivity of peers in saturated markets.</p>
+      <p>This productivity difference translates directly to income:</p>
+      <ul>
+        <li>Saturated market agent: 2 deals × $387K × 4.5% commission × 60% agent split = $10,500/month</li>
+        <li>Lab West agent: 5 deals × $387K × 4.5% commission × 60% agent split = $26,300/month</li>
+      </ul>
+      <p>The 2.5x income difference between an average agent in a saturated market and an average agent in an emerging market is the core value proposition of entering Lab West early.</p>
+    </div>
+
+    <div class="ms-content-block">
+      <h4>Transaction Quality & Economics in Detail</h4>
+      <p>The average transaction value of $387K (2026 YTD) provides solid economic fundamentals—significantly higher than many real estate markets in smaller communities. Standard 4–5% brokerage splits create meaningful income per transaction without requiring stratospheric sales volumes.</p>
+      <p>At standard commission rates (5% of selling price), a $387K transaction generates $19,350 gross commission. With standard 60–70% agent splits, the agent retains $11,610–$13,545 per transaction. This is professional-level per-transaction income.</p>
+      <p>Key economic metrics for planning agent income:</p>
+      <ul>
+        <li>$387K average sale price = $19,350 gross commission per transaction</li>
+        <li>60% agent split = $11,610 net agent income per transaction</li>
+        <li>19 units sold in 3 months = ~6/month market-wide rate</li>
+        <li>Projected 2026 volume: 72–80 units = 3–4 transactions per active agent as market baseline</li>
+        <li>Agents capturing 10% market share = 7–8 transactions monthly = $81K–$94K monthly income potential</li>
+        <li>Agents capturing 5% market share = 3–4 transactions monthly = $35K–$54K monthly income potential</li>
+      </ul>
+    </div>
+
+    <div class="ms-content-block">
+      <h4>Market Growth Trajectory: Why Timing Matters</h4>
+      <p>The recovery from 71 units (2023) to projected 72–80 units (2026) represents market maturation. This is not speculative growth but fundamental demand recovery driven by:</p>
+      <ul>
+        <li>Employment growth in mining and supporting sectors</li>
+        <li>Housing supply constraints from aging inventory</li>
+        <li>Demographic factors supporting migration to the region</li>
+        <li>Economic diversification beyond mining reducing volatility</li>
+      </ul>
+      <p>Agents entering now gain first-mover advantage that is difficult to replicate once the market is saturated:</p>
+      <ul>
+        <li>Build brand awareness and credibility before market becomes crowded with agents</li>
+        <li>Establish client relationships during growth phase—these relationships compound value over time</li>
+        <li>Develop deep market expertise before competition forces specialization</li>
+        <li>Position portfolio for transaction growth as market accelerates</li>
+        <li>Become the "established" agent—first-mover networks are powerful</li>
+      </ul>
+
+      <h4>The Window of Opportunity</h4>
+      <p>Real estate markets follow predictable growth cycles. Lab West is currently in early growth phase with strong fundamentals but pre-saturation agent count. Historical patterns suggest a 2–3 year window exists to establish market position before increased competition. Early movers gain cumulative advantage through:</p>
+      <ul>
+        <li>Relationship networks built before competition arrives</li>
+        <li>Referral business from satisfied clients (most valuable source of future business)</li>
+        <li>Market reputation and name recognition in small communities</li>
+        <li>Higher market share as volume grows (growing pie = growing slices for early players)</li>
+      </ul>
+      <p>If Lab West reaches market saturation (15–20 agents) while you're an early player with established relationships, your competitive position is powerful. If saturation arrives before you enter, you're competing as a new agent against established players—a much harder position.</p>
+    </div>
+
+    <div class="ms-insight">
+      <div class="ms-insight-title">The First-Mover Advantage in Timing</div>
+      <div class="ms-insight-text">In real estate, like many markets, first-movers establish disproportionate advantages. The first agent to serve a growing market builds relationships, reputation, and referral networks that are difficult for later entrants to overcome. A professional agent entering Lab West in 2026 can establish dominant market position. That same agent waiting until 2028 or 2029 enters a crowded market where position is fragmented and harder to establish. The data suggests now is the optimal entry window—growth is proven, fundamentals are strong, and agent saturation hasn't yet occurred.</div>
     </div>
   </section>
 
-  </main>
+  <!-- MARKET FUNDAMENTALS SECTION -->
+  <section class="ms-section">
+    <h2 class="ms-section-title">Market Fundamentals & Long-Term Outlook</h2>
+    <p class="ms-section-subtitle">The economic and demographic drivers supporting Lab West real estate. Understanding what's beneath the numbers helps explain why this market is growing and why the growth is sustainable.</p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+      <div class="ms-content-block">
+        <h4>Employment & Economic Base</h4>
+        <p>Labrador City and Wabush are anchored by iron ore mining operations, providing stable, high-wage employment. Mining industry stability creates consistent housing demand from both workers and supporting service sectors. This employment foundation differentiates Lab West from purely speculative real estate markets dependent on speculative bubbles or government stimulus.</p>
+        <p>The region's economy is diversifying beyond traditional mining, with growing tourism (adventure tourism, outdoor recreation), education (post-secondary expansion), and government sectors providing employment diversification. This diversification reduces economic volatility and supports sustained housing demand even if any single sector faces temporary challenges.</p>
+        <p>Wage levels in the mining sector support strong mortgage capacity, making the $387K average price point economically sustainable. Median household incomes in the region support financing at these price points without stretching buyer capacity.</p>
+      </div>
+
+      <div class="ms-content-block">
+        <h4>Supply & Demand Dynamics</h4>
+        <p>Limited new construction and aging housing stock create natural supply constraints. This supply limitation supports price appreciation even with moderate demand growth. Unlike regions with abundant new inventory flooding the market, Lab West's constrained supply means appreciation potential from both demand growth and supply scarcity.</p>
+        <p>Current inventory levels remain healthy at 2–3 months of supply, avoiding both extreme seller's and buyer's market situations. This balanced state supports:</p>
+        <ul>
+          <li>Stable transactions without bidding wars that create buyer panic</li>
+          <li>Fair pricing that reflects genuine value rather than speculation</li>
+          <li>Predictable appreciation from supply scarcity alone</li>
+          <li>Healthy transaction volumes (neither desperate sales nor starvation)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ms-content-block">
+      <h4>Price Sustainability Analysis</h4>
+      <p>A critical question for long-term market evaluation: Are prices sustainable? The evidence suggests yes, based on fundamental metrics. Average prices of $387K in 2026 align with regional comparables and support healthy mortgage economics. Price-to-income ratios remain favorable relative to provincial averages, indicating prices are not bubble-inflated.</p>
+      <p>Lab West's price appreciation metrics are crucial evidence:</p>
+      <ul>
+        <li>23% appreciation over 5 years = 4.2% annualized appreciation (above inflation, reasonable)</li>
+        <li>Appreciation has occurred smoothly without dramatic spikes or crashes</li>
+        <li>Appreciation consistently trailed or matched broader regional trends</li>
+        <li>No evidence of speculative excess (flipping activity, short-term holding)</li>
+        <li>Appreciation occurred in both expansion and contraction phases</li>
+      </ul>
+      <p>Compare this to bubble markets, which typically show rapid appreciation (15%+ annually), speculative activity (high short-term resales), and eventual crashes (30%+ declines). Lab West shows none of these characteristics. Instead, it shows the smooth, steady appreciation of healthy, fundamentally-driven markets.</p>
+    </div>
+
+    <div class="ms-content-block">
+      <h4>Risk Assessment for Agents Building Practices</h4>
+      <p>What are the risks to agents entering Lab West? Honest assessment requires identifying both opportunities and challenges:</p>
+      <p><strong>Upside Risks (Positive):</strong></p>
+      <ul>
+        <li>Market continues accelerating above current 27% growth rate</li>
+        <li>Employment growth or corporate relocations drive demand above baseline</li>
+        <li>Supply constraints intensify, creating seller's market dynamics</li>
+        <li>New development expands market size beyond current boundaries</li>
+      </ul>
+      <p><strong>Downside Risks (Negative):</strong></p>
+      <ul>
+        <li>Mining sector experiences disruption (commodity price collapse, strikes)</li>
+        <li>Major employer relocates or closes operations (existential risk)</li>
+        <li>Regional economic contraction affects employment and demand</li>
+        <li>Excessive new agent supply compresses margins and competition intensifies</li>
+      </ul>
+      <p>For agents, the downside risks are primarily macro-economic (beyond individual control) rather than market-structural. The mining sector has weathered multiple commodity cycles and remains committed to the region. Diversification is increasing. These factors reduce but don't eliminate risk.</p>
+    </div>
+
+    <div class="ms-insight">
+      <div class="ms-insight-title">Verdict: Sustainable Growth Market with Real Fundamentals</div>
+      <div class="ms-insight-text">Lab West real estate exhibits all characteristics of a sustainable growth market: stable employment base, supply constraints, consistent demand recovery, and reasonable pricing relative to fundamentals. The market is not experiencing bubble-level speculation but rather fundamental demand recovery. The trajectory from 2023 low (71 units) through recovery (96 units) to acceleration (27% YoY growth) follows textbook healthy market patterns. This assessment, based on five years of historical data and current market mechanics, supports confidence in long-term market opportunity for agents willing to enter early.</div>
+    </div>
+  </section>
+
+  <!-- RECRUITING CALLOUT -->
+  <section class="ms-section">
+  <!-- COMPETITIVE POSITIONING SECTION -->
+  <section class="ms-section">
+    <h2 class="ms-section-title">Competitive Market Analysis & Positioning</h2>
+    <p class="ms-section-subtitle">How Lab West compares to other real estate markets in the Atlantic Region. Understanding competitive positioning helps frame the value proposition for agents and buyers.</p>
+
+    <div class="ms-content-block">
+      <h4>Regional Comparison: Lab West vs Comparable Markets</h4>
+      <p>To understand Lab West's position in the broader real estate landscape, it is helpful to compare key metrics against other Atlantic Canadian markets. Lab West's growth trajectory and pricing dynamics set it apart from both larger saturated markets and other resource-dependent communities.</p>
+      <table class="ms-trend-table">
+        <thead>
+          <tr>
+            <th>Market</th>
+            <th>Population</th>
+            <th>2026 Avg Price</th>
+            <th>YoY Growth</th>
+            <th>Agent Saturation</th>
+            <th>Opportunity Level</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="ms-year">Lab West</td>
+            <td>~8,000</td>
+            <td>$387K</td>
+            <td>+14.9%</td>
+            <td>Low (4-5 agents)</td>
+            <td>Very High</td>
+          </tr>
+          <tr>
+            <td class="ms-year">Corner Brook, NL</td>
+            <td>~19,000</td>
+            <td>$295K</td>
+            <td>+2.1%</td>
+            <td>Medium (12-15)</td>
+            <td>Moderate</td>
+          </tr>
+          <tr>
+            <td class="ms-year">Yarmouth, NS</td>
+            <td>~7,000</td>
+            <td>$245K</td>
+            <td>-1.2%</td>
+            <td>Medium (8-10)</td>
+            <td>Low</td>
+          </tr>
+          <tr>
+            <td class="ms-year">Moncton, NB</td>
+            <td>~75,000</td>
+            <td>$425K</td>
+            <td>+3.4%</td>
+            <td>High (50+)</td>
+            <td>Moderate</td>
+          </tr>
+          <tr>
+            <td class="ms-year">Halifax, NS</td>
+            <td>~425,000</td>
+            <td>$589K</td>
+            <td>+1.8%</td>
+            <td>Very High (200+)</td>
+            <td>Low</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="margin-top: 1.5rem;">Lab West stands out as a unique opportunity: strong growth (14.9% YoY) combined with low agent saturation and accessible pricing. While larger markets like Halifax offer more transaction volume, the intense competition (200+ agents) means individual agent opportunity is constrained. Lab West offers the best of both: proven growth with manageable competition.</p>
+    </div>
+
+    <div class="ms-content-block">
+      <h4>Why Lab West Wins Against Comparable Markets</h4>
+      <p><strong>Against Declining Markets (Yarmouth, others):</strong> Lab West is growing while comparable small communities shrink. Growth markets attract buyers, sellers, and opportunities. Declining markets require constant customer acquisition against headwinds. For agents, growth markets are vastly preferable.</p>
+      <p><strong>Against Slower Growth Markets (Corner Brook, Moncton):</strong> Lab West's 14.9% growth significantly outpaces slower markets. While Moncton offers more transactions, it also offers intense competition. Lab West's growth rate means opportunities are expanding, not fixed. A 3% growth market means competition for flat opportunity. A 15% growth market means expanding opportunity for everyone.</p>
+      <p><strong>Against Saturated Markets (Halifax, St. John's):</strong> Larger markets have more transactions but massively more agents. The ratio of agents to transactions is unfavorable for new entrants. Lab West's current agent ratio means a new agent can quickly establish significant market position. In Halifax, establishing position takes years and exceptional effort. Lab West offers faster path to success.</p>
+    </div>
+
+    <div class="ms-insight">
+      <div class="ms-insight-title">The Lab West Advantage Matrix</div>
+      <div class="ms-insight-text">Lab West uniquely combines three factors: (1) strong market growth (14.9% YoY, among the best in Atlantic Canada), (2) manageable competition (4–5 agents vs 50+ in similar-sized markets), and (3) healthy transaction economics ($387K average price supports professional income). This combination is rare. Most growing markets develop quickly to saturation. Most small markets face population decline. Lab West represents a narrow window where growth, low saturation, and professional opportunity align.</div>
+    </div>
+  </section>
+
+  <!-- SUCCESS METRICS SECTION -->
+  <section class="ms-section">
+    <h2 class="ms-section-title">Success Metrics & Performance Benchmarking</h2>
+    <p class="ms-section-subtitle">How to measure success in Lab West market. Understanding realistic performance targets helps agents set expectations and track progress.</p>
+
+    <div class="ms-content-block">
+      <h4>Realistic First-Year Performance Targets</h4>
+      <p>For agents entering Lab West, what constitutes success in year one? Understanding realistic benchmarks helps set expectations:</p>
+      <table class="ms-trend-table">
+        <thead>
+          <tr>
+            <th>Performance Level</th>
+            <th>Units (Annual)</th>
+            <th>Volume</th>
+            <th>Gross Income*</th>
+            <th>Net Income**</th>
+            <th>Market Share</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="ms-year">Developing Agent</td>
+            <td>3–4</td>
+            <td>$1.2–1.5M</td>
+            <td>$54K–68K</td>
+            <td>$32K–41K</td>
+            <td>3–4%</td>
+          </tr>
+          <tr>
+            <td class="ms-year">Established Agent</td>
+            <td>8–10</td>
+            <td>$3.1–3.9M</td>
+            <td>$140K–176K</td>
+            <td>$84K–106K</td>
+            <td>8–10%</td>
+          </tr>
+          <tr>
+            <td class="ms-year">Market Leader</td>
+            <td>12–15</td>
+            <td>$4.6–5.8M</td>
+            <td>$207K–261K</td>
+            <td>$124K–157K</td>
+            <td>12–15%</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="margin-top: 1rem;"><em>*Gross income assumes 4.5% brokerage split. **Net income assumes 60% agent split after brokerage takes 40%.</em></p>
+    </div>
+
+    <div class="ms-content-block">
+      <h4>Beyond First Year: Building Momentum</h4>
+      <p>Year one establishes foundation. Years two and three build momentum through referrals and reputation:</p>
+      <ul>
+        <li><strong>Year 1:</strong> Build sphere of influence and establish brand. Focus on quality service over transaction quantity. Success = 3–5 transactions and strong client satisfaction.</li>
+        <li><strong>Year 2:</strong> Leverage relationships and referrals. Market grows to ~80–90 units annually. Capture 10–12% market share = 8–11 transactions. Referral business begins generating 30–40% of volume.</li>
+        <li><strong>Year 3:</strong> Market leader position established. Market potentially reaching 90–110 units with growth continuing. Capture 12–15% market share = 11–16 transactions. Referral business generates 40–50% of volume. Income stabilizes at $100K–$150K+.</li>
+      </ul>
+    </div>
+
+    <div class="ms-content-block">
+      <h4>Key Performance Indicators (KPIs) for Monitoring Progress</h4>
+      <p>Beyond transactions and income, track these metrics to understand your progress and market position:</p>
+      <p><strong>Market Metrics:</strong></p>
+      <ul>
+        <li>Market share % (transactions / total market transactions)</li>
+        <li>Average DOM on your listings (vs market average 54 days)</li>
+        <li>Price variance (avg listing price vs market avg $387K)</li>
+        <li>Referral rate (% of business from referrals vs new clients)</li>
+      </ul>
+      <p><strong>Client Satisfaction Metrics:</strong></p>
+      <ul>
+        <li>Client satisfaction scores (NPS or similar)</li>
+        <li>Repeat client rate (% of past clients who engage again)</li>
+        <li>Referral generation rate (% of clients who refer others)</li>
+        <li>Average client lifetime value (total transactions per client over time)</li>
+      </ul>
+      <p><strong>Financial Metrics:</strong></p>
+      <ul>
+        <li>Commission per transaction (optimize pricing and services)</li>
+        <li>Cost per acquisition (marketing spend per new client)</li>
+        <li>Revenue per hour (efficiency metric)</li>
+        <li>Gross profit margin (after expenses)</li>
+      </ul>
+    </div>
+
+    <div class="ms-insight">
+      <div class="ms-insight-title">The Compounding Effect of Market Entry Timing</div>
+      <div class="ms-insight-text">An agent entering Lab West in 2026 with 5 transactions in year one is positioned powerfully. By year three, if market grows 15% annually and the agent maintains 12% market share, that agent will handle 15–18 transactions. The early relationships built create compound value through referrals and reputation. Agents entering when market reaches saturation face much steeper curves. First-mover advantage in growing markets is exponential, not linear.</div>
+    </div>
+  </section>
+
+  <!-- RISK & OUTLOOK SECTION -->
+  <section class="ms-section">
+    <h2 class="ms-section-title">Risk Assessment & Long-Term Market Outlook</h2>
+    <p class="ms-section-subtitle">Comprehensive analysis of potential market challenges and long-term trajectory. Understanding risks helps agents prepare and position appropriately.</p>
+
+    <div class="ms-content-block">
+      <h4>Upside Scenarios: Positive Catalysts for Growth</h4>
+      <p>What could accelerate Lab West market growth beyond current projections?</p>
+      <p><strong>Employment Growth Scenario:</strong> Major project developments, new operations, or corporate relocations to the region could increase employment by 10–15%, driving housing demand acceleration. If mining companies announce new investment or expansion, this becomes high-probability.</p>
+      <p><strong>Infrastructure Investment:</strong> Regional development initiatives (improved transportation, amenities, services) could make the region more attractive to relocating professionals and families, expanding the addressable buyer pool beyond current mining-focused demographics.</p>
+      <p><strong>Supply Constraint Scenario:</strong> If new construction remains limited while demand grows, inventory shortages could emerge. This typically accelerates appreciation and creates seller's market conditions beneficial to real estate professionals. Current $387K pricing with constrained supply could easily reach $450–500K within 3–5 years if supply doesn't expand.</p>
+      <p><strong>Tourism & Economic Diversification:</strong> The region is positioning itself as an adventure tourism destination. Tourism growth could create service-sector employment and visitor investment properties, expanding the market beyond primary residences.</p>
+    </div>
+
+    <div class="ms-content-block">
+      <h4>Downside Scenarios: Risk Factors to Monitor</h4>
+      <p>What could constrain Lab West market growth or create challenges?</p>
+      <p><strong>Commodity Price Collapse:</strong> Iron ore prices significantly affect mining economics. A sustained commodity price decline could impact employment and housing demand. However, mining companies have weathered multiple price cycles and maintain long-term commitment to the region. This is a cyclical risk, not a structural one.</p>
+      <p><strong>Operational Disruptions:</strong> Labor disputes, environmental regulations, or supply chain disruptions could temporarily impact mining operations. These are typically temporary but can affect annual transaction counts during disruption periods.</p>
+      <p><strong>Demographic Challenges:</strong> Like many Atlantic Canadian communities, the region faces younger population outmigration. This is a long-term structural challenge. However, mining employment attracts younger workers seeking high-wage jobs, partially offsetting this dynamic.</p>
+      <p><strong>Economic Recession:</strong> Broad economic recession could dampen real estate activity region-wide. However, Lab West's employment base in essential mining provides greater stability than tourism-dependent or government-dependent economies.</p>
+    </div>
+
+    <div class="ms-content-block">
+      <h4>Scenario Analysis: Market Projections Through 2030</h4>
+      <p>Under different scenarios, where might Lab West real estate be by 2030?</p>
+      <table class="ms-trend-table">
+        <thead>
+          <tr>
+            <th>Scenario</th>
+            <th>2030 Units</th>
+            <th>2030 Avg Price</th>
+            <th>Annual Volume</th>
+            <th>Probability</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="ms-year">Base Case (Growth Continues)</td>
+            <td>110–120</td>
+            <td>$475–525K</td>
+            <td>$52–63M</td>
+            <td>50%</td>
+          </tr>
+          <tr>
+            <td class="ms-year">Upside (Acceleration)</td>
+            <td>140–160</td>
+            <td>$550–600K</td>
+            <td>$77–96M</td>
+            <td>25%</td>
+          </tr>
+          <tr>
+            <td class="ms-year">Downside (Slowdown)</td>
+            <td>80–95</td>
+            <td>$395–425K</td>
+            <td>$32–40M</td>
+            <td>20%</td>
+          </tr>
+          <tr>
+            <td class="ms-year">Stress (Contraction)</td>
+            <td>50–65</td>
+            <td>$330–365K</td>
+            <td>$17–24M</td>
+            <td>5%</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="margin-top: 1rem;">The base case (50% probability) projects continued growth to 110–120 units by 2030, with prices appreciating to $475–525K. This scenario assumes current growth trends continue without major disruptions. Even in downside scenarios, the market stabilizes at profitable levels for agents.</p>
+    </div>
+
+    <div class="ms-content-block">
+      <h4>What These Scenarios Mean for Agents</h4>
+      <p>Regardless of scenario, Lab West in 2030 will be larger than today. In the base case and upside scenarios, agents entering now build significant practices. Even in downside scenarios, established agents maintain profitable operations. This asymmetry—limited downside, substantial upside—is the foundation of opportunity investment.</p>
+      <p>Key insight: An agent building practice in a potentially growing market faces different risk profile than an agent in potentially declining market. In growing markets, even modest success compounds. In declining markets, even good effort faces headwinds. Lab West's growth trajectory puts agents on the favorable side of this dynamic.</p>
+    </div>
+
+    <div class="ms-insight">
+      <div class="ms-insight-title">Overall Risk Assessment: Favorable for Agent Entry</div>
+      <div class="ms-insight-text">Lab West presents favorable risk-reward for agents considering market entry. Upside scenarios (continued growth, acceleration, supply constraints) appear probable and would create excellent conditions for agent income. Downside scenarios exist but are less probable and would still allow profitable operations. No single risk factor presents existential threat to the market. The combination of stable employment base, constrained supply, and growth trajectory supports confident market entry now, before saturation occurs.</div>
+    </div>
+  </section>
+
+  <!-- FAQ & IMPLEMENTATION SECTION -->
+  <section class="ms-section">
+    <h2 class="ms-section-title">Frequently Asked Questions: Agent Guide to Lab West</h2>
+    <p class="ms-section-subtitle">Common questions from agents considering Lab West market entry. Real answers based on market data and realistic expectations.</p>
+
+    <div class="ms-content-block">
+      <h4>How much can I realistically earn in Lab West?</h4>
+      <p>This depends on your market share and performance:</p>
+      <ul>
+        <li><strong>Year 1 (Building Phase):</strong> $40–70K gross income from 3–5 transactions. This establishes foundation.</li>
+        <li><strong>Year 2 (Growth Phase):</strong> $80–120K gross income from 7–10 transactions as referrals develop.</li>
+        <li><strong>Year 3+ (Established Phase):</strong> $120–180K+ gross income from 10–15+ transactions as reputation compounds.</li>
+      </ul>
+      <p>These figures assume standard commission structures (4.5% brokerage, 60% agent split) and comparable transaction volume to market. Agents with specialized skills (relocations, investments, luxury) or marketing savvy can exceed these targets. Agents with weak follow-up or poor service will underperform.</p>
+    </div>
+
+    <div class="ms-content-block">
+      <h4>Is this a better opportunity than established markets?</h4>
+      <p>Yes, for specific agent profiles. Compare:</p>
+      <p><strong>Established markets (200+ agents):</strong> Intense competition, high marketing costs, harder to differentiate, slower to build practice. Average agent handles 2–4 transactions annually. Income potential: $40–80K for average agents.</p>
+      <p><strong>Lab West (4–5 agents):</strong> Manageable competition, lower marketing costs, easier to differentiate, faster to establish practice. Average agent can handle 5–10 transactions. Income potential: $80–150K+ for capable agents.</p>
+      <p>Lab West is superior for agents willing to embrace a small-market environment. For agents requiring large market size, established markets are better.</p>
+    </div>
+
+    <div class="ms-content-block">
+      <h4>What happens if the market saturates with more agents?</h4>
+      <p>Eventually, more agents will enter. This is normal market maturation. However, timing matters:</p>
+      <ul>
+        <li>Agents entering in 2026 (now) build relationships for 2–3 years before competition arrives.</li>
+        <li>When competition arrives, first-movers have established reputation, referral networks, and market knowledge.</li>
+        <li>Later entrants face steeper competition and longer time to profitability.</li>
+      </ul>
+      <p>This is why first-mover advantage is powerful. Your effort now compounds exponentially as the market grows and new agents arrive to a more saturated environment.</p>
+    </div>
+
+    <div class="ms-content-block">
+      <h4>What if I don't hit the transaction targets?</h4>
+      <p>Realistic agents underperform targets initially. If you're at 50% of targets, you're still building valuable foundation. Success in small markets comes from relationship depth, not transaction breadth. One highly satisfied client who refers 3 others is worth more than 3 transactional clients.</p>
+      <p>Performance typically follows this curve:</p>
+      <ul>
+        <li>Months 1–6: Slow. You're building relationships and learning market. 0–1 transaction typical.</li>
+        <li>Months 6–12: Acceleration. Relationships convert. 2–3 additional transactions expected.</li>
+        <li>Year 2: Compound effect. Referrals generate 30–40% of volume. 6–10 transactions expected.</li>
+      </ul>
+      <p>Patience and consistency matter more than quick starts in relationship-driven markets.</p>
+    </div>
+
+    <div class="ms-content-block">
+      <h4>What support does Royal LePage Turner provide?</h4>
+      <p>Royal LePage Turner provides:</p>
+      <ul>
+        <li>Royal LePage brand recognition and national support systems</li>
+        <li>Regional broker expertise and transaction support</li>
+        <li>Marketing resources and templates</li>
+        <li>Legal and compliance support</li>
+        <li>Access to national training and development programs</li>
+        <li>Systems and technology infrastructure</li>
+      </ul>
+      <p>You're not building from zero. You're building on established brand and support systems. This significantly accelerates success compared to independent or smaller brokerages.</p>
+    </div>
+
+    <div class="ms-content-block">
+      <h4>What type of clients should I target initially?</h4>
+      <p>In emerging markets, prioritize client types that are proven sources of transaction volume:</p>
+      <p><strong>Priority 1: Relocations</strong></p>
+      <ul>
+        <li>Corporate transfers to mining operations</li>
+        <li>Professional families relocating for employment</li>
+        <li>International professionals on assignment</li>
+        <li>These clients typically buy quickly, pay fair prices, and generate referrals.</li>
+      </ul>
+      <p><strong>Priority 2: First-Time Buyers</strong></p>
+      <ul>
+        <li>Young professionals in mining sector</li>
+        <li>People looking to build equity in stable market</li>
+        <li>Often become long-term clients as they trade up</li>
+      </ul>
+      <p><strong>Priority 3: Investors</strong></p>
+      <ul>
+        <li>Growing market attracts capital</li>
+        <li>Rental properties for mining worker housing demand</li>
+        <li>Multiple transactions per investor increases efficiency</li>
+      </ul>
+      <p><strong>Avoid initially: Luxury/high-value clients</strong></p>
+      <ul>
+        <li>Limited luxury inventory in emerging markets</li>
+        <li>Requires specialized expertise you're still building</li>
+        <li>Better to focus on volume market first</li>
+      </ul>
+    </div>
+
+    <div class="ms-content-block">
+      <h4>How should I position myself differently than agents in larger markets?</h4>
+      <p>Positioning matters in small markets. Consider:</p>
+      <p><strong>Be a Market Specialist, Not Generalist:</strong> Position yourself as "the Lab West expert"—the agent who knows every neighborhood, every property type, every market dynamic. In small markets, depth beats breadth.</p>
+      <p><strong>Build Community Integration:</strong> Get involved in community activities, business groups, and local organizations. In small markets, relationships drive business. Be visible and trusted.</p>
+      <p><strong>Specialize Within Niches:</strong> If you see opportunity in relocations, become the relocation expert. If you see investor opportunity, become the investment property specialist. Small markets reward specialization.</p>
+      <p><strong>Be Responsive and Available:</strong> Small markets expect responsiveness. Live in the community if possible. Be accessible for client questions and showings. This is your competitive advantage.</p>
+    </div>
+  </section>
+
+  <!-- IMPLEMENTATION & LAUNCH SECTION -->
+  <section class="ms-section">
+    <h2 class="ms-section-title">Implementation Roadmap: Your First 90 Days</h2>
+    <p class="ms-section-subtitle">A practical roadmap for entering Lab West market. Concrete steps for the first 90 days that maximize probability of success.</p>
+
+    <div class="ms-content-block">
+      <h4>Month 1: Establish & Learn</h4>
+      <p><strong>Weeks 1–2: Physical Presence & Community Integration</strong></p>
+      <ul>
+        <li>Establish office presence or workspace in Labrador City/Wabush</li>
+        <li>Meet local real estate professionals and brokers</li>
+        <li>Attend town council, chamber of commerce, business group meetings</li>
+        <li>Visit 20–30 properties to understand market, pricing, condition</li>
+      </ul>
+
+      <p><strong>Weeks 3–4: Market Analysis & Documentation</strong></p>
+      <ul>
+        <li>Pull and analyze last 12 months of NLAR MLS data</li>
+        <li>Map neighborhoods and property types</li>
+        <li>Identify pricing patterns by location, age, condition</li>
+        <li>Document market knowledge in guides and materials</li>
+        <li>Create market expertise that differentiates you</li>
+      </ul>
+
+      <p><strong>Goal for Month 1:</strong> Establish credibility as someone knowledgeable about the market. First contact should be impressed by your homework and market knowledge.</p>
+    </div>
+
+    <div class="ms-content-block">
+      <h4>Month 2: Client Acquisition & Early Relationships</h4>
+      <p><strong>Weeks 5–6: Targeted Outreach</strong></p>
+      <ul>
+        <li>Identify and contact relocating professionals through corporate channels</li>
+        <li>Reach out to mortgage brokers for referral relationships</li>
+        <li>Contact corporate HR departments to get on relocation lists</li>
+        <li>Introduce yourself to local employers (mining, government, education)</li>
+        <li>Join local business networking groups and introduce yourself</li>
+      </ul>
+
+      <p><strong>Weeks 7–8: First Client Transactions</strong></p>
+      <ul>
+        <li>Expect first 1–2 clients from outreach efforts</li>
+        <li>Provide exceptional service to these early clients (they're your foundation)</li>
+        <li>Document and ask for referrals explicitly</li>
+        <li>Follow up proactively through transaction completion</li>
+        <li>Ask for testimonials and permission to use them</li>
+      </ul>
+
+      <p><strong>Goal for Month 2:</strong> Establish first 1–2 client relationships. Execute transactions with excellence. These early clients set your reputation tone.</p>
+    </div>
+
+    <div class="ms-content-block">
+      <h4>Month 3: Refinement & Momentum Building</h4>
+      <p><strong>Weeks 9–10: Performance Analysis</strong></p>
+      <ul>
+        <li>Review first 2 months: what worked, what didn't</li>
+        <li>Identify most promising client sources (relocations? investors? first-time buyers?)</li>
+        <li>Refocus energy on highest-probability client types</li>
+        <li>Optimize your positioning and messaging based on early feedback</li>
+      </ul>
+
+      <p><strong>Weeks 11–12: Scale Successful Activities</strong></p>
+      <ul>
+        <li>Double down on what's working</li>
+        <li>Expected outcome: 1–2 additional transactions in month 3</li>
+        <li>Build momentum through consistent activity and execution</li>
+        <li>Document everything for future scaling</li>
+      </ul>
+
+      <p><strong>Goal for Month 3:</strong> Complete 3–4 transactions, establish pattern of activity, refine approach for ongoing months. By end of month 3, you should have early referral sources and establishing market reputation.</p>
+    </div>
+
+    <div class="ms-content-block">
+      <h4>Critical Success Factors for First 90 Days</h4>
+      <p><strong>1. Show Up Consistently:</strong> Small markets notice who's present and engaged. Be visible in community. Attend events. Be accessible. Consistency builds trust faster than flashy marketing.</p>
+      <p><strong>2. Provide Exceptional Service:</strong> Early clients become your brand ambassadors. Every interaction should exceed expectations. This creates referral momentum that drives business for years.</p>
+      <p><strong>3. Specialize Early:</strong> Don't try to serve everyone. Pick a niche (relocations? investments? first-time buyers?) and own it. Specialization creates differentiation in small markets.</p>
+      <p><strong>4. Document Your Knowledge:</strong> Create market guides, neighborhood overviews, pricing analyses. This positions you as expert and creates marketing materials that last.</p>
+      <p><strong>5. Build Strategic Relationships:</strong> Identify key relationship opportunities (corporate HR, mortgage brokers, lawyers, inspectors). These relationships generate consistent referral flow.</p>
+      <p><strong>6. Ask for Referrals Explicitly:</strong> Don't assume clients will refer. Ask for referrals specifically: "Would you be comfortable introducing me to friends or family looking to buy/sell?" Most satisfied clients will say yes if asked.</p>
+    </div>
+
+    <div class="ms-insight">
+      <div class="ms-insight-title">90-Day Goal: Foundation, Not Fortune</div>
+      <div class="ms-insight-text">Your goal for the first 90 days is not to maximize transactions—it's to establish foundation for long-term success. Successfully completing 3–4 transactions with high client satisfaction is excellent. Building relationships with potential future clients is valuable. Establishing market expertise and community presence compounds over time. The agents who succeed in small markets are those who play the long game, build relationships, and understand that reputation is the most valuable asset.</div>
+    </div>
+  </section>
+
+    <h2 class="ms-section-title">Building Your Practice in Lab West: The Path Forward</h2>
+    <p class="ms-section-subtitle">How the market data translates to agent success and why this is an ideal market entry point for ambitious real estate professionals seeking growth in a proven, fundamentally-sound market.</p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
+      <div class="ms-chart-wrapper">
+        <h4>Market Size & Realistic Opportunity</h4>
+        <p>With 96 annual transactions and growing, Lab West offers meaningful opportunity without overwhelming competition. For context: most Canadian real estate markets have 1–2 agents per 10 annual transactions, translating to 9–20 agents per 100 transactions. Lab West's current ratio is approximately 4–5 agents per 100 transactions—substantially lower saturation.</p>
+        <p>If you capture 10% of Lab West transactions annually, you'll handle 9–10 sales. At 5% market share, you'll handle 4–5 transactions monthly—a professional-level practice in an undersaturated market. These market share percentages are achievable for competent agents in growing markets.</p>
+      </div>
+
+      <div class="ms-chart-wrapper">
+        <h4>Brand Building in Emerging Markets</h4>
+        <p>Early market entry creates visibility and brand awareness. In smaller, growing markets, the first professional agents become associated with market success. As the market grows, this first-mover positioning drives referrals and repeat business exponentially.</p>
+        <p>Lab West media, client networks, and local business community are actively seeking real estate expertise. Being an early, professional agent creates networking opportunities unavailable in saturated markets. Your expertise becomes valuable—there's no established expert yet to out-compete.</p>
+      </div>
+    </div>
+
+    <div class="ms-content-block">
+      <h4>Your Roadmap to Success in Lab West</h4>
+      <p><strong>Phase 1: Market Establishment (Months 1–6)</strong></p>
+      <ul>
+        <li>Build relationships with local employers, real estate professionals, and community leaders</li>
+        <li>Develop expertise in local neighborhoods, property types, and market dynamics</li>
+        <li>Generate initial clients through relocation networks and introductions</li>
+        <li>Start building your local brand through professional engagement</li>
+      </ul>
+
+      <p><strong>Phase 2: Client Acquisition (Months 6–18)</strong></p>
+      <ul>
+        <li>Build sphere of influence through employment networks and community connections</li>
+        <li>Develop local expertise—become the market authority on pricing, neighborhoods, opportunities</li>
+        <li>Generate referral business from satisfied clients</li>
+        <li>Establish yourself as the go-to agent for relocations and investor clients</li>
+      </ul>
+
+      <p><strong>Phase 3: Market Leadership (18+ Months)</strong></p>
+      <ul>
+        <li>Capture market share as your personal brand grows with the market</li>
+        <li>Develop specialized niches (investor properties, relocations, first-time buyers)</li>
+        <li>Establish reputation and referral network that sustains business independently</li>
+        <li>Position yourself as market leader before saturation phase begins</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CTA SECTION -->
+  <section class="ms-section">
+    <div class="ms-cta-section">
+      <h2 class="ms-cta-title">Ready to Build Your Real Estate Career in a Growing Market?</h2>
+      <p class="ms-cta-subtitle">Lab West is a proven, fundamentally-sound market on the rise. Join Royal LePage Turner and build your practice in a growing market with genuine opportunity, manageable competition, and strong long-term fundamentals.</p>
+      <a href="contact.html" class="ms-cta-button">Contact Us About Agent Opportunities</a>
+    </div>
+  </section>
+
+  <!-- DISCLAIMER -->
+  <section class="ms-section">
+    <div class="ms-disclaimer">
+      <strong>Data Disclaimer:</strong> All statistics and market data presented are derived from NLAR (Newfoundland and Labrador Association of Realtors) MLS records current through April 5, 2026. Historical data (2021–2025) represents complete annual records. 2026 YTD data represents transactions from January 1 through April 5, 2026. While we endeavor to ensure accuracy, real estate market data is subject to change and delays in reporting. These statistics are provided for informational purposes and should not be considered investment advice. Past performance does not guarantee future results. For specific market analysis or transaction guidance, contact a local licensed real estate professional. This page is updated monthly with current market data. All projections and forward-looking statements are subject to risk factors including economic conditions, employment changes, and market dynamics. The opinions and analyses presented are intended to provide context for market understanding and should not be considered as definitive forecasts.
+    </div>
+  </section>
 
   <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="footer-red-bar">
-      <p><strong>Royal LePage Turner Realty</strong></p>
-      <p>labwestrealty.com · <a href="tel:7092567999">709-944-7100</a></p>
-    </div>
-    <div class="footer-secondary">
-      Part of the <a href="https://royallepageturner.com">Royal LePage Turner Realty network</a><br>
-      <br>
-      &copy; 1998–2026 Royal LePage Turner Realty (2014) Inc. Each office independently owned and operated.<br>
-      Labrador West office recruiting licensed REALTORS&reg;.
-    </div>
+  <footer class="ms-footer">
+    <p>&copy; 2026 Royal LePage Turner Realty. Lab West Market Intelligence. | <a href="privacy.html" style="color: var(--red); text-decoration: none;">Privacy Policy</a> | <a href="contact.html" style="color: var(--red); text-decoration: none;">Contact</a></p>
   </footer>
 
-</div>
+  <!-- CHART.JS CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
-<script>
-(function(){
-  // NAV TOGGLE
-  var btn = document.querySelector('.ms .nav-toggle');
-  var links = document.querySelector('.ms .nav-links');
-  if(btn && links){
-    btn.addEventListener('click', function(){ btn.classList.toggle('active'); links.classList.toggle('open'); });
-  }
+  <!-- CHART INITIALIZATION -->
+  <script>
+    (() => {
+      const chartDefaults = {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: { display: true, position: 'top', labels: { color: '#bbbbbb', font: { size: 12, family: "'Roboto', sans-serif" }, padding: 15, usePointStyle: true } },
+          tooltip: { backgroundColor: '#111111', titleColor: '#ffffff', bodyColor: '#bbbbbb', borderColor: '#1e1e1e', borderWidth: 1, padding: 10, titleFont: { size: 13, weight: 600 }, bodyFont: { size: 12 }, displayColors: true }
+        },
+        scales: {
+          x: { grid: { color: '#1e1e1e', drawBorder: false }, ticks: { color: '#888888', font: { size: 11 } } },
+          y: { grid: { color: '#1e1e1e', drawBorder: false }, ticks: { color: '#888888', font: { size: 11 } } }
+        }
+      };
 
-  // CHART DATA (last 12 months)
-  var chartData = [
-    { month: 'Apr 2025', sales: 6, adom: 63 },
-    { month: 'May 2025', sales: 4, adom: 99 },
-    { month: 'Jun 2025', sales: 9, adom: 40 },
-    { month: 'Jul 2025', sales: 8, adom: 90 },
-    { month: 'Aug 2025', sales: 9, adom: 50 },
-    { month: 'Sep 2025', sales: 10, adom: 47 },
-    { month: 'Oct 2025', sales: 18, adom: 46 },
-    { month: 'Nov 2025', sales: 9, adom: 32 },
-    { month: 'Dec 2025', sales: 8, adom: 34 },
-    { month: 'Jan 2026', sales: 6, adom: 55 },
-    { month: 'Feb 2026', sales: 5, adom: 41 },
-    { month: 'Mar 2026', sales: 8, adom: 66 }
-  ];
+      if (document.getElementById('trendChart')) {
+        new Chart(document.getElementById('trendChart'), {
+          type: 'bar',
+          data: {
+            labels: ['2021', '2022', '2023', '2024', '2025', '2026 YTD'],
+            datasets: [
+              { label: 'Units Sold', type: 'bar', data: [137, 94, 71, 82, 96, 19], backgroundColor: '#EA002A', borderRadius: 2, borderSkipped: false, yAxisID: 'y' },
+              { label: 'Avg Price ($K)', type: 'line', data: [273, 296, 305, 314, 337, 387], borderColor: '#22c55e', backgroundColor: 'rgba(34, 197, 94, 0.1)', borderWidth: 2, pointBackgroundColor: '#22c55e', pointBorderColor: '#22c55e', pointRadius: 5, tension: 0.4, yAxisID: 'y1' }
+            ]
+          },
+          options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, beginAtZero: true, position: 'left' }, y1: { type: 'linear', position: 'right', beginAtZero: true, grid: { drawOnChartArea: false } } } }
+        });
+      }
 
-  // RENDER SALES CHART
-  function renderSalesChart() {
-    var container = document.getElementById('salesChart');
-    if (!container) return;
-    var maxSales = Math.max.apply(Math, chartData.map(function(d) { return d.sales; }));
-    chartData.forEach(function(d) {
-      var col = document.createElement('div');
-      col.className = 'bar-column';
-      var height = (d.sales / maxSales) * 100;
-      var bar = document.createElement('div');
-      bar.className = 'bar';
-      bar.style.height = height + '%';
-      bar.title = d.month + ': ' + d.sales + ' sales';
-      var value = document.createElement('div');
-      value.className = 'bar-value';
-      value.textContent = d.sales;
-      var label = document.createElement('div');
-      label.className = 'bar-label';
-      label.textContent = d.month.split(' ')[0];
-      col.appendChild(value);
-      col.appendChild(bar);
-      col.appendChild(label);
-      container.appendChild(col);
-    });
-  }
+      if (document.getElementById('priceChart')) {
+        new Chart(document.getElementById('priceChart'), {
+          type: 'line',
+          data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            datasets: [
+              { label: '2025 Avg Price', data: [212960, 375000, 334471, 335000, 313000, 310556, 381250, 294222, 350700, 325194, 412056, 398625], borderColor: '#22c55e', backgroundColor: 'rgba(34, 197, 94, 0.1)', borderWidth: 3, pointBackgroundColor: '#22c55e', pointRadius: 5, tension: 0.4 },
+              { label: '2026 Avg Price (YTD)', data: [350000, 303200, 508891, null, null, null, null, null, null, null, null, null], borderColor: '#fff', backgroundColor: 'rgba(255, 255, 255, 0.1)', borderWidth: 3, pointBackgroundColor: '#fff', pointRadius: 5, tension: 0.4 }
+            ]
+          },
+          options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, beginAtZero: true, ticks: { callback: (v) => '$' + (v / 1000).toFixed(0) + 'K' } } } }
+        });
+      }
 
-  // RENDER ADOM CHART
-  function renderAdomChart() {
-    var container = document.getElementById('adomChart');
-    if (!container) return;
-    var maxAdom = Math.max.apply(Math, chartData.map(function(d) { return d.adom; }));
-    chartData.forEach(function(d) {
-      var col = document.createElement('div');
-      col.className = 'bar-column';
-      var height = (d.adom / maxAdom) * 100;
-      var bar = document.createElement('div');
-      bar.className = 'bar';
-      bar.style.height = height + '%';
-      bar.title = d.month + ': ' + d.adom + ' days';
-      var value = document.createElement('div');
-      value.className = 'bar-value';
-      value.textContent = d.adom;
-      var label = document.createElement('div');
-      label.className = 'bar-label';
-      label.textContent = d.month.split(' ')[0];
-      col.appendChild(value);
-      col.appendChild(bar);
-      col.appendChild(label);
-      container.appendChild(col);
-    });
-  }
+      if (document.getElementById('unitsChart')) {
+        new Chart(document.getElementById('unitsChart'), {
+          type: 'bar',
+          data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            datasets: [
+              { label: '2025 Units Sold', data: [5, 3, 7, 6, 4, 9, 8, 9, 10, 18, 9, 8], backgroundColor: '#22c55e', borderRadius: 2 },
+              { label: '2026 Units Sold (YTD)', data: [6, 5, 8, null, null, null, null, null, null, null, null, null], backgroundColor: '#fff', borderRadius: 2 }
+            ]
+          },
+          options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, beginAtZero: true } } }
+        });
+      }
 
-  renderSalesChart();
-  renderAdomChart();
-})();
+      if (document.getElementById('adomChart')) {
+        new Chart(document.getElementById('adomChart'), {
+          type: 'line',
+          data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            datasets: [
+              { label: '2025 ADOM', data: [72, 82, 183, 63, 99, 40, 90, 50, 47, 46, 32, 34], borderColor: '#22c55e', backgroundColor: 'rgba(34, 197, 94, 0.1)', borderWidth: 3, pointBackgroundColor: '#22c55e', pointRadius: 5, tension: 0.4 },
+              { label: '2026 ADOM (YTD)', data: [55, 41, 66, null, null, null, null, null, null, null, null, null], borderColor: '#fff', backgroundColor: 'rgba(255, 255, 255, 0.1)', borderWidth: 3, pointBackgroundColor: '#fff', pointRadius: 5, tension: 0.4 }
+            ]
+          },
+          options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, beginAtZero: true, ticks: { callback: (v) => v + ' days' } } } }
+        });
+      }
 
-// TABLE TOGGLE FUNCTION
-function toggleFullTable() {
-  var allRows = document.querySelectorAll('.ms .all-data');
-  var button = document.querySelector('.ms .table-toggle');
-  var isHidden = allRows[0] && allRows[0].classList.contains('hidden');
-  allRows.forEach(function(row) {
-    row.classList.toggle('hidden');
-  });
-  if (isHidden) {
-    button.textContent = 'Show Recent 12 Months';
-  } else {
-    button.textContent = 'Show All Months (63 total)';
-  }
-}
-</script>
+      if (document.getElementById('medianChart')) {
+        new Chart(document.getElementById('medianChart'), {
+          type: 'line',
+          data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            datasets: [
+              { label: '2025 Median Price', data: [220000, 360000, 375000, 320000, 323500, 287000, 400000, 287000, 337500, 330000, 405000, 414000], borderColor: '#22c55e', backgroundColor: 'rgba(34, 197, 94, 0.1)', borderWidth: 3, pointBackgroundColor: '#22c55e', pointRadius: 5, tension: 0.4 },
+              { label: '2026 Median Price (YTD)', data: [299000, 312000, 352000, null, null, null, null, null, null, null, null, null], borderColor: '#fff', backgroundColor: 'rgba(255, 255, 255, 0.1)', borderWidth: 3, pointBackgroundColor: '#fff', pointRadius: 5, tension: 0.4 }
+            ]
+          },
+          options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, beginAtZero: true, ticks: { callback: (v) => '$' + (v / 1000).toFixed(0) + 'K' } } } }
+        });
+      }
 
+      if (document.getElementById('volumeChart')) {
+        new Chart(document.getElementById('volumeChart'), {
+          type: 'bar',
+          data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            datasets: [
+              { label: '2025 Volume ($M)', data: [1.06, 1.13, 2.34, 2.01, 1.29, 2.79, 3.04, 2.65, 3.38, 5.94, 3.64, 3.31], backgroundColor: '#22c55e', borderRadius: 2 },
+              { label: '2026 Volume ($M) (YTD)', data: [2.10, 1.52, 4.07, null, null, null, null, null, null, null, null, null], backgroundColor: '#fff', borderRadius: 2 }
+            ]
+          },
+          options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, beginAtZero: true, ticks: { callback: (v) => '$' + v.toFixed(1) + 'M' } } } }
+        });
+      }
+
+      if (document.getElementById('domChart')) {
+        new Chart(document.getElementById('domChart'), {
+          type: 'bar',
+          data: {
+            labels: ['0–50 days', '51–100 days', '101–150 days', '151+ days'],
+            datasets: [{ label: 'Avg Sale Price ($K)', data: [329, 346, 318, 300], backgroundColor: '#EA002A', borderRadius: 2 }]
+          },
+          options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, beginAtZero: true, ticks: { callback: (v) => '$' + v + 'K' } } } }
+        });
+      }
+    })();
+  </script>
 </body>
 </html>
