@@ -33,20 +33,20 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
-    body { background: #1a1a1a; color: #fff; font-family: 'Roboto', sans-serif; font-weight: 400; line-height: 1.6; overflow-x: hidden; }
-    .ms { --red: #EA002A; --dark: #0a0a0a; --dark2: #111111; --dark3: #1a1a1a; --border: #1e1e1e; --border2: #252525; --muted: #888888; --light: #bbbbbb; --white: #ffffff; --green: #22c55e; --yellow: #facc15; width: 100%; background: var(--dark3); }
+    body { background: #fff; color: #2c2c2c; font-family: 'Roboto', sans-serif; font-weight: 400; line-height: 1.6; overflow-x: hidden; }
+    .ms { --red: #EA002A; --dark: #fff; --dark2: #fff; --dark3: #fff; --border: #e8e8e8; --border2: #ddd; --muted: #999; --light: #555; --white: #1a1a1a; --green: #22c55e; --yellow: #facc15; width: 100%; background: var(--dark3); }
 
     /* ===== NAVIGATION ===== */
-    .ms-nav { position: sticky; top: 0; z-index: 100; background: var(--dark2); border-bottom: 1px solid var(--border); backdrop-filter: blur(10px); background-color: rgba(17, 17, 17, 0.95); }
+    .ms-nav { position: sticky; top: 0; z-index: 100; background: var(--dark2); border-bottom: 1px solid var(--border); backdrop-filter: blur(10px); background-color: rgba(255, 255, 255, 0.95); }
     .ms-nav-inner { max-width: 1400px; margin: 0 auto; padding: 0 2rem; height: 70px; display: flex; justify-content: space-between; align-items: center; }
-    .ms-nav-brand { display: flex; align-items: center; gap: 1rem; text-decoration: none; color: #fff; transition: opacity 0.3s; }
+    .ms-nav-brand { display: flex; align-items: center; gap: 1rem; text-decoration: none; color: #1a1a1a; transition: opacity 0.3s; }
     .ms-nav-brand:hover { opacity: 0.8; }
     .ms-nav-name { font-family: 'Raleway', sans-serif; font-size: 1.4rem; font-weight: 800; line-height: 1.2; }
     .ms-nav-name span { color: var(--red); }
     .ms-nav-divider { width: 1px; height: 30px; background: var(--border); }
-    .ms-nav-rlp { font-family: 'Raleway', sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; }
+    .ms-nav-rlp { font-family: 'Raleway', sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; color: #555; text-transform: uppercase; }
     .ms-nav-right { display: flex; align-items: center; gap: 2rem; }
-    .ms-nav-phone { color: var(--light); text-decoration: none; font-size: 0.95rem; font-weight: 500; transition: color 0.3s; }
+    .ms-nav-phone { color: var(--red); text-decoration: none; font-size: 0.95rem; font-weight: 500; transition: color 0.3s; }
     .ms-nav-phone:hover { color: var(--red); }
     .ms-nav-cta { background: var(--red); color: #fff; padding: 0.6rem 1.2rem; border-radius: 2px; text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: all 0.3s; border: 2px solid var(--red); }
     .ms-nav-cta:hover { background: transparent; color: var(--red); }
@@ -54,24 +54,24 @@
     @media (max-width: 600px) { .ms-nav-inner { padding: 0 1rem; flex-wrap: wrap; height: auto; gap: 0.5rem; } .ms-nav-right { width: 100%; gap: 1rem; } }
 
     /* ===== HERO SECTION ===== */
-    .ms-hero { position: relative; background: linear-gradient(135deg, var(--dark2) 0%, var(--dark3) 100%); padding: 6rem 2rem; text-align: center; overflow: hidden; }
-    .ms-hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(255, 255, 255, 0.018) 59px, rgba(255, 255, 255, 0.018) 60px); pointer-events: none; }
+    .ms-hero { position: relative; background: linear-gradient(135deg, #f8f8f8 0%, #fff 50%, #f5f5f5 100%); padding: 6rem 2rem; text-align: center; overflow: hidden; }
+    .ms-hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(234, 0, 42, 0.025) 59px, rgba(234, 0, 42, 0.025) 60px); pointer-events: none; }
     .ms-hero-content { position: relative; z-index: 2; max-width: 900px; margin: 0 auto; }
     .ms-hero-badge { display: inline-block; background: rgba(234, 0, 42, 0.1); border: 1px solid var(--red); color: var(--red); padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; margin-bottom: 1.5rem; letter-spacing: 0.05em; }
-    .ms-hero-eyebrow { color: var(--muted); font-size: 0.95rem; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 0.8rem; }
+    .ms-hero-eyebrow { color: #666; font-size: 0.95rem; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 0.8rem; }
     .ms-hero-eyebrow::before, .ms-hero-eyebrow::after { content: ''; width: 30px; height: 2px; background: var(--red); }
-    .ms-hero-title { font-family: 'Raleway', sans-serif; font-size: 3rem; font-weight: 900; margin: 1.5rem 0; line-height: 1.1; color: var(--white); }
-    .ms-hero-subtitle { color: var(--light); font-size: 1.1rem; margin-bottom: 1rem; font-weight: 300; }
-    .ms-hero-source { color: var(--muted); font-size: 0.85rem; margin-top: 1rem; }
+    .ms-hero-title { font-family: 'Raleway', sans-serif; font-size: 3rem; font-weight: 900; margin: 1.5rem 0; line-height: 1.1; color: #1a1a1a; }
+    .ms-hero-subtitle { color: #666; font-size: 1.1rem; margin-bottom: 1rem; font-weight: 300; }
+    .ms-hero-source { color: #999; font-size: 0.85rem; margin-top: 1rem; }
     @media (max-width: 820px) { .ms-hero { padding: 4rem 1.5rem; } .ms-hero-title { font-size: 2rem; } .ms-hero-subtitle { font-size: 1rem; } }
 
     /* ===== STAT STRIPS ===== */
     .ms-stat-strip { background: linear-gradient(90deg, rgba(234, 0, 42, 0.05) 0%, transparent 100%); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 2.5rem 2rem; }
-    .ms-stat-strip-label { max-width: 1400px; margin: 0 auto; color: var(--muted); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1.5rem; }
+    .ms-stat-strip-label { max-width: 1400px; margin: 0 auto; color: #999; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1.5rem; }
     .ms-stat-grid { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(5, 1fr); gap: 2rem; }
     .ms-stat-card { text-align: center; padding: 1.5rem; border-radius: 2px; border-top: 3px solid var(--red); }
-    .ms-stat-value { font-family: 'Raleway', sans-serif; font-size: 2.2rem; font-weight: 900; color: var(--white); margin-bottom: 0.5rem; }
-    .ms-stat-label { color: var(--muted); font-size: 0.85rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+    .ms-stat-value { font-family: 'Raleway', sans-serif; font-size: 2.2rem; font-weight: 900; color: #1a1a1a; margin-bottom: 0.5rem; }
+    .ms-stat-label { color: #999; font-size: 0.85rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
     .ms-stat-delta { color: var(--green); font-size: 0.8rem; margin-top: 0.5rem; font-weight: 600; }
     .ms-stat-delta.negative { color: var(--red); }
     @media (max-width: 1000px) { .ms-stat-grid { grid-template-columns: repeat(3, 1fr); gap: 1.5rem; } .ms-stat-value { font-size: 1.8rem; } }
@@ -80,68 +80,68 @@
 
     /* ===== SECTION ===== */
     .ms-section { max-width: 1400px; margin: 0 auto; padding: 3rem 2rem; }
-    .ms-section-title { font-family: 'Raleway', sans-serif; font-size: 1.8rem; font-weight: 800; margin-bottom: 0.5rem; color: var(--white); }
-    .ms-section-subtitle { color: var(--light); font-size: 1rem; margin-bottom: 2rem; font-weight: 300; }
+    .ms-section-title { font-family: 'Raleway', sans-serif; font-size: 1.8rem; font-weight: 800; margin-bottom: 0.5rem; color: #1a1a1a; }
+    .ms-section-subtitle { color: #666; font-size: 1rem; margin-bottom: 2rem; font-weight: 300; }
     .ms-section-divider { height: 1px; background: var(--border); margin: 2rem 0; }
 
     /* ===== CHARTS & TABLES ===== */
     .ms-trend-container { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; margin-bottom: 2rem; }
-    .ms-chart-wrapper { background: var(--dark2); border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem; position: relative; }
-    .ms-chart-wrapper h3 { font-family: 'Raleway', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: var(--white); }
-    .ms-chart-wrapper h4 { font-family: 'Raleway', sans-serif; font-size: 1rem; font-weight: 600; margin: 1.5rem 0 1rem 0; color: var(--white); }
-    .ms-chart-wrapper p { color: var(--light); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1rem; }
+    .ms-chart-wrapper { background: #fff; border: 1px solid #e8e8e8; border-radius: 4px; padding: 1.5rem; position: relative; }
+    .ms-chart-wrapper h3 { font-family: 'Raleway', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: #1a1a1a; }
+    .ms-chart-wrapper h4 { font-family: 'Raleway', sans-serif; font-size: 1rem; font-weight: 600; margin: 1.5rem 0 1rem 0; color: #1a1a1a; }
+    .ms-chart-wrapper p { color: #666; font-size: 0.9rem; line-height: 1.6; margin-bottom: 1rem; }
     .ms-trend-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-    .ms-trend-table th { background: var(--border); color: var(--white); padding: 0.75rem; text-align: left; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
-    .ms-trend-table td { padding: 0.75rem; border-bottom: 1px solid var(--border); color: var(--light); }
+    .ms-trend-table th { background: #f5f5f5; color: #1a1a1a; padding: 0.75rem; text-align: left; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .ms-trend-table td { padding: 0.75rem; border-bottom: 1px solid #e8e8e8; color: #555; }
     .ms-trend-table tr:last-child td { border-bottom: none; }
-    .ms-trend-table .ms-year { font-weight: 600; color: var(--white); }
+    .ms-trend-table .ms-year { font-weight: 600; color: #1a1a1a; }
     .ms-trend-table .ms-positive { color: var(--green); }
     .ms-trend-table .ms-negative { color: var(--red); }
     @media (max-width: 1000px) { .ms-trend-container { grid-template-columns: 1fr; } }
 
     /* ===== INSIGHT BOX ===== */
-    .ms-insight { background: rgba(234, 0, 42, 0.08); border-left: 4px solid var(--red); padding: 1.5rem; border-radius: 2px; margin: 2rem 0; }
-    .ms-insight-title { font-family: 'Raleway', sans-serif; font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: 0.5rem; }
-    .ms-insight-text { color: var(--light); font-size: 0.95rem; line-height: 1.6; }
+    .ms-insight { background: rgba(234, 0, 42, 0.06); border-left: 4px solid var(--red); padding: 1.5rem; border-radius: 2px; margin: 2rem 0; }
+    .ms-insight-title { font-family: 'Raleway', sans-serif; font-size: 1rem; font-weight: 700; color: #1a1a1a; margin-bottom: 0.5rem; }
+    .ms-insight-text { color: #666; font-size: 0.95rem; line-height: 1.6; }
 
     /* ===== SIGNAL CARDS ===== */
     .ms-signal-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin: 2rem 0; }
-    .ms-signal-card { background: var(--dark2); border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem; }
+    .ms-signal-card { background: #fff; border: 1px solid #e8e8e8; border-radius: 4px; padding: 1.5rem; }
     .ms-signal-card-number { font-family: 'Raleway', sans-serif; font-size: 2.5rem; font-weight: 900; color: var(--red); margin-bottom: 0.5rem; }
-    .ms-signal-card-title { font-family: 'Raleway', sans-serif; font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: 0.75rem; }
-    .ms-signal-card-text { color: var(--light); font-size: 0.9rem; line-height: 1.6; }
+    .ms-signal-card-title { font-family: 'Raleway', sans-serif; font-size: 1rem; font-weight: 700; color: #1a1a1a; margin-bottom: 0.75rem; }
+    .ms-signal-card-text { color: #666; font-size: 0.9rem; line-height: 1.6; }
     @media (max-width: 1000px) { .ms-signal-grid { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 600px) { .ms-signal-grid { grid-template-columns: 1fr; } }
 
     /* ===== PERSONA CARDS ===== */
     .ms-persona-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin: 2rem 0; }
-    .ms-persona-card { background: var(--dark2); border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem; }
+    .ms-persona-card { background: #fff; border: 1px solid #e8e8e8; border-radius: 4px; padding: 1.5rem; }
     .ms-persona-icon { font-size: 2rem; margin-bottom: 1rem; }
-    .ms-persona-title { font-family: 'Raleway', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--white); margin-bottom: 0.75rem; }
-    .ms-persona-text { color: var(--light); font-size: 0.9rem; line-height: 1.6; }
+    .ms-persona-title { font-family: 'Raleway', sans-serif; font-size: 1.1rem; font-weight: 700; color: #1a1a1a; margin-bottom: 0.75rem; }
+    .ms-persona-text { color: #666; font-size: 0.9rem; line-height: 1.6; }
     @media (max-width: 1000px) { .ms-persona-grid { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 600px) { .ms-persona-grid { grid-template-columns: 1fr; } }
 
     /* ===== CONTENT BLOCKS ===== */
     .ms-content-block { margin: 2rem 0; }
-    .ms-content-block h4 { font-family: 'Raleway', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--white); margin-bottom: 0.75rem; }
-    .ms-content-block p { color: var(--light); font-size: 0.95rem; line-height: 1.7; margin-bottom: 1rem; }
+    .ms-content-block h4 { font-family: 'Raleway', sans-serif; font-size: 1.05rem; font-weight: 700; color: #1a1a1a; margin-bottom: 0.75rem; }
+    .ms-content-block p { color: #666; font-size: 0.95rem; line-height: 1.7; margin-bottom: 1rem; }
     .ms-content-block ul { list-style: none; margin-left: 0; }
-    .ms-content-block li { color: var(--light); font-size: 0.95rem; line-height: 1.7; margin: 0.5rem 0; padding-left: 1.5rem; position: relative; }
+    .ms-content-block li { color: #666; font-size: 0.95rem; line-height: 1.7; margin: 0.5rem 0; padding-left: 1.5rem; position: relative; }
     .ms-content-block li::before { content: '•'; position: absolute; left: 0; color: var(--red); font-weight: bold; }
 
     /* ===== CTA SECTION ===== */
-    .ms-cta-section { background: linear-gradient(135deg, rgba(234, 0, 42, 0.15) 0%, transparent 100%); border: 1px solid var(--border); border-radius: 4px; padding: 3rem 2rem; text-align: center; margin: 3rem 0; }
-    .ms-cta-title { font-family: 'Raleway', sans-serif; font-size: 1.6rem; font-weight: 800; margin-bottom: 1rem; color: var(--white); }
-    .ms-cta-subtitle { color: var(--light); font-size: 1rem; margin-bottom: 2rem; }
+    .ms-cta-section { background: #1a1a1a; border: 1px solid #1a1a1a; border-radius: 4px; padding: 3rem 2rem; text-align: center; margin: 3rem 0; }
+    .ms-cta-title { font-family: 'Raleway', sans-serif; font-size: 1.6rem; font-weight: 800; margin-bottom: 1rem; color: #fff; }
+    .ms-cta-subtitle { color: #ccc; font-size: 1rem; margin-bottom: 2rem; }
     .ms-cta-button { background: var(--red); color: #fff; padding: 0.75rem 2rem; border-radius: 2px; text-decoration: none; font-size: 0.95rem; font-weight: 600; display: inline-block; transition: all 0.3s; border: 2px solid var(--red); }
     .ms-cta-button:hover { background: transparent; color: var(--red); }
 
     /* ===== DISCLAIMER ===== */
-    .ms-disclaimer { background: var(--border); border-left: 4px solid var(--muted); padding: 1.5rem; border-radius: 2px; font-size: 0.8rem; color: var(--light); line-height: 1.6; margin: 2rem 0; }
+    .ms-disclaimer { background: #f5f5f5; border-left: 4px solid #ddd; padding: 1.5rem; border-radius: 2px; font-size: 0.8rem; color: #666; line-height: 1.6; margin: 2rem 0; }
 
     /* ===== FOOTER ===== */
-    .ms-footer { background: var(--dark2); border-top: 1px solid var(--border); padding: 2rem; text-align: center; color: var(--muted); font-size: 0.85rem; }
+    .ms-footer { background: #fff; border-top: 4px solid var(--red); padding: 2rem; text-align: center; color: #999; font-size: 0.85rem; }
   </style>
 </head>
 <body class="ms">
@@ -1286,12 +1286,12 @@
         responsive: true,
         maintainAspectRatio: true,
         plugins: {
-          legend: { display: true, position: 'top', labels: { color: '#bbbbbb', font: { size: 12, family: "'Roboto', sans-serif" }, padding: 15, usePointStyle: true } },
-          tooltip: { backgroundColor: '#111111', titleColor: '#ffffff', bodyColor: '#bbbbbb', borderColor: '#1e1e1e', borderWidth: 1, padding: 10, titleFont: { size: 13, weight: 600 }, bodyFont: { size: 12 }, displayColors: true }
+          legend: { display: true, position: 'top', labels: { color: '#555', font: { size: 12, family: "'Roboto', sans-serif" }, padding: 15, usePointStyle: true } },
+          tooltip: { backgroundColor: '#fff', titleColor: '#1a1a1a', bodyColor: '#666', borderColor: '#e8e8e8', borderWidth: 1, padding: 10, titleFont: { size: 13, weight: 600 }, bodyFont: { size: 12 }, displayColors: true }
         },
         scales: {
-          x: { grid: { color: '#1e1e1e', drawBorder: false }, ticks: { color: '#888888', font: { size: 11 } } },
-          y: { grid: { color: '#1e1e1e', drawBorder: false }, ticks: { color: '#888888', font: { size: 11 } } }
+          x: { grid: { color: '#e8e8e8', drawBorder: false }, ticks: { color: '#888', font: { size: 11 } } },
+          y: { grid: { color: '#e8e8e8', drawBorder: false }, ticks: { color: '#888', font: { size: 11 } } }
         }
       };
 
@@ -1316,7 +1316,7 @@
             labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             datasets: [
               { label: '2025 Avg Price', data: [212960, 375000, 334471, 335000, 313000, 310556, 381250, 294222, 350700, 325194, 412056, 398625], borderColor: '#22c55e', backgroundColor: 'rgba(34, 197, 94, 0.1)', borderWidth: 3, pointBackgroundColor: '#22c55e', pointRadius: 5, tension: 0.4 },
-              { label: '2026 Avg Price (YTD)', data: [350000, 303200, 508891, null, null, null, null, null, null, null, null, null], borderColor: '#fff', backgroundColor: 'rgba(255, 255, 255, 0.1)', borderWidth: 3, pointBackgroundColor: '#fff', pointRadius: 5, tension: 0.4 }
+              { label: '2026 Avg Price (YTD)', data: [350000, 303200, 508891, null, null, null, null, null, null, null, null, null], borderColor: '#2c5aa0', backgroundColor: 'rgba(44, 90, 160, 0.1)', borderWidth: 3, pointBackgroundColor: '#2c5aa0', pointRadius: 5, tension: 0.4 }
             ]
           },
           options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, beginAtZero: true, ticks: { callback: (v) => '$' + (v / 1000).toFixed(0) + 'K' } } } }
@@ -1330,7 +1330,7 @@
             labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             datasets: [
               { label: '2025 Units Sold', data: [5, 3, 7, 6, 4, 9, 8, 9, 10, 18, 9, 8], backgroundColor: '#22c55e', borderRadius: 2 },
-              { label: '2026 Units Sold (YTD)', data: [6, 5, 8, null, null, null, null, null, null, null, null, null], backgroundColor: '#fff', borderRadius: 2 }
+              { label: '2026 Units Sold (YTD)', data: [6, 5, 8, null, null, null, null, null, null, null, null, null], backgroundColor: '#2c5aa0', borderRadius: 2 }
             ]
           },
           options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, beginAtZero: true } } }
@@ -1344,7 +1344,7 @@
             labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             datasets: [
               { label: '2025 ADOM', data: [72, 82, 183, 63, 99, 40, 90, 50, 47, 46, 32, 34], borderColor: '#22c55e', backgroundColor: 'rgba(34, 197, 94, 0.1)', borderWidth: 3, pointBackgroundColor: '#22c55e', pointRadius: 5, tension: 0.4 },
-              { label: '2026 ADOM (YTD)', data: [55, 41, 66, null, null, null, null, null, null, null, null, null], borderColor: '#fff', backgroundColor: 'rgba(255, 255, 255, 0.1)', borderWidth: 3, pointBackgroundColor: '#fff', pointRadius: 5, tension: 0.4 }
+              { label: '2026 ADOM (YTD)', data: [55, 41, 66, null, null, null, null, null, null, null, null, null], borderColor: '#2c5aa0', backgroundColor: 'rgba(44, 90, 160, 0.1)', borderWidth: 3, pointBackgroundColor: '#2c5aa0', pointRadius: 5, tension: 0.4 }
             ]
           },
           options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, beginAtZero: true, ticks: { callback: (v) => v + ' days' } } } }
@@ -1358,7 +1358,7 @@
             labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             datasets: [
               { label: '2025 Median Price', data: [220000, 360000, 375000, 320000, 323500, 287000, 400000, 287000, 337500, 330000, 405000, 414000], borderColor: '#22c55e', backgroundColor: 'rgba(34, 197, 94, 0.1)', borderWidth: 3, pointBackgroundColor: '#22c55e', pointRadius: 5, tension: 0.4 },
-              { label: '2026 Median Price (YTD)', data: [299000, 312000, 352000, null, null, null, null, null, null, null, null, null], borderColor: '#fff', backgroundColor: 'rgba(255, 255, 255, 0.1)', borderWidth: 3, pointBackgroundColor: '#fff', pointRadius: 5, tension: 0.4 }
+              { label: '2026 Median Price (YTD)', data: [299000, 312000, 352000, null, null, null, null, null, null, null, null, null], borderColor: '#2c5aa0', backgroundColor: 'rgba(44, 90, 160, 0.1)', borderWidth: 3, pointBackgroundColor: '#2c5aa0', pointRadius: 5, tension: 0.4 }
             ]
           },
           options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, beginAtZero: true, ticks: { callback: (v) => '$' + (v / 1000).toFixed(0) + 'K' } } } }
@@ -1372,7 +1372,7 @@
             labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             datasets: [
               { label: '2025 Volume ($M)', data: [1.06, 1.13, 2.34, 2.01, 1.29, 2.79, 3.04, 2.65, 3.38, 5.94, 3.64, 3.31], backgroundColor: '#22c55e', borderRadius: 2 },
-              { label: '2026 Volume ($M) (YTD)', data: [2.10, 1.52, 4.07, null, null, null, null, null, null, null, null, null], backgroundColor: '#fff', borderRadius: 2 }
+              { label: '2026 Volume ($M) (YTD)', data: [2.10, 1.52, 4.07, null, null, null, null, null, null, null, null, null], backgroundColor: '#2c5aa0', borderRadius: 2 }
             ]
           },
           options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, beginAtZero: true, ticks: { callback: (v) => '$' + v.toFixed(1) + 'M' } } } }
