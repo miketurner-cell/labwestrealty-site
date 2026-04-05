@@ -7,17 +7,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="canonical" href="https://labwestrealty.com/">
-  <meta name="description" content="Join Royal LePage Turner Realty's Labrador West office. Recruiting experienced REALTORS® in Labrador City & Wabush, NL. Award-winning brokerage, cutting-edge tools, national support.">
-  <title>Labrador West Realty — Join Royal LePage Turner | Recruiting</title>
-  <meta property="og:title" content="Labrador West Realty — Join Royal LePage Turner">
-  <meta property="og:description" content="Recruiting licensed REALTORS® for Labrador West. Be the first RLP agent in Lab City & Wabush. Chairman's Club Top 1% nationally.">
-  <meta property="og:url" content="https://labwestrealty.com/">
+  <link rel="canonical" href="https://labwestrealty.com/labrador-west.html">
+  <meta name="description" content="Labrador West real estate market opportunity. Labrador City & Wabush, NL. Growing market driven by mining, community growth, and housing demand.">
+  <title>Labrador West Real Estate Market — Opportunity</title>
+  <meta property="og:title" content="Labrador West Real Estate Market">
+  <meta property="og:description" content="Explore the growing real estate opportunity in Labrador City & Wabush. Mining-driven economy, housing demand, and community growth.">
+  <meta property="og:url" content="https://labwestrealty.com/labrador-west.html">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Labrador West Realty">
-  <meta property="og:image" content="https://labwestrealty.com/og-image.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@600;700;800;900&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
@@ -27,9 +24,8 @@
     a { color: inherit; }
     img { display: block; max-width: 100%; }
 
-    /* ═══ SCOPED: .lw (Labrador West — recruiting, light corporate) ═══ */
+    /* ═══ SCOPED: .lw (Labrador West) ═══ */
 
-    /* ── NAV ── */
     .lw .nav-bar {
       display: flex; align-items: center; justify-content: space-between;
       background: #fff; padding: 0 48px; height: 72px;
@@ -65,19 +61,13 @@
     /* ── HERO ── */
     .lw .hero {
       background: linear-gradient(135deg, #f8f8f8 0%, #fff 50%, #f5f5f5 100%);
-      padding: 100px 48px 80px; text-align: center; position: relative; overflow: hidden;
+      padding: 80px 48px 60px; text-align: center; position: relative; overflow: hidden;
     }
     .lw .hero::before {
       content: ''; position: absolute; inset: 0; opacity: 0.025;
       background: repeating-linear-gradient(90deg, #EA002A 0px, #EA002A 1px, transparent 1px, transparent 80px);
     }
     .lw .hero-content { max-width: 760px; margin: 0 auto; position: relative; z-index: 1; }
-    .lw .hero-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
-      color: #EA002A; background: rgba(234,0,42,0.06); border: 1px solid rgba(234,0,42,0.15);
-      padding: 8px 20px; border-radius: 24px; margin-bottom: 32px;
-    }
     .lw .hero h1 {
       font-family: 'Raleway', sans-serif; font-weight: 900;
       font-size: clamp(34px, 5vw, 54px); line-height: 1.12; margin: 0 0 20px;
@@ -86,21 +76,56 @@
     .lw .hero h1 em { font-style: normal; color: #EA002A; }
     .lw .hero-sub {
       font-size: clamp(16px, 2vw, 19px); color: #666; line-height: 1.7;
-      margin: 0 0 40px; font-weight: 300;
+      margin: 0; font-weight: 300;
     }
-    .lw .hero-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-    .lw .btn-primary {
-      display: inline-block; background: #EA002A; color: #fff; padding: 14px 32px;
-      font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 14px;
-      letter-spacing: 0.03em; text-decoration: none; border-radius: 6px; transition: background 0.2s;
+
+    /* ── SECTIONS ── */
+    .lw section { padding: 96px 48px; }
+    .lw .section-inner { max-width: 1100px; margin: 0 auto; }
+    .lw .section-eyebrow {
+      font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+      color: #EA002A; margin-bottom: 12px;
     }
-    .lw .btn-primary:hover { background: #c8001f; }
-    .lw .btn-outline {
-      display: inline-block; background: transparent; color: #1a1a1a; padding: 14px 32px;
-      font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 14px;
-      letter-spacing: 0.03em; text-decoration: none; border-radius: 6px; border: 1px solid #ccc; transition: all 0.2s;
+    .lw .section-title {
+      font-family: 'Raleway', sans-serif; font-weight: 900;
+      font-size: clamp(26px, 3.5vw, 38px); color: #1a1a1a; margin: 0 0 16px; letter-spacing: -0.02em;
     }
-    .lw .btn-outline:hover { border-color: #EA002A; color: #EA002A; }
+    .lw .section-desc {
+      font-size: 17px; color: #666; line-height: 1.75; max-width: 600px; margin-bottom: 48px;
+    }
+
+    /* ── MARKET OVERVIEW ── */
+    .lw .market-section { background: #fff; }
+    .lw .market-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+    .lw .market-content h3 {
+      font-family: 'Raleway', sans-serif; font-weight: 900;
+      font-size: clamp(24px, 3vw, 32px); color: #1a1a1a; margin: 0 0 16px; line-height: 1.2;
+    }
+    .lw .market-content p {
+      font-size: 16px; color: #666; line-height: 1.8; margin: 0 0 16px;
+    }
+    .lw .market-content p:last-child { margin-bottom: 0; }
+    .lw .market-image {
+      background: linear-gradient(135deg, rgba(234,0,42,0.08), rgba(234,0,42,0.03));
+      border-radius: 12px; height: 360px; display: flex; align-items: center; justify-content: center;
+      font-size: 14px; color: #999; border: 1px solid rgba(234,0,42,0.15);
+    }
+
+    /* ── OPPORTUNITY GRID ── */
+    .lw .opportunity-section { background: #f7f7f7; }
+    .lw .opportunity-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 40px; }
+    .lw .opportunity-item {
+      background: #fff; border: 1px solid #e8e8e8; border-radius: 12px;
+      padding: 40px 28px; transition: box-shadow 0.25s, transform 0.25s;
+    }
+    .lw .opportunity-item:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.06); transform: translateY(-4px); }
+    .lw .opportunity-icon {
+      width: 48px; height: 48px; border-radius: 10px; background: rgba(234,0,42,0.06);
+      display: flex; align-items: center; justify-content: center; margin-bottom: 16px;
+    }
+    .lw .opportunity-icon svg { width: 20px; height: 20px; fill: #EA002A; }
+    .lw .opportunity-item h4 { font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 18px; color: #1a1a1a; margin: 0 0 12px; }
+    .lw .opportunity-item p { font-size: 15px; color: #666; line-height: 1.7; margin: 0; }
 
     /* ── STATS ── */
     .lw .stats-strip {
@@ -118,44 +143,15 @@
     .lw .stat-num em { font-style: normal; color: #EA002A; }
     .lw .stat-label { font-size: 13px; color: rgba(255,255,255,0.5); letter-spacing: 0.04em; }
 
-    /* ── SECTIONS ── */
-    .lw section { padding: 96px 48px; }
-    .lw .section-inner { max-width: 1100px; margin: 0 auto; }
-    .lw .section-eyebrow {
-      font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
-      color: #EA002A; margin-bottom: 12px;
+    /* ── WHY NOW ── */
+    .lw .why-section { background: #fff; }
+    .lw .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 40px; }
+    .lw .why-item h4 {
+      font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 18px; color: #1a1a1a; margin: 0 0 12px;
     }
-    .lw .section-title {
-      font-family: 'Raleway', sans-serif; font-weight: 900;
-      font-size: clamp(26px, 3.5vw, 38px); color: #1a1a1a; margin: 0 0 16px; letter-spacing: -0.02em;
+    .lw .why-item p {
+      font-size: 15px; color: #666; line-height: 1.7; margin: 0;
     }
-    .lw .section-desc {
-      font-size: 17px; color: #666; line-height: 1.75; max-width: 600px; margin-bottom: 48px;
-    }
-
-    /* ── BENEFITS GRID ── */
-    .lw .benefits-section { background: #f7f7f7; }
-    .lw .benefits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 40px; }
-    .lw .benefit-item {}
-    .lw .benefit-item .benefit-icon {
-      width: 44px; height: 44px; border-radius: 10px; background: rgba(234,0,42,0.06);
-      display: flex; align-items: center; justify-content: center; margin-bottom: 16px;
-    }
-    .lw .benefit-item .benefit-icon svg { width: 20px; height: 20px; fill: #EA002A; }
-    .lw .benefit-item h3 { font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 17px; color: #1a1a1a; margin: 0 0 8px; }
-    .lw .benefit-item p { font-size: 15px; color: #666; line-height: 1.7; margin: 0; }
-
-    /* ── AWARDS SECTION ── */
-    .lw .awards-section { background: #fff; }
-    .lw .award-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; }
-    .lw .award-badge {
-      background: #fff; border: 1px solid #e8e8e8; border-radius: 10px;
-      padding: 32px 20px; text-align: center; text-decoration: none; color: #2c2c2c;
-      transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
-    }
-    .lw .award-badge:hover { border-color: #EA002A; box-shadow: 0 12px 40px rgba(0,0,0,0.06); transform: translateY(-4px); }
-    .lw .award-badge .award-label { font-size: 12px; font-weight: 600; color: #EA002A; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
-    .lw .award-badge h4 { font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 15px; color: #1a1a1a; margin: 0; line-height: 1.4; }
 
     /* ── CTA BANNER ── */
     .lw .cta-banner {
@@ -172,6 +168,12 @@
       font-size: clamp(24px, 3.5vw, 36px); color: #fff; margin: 0 0 16px;
     }
     .lw .cta-banner p { font-size: 17px; color: rgba(255,255,255,0.6); margin: 0 0 36px; }
+    .lw .btn-primary {
+      display: inline-block; background: #EA002A; color: #fff; padding: 14px 32px;
+      font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 14px;
+      letter-spacing: 0.03em; text-decoration: none; border-radius: 6px; transition: background 0.2s;
+    }
+    .lw .btn-primary:hover { background: #c8001f; }
 
     /* ── FOOTER ── */
     .lw .site-footer { background: #fafafa; border-top: 1px solid #e8e8e8; padding: 56px 48px 0; }
@@ -221,10 +223,10 @@
       .lw .footer-inner { grid-template-columns: 1fr; gap: 32px; }
       .lw .site-footer { padding: 40px 20px 0; }
       .lw .footer-red-bar { margin: 0 -20px; padding: 14px 20px; }
+      .lw .market-grid { grid-template-columns: 1fr; gap: 40px; }
     }
     @media (max-width: 600px) {
       .lw .stats-strip { flex-direction: column; }
-      .lw .hero-actions { flex-direction: column; align-items: center; }
     }
   </style>
 </head>
@@ -257,120 +259,108 @@
   <!-- HERO -->
   <section class="hero">
     <div class="hero-content">
-      <div class="hero-badge">Royal LePage Turner Realty — Now Recruiting in Labrador West</div>
-      <h1>Build Your Real Estate Career in <em>Labrador West</em></h1>
-      <p class="hero-sub">Join an award-winning brokerage with cutting-edge technology, national support, and proven leadership. Be the first Royal LePage agent in Labrador City and Wabush.</p>
-      <div class="hero-actions">
-        <a href="contact.html" class="btn-primary">Start Your Journey</a>
-        <a href="why-join.html" class="btn-outline">Learn Benefits</a>
+      <h1>The Labrador West <em>Opportunity</em></h1>
+      <p class="hero-sub">A growing market driven by stable employment, housing demand, and community growth. Be the first Royal LePage agent to serve this region.</p>
+    </div>
+  </section>
+
+  <!-- MARKET OVERVIEW -->
+  <section class="market-section">
+    <div class="section-inner">
+      <div class="market-grid">
+        <div class="market-content">
+          <h3>A Market Ready for Royal LePage</h3>
+          <p>Labrador West—encompassing Labrador City and Wabush—is a thriving community of approximately 10,000 residents with a stable, diversified economy. Iron ore mining remains the backbone, but the region benefits from growing healthcare, education, and government employment sectors.</p>
+          <p>Until now, there has been no Royal LePage presence in Lab West. That represents a genuine market opportunity. Real estate agents in the region have an immediate advantage: first-mover status in a community hungry for modern tools, professional service, and the backing of Canada's leading real estate brand.</p>
+        </div>
+        <div class="market-image">Labrador West Market Opportunity</div>
       </div>
     </div>
   </section>
 
-  <!-- STATS -->
+  <!-- MARKET STATS -->
   <div class="stats-strip">
     <div class="stat-item">
-      <div class="stat-num"><em>Top 1%</em></div>
-      <div class="stat-label">Chairman's Club 9 Consecutive Years</div>
+      <div class="stat-num">10,000</div>
+      <div class="stat-label">Population (Lab City + Wabush)</div>
     </div>
     <div class="stat-item">
-      <div class="stat-num">#43</div>
-      <div class="stat-label">Nationally by Units (2025)</div>
+      <div class="stat-num">1st</div>
+      <div class="stat-label">RLP Agent in Lab West</div>
     </div>
     <div class="stat-item">
-      <div class="stat-num">28</div>
-      <div class="stat-label">Years Serving NL</div>
+      <div class="stat-num">Stable</div>
+      <div class="stat-label">Mining-Driven Economy</div>
     </div>
     <div class="stat-item">
-      <div class="stat-num">11</div>
-      <div class="stat-label">Licensed REALTORS&reg;</div>
+      <div class="stat-num">Growing</div>
+      <div class="stat-label">Healthcare & Education Jobs</div>
     </div>
   </div>
 
-  <!-- BENEFITS PREVIEW -->
-  <section class="benefits-section">
+  <!-- OPPORTUNITIES -->
+  <section class="opportunity-section">
     <div class="section-inner">
-      <div class="section-eyebrow">What You Get</div>
-      <h2 class="section-title">Everything You Need to Succeed</h2>
-      <p class="section-desc">At Royal LePage Turner Realty, we invest in our agents' success with technology, training, and support that competitors can't match.</p>
-      <div class="benefits-grid">
-        <div class="benefit-item">
-          <div class="benefit-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div>
-          <h3>rlpSPHERE&reg; CRM</h3>
-          <p>AI-powered Smart CRM, IDX websites, Lead Engine, and Marketing Autopilot included.</p>
+      <div class="section-eyebrow">Why Now?</div>
+      <h2 class="section-title">Market Drivers & Demand</h2>
+      <p class="section-desc">Labrador West presents compelling opportunities for real estate agents willing to invest in the market.</p>
+      <div class="opportunity-grid">
+        <div class="opportunity-item">
+          <div class="opportunity-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/></svg></div>
+          <h4>Mining Employment Stability</h4>
+          <p>Iron ore mining through Rio Tinto's IOC operation employs hundreds. Mining workers seek quality housing and represent a stable client base for real estate agents.</p>
         </div>
-        <div class="benefit-item">
-          <div class="benefit-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.6 8.3h-2.4V7h-2.4v3.3H8.4v2.4h3.3v3.3h2.4v-3.3h3.3v-2.4z"/></svg></div>
-          <h3>Smart Leads™</h3>
-          <p>National lead distribution from royallepage.ca to grow your business fast.</p>
+        <div class="opportunity-item">
+          <div class="opportunity-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/></svg></div>
+          <h4>Healthcare & Government Growth</h4>
+          <p>Growing healthcare services and government employment offer additional income stability. Medical professionals and civil servants seeking housing represent premium clients.</p>
         </div>
-        <div class="benefit-item">
-          <div class="benefit-icon"><svg viewBox="0 0 24 24"><path d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6.538 12.465c0 2.048-1.694 3.71-3.784 3.71-2.09 0-3.784-1.662-3.784-3.71s1.694-3.71 3.784-3.71c2.09 0 3.784 1.662 3.784 3.71zm-9.322 0c0 2.048-1.694 3.71-3.784 3.71s-3.784-1.662-3.784-3.71 1.694-3.71 3.784-3.71 3.784 1.662 3.784 3.71zm4.661-8.465c0 1.657-1.343 3-3 3s-3-1.343-3-3 1.343-3 3-3 3 1.343 3 3z"/></svg></div>
-          <h3>Professional Support</h3>
-          <p>Weekly webinars, Buffini training, Peak Producers, and ongoing coaching.</p>
+        <div class="opportunity-item">
+          <div class="opportunity-icon"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
+          <h4>Newcomer & Relocation Demand</h4>
+          <p>People relocating to Lab West for work need housing information, local expertise, and guidance. Royal LePage's relocation network creates advantages.</p>
         </div>
-        <div class="benefit-item">
-          <div class="benefit-icon"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg></div>
-          <h3>Marketing Resources</h3>
-          <p>Professional photography, video, iGuide services, and digital marketing tools.</p>
+        <div class="opportunity-item">
+          <div class="opportunity-icon"><svg viewBox="0 0 24 24"><path d="M3 13h2v8H3zm4-8h2v16H7zm4-2h2v18h-2zm4 4h2v14h-2zm4-2h2v16h-2z"/></svg></div>
+          <h4>Limited Real Estate Service</h4>
+          <p>Currently underserved by professional real estate agents. Homebuyers and sellers in Lab West lack the modern tools and support Turner Realty provides.</p>
         </div>
-        <div class="benefit-item">
-          <div class="benefit-icon"><svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg></div>
-          <h3>rlpCAMPUS™</h3>
-          <p>Free self-directed online training covering sales, tech, marketing, and compliance.</p>
+        <div class="opportunity-item">
+          <div class="opportunity-icon"><svg viewBox="0 0 24 24"><path d="M11.99 5V1h-2v4c-6.3.5-11 5.9-11 12.5S3.7 23.5 10 24v-4c-3.9-.5-6.8-3.9-6.8-8.5s2.9-8 6.8-8.5V5zm6.9 9c0-1.71-1.39-3.1-3.1-3.1-1.71 0-3.1 1.39-3.1 3.1s1.39 3.1 3.1 3.1c1.71 0 3.1-1.39 3.1-3.1z"/></svg></div>
+          <h4>First-Mover Advantage</h4>
+          <p>Be the first professional agent in Lab West to offer Royal LePage's full suite of tools, training, and support. Brand loyalty follows early adopters.</p>
         </div>
-        <div class="benefit-item">
-          <div class="benefit-icon"><svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg></div>
-          <h3>@royallepage.ca Email</h3>
-          <p>Professional Google Workspace email and collaboration tools included.</p>
-        </div>
-        <div class="benefit-item">
-          <div class="benefit-icon"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
-          <h3>National Referral Network</h3>
-          <p>20,000+ agents nationwide ready to collaborate on transactions.</p>
+        <div class="opportunity-item">
+          <div class="opportunity-icon"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></div>
+          <h4>Growing Community Investment</h4>
+          <p>Lab West is investing in infrastructure, amenities, and quality of life. Community growth attracts newcomers and creates ongoing real estate activity.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- AWARDS & CREDENTIALS -->
-  <section class="awards-section">
+  <!-- WHY IT MATTERS -->
+  <section class="why-section">
     <div class="section-inner">
-      <div class="section-eyebrow">Our Track Record</div>
-      <h2 class="section-title">Award-Winning Leadership</h2>
-      <p class="section-desc">When you join Turner Realty, you join a brokerage recognized across Canada for excellence.</p>
-      <div class="award-grid">
-        <div class="award-badge">
-          <div class="award-label">National</div>
-          <h4>Chairman's Club Top 1% — 9 Consecutive Years</h4>
+      <div class="section-eyebrow">For Real Estate Agents</div>
+      <h2 class="section-title">What This Means for Your Career</h2>
+      <p class="section-desc">Labrador West offers real estate agents something rare: an underserved market with genuine housing demand and immediate opportunity.</p>
+      <div class="why-grid">
+        <div class="why-item">
+          <h4>Less Competition</h4>
+          <p>Fewer real estate agents means your listings and services stand out. You'll build relationships and reputation faster than in saturated markets.</p>
         </div>
-        <div class="award-badge">
-          <div class="award-label">National</div>
-          <h4>#43 Brokerage by Units — 2025</h4>
+        <div class="why-item">
+          <h4>Strong Local Network</h4>
+          <p>Lab West is a tight-knit community. Professional service, honesty, and results build loyalty and referrals that compound over time.</p>
         </div>
-        <div class="award-badge">
-          <div class="award-label">Regional</div>
-          <h4>A.E. LePage Brokerage of the Year — 2018, 2020</h4>
+        <div class="why-item">
+          <h4>Stable Client Base</h4>
+          <p>Mining employment, healthcare jobs, and government positions provide income stability. Your clients have reliable purchasing power.</p>
         </div>
-        <div class="award-badge">
-          <div class="award-label">National</div>
-          <h4>Best in Tech — 2021, 2022, 2024</h4>
-        </div>
-        <div class="award-badge">
-          <div class="award-label">National</div>
-          <h4>Award of Excellence — 2022–2025</h4>
-        </div>
-        <div class="award-badge">
-          <div class="award-label">National</div>
-          <h4>Executive Circle — 2022–2025</h4>
-        </div>
-        <div class="award-badge">
-          <div class="award-label">Regional</div>
-          <h4>Top Ten East Coast Team — 10 Consecutive Years</h4>
-        </div>
-        <div class="award-badge">
-          <div class="award-label">National</div>
-          <h4>Lead Manager of the Year Finalist — 2023</h4>
+        <div class="why-item">
+          <h4>Brand Prestige</h4>
+          <p>Royal LePage's reputation and rlpSPHERE technology differentiate you immediately. You're bringing professional tools to an underserved market.</p>
         </div>
       </div>
     </div>
@@ -379,8 +369,8 @@
   <!-- CTA BANNER -->
   <section class="cta-banner">
     <div class="section-inner">
-      <h2>Ready to Take the Next Step?</h2>
-      <p>Contact Mike Turner, Broker of Record, to discuss your future with Royal LePage Turner Realty.</p>
+      <h2>Pioneer the Lab West Market</h2>
+      <p>Be the first Royal LePage REALTOR&reg; in Labrador City & Wabush. Let's talk about building your career here.</p>
       <a href="contact.html" class="btn-primary">Get in Touch</a>
     </div>
   </section>
@@ -430,40 +420,6 @@
     btn.addEventListener('click', function(){ btn.classList.toggle('active'); links.classList.toggle('open'); });
   }
 })();
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "RealEstateAgent",
-  "name": "Royal LePage Turner Realty — Labrador West",
-  "alternateName": "Labrador West Realty",
-  "url": "https://labwestrealty.com",
-  "telephone": "+1-709-256-7999",
-  "email": "miketurner@royallepage.ca",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "204 Airport Boulevard",
-    "addressLocality": "Gander",
-    "addressRegion": "NL",
-    "postalCode": "A1V 1L6",
-    "addressCountry": "CA"
-  },
-  "geo": {
-    "@type": "GeoCoordinates",
-    "latitude": 52.8086,
-    "longitude": -66.6496
-  },
-  "description": "Recruiting licensed REALTORS® for Labrador West office of Royal LePage Turner Realty. Be the first RLP agent in Labrador City & Wabush.",
-  "areaServed": [
-    {"@type": "City", "name": "Labrador City"},
-    {"@type": "City", "name": "Wabush"}
-  ],
-  "parentOrganization": {
-    "@type": "Organization",
-    "name": "Royal LePage Turner Realty (2014) Inc.",
-    "url": "https://royallepageturner.com"
-  }
-}
 </script>
 </body>
 </html>
