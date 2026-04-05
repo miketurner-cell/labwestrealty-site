@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-FEMZDX1BJQ"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-FEMZDX1BJQ');</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="canonical" href="https://labwestrealty.com/market-stats.html">
+  <meta name="description" content="Lab West real estate market statistics. Labrador City & Wabush MLS data, sales trends, pricing analysis, and market insights (Jan 2021 – Mar 2026).">
+  <title>Market Statistics — Labrador West Realty</title>
+  <meta property="og:title" content="Market Statistics — Labrador West Realty">
+  <meta property="og:description" content="Explore Labrador West real estate market data: sales, median prices, days on market, and trends from NLAR Matrix MLS.">
+  <meta property="og:url" content="https://labwestrealty.com/market-stats.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Labrador West Realty">
+  <meta property="og:image" content="https://labwestrealty.com/og-default.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@600;700;800;900&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; padding: 0; background: #1a1a1a; color: #fff; font-family: 'Roboto', sans-serif; font-weight: 400; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+    a { color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    /* ═══ SCOPED: .ms (Market Statistics — dark theme) ═══ */
+
+    .ms {
+      background: #1a1a1a;
+      position: relative;
+    }
+
+    /* ── NAV ── */
+    .ms .nav-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      background: #111; padding: 0 48px; height: 72px;
+      border-bottom: 1px solid rgba(255,255,255,0.08); position: sticky; top: 0; z-index: 1000;
+    }
+    .ms .nav-brand { display: flex; align-items: center; text-decoration: none; gap: 12px; }
+    .ms .nav-brand-name {
+      font-family: 'Raleway', sans-serif; font-weight: 900; font-size: 18px; color: #fff; letter-spacing: -0.01em;
+    }
+    .ms .nav-brand-name span { color: #EA002A; }
+    .ms .nav-brand-divider { width: 1px; height: 28px; background: rgba(255,255,255,0.15); }
+    .ms .nav-brand-sub {
+      font-size: 11px; font-weight: 400; color: rgba(255,255,255,0.4); letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .ms .nav-toggle { display: none; flex-direction: column; justify-content: center; gap: 5px; background: none; border: none; cursor: pointer; padding: 8px; }
+    .ms .nav-toggle span { display: block; width: 22px; height: 2px; background: #fff; border-radius: 1px; transition: transform 0.3s, opacity 0.3s; }
+    .ms .nav-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .ms .nav-toggle.active span:nth-child(2) { opacity: 0; }
+    .ms .nav-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+    .ms .nav-links { display: flex; align-items: center; list-style: none; margin: 0; padding: 0; gap: 4px; }
+    .ms .nav-links li a {
+      display: block; padding: 8px 16px; font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.6);
+      text-decoration: none; letter-spacing: 0.01em; transition: color 0.2s; border-radius: 6px;
+    }
+    .ms .nav-links li a:hover { color: #EA002A; }
+    .ms .nav-right { display: flex; align-items: center; gap: 16px; }
+    .ms .nav-phone {
+      display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 500;
+      color: #EA002A; text-decoration: none;
+    }
+    .ms .nav-phone svg { width: 16px; height: 16px; fill: #EA002A; }
+
+    /* ── HERO ── */
+    .ms .hero {
+      background: linear-gradient(135deg, rgba(26,26,26,1) 0%, rgba(17,17,17,1) 50%, rgba(26,26,26,1) 100%);
+      padding: 100px 48px 80px; text-align: center; position: relative; overflow: hidden;
+    }
+    .ms .hero::before {
+      content: ''; position: absolute; inset: 0; opacity: 0.03;
+      background: repeating-linear-gradient(90deg, #fff 0px, #fff 1px, transparent 1px, transparent 80px);
+    }
+    .ms .hero-content { max-width: 760px; margin: 0 auto; position: relative; z-index: 1; }
+    .ms .hero h1 {
+      font-family: 'Raleway', sans-serif; font-weight: 900;
+      font-size: clamp(34px, 5vw, 54px); line-height: 1.12; margin: 0 0 20px;
+      color: #fff; letter-spacing: -0.03em;
+    }
+    .ms .hero h1 em { font-style: normal; color: #EA002A; }
+    .ms .hero-sub {
+      font-size: clamp(16px, 2vw, 19px); color: rgba(255,255,255,0.6); line-height: 1.7;
+      margin: 0; font-weight: 300;
+    }
+
+    /* ── KEY STATS CARDS ── */
+    .ms .key-stats {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px;
+      max-width: 1100px; margin: 0 auto 80px; padding: 0 48px;
+    }
+    .ms .stat-card {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(234,0,42,0.2);
+      border-radius: 12px; padding: 32px 24px; text-align: center;
+      transition: background 0.25s, border-color 0.25s;
+    }
+    .ms .stat-card:hover {
+      background: rgba(255,255,255,0.05); border-color: #EA002A;
+    }
+    .ms .stat-card-value {
+      font-family: 'Raleway', sans-serif; font-weight: 900; font-size: clamp(28px, 3vw, 40px);
+      color: #EA002A; line-height: 1; margin-bottom: 12px;
+    }
+    .ms .stat-card-label {
+      font-size: 13px; color: rgba(255,255,255,0.5); letter-spacing: 0.02em; text-transform: uppercase;
+    }
+
+    /* ── SECTIONS ── */
+    .ms section { padding: 96px 48px; }
+    .ms .section-inner { max-width: 1100px; margin: 0 auto; }
+    .ms .section-eyebrow {
+      font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+      color: #EA002A; margin-bottom: 12px;
+    }
+    .ms .section-title {
+      font-family: 'Raleway', sans-serif; font-weight: 900;
+      font-size: clamp(26px, 3.5vw, 38px); color: #fff; margin: 0 0 16px; letter-spacing: -0.02em;
+    }
+    .ms .section-desc {
+      font-size: 17px; color: rgba(255,255,255,0.6); line-height: 1.75; max-width: 600px; margin-bottom: 48px;
+    }
+
+    /* ── DATA TABLE ── */
+    .ms .table-section { position: relative; }
+    .ms .table-controls {
+      margin-bottom: 32px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+    }
+    .ms .table-toggle {
+      background: #EA002A; color: #fff; border: none; padding: 10px 20px;
+      font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 13px;
+      letter-spacing: 0.03em; border-radius: 6px; cursor: pointer; transition: background 0.2s;
+    }
+    .ms .table-toggle:hover { background: #c8001f; }
+    .ms .table-wrapper {
+      background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; overflow: hidden; overflow-x: auto;
+    }
+    .ms table {
+      width: 100%; border-collapse: collapse; font-size: 14px;
+    }
+    .ms table thead {
+      background: rgba(255,255,255,0.04); border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .ms table th {
+      padding: 16px 12px; text-align: left; font-weight: 600; color: #EA002A;
+      letter-spacing: 0.02em; text-transform: uppercase; font-size: 12px;
+    }
+    .ms table td {
+      padding: 14px 12px; border-bottom: 1px solid rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.7);
+    }
+    .ms table tbody tr:hover {
+      background: rgba(255,255,255,0.02);
+    }
+    .ms table tbody tr.hidden {
+      display: none;
+    }
+    .ms .table-month { font-weight: 500; color: #fff; }
+
+    /* ── CHARTS ── */
+    .ms .charts-section { background: transparent; }
+    .ms .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 48px; margin-top: 48px; }
+    .ms .chart-card {
+      background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; padding: 32px;
+    }
+    .ms .chart-title {
+      font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 18px;
+      color: #fff; margin: 0 0 24px; letter-spacing: -0.01em;
+    }
+    .ms .chart-bars {
+      display: flex; align-items: flex-end; justify-content: space-around; gap: 8px;
+      height: 280px; background: rgba(255,255,255,0.01); border-radius: 8px; padding: 12px;
+    }
+    .ms .bar-column {
+      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+      gap: 8px; min-width: 0;
+    }
+    .ms .bar {
+      width: 100%; border-radius: 6px 6px 0 0; background: linear-gradient(180deg, #EA002A, #c8001f);
+      transition: opacity 0.2s; cursor: help;
+    }
+    .ms .bar:hover { opacity: 0.8; }
+    .ms .bar-label {
+      font-size: 11px; color: rgba(255,255,255,0.4); text-align: center; word-break: break-word;
+      width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .ms .bar-value {
+      font-size: 12px; font-weight: 600; color: #EA002A; margin-bottom: 4px;
+    }
+
+    /* ── DATA SOURCE ── */
+    .ms .data-source {
+      text-align: center; padding: 24px; background: rgba(255,255,255,0.02);
+      border-top: 1px solid rgba(255,255,255,0.08); border-radius: 0 0 12px 12px;
+      font-size: 13px; color: rgba(255,255,255,0.4); margin-top: 32px;
+    }
+
+    /* ── CTA SECTION ── */
+    .ms .agent-cta {
+      background: rgba(234,0,42,0.08); border: 1px solid rgba(234,0,42,0.2);
+      border-radius: 12px; padding: 48px 32px; margin-top: 64px;
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .ms .agent-cta::before {
+      content: ''; position: absolute; inset: 0; opacity: 0.02;
+      background: repeating-linear-gradient(90deg, #fff 0px, #fff 1px, transparent 1px, transparent 80px);
+    }
+    .ms .agent-cta .cta-content { position: relative; z-index: 1; }
+    .ms .agent-cta h3 {
+      font-family: 'Raleway', sans-serif; font-weight: 900;
+      font-size: clamp(22px, 3vw, 32px); color: #fff; margin: 0 0 16px;
+    }
+    .ms .agent-cta p {
+      font-size: 16px; color: rgba(255,255,255,0.7); margin: 0 0 28px; max-width: 600px; margin-left: auto; margin-right: auto;
+    }
+    .ms .btn-primary {
+      display: inline-block; background: #EA002A; color: #fff; padding: 14px 32px;
+      font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 14px;
+      letter-spacing: 0.03em; text-decoration: none; border-radius: 6px; transition: background 0.2s;
+    }
+    .ms .btn-primary:hover { background: #c8001f; }
+
+    /* ── FOOTER ── */
+    .ms .site-footer { background: #111; border-top: 1px solid rgba(255,255,255,0.08); padding: 0; }
+    .ms .footer-red-bar {
+      background: #EA002A; padding: 14px 48px;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+    }
+    .ms .footer-red-bar p { margin: 0; font-size: 12px; color: #fff; font-weight: 400; }
+    .ms .footer-red-bar a { color: #fff; text-decoration: none; }
+    .ms .footer-secondary {
+      padding: 32px 48px; text-align: center; font-size: 13px; color: rgba(255,255,255,0.4);
+      line-height: 1.6;
+    }
+    .ms .footer-secondary a { color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.2s; }
+    .ms .footer-secondary a:hover { color: #EA002A; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 1024px) {
+      .ms .nav-bar { padding: 0 20px; height: 60px; }
+      .ms .nav-brand-divider, .ms .nav-brand-sub { display: none; }
+      .ms .nav-toggle { display: flex; }
+      .ms .nav-links {
+        display: none; flex-direction: column; position: absolute; top: 60px; left: 0; right: 0;
+        background: #111; border-bottom: 1px solid rgba(255,255,255,0.08); padding: 8px 0; box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+      }
+      .ms .nav-links.open { display: flex; }
+      .ms .nav-links li a { padding: 12px 24px; font-size: 15px; }
+      .ms .nav-right { display: none; }
+      .ms .hero { padding: 64px 20px 56px; }
+      .ms .key-stats { padding: 0 20px; }
+      .ms section { padding: 64px 20px; }
+      .ms .footer-red-bar { margin: 0; padding: 14px 20px; }
+      .ms .footer-secondary { padding: 32px 20px; }
+      .ms .chart-bars { height: 240px; }
+    }
+    @media (max-width: 600px) {
+      .ms .key-stats { grid-template-columns: 1fr 1fr; gap: 16px; }
+      .ms .chart-bars { height: 200px; }
+      .ms .chart-card { padding: 20px; }
+      .ms table { font-size: 12px; }
+      .ms table th, .ms table td { padding: 10px 8px; }
+    }
+  </style>
+</head>
+<body>
+<div class="ms">
+
+  <!-- NAV -->
+  <nav class="nav-bar">
+    <a href="index.html" class="nav-brand">
+      <img src="images/rlp-logo.png" alt="Royal LePage" width="40" height="40" style="margin-right:10px;vertical-align:middle;">
+      <span class="nav-brand-name">Labrador <span>West</span></span>
+      <span class="nav-brand-divider"></span>
+      <span class="nav-brand-sub">Royal LePage Turner</span>
+    </a>
+    <button class="nav-toggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="why-join.html">Why Join</a></li>
+      <li><a href="about-turner.html">About Turner</a></li>
+      <li><a href="labrador-west.html">The Market</a></li>
+      <li><a href="market-stats.html">Market Stats</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="tel:7092567999" class="nav-phone">
+        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        709-944-7100
+      </a>
+    </div>
+  </nav>
+
+  <main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Market <em>Statistics</em></h1>
+      <p class="hero-sub">Real estate data for Labrador City and Wabush. Sales trends, pricing analysis, and market insights powered by NLAR Matrix MLS.</p>
+    </div>
+  </section>
+
+  <!-- KEY STATS CARDS -->
+  <div class="key-stats">
+    <div class="stat-card">
+      <div class="stat-card-value">8</div>
+      <div class="stat-card-label">Sales (Mar 2026)</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-value">$352K</div>
+      <div class="stat-card-label">Median Price</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-value">66</div>
+      <div class="stat-card-label">Avg Days on Market</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-value">$508.9K</div>
+      <div class="stat-card-label">Avg Sale Price</div>
+    </div>
+  </div>
+
+  <!-- DATA TABLE -->
+  <section class="table-section">
+    <div class="section-inner">
+      <div class="section-eyebrow">Historical Data</div>
+      <h2 class="section-title">Monthly Trends (Jan 2021 – Mar 2026)</h2>
+      <p class="section-desc">Complete market data showing sales volume, median price, average days on market (ADOM), and average sale price over 63 months.</p>
+
+      <div class="table-controls">
+        <button class="table-toggle" onclick="toggleFullTable()">Show All Months (63 total)</button>
+        <span style="font-size: 13px; color: rgba(255,255,255,0.5);">Currently showing last 12 months</span>
+      </div>
+
+      <div class="table-wrapper">
+        <table id="marketTable">
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Sales Count</th>
+              <th>Median Price</th>
+              <th>Avg Days on Market</th>
+              <th>Avg Sale Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="recent-only"><td class="table-month">Mar 2026</td><td>8</td><td>$352,000</td><td>66</td><td>$508,891</td></tr>
+            <tr class="recent-only"><td class="table-month">Feb 2026</td><td>5</td><td>$312,000</td><td>41</td><td>$303,200</td></tr>
+            <tr class="recent-only"><td class="table-month">Jan 2026</td><td>6</td><td>$299,000</td><td>55</td><td>$350,000</td></tr>
+            <tr class="recent-only"><td class="table-month">Dec 2025</td><td>8</td><td>$414,000</td><td>34</td><td>$398,625</td></tr>
+            <tr class="recent-only"><td class="table-month">Nov 2025</td><td>9</td><td>$405,000</td><td>32</td><td>$412,056</td></tr>
+            <tr class="recent-only"><td class="table-month">Oct 2025</td><td>18</td><td>$330,000</td><td>46</td><td>$325,194</td></tr>
+            <tr class="recent-only"><td class="table-month">Sep 2025</td><td>10</td><td>$337,500</td><td>47</td><td>$350,700</td></tr>
+            <tr class="recent-only"><td class="table-month">Aug 2025</td><td>9</td><td>$287,000</td><td>50</td><td>$294,222</td></tr>
+            <tr class="recent-only"><td class="table-month">Jul 2025</td><td>8</td><td>$400,000</td><td>90</td><td>$381,250</td></tr>
+            <tr class="recent-only"><td class="table-month">Jun 2025</td><td>9</td><td>$287,000</td><td>40</td><td>$310,556</td></tr>
+            <tr class="recent-only"><td class="table-month">May 2025</td><td>4</td><td>$323,500</td><td>99</td><td>$313,000</td></tr>
+            <tr class="recent-only"><td class="table-month">Apr 2025</td><td>6</td><td>$320,000</td><td>63</td><td>$335,000</td></tr>
+
+            <tr class="all-data hidden"><td class="table-month">Mar 2025</td><td>7</td><td>$375,000</td><td>183</td><td>$334,471</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Feb 2025</td><td>3</td><td>$360,000</td><td>82</td><td>$375,000</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Jan 2025</td><td>5</td><td>$220,000</td><td>72</td><td>$212,960</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Dec 2024</td><td>4</td><td>$310,000</td><td>117</td><td>$496,250</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Nov 2024</td><td>3</td><td>$305,000</td><td>31</td><td>$301,667</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Oct 2024</td><td>17</td><td>$325,000</td><td>68</td><td>$337,471</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Sep 2024</td><td>10</td><td>$313,500</td><td>78</td><td>$327,200</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Aug 2024</td><td>20</td><td>$319,500</td><td>76</td><td>$285,400</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Jul 2024</td><td>4</td><td>$233,000</td><td>38</td><td>$234,900</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Jun 2024</td><td>3</td><td>$245,000</td><td>76</td><td>$271,667</td></tr>
+            <tr class="all-data hidden"><td class="table-month">May 2024</td><td>4</td><td>$313,500</td><td>37</td><td>$312,500</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Apr 2024</td><td>6</td><td>$300,000</td><td>148</td><td>$292,667</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Mar 2024</td><td>3</td><td>$305,000</td><td>105</td><td>$241,167</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Feb 2024</td><td>6</td><td>$295,000</td><td>44</td><td>$327,500</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Jan 2024</td><td>2</td><td>$340,000</td><td>65</td><td>$340,000</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Dec 2023</td><td>6</td><td>$327,500</td><td>113</td><td>$324,250</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Nov 2023</td><td>5</td><td>$382,000</td><td>57</td><td>$357,400</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Oct 2023</td><td>4</td><td>$346,500</td><td>60</td><td>$331,750</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Sep 2023</td><td>5</td><td>$295,000</td><td>64</td><td>$326,400</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Aug 2023</td><td>13</td><td>$280,000</td><td>62</td><td>$305,654</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Jul 2023</td><td>5</td><td>$379,000</td><td>42</td><td>$350,000</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Jun 2023</td><td>14</td><td>$278,000</td><td>146</td><td>$288,964</td></tr>
+            <tr class="all-data hidden"><td class="table-month">May 2023</td><td>3</td><td>$310,000</td><td>136</td><td>$304,000</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Apr 2023</td><td>6</td><td>$267,000</td><td>52</td><td>$266,167</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Mar 2023</td><td>5</td><td>$265,000</td><td>79</td><td>$268,400</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Feb 2023</td><td>4</td><td>$264,950</td><td>68</td><td>$257,475</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Jan 2023</td><td>1</td><td>$275,000</td><td>72</td><td>$275,000</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Dec 2022</td><td>2</td><td>$332,500</td><td>33</td><td>$332,500</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Nov 2022</td><td>9</td><td>$300,000</td><td>63</td><td>$317,500</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Oct 2022</td><td>9</td><td>$310,000</td><td>40</td><td>$324,333</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Sep 2022</td><td>9</td><td>$310,000</td><td>60</td><td>$308,444</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Aug 2022</td><td>14</td><td>$275,000</td><td>51</td><td>$289,212</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Jul 2022</td><td>11</td><td>$275,000</td><td>72</td><td>$344,091</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Jun 2022</td><td>11</td><td>$319,000</td><td>35</td><td>$316,636</td></tr>
+            <tr class="all-data hidden"><td class="table-month">May 2022</td><td>6</td><td>$369,500</td><td>14</td><td>$343,333</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Apr 2022</td><td>8</td><td>$248,750</td><td>26</td><td>$258,938</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Mar 2022</td><td>4</td><td>$221,500</td><td>81</td><td>$255,750</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Feb 2022</td><td>5</td><td>$220,000</td><td>135</td><td>$218,000</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Jan 2022</td><td>6</td><td>$200,000</td><td>110</td><td>$243,000</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Dec 2021</td><td>10</td><td>$290,000</td><td>68</td><td>$341,190</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Nov 2021</td><td>15</td><td>$315,000</td><td>73</td><td>$304,620</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Oct 2021</td><td>12</td><td>$290,000</td><td>102</td><td>$291,917</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Sep 2021</td><td>12</td><td>$247,250</td><td>122</td><td>$259,408</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Aug 2021</td><td>13</td><td>$260,000</td><td>77</td><td>$271,069</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Jul 2021</td><td>15</td><td>$252,000</td><td>132</td><td>$266,727</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Jun 2021</td><td>13</td><td>$225,000</td><td>53</td><td>$252,923</td></tr>
+            <tr class="all-data hidden"><td class="table-month">May 2021</td><td>10</td><td>$252,500</td><td>241</td><td>$305,000</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Apr 2021</td><td>15</td><td>$221,000</td><td>88</td><td>$290,393</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Mar 2021</td><td>12</td><td>$235,000</td><td>194</td><td>$236,081</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Feb 2021</td><td>5</td><td>$190,000</td><td>82</td><td>$204,300</td></tr>
+            <tr class="all-data hidden"><td class="table-month">Jan 2021</td><td>5</td><td>$230,000</td><td>156</td><td>$254,800</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="data-source">Data sourced from NLAR Matrix MLS. Updated monthly.</div>
+    </div>
+  </section>
+
+  <!-- CHARTS SECTION -->
+  <section class="charts-section">
+    <div class="section-inner">
+      <div class="section-eyebrow">Visual Trends</div>
+      <h2 class="section-title">Last 12 Months at a Glance</h2>
+
+      <div class="chart-grid">
+        <!-- Sales Count Chart -->
+        <div class="chart-card">
+          <h3 class="chart-title">Monthly Sales Count</h3>
+          <div class="chart-bars" id="salesChart"></div>
+        </div>
+
+        <!-- Average Days on Market Chart -->
+        <div class="chart-card">
+          <h3 class="chart-title">Average Days on Market</h3>
+          <div class="chart-bars" id="adomChart"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AGENT RECRUITMENT CTA -->
+  <section class="table-section">
+    <div class="section-inner">
+      <div class="agent-cta">
+        <div class="cta-content">
+          <h3>Join the Lab West Market</h3>
+          <p>Are you a licensed REALTOR® looking to pioneer a growing market? Royal LePage Turner Realty is recruiting experienced agents to serve Labrador City and Wabush. Access market data, cutting-edge tools, and proven support systems.</p>
+          <a href="contact.html" class="btn-primary">Get in Touch with Mike Turner</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-red-bar">
+      <p><strong>Royal LePage Turner Realty</strong></p>
+      <p>labwestrealty.com · <a href="tel:7092567999">709-944-7100</a></p>
+    </div>
+    <div class="footer-secondary">
+      Part of the <a href="https://royallepageturner.com">Royal LePage Turner Realty network</a><br>
+      <br>
+      &copy; 1998–2026 Royal LePage Turner Realty (2014) Inc. Each office independently owned and operated.<br>
+      Labrador West office recruiting licensed REALTORS&reg;.
+    </div>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  // NAV TOGGLE
+  var btn = document.querySelector('.ms .nav-toggle');
+  var links = document.querySelector('.ms .nav-links');
+  if(btn && links){
+    btn.addEventListener('click', function(){ btn.classList.toggle('active'); links.classList.toggle('open'); });
+  }
+
+  // CHART DATA (last 12 months)
+  var chartData = [
+    { month: 'Apr 2025', sales: 6, adom: 63 },
+    { month: 'May 2025', sales: 4, adom: 99 },
+    { month: 'Jun 2025', sales: 9, adom: 40 },
+    { month: 'Jul 2025', sales: 8, adom: 90 },
+    { month: 'Aug 2025', sales: 9, adom: 50 },
+    { month: 'Sep 2025', sales: 10, adom: 47 },
+    { month: 'Oct 2025', sales: 18, adom: 46 },
+    { month: 'Nov 2025', sales: 9, adom: 32 },
+    { month: 'Dec 2025', sales: 8, adom: 34 },
+    { month: 'Jan 2026', sales: 6, adom: 55 },
+    { month: 'Feb 2026', sales: 5, adom: 41 },
+    { month: 'Mar 2026', sales: 8, adom: 66 }
+  ];
+
+  // RENDER SALES CHART
+  function renderSalesChart() {
+    var container = document.getElementById('salesChart');
+    if (!container) return;
+    var maxSales = Math.max.apply(Math, chartData.map(function(d) { return d.sales; }));
+    chartData.forEach(function(d) {
+      var col = document.createElement('div');
+      col.className = 'bar-column';
+      var height = (d.sales / maxSales) * 100;
+      var bar = document.createElement('div');
+      bar.className = 'bar';
+      bar.style.height = height + '%';
+      bar.title = d.month + ': ' + d.sales + ' sales';
+      var value = document.createElement('div');
+      value.className = 'bar-value';
+      value.textContent = d.sales;
+      var label = document.createElement('div');
+      label.className = 'bar-label';
+      label.textContent = d.month.split(' ')[0];
+      col.appendChild(value);
+      col.appendChild(bar);
+      col.appendChild(label);
+      container.appendChild(col);
+    });
+  }
+
+  // RENDER ADOM CHART
+  function renderAdomChart() {
+    var container = document.getElementById('adomChart');
+    if (!container) return;
+    var maxAdom = Math.max.apply(Math, chartData.map(function(d) { return d.adom; }));
+    chartData.forEach(function(d) {
+      var col = document.createElement('div');
+      col.className = 'bar-column';
+      var height = (d.adom / maxAdom) * 100;
+      var bar = document.createElement('div');
+      bar.className = 'bar';
+      bar.style.height = height + '%';
+      bar.title = d.month + ': ' + d.adom + ' days';
+      var value = document.createElement('div');
+      value.className = 'bar-value';
+      value.textContent = d.adom;
+      var label = document.createElement('div');
+      label.className = 'bar-label';
+      label.textContent = d.month.split(' ')[0];
+      col.appendChild(value);
+      col.appendChild(bar);
+      col.appendChild(label);
+      container.appendChild(col);
+    });
+  }
+
+  renderSalesChart();
+  renderAdomChart();
+})();
+
+// TABLE TOGGLE FUNCTION
+function toggleFullTable() {
+  var allRows = document.querySelectorAll('.ms .all-data');
+  var button = document.querySelector('.ms .table-toggle');
+  var isHidden = allRows[0] && allRows[0].classList.contains('hidden');
+  allRows.forEach(function(row) {
+    row.classList.toggle('hidden');
+  });
+  if (isHidden) {
+    button.textContent = 'Show Recent 12 Months';
+  } else {
+    button.textContent = 'Show All Months (63 total)';
+  }
+}
+</script>
+
+</body>
+</html>
