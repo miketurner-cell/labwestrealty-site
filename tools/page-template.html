@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PAGE_DESCRIPTION">
+    <meta property="og:title" content="PAGE_TITLE | Turner Realty — Labrador West">
+    <meta property="og:description" content="PAGE_DESCRIPTION">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="../images/og-image.png">
+    <title>PAGE_TITLE | Turner Realty — Lab West</title>
+    <link rel="canonical" href="https://labwestrealty.com/pages/PAGE_SLUG.html">
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+    <link rel="stylesheet" href="../css/main.css">
+    <style>
+        /*
+         * PAGE NAME (.xx) Scope — Dark Theme
+         * ──────────────────────────────────
+         * Dark Theme (Lab West):
+         *   Backgrounds: #0a0a0a (darkest), #111111 (cards/sections)
+         *   Text:        #fff (headings), rgba(255,255,255,0.7) (body), #bbb (secondary)
+         *   Accent:      #EA002A (red), #c8001f (hover red)
+         *   Borders:     #222 (card borders), #1e1e1e (subtle)
+         *   Fonts:       'Raleway' 800/900 (headings), 'Roboto' 300/400 (body)
+         *   H2 size:     clamp(26px, 4vw, 38px)
+         */
+
+        /* Hero */
+        .xx-hero {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+            padding: 100px 20px;
+            border-bottom: 1px solid #222;
+            position: relative;
+        }
+
+        .xx-hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .xx-hero-eyebrow {
+            font-family: 'Roboto', sans-serif;
+            font-size: 0.85rem;
+            color: #EA002A;
+            margin: 0 0 20px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .xx-hero h1 {
+            font-family: 'Raleway', sans-serif;
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            color: #fff;
+            margin: 0 0 20px 0;
+            letter-spacing: -1px;
+            line-height: 1.2;
+        }
+
+        .xx-hero-sub {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.1rem;
+            color: #ddd;
+            margin: 0 0 40px 0;
+            line-height: 1.8;
+            max-width: 650px;
+        }
+
+        /* Content */
+        .xx-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        /* Section Title */
+        .xx-section-title {
+            font-family: 'Raleway', sans-serif;
+            font-size: clamp(26px, 4vw, 38px);
+            font-weight: 900;
+            margin: 60px 0 40px 0;
+            color: #fff;
+            letter-spacing: -0.5px;
+            text-align: center;
+        }
+
+        /* Card */
+        .xx-card {
+            background: #111111;
+            border: 1px solid #222;
+            border-radius: 8px;
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .xx-card:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            border-color: #EA002A;
+        }
+
+        .xx-card h3 {
+            font-family: 'Raleway', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin: 0 0 12px 0;
+            color: #fff;
+        }
+
+        .xx-card p {
+            font-family: 'Roboto', sans-serif;
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            margin: 0 0 12px 0;
+        }
+
+        /* Info Box (left red border) */
+        .xx-info-box {
+            background: #111111;
+            border-left: 4px solid #EA002A;
+            padding: 30px;
+            border-radius: 8px;
+            margin: 50px 0;
+        }
+
+        .xx-info-box h3 {
+            font-family: 'Raleway', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin: 0 0 15px 0;
+            color: #fff;
+        }
+
+        .xx-info-box ul {
+            font-family: 'Roboto', sans-serif;
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.8;
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        /* Buttons */
+        .xx-btn {
+            display: inline-block;
+            padding: 15px 35px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .xx-btn-primary {
+            background: #EA002A;
+            color: #fff;
+        }
+
+        .xx-btn-primary:hover {
+            background: #c8001f;
+            transform: translateY(-2px);
+        }
+
+        .xx-btn-secondary {
+            background: transparent;
+            color: #fff;
+            border: 2px solid #EA002A;
+        }
+
+        .xx-btn-secondary:hover {
+            background: rgba(234, 0, 42, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Final CTA */
+        .xx-final-cta {
+            background: linear-gradient(135deg, #1a1a1a 0%, #111111 100%);
+            color: #fff;
+            padding: 60px 40px;
+            border-radius: 8px;
+            margin-bottom: 80px;
+            text-align: center;
+            border: 1px solid #222;
+        }
+
+        .xx-final-cta h2 {
+            font-family: 'Raleway', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin: 0 0 15px 0;
+        }
+
+        .xx-final-cta p {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.05rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin: 0 0 30px 0;
+            line-height: 1.6;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .xx-hero h1 { font-size: 2.2rem; }
+            .xx-section-title { font-size: 1.8rem; }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@600;700;800;900&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="xx">
+
+    <!-- ═══ NAVIGATION ═══ -->
+    <div class="nav-top-bar">
+        <a href="../index.html" class="nav-brand">
+            <span class="nav-brand-name">Turner <span>Realty</span></span>
+            <div class="nav-brand-sub">Royal LePage</div>
+        </a>
+        <a href="tel:7092567999" class="nav-phone-pill">
+            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.88.37 1.73.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c1.08.33 1.93.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <span class="nav-phone-num">709-256-7999</span>
+        </a>
+    </div>
+
+    <!-- Hero -->
+    <section class="xx-hero">
+        <div class="xx-hero-container">
+            <p class="xx-hero-eyebrow">EYEBROW_TEXT</p>
+            <h1>PAGE_HEADLINE</h1>
+            <p class="xx-hero-sub">PAGE_SUBHEADLINE</p>
+            <div style="display:flex;gap:20px;flex-wrap:wrap;">
+                <a href="#" class="xx-btn xx-btn-primary">PRIMARY_CTA</a>
+                <a href="#" class="xx-btn xx-btn-secondary">SECONDARY_CTA</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content -->
+    <div class="xx-content">
+
+        <h2 class="xx-section-title">Section Title Here</h2>
+
+        <!-- Example card grid -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;margin:40px 0;">
+            <div class="xx-card">
+                <h3>Card Title</h3>
+                <p>Card content goes here. Dark theme: use rgba(255,255,255,0.7) for body text.</p>
+            </div>
+        </div>
+
+        <!-- Example info box -->
+        <div class="xx-info-box">
+            <h3>Info Box Title</h3>
+            <ul>
+                <li>Item one</li>
+                <li>Item two</li>
+            </ul>
+        </div>
+
+        <!-- Final CTA -->
+        <section class="xx-final-cta">
+            <h2>CTA Headline</h2>
+            <p>CTA supporting text here.</p>
+            <div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;">
+                <a href="#" class="xx-btn xx-btn-primary">Contact Us</a>
+                <a href="tel:7092567999" class="xx-btn xx-btn-secondary">Call 709-256-7999</a>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Footer Bar -->
+    <div style="background:#EA002A;color:#fff;padding:20px 48px;display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:600;border-top:1px solid #c8001f;">
+        <span>Royal LePage Turner Realty</span>
+        <div style="display:flex;align-items:center;gap:16px;">
+            <a href="https://royallepageturner.com/" style="color:#fff;text-decoration:none;" target="_blank" rel="noopener">royallepageturner.com</a>
+            <span>·</span>
+            <a href="tel:7092567999" style="color:#fff;text-decoration:none;">709-256-7999</a>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
