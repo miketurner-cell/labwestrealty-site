@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <!-- Google Analytics 4 -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-FEMZDX1BJQ"></script>
-  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-FEMZDX1BJQ');</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-T84T2D5RLH"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-T84T2D5RLH');</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" href="favicon.png">
@@ -230,7 +230,16 @@
     }
     @media (max-width: 600px) {
       .lw .stats-strip { flex-direction: column; }
+      .lw .scenic-band { min-height: 260px; }
+      .lw .scenic-band-inner { padding: 40px 24px; }
     }
+    /* ── SCENIC BAND ── */
+    .lw .scenic-band { position: relative; width: 100%; min-height: 340px; display: flex; align-items: center; justify-content: center; background-size: cover; background-position: center; text-align: center; color: #fff; overflow: hidden; background-image: url('images/web/churchill-river-panorama.jpg'); }
+    .lw .scenic-band::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(17,17,17,0.55) 0%, rgba(26,26,26,0.45) 100%); }
+    .lw .scenic-band-inner { position: relative; z-index: 1; max-width: 760px; padding: 56px 32px; }
+    .lw .scenic-band-eyebrow { font-size: 12px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: #ffb3bf; margin-bottom: 14px; }
+    .lw .scenic-band h2 { font-family: 'Raleway', sans-serif; font-weight: 900; font-size: clamp(28px, 3.6vw, 40px); line-height: 1.15; margin: 0 0 12px; color: #fff; letter-spacing: -0.02em; }
+    .lw .scenic-band p { font-size: 16px; line-height: 1.6; color: rgba(255,255,255,0.92); margin: 0; }
   </style>
 </head>
 <body>
@@ -279,6 +288,15 @@
         </div>
         <div class="market-image">Labrador West Market Opportunity</div>
       </div>
+    </div>
+  </section>
+
+  <!-- SCENIC BAND -->
+  <section class="scenic-band" aria-label="Labrador's western frontier">
+    <div class="scenic-band-inner">
+      <div class="scenic-band-eyebrow">The Western Frontier</div>
+      <h2>One of Canada's Most Underserved Real Estate Markets.</h2>
+      <p>Resource-driven, community-close, and waiting for a REALTOR&reg; who's ready to lead.</p>
     </div>
   </section>
 

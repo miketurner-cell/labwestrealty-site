@@ -54,7 +54,7 @@ All styles use the `.lw` prefix for scoped styling, matching the corporate light
 ### SEO & Analytics
 - Meta tags (title, description, og:tags) on every page
 - Canonical URLs for each page
-- Google Analytics 4 (G-FEMZDX1BJQ)
+- Google Analytics 4 (G-T84T2D5RLH)
 - Structured data (JSON-LD) on contact page
 - XML sitemap for search indexing
 

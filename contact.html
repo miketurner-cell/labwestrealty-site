@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <!-- Google Analytics 4 -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-FEMZDX1BJQ"></script>
-  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-FEMZDX1BJQ');</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-T84T2D5RLH"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-T84T2D5RLH');</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" href="favicon.png">
@@ -274,6 +274,11 @@
             <textarea id="message" name="message" required placeholder="Share your background, experience, and what attracts you to Labrador West..."></textarea>
           </div>
 
+          <!-- Honeypot - hidden from humans -->
+          <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;" aria-hidden="true">
+            <label for="rf_company">Company</label>
+            <input type="text" name="company" id="rf_company" autocomplete="off" tabindex="-1">
+          </div>
           <button type="submit" class="btn-submit">Send Inquiry</button>
         </form>
 
@@ -373,9 +378,15 @@
 // Form submission handler
 (function(){
   var form = document.getElementById('contactForm');
+  var formLoadTime = Date.now();
   if(form){
     form.addEventListener('submit', function(e){
       e.preventDefault();
+
+      // Bot protection
+      var hp = document.getElementById('rf_company');
+      if (hp && hp.value.trim() !== '') { alert('Thank you! Your inquiry has been sent.'); return; }
+      if ((Date.now() - formLoadTime) / 1000 < 3) { alert('Thank you! Your inquiry has been sent.'); return; }
 
       // Gather form data
       var name = document.getElementById('name').value;

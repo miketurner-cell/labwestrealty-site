@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-T84T2D5RLH"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-T84T2D5RLH');</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="canonical" href="https://labwestrealty.com/404.html">
+  <meta name="description" content="Page not found. Return to Labrador West Realty — Royal LePage Turner Realty's recruiting site for Labrador City & Wabush.">
+  <title>Page Not Found | Labrador West Realty</title>
+  <meta property="og:title" content="Page Not Found | Labrador West Realty">
+  <meta property="og:description" content="Page not found. Return to Labrador West Realty — Royal LePage Turner Realty's recruiting site.">
+  <meta property="og:url" content="https://labwestrealty.com/404.html">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@600;700;800;900&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; padding: 0; background: #fff; color: #2c2c2c; font-family: 'Roboto', sans-serif; font-weight: 400; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+    button { font-family: inherit; }
+
+    /* ═══ SCOPED: .lw (Labrador West — recruiting, light corporate) ═══ */
+    .lw { width: 100%; display: flex; flex-direction: column; min-height: 100vh; }
+
+    /* ── NAV ── */
+    .lw .nav-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      background: #fff; padding: 0 48px; height: 72px;
+      border-bottom: 1px solid #e8e8e8; position: sticky; top: 0; z-index: 1000;
+    }
+    .lw .nav-brand { display: flex; align-items: center; text-decoration: none; gap: 12px; }
+    .lw .nav-brand img { height: 28px; width: auto; }
+    .lw .nav-brand-name {
+      font-family: 'Raleway', sans-serif; font-weight: 900; font-size: 18px; color: #1a1a1a; letter-spacing: -0.01em;
+    }
+    .lw .nav-brand-name span { color: #EA002A; }
+    .lw .nav-brand-divider { width: 1px; height: 28px; background: #ddd; }
+    .lw .nav-brand-sub {
+      font-size: 11px; font-weight: 400; color: #999; letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .lw .nav-toggle { display: none; flex-direction: column; justify-content: center; gap: 5px; background: none; border: none; cursor: pointer; padding: 8px; }
+    .lw .nav-toggle span { display: block; width: 22px; height: 2px; background: #1a1a1a; border-radius: 1px; transition: transform 0.3s, opacity 0.3s; }
+    .lw .nav-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .lw .nav-toggle.active span:nth-child(2) { opacity: 0; }
+    .lw .nav-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+    .lw .nav-links { display: flex; align-items: center; list-style: none; margin: 0; padding: 0; gap: 4px; }
+    .lw .nav-links li a {
+      display: block; padding: 8px 16px; font-size: 14px; font-weight: 500; color: #555;
+      text-decoration: none; letter-spacing: 0.01em; transition: color 0.2s; border-radius: 6px;
+    }
+    .lw .nav-links li a:hover { color: #EA002A; }
+    .lw .nav-right { display: flex; align-items: center; gap: 16px; }
+    .lw .nav-phone {
+      display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 500;
+      color: #EA002A; text-decoration: none;
+    }
+    .lw .nav-phone svg { width: 16px; height: 16px; fill: #EA002A; }
+
+    /* ── ERROR CONTAINER ── */
+    .lw .error-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 48px;
+    }
+    .lw .error-content {
+      text-align: center;
+      background: #fff;
+      border: 1px solid #e8e8e8;
+      border-radius: 8px;
+      padding: 60px 40px;
+      max-width: 600px;
+    }
+    .lw .error-number {
+      font-family: 'Raleway', sans-serif;
+      font-weight: 900;
+      font-size: clamp(5rem, 15vw, 10rem);
+      line-height: 1;
+      color: #EA002A;
+      margin: 0 0 20px;
+    }
+    .lw .error-heading {
+      font-family: 'Raleway', sans-serif;
+      font-weight: 900;
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      color: #1a1a1a;
+      margin: 0 0 16px;
+      letter-spacing: -0.02em;
+    }
+    .lw .error-message {
+      font-size: 16px;
+      color: #666;
+      line-height: 1.7;
+      margin: 0 0 36px;
+    }
+    .lw .error-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .lw .btn-primary {
+      display: inline-block; background: #EA002A; color: #fff; padding: 14px 32px;
+      font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 14px;
+      letter-spacing: 0.03em; border-radius: 6px; transition: background 0.2s;
+    }
+    .lw .btn-primary:hover { background: #c8001f; }
+    .lw .btn-outline {
+      display: inline-block; background: transparent; color: #1a1a1a; padding: 14px 32px;
+      font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 14px;
+      letter-spacing: 0.03em; border-radius: 6px; border: 1px solid #ccc; transition: all 0.2s;
+    }
+    .lw .btn-outline:hover { border-color: #EA002A; color: #EA002A; }
+
+    /* ── FOOTER ── */
+    .lw .site-footer { background: #fafafa; border-top: 1px solid #e8e8e8; padding: 56px 48px 0; margin-top: auto; }
+    .lw .footer-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 48px; padding-bottom: 48px;
+    }
+    .lw .footer-brand img { height: 24px; width: auto; margin-bottom: 12px; }
+    .lw .footer-brand-name { font-family: 'Raleway', sans-serif; font-weight: 900; font-size: 16px; color: #1a1a1a; margin-bottom: 12px; }
+    .lw .footer-brand p { font-size: 13px; color: #888; line-height: 1.7; margin: 0; }
+    .lw .footer-brand a { color: #888; transition: color 0.2s; }
+    .lw .footer-brand a:hover { color: #EA002A; }
+    .lw .footer-heading {
+      font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 12px;
+      letter-spacing: 0.08em; text-transform: uppercase; color: #999; margin-bottom: 16px;
+    }
+    .lw .footer-links { list-style: none; margin: 0; padding: 0; }
+    .lw .footer-links li { margin-bottom: 10px; }
+    .lw .footer-links a { font-size: 14px; color: #666; transition: color 0.2s; }
+    .lw .footer-links a:hover { color: #EA002A; }
+    .lw .footer-red-bar {
+      background: #EA002A; margin: 0 -48px; padding: 14px 48px;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+    }
+    .lw .footer-red-bar p { margin: 0; font-size: 12px; color: #fff; font-weight: 400; }
+    .lw .footer-red-bar a { color: #fff; }
+    .lw .footer-legal {
+      background: #fafafa; padding: 24px 48px; margin: 0 -48px; text-align: center;
+      font-size: 11px; color: #999; border-top: 1px solid #e8e8e8;
+    }
+    .lw .footer-legal a { color: #999; }
+    .lw .footer-legal a:hover { color: #EA002A; }
+
+    /* ── PROUDLY CANADIAN ── */
+    .lw .proudly-canadian {
+      max-width: 1100px; margin: 0 auto; text-align: center; padding-top: 24px;
+      font-size: 11px; color: #999;
+    }
+    .lw .proudly-canadian img { height: 40px; width: auto; margin: 0 auto; opacity: 0.6; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      .lw .nav-bar { padding: 0 24px; }
+      .lw .nav-links { display: none; }
+      .lw .nav-toggle { display: flex; }
+      .lw .nav-links.active { display: flex; flex-direction: column; position: absolute; top: 72px; left: 0; right: 0; background: #fff; padding: 16px; border-bottom: 1px solid #e8e8e8; gap: 8px; }
+      .lw .error-wrapper { padding: 40px 24px; }
+      .lw .error-content { padding: 40px 24px; border-radius: 6px; }
+      .lw .error-actions { flex-direction: column; }
+      .lw .btn-primary, .lw .btn-outline { width: 100%; text-align: center; }
+      .lw .footer-inner { grid-template-columns: 1fr; gap: 32px; padding-bottom: 32px; }
+      .lw .footer-red-bar { margin: 0 -24px; padding: 12px 24px; }
+      .lw .site-footer { padding: 40px 24px 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="lw">
+    <!-- NAV -->
+    <nav class="nav-bar">
+      <a href="index.html" class="nav-brand">
+        <img src="images/rlp-logo.png" alt="Royal LePage">
+        <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+          <span class="nav-brand-name">Labrador <span>West</span></span>
+          <span class="nav-brand-divider"></span>
+          <span class="nav-brand-sub">Royal LePage Turner</span>
+        </div>
+      </a>
+      <button class="nav-toggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-right">
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="why-join.html">Why Join</a></li>
+          <li><a href="about-turner.html">About Turner</a></li>
+          <li><a href="labrador-west.html">The Market</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <a href="tel:709-256-7999" class="nav-phone">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+          </svg>
+          709-256-7999
+        </a>
+      </div>
+    </nav>
+
+    <!-- ERROR WRAPPER -->
+    <div class="error-wrapper">
+      <div class="error-content">
+        <div class="error-number">404</div>
+        <h1 class="error-heading">Page Not Found</h1>
+        <p class="error-message">The page you're looking for doesn't exist. Let's get you back on track — explore recruiting opportunities, learn about Turner, or contact us.</p>
+        <div class="error-actions">
+          <a href="index.html" class="btn-primary">Back to Homepage</a>
+          <a href="contact.html" class="btn-outline">Contact Us</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <img src="images/rlp-logo.png" alt="Royal LePage">
+          <div class="footer-brand-name">Labrador West Realty</div>
+          <p>Part of Royal LePage Turner Realty<br>
+            204 Airport Boulevard<br>
+            Gander, NL A1V 1L6<br>
+            <a href="tel:709-256-7999">709-256-7999</a>
+          </p>
+        </div>
+        <div>
+          <div class="footer-heading">Recruiting</div>
+          <ul class="footer-links">
+            <li><a href="why-join.html">Why Join</a></li>
+            <li><a href="about-turner.html">About Turner</a></li>
+            <li><a href="labrador-west.html">The Market</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-heading">Turner Network</div>
+          <ul class="footer-links">
+            <li><a href="https://realestategander.com" target="_blank">Gander Office</a></li>
+            <li><a href="https://goosebayrealestate.ca" target="_blank">Happy Valley–Goose Bay</a></li>
+            <li><a href="https://royallepageturner.com" target="_blank">Main Network</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-red-bar">
+        <p>Royal LePage Turner Realty (2014) Inc.</p>
+        <p>labwestrealty.com · 709-256-7999</p>
+      </div>
+      <div class="footer-legal">
+        © 1998–2026 Royal LePage Turner Realty (2014) Inc. Each office independently owned and operated. Labrador West office recruiting licensed REALTORS®.
+      </div>
+      <div class="proudly-canadian">
+        <img src="images/proudly-canadian.png" alt="Proudly Canadian" style="display: none;">
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Mobile nav toggle
+    const toggle = document.querySelector('.nav-toggle');
+    const links = document.querySelector('.nav-links');
+    if (toggle) {
+      toggle.addEventListener('click', function() {
+        toggle.classList.toggle('active');
+        links.classList.toggle('active');
+      });
+    }
+  </script>
+</body>
+</html>
