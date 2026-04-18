@@ -188,9 +188,11 @@
       .lw .nav-brand-divider, .lw .nav-brand-sub { display: none; }
       .lw .nav-toggle { display: flex; }
       .lw .nav-links {
-        display: none; flex-direction: column; position: absolute; top: 60px; left: 0; right: 0;
-        background: #fff; border-bottom: 1px solid #e8e8e8; padding: 8px 0; box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+        display: none; flex-direction: column; position: fixed; top: 60px; left: 0; right: 0;
+        max-height: calc(100vh - 60px); max-height: calc(100dvh - 60px); overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
+        background: #fff; border-bottom: 1px solid #e8e8e8; padding: 8px 0; box-shadow: 0 8px 24px rgba(0,0,0,0.06); z-index: 1000;
       }
+      body.nav-menu-open { overflow: hidden; touch-action: none; }
       .lw .nav-links.open { display: flex; }
       .lw .nav-links li a { padding: 12px 24px; font-size: 15px; }
       .lw .nav-right { display: none; }
@@ -202,6 +204,8 @@
       .lw .contact-grid { grid-template-columns: 1fr; gap: 40px; }
     }
   </style>
+  <script src="js/analytics-events.js" defer></script>
+  <link rel="stylesheet" href="css/turner-network.css">
 </head>
 <body>
 <div class="lw">
@@ -363,7 +367,8 @@
   var btn = document.querySelector('.lw .nav-toggle');
   var links = document.querySelector('.lw .nav-links');
   if(btn && links){
-    btn.addEventListener('click', function(){ btn.classList.toggle('active'); links.classList.toggle('open'); });
+    btn.addEventListener('click', function(){ btn.classList.toggle('active'); links.classList.toggle('open'); document.body.classList.toggle('nav-menu-open', links.classList.contains('open'));});
+    links.addEventListener('click', function(ev){ if(ev.target.tagName==='A'){ btn.classList.remove('active'); links.classList.remove('open'); document.body.classList.remove('nav-menu-open'); } });
   }
 })();
 
@@ -397,6 +402,20 @@
       var license = document.getElementById('license').value;
       var message = document.getElementById('message').value;
 
+      // Analytics: recruiting funnel event (NOT generate_lead — recruiting
+      // leads are kept separate from buyer/seller leads so Google Ads and
+      // GA4 conversion math stay clean across the portfolio).
+      if (typeof window.send === 'function') {
+        try {
+          window.send('recruiting_inquiry', {
+            form_name: 'LabWest Contact',
+            license_status: license,
+            page_path: location.pathname,
+            region: 'Labrador West'
+          });
+        } catch (evErr) { /* no-op */ }
+      }
+
       // Build mailto subject and body
       var subject = encodeURIComponent('Labrador West Recruiting Inquiry from ' + name);
       var body = encodeURIComponent(
@@ -416,5 +435,7 @@
   }
 })();
 </script>
+  <script>window.TURNER_SITE='labwest';</script>
+  <script src="js/turner-network.js" defer></script>
 </body>
 </html>
