@@ -3,4 +3,5 @@ Allow: /
 Disallow: /admin/
 Disallow: /private/
 
+Sitemap: https://labwestrealty.com/sitemap-index.xml
 Sitemap: https://labwestrealty.com/sitemap.xml
