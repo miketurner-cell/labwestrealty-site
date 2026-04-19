@@ -8,8 +8,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="canonical" href="https://labwestrealty.com/about-turner.html">
-  <meta name="description" content="About Royal LePage Turner Realty. Award-winning brokerage serving Newfoundland & Labrador since 1998. Leadership, awards, and culture.">
-  <title>About Royal LePage Turner Realty — Award-Winning Leadership</title>
+  <meta name="description" content="Royal LePage Turner Realty: award-winning Newfoundland & Labrador brokerage since 1998. Chairman's Club Top 1% for 9 consecutive years, #43 nationally by units (2025), Broker of Record Mike Turner. Three offices, 11 REALTORS®.">
+  <title>Royal LePage Turner Realty — Award-Winning NL Brokerage Since 1998</title>
   <meta property="og:title" content="About Royal LePage Turner Realty">
   <meta property="og:description" content="Award-winning brokerage serving Newfoundland & Labrador since 1998 with cutting-edge technology and proven leadership.">
   <meta property="og:url" content="https://labwestrealty.com/about-turner.html">
@@ -216,9 +216,11 @@
       .lw .nav-brand-divider, .lw .nav-brand-sub { display: none; }
       .lw .nav-toggle { display: flex; }
       .lw .nav-links {
-        display: none; flex-direction: column; position: absolute; top: 60px; left: 0; right: 0;
-        background: #fff; border-bottom: 1px solid #e8e8e8; padding: 8px 0; box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+        display: none; flex-direction: column; position: fixed; top: 60px; left: 0; right: 0;
+        max-height: calc(100vh - 60px); max-height: calc(100dvh - 60px); overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
+        background: #fff; border-bottom: 1px solid #e8e8e8; padding: 8px 0; box-shadow: 0 8px 24px rgba(0,0,0,0.06); z-index: 1000;
       }
+      body.nav-menu-open { overflow: hidden; touch-action: none; }
       .lw .nav-links.open { display: flex; }
       .lw .nav-links li a { padding: 12px 24px; font-size: 15px; }
       .lw .nav-right { display: none; }
@@ -235,6 +237,61 @@
       .lw .stats-strip { flex-direction: column; }
     }
   </style>
+  <script src="js/analytics-events.js" defer></script>
+  <link rel="stylesheet" href="css/turner-network.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "url": "https://labwestrealty.com/about-turner.html",
+    "name": "About Royal LePage Turner Realty — Award-Winning NL Brokerage",
+    "description": "Royal LePage Turner Realty has served Newfoundland & Labrador since 1998. Chairman's Club Top 1% for 9 consecutive years, #43 brokerage by units nationally (2025).",
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "Royal LePage Turner Realty (2014) Inc.",
+      "foundingDate": "1998",
+      "url": "https://royallepageturner.com",
+      "logo": "https://labwestrealty.com/images/rlp-logo.png",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "204 Airport Boulevard",
+        "addressLocality": "Gander",
+        "addressRegion": "NL",
+        "postalCode": "A1V 1L6",
+        "addressCountry": "CA"
+      },
+      "telephone": "+1-709-256-7999",
+      "founder": {
+        "@type": "Person",
+        "name": "Mike Turner",
+        "jobTitle": "Broker of Record"
+      },
+      "award": [
+        "Chairman's Club Top 1% — 9 Consecutive Years",
+        "#43 Brokerage by Units (2025)",
+        "A.E. LePage Brokerage of the Year — 2018, 2020",
+        "Best in Tech — 2021, 2022, 2024",
+        "Award of Excellence — 2023–2025",
+        "Executive Circle — 2022–2025",
+        "Top Ten East Coast Team — 10 Consecutive Years",
+        "Lead Manager of the Year Finalist — 2023"
+      ],
+      "areaServed": [
+        {"@type": "City", "name": "Gander"},
+        {"@type": "City", "name": "Happy Valley-Goose Bay"},
+        {"@type": "City", "name": "Labrador City"},
+        {"@type": "City", "name": "Wabush"}
+      ]
+    },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://labwestrealty.com/"},
+        {"@type": "ListItem", "position": 2, "name": "About Turner"}
+      ]
+    }
+  }
+  </script>
 </head>
 <body>
 <div class="lw">
@@ -266,7 +323,7 @@
   <!-- HERO -->
   <section class="hero">
     <div class="hero-content">
-      <h1>The Turner Realty <em>Story</em></h1>
+      <h1>About <em>Royal LePage Turner Realty</em> — NL's Award-Winning Brokerage</h1>
       <p class="hero-sub">Since 1998, we've built an award-winning brokerage on integrity, innovation, and community commitment. Here's how we got here—and where we're going.</p>
     </div>
   </section>
@@ -277,7 +334,7 @@
       <div class="story-grid">
         <div class="story-content">
           <h3>From One Office to a Province-Wide Network</h3>
-          <p>Royal LePage Turner Realty was founded in 1998 by Gaye Turner in Gander, Newfoundland. What started as a single broker with a vision has grown into a respected brokerage operating three offices across the province with 11 licensed REALTORS&reg; serving thousands of clients.</p>
+          <p>Royal LePage Turner Realty was founded in 1998 by Gaye Turner in Gander, Newfoundland. What started as a single broker with a vision has grown into a respected brokerage operating offices across the province with licensed REALTORS&reg; serving thousands of clients.</p>
           <p>Throughout our growth, we've never lost sight of our founding values: integrity, hard work, and an unwavering commitment to client success. Every award we've won, every achievement we've celebrated, has been earned through the dedication of our agents and our investment in cutting-edge technology.</p>
         </div>
         <div class="story-image">Turner Realty Growth Timeline</div>
@@ -409,7 +466,13 @@
       &copy; 1998&ndash;2026 Royal LePage Turner Realty (2014) Inc. Each office independently owned and operated.<br>
       Labrador West office recruiting licensed REALTORS&reg;.
     </div>
-  </footer>
+  <!-- crea-compliance:v1 -->
+<aside class="crea-compliance" role="contentinfo" aria-label="REALTOR and MLS trademark statement">
+  <p>The information contained on this page is based in whole or in part on information that is provided by members of The Canadian Real Estate Association, who are responsible for its accuracy. CREA reproduces and distributes this information as a service for its members and assumes no responsibility for its accuracy. Royal LePage Turner Realty (2014) Inc. is a member of The Canadian Real Estate Association.</p>
+  <p>REALTOR®, REALTORS®, and the REALTOR® logo are certification marks owned or controlled by The Canadian Real Estate Association (CREA) and identify real estate professionals who are members of CREA. The trademarks MLS®, Multiple Listing Service®, and the associated logos identify professional services rendered by REALTOR® members of CREA to effect the purchase, sale and lease of real estate as part of a cooperative selling system.</p>
+</aside>
+<!-- /crea-compliance:v1 -->
+</footer>
 
 </div>
 
@@ -418,9 +481,12 @@
   var btn = document.querySelector('.lw .nav-toggle');
   var links = document.querySelector('.lw .nav-links');
   if(btn && links){
-    btn.addEventListener('click', function(){ btn.classList.toggle('active'); links.classList.toggle('open'); });
+    btn.addEventListener('click', function(){ btn.classList.toggle('active'); links.classList.toggle('open'); document.body.classList.toggle('nav-menu-open', links.classList.contains('open'));});
+    links.addEventListener('click', function(ev){ if(ev.target.tagName==='A'){ btn.classList.remove('active'); links.classList.remove('open'); document.body.classList.remove('nav-menu-open'); } });
   }
 })();
 </script>
+  <script>window.TURNER_SITE='labwest';</script>
+  <script src="js/turner-network.js" defer></script>
 </body>
 </html>

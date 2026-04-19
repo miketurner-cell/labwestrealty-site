@@ -8,8 +8,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="canonical" href="https://labwestrealty.com/why-join.html">
-  <meta name="description" content="Why join Royal LePage Turner Realty in Labrador West. Superior technology, training, support, and marketing resources for agents.">
-  <title>Why Join Royal LePage Turner — Labrador West Realty</title>
+  <meta name="description" content="Why join Royal LePage Turner Realty as a REALTOR® in Labrador West: rlpSPHERE CRM, Smart Leads from royallepage.ca, Buffini Peak Producers training, Marketing Autopilot, and a 20,000+ agent national referral network.">
+  <title>Why Join a Royal LePage Brokerage — Tech, Training & Leads | Labrador West</title>
   <meta property="og:title" content="Why Join Royal LePage Turner">
   <meta property="og:description" content="Superior technology, training, support, and marketing resources for real estate agents.">
   <meta property="og:url" content="https://labwestrealty.com/why-join.html">
@@ -194,9 +194,11 @@
       .lw .nav-brand-divider, .lw .nav-brand-sub { display: none; }
       .lw .nav-toggle { display: flex; }
       .lw .nav-links {
-        display: none; flex-direction: column; position: absolute; top: 60px; left: 0; right: 0;
-        background: #fff; border-bottom: 1px solid #e8e8e8; padding: 8px 0; box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+        display: none; flex-direction: column; position: fixed; top: 60px; left: 0; right: 0;
+        max-height: calc(100vh - 60px); max-height: calc(100dvh - 60px); overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
+        background: #fff; border-bottom: 1px solid #e8e8e8; padding: 8px 0; box-shadow: 0 8px 24px rgba(0,0,0,0.06); z-index: 1000;
       }
+      body.nav-menu-open { overflow: hidden; touch-action: none; }
       .lw .nav-links.open { display: flex; }
       .lw .nav-links li a { padding: 12px 24px; font-size: 15px; }
       .lw .nav-right { display: none; }
@@ -210,6 +212,23 @@
       .lw .scenic-band { min-height: 260px; }
       .lw .scenic-band-inner { padding: 40px 24px; }
     }
+    /* ── FAQ ── */
+    .lw .faq-section { background: #fff; }
+    .lw .faq-list { max-width: 820px; margin: 0 auto; }
+    .lw .faq-item {
+      border-top: 1px solid #e8e8e8; padding: 28px 0;
+    }
+    .lw .faq-item:last-child { border-bottom: 1px solid #e8e8e8; }
+    .lw .faq-item h3 {
+      font-family: 'Raleway', sans-serif; font-weight: 800;
+      font-size: 19px; color: #1a1a1a; margin: 0 0 10px; line-height: 1.35; letter-spacing: -0.01em;
+    }
+    .lw .faq-item p {
+      font-size: 16px; color: #555; line-height: 1.75; margin: 0;
+    }
+    .lw .faq-item p a { color: #EA002A; text-decoration: none; font-weight: 500; }
+    .lw .faq-item p a:hover { text-decoration: underline; }
+
     /* ── SCENIC BAND ── */
     .lw .scenic-band { position: relative; width: 100%; min-height: 340px; display: flex; align-items: center; justify-content: center; background-size: cover; background-position: center; text-align: center; color: #fff; overflow: hidden; background-image: url('images/web/route510-labrador.jpg'); }
     .lw .scenic-band::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(17,17,17,0.55) 0%, rgba(26,26,26,0.45) 100%); }
@@ -218,6 +237,100 @@
     .lw .scenic-band h2 { font-family: 'Raleway', sans-serif; font-weight: 900; font-size: clamp(28px, 3.6vw, 40px); line-height: 1.15; margin: 0 0 12px; color: #fff; letter-spacing: -0.02em; }
     .lw .scenic-band p { font-size: 16px; line-height: 1.6; color: rgba(255,255,255,0.92); margin: 0; }
   </style>
+  <script src="js/analytics-events.js" defer></script>
+  <link rel="stylesheet" href="css/turner-network.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "url": "https://labwestrealty.com/why-join.html",
+    "name": "Why Join Royal LePage Turner Realty — Labrador West Recruiting",
+    "description": "Benefits of joining Royal LePage Turner Realty as a REALTOR® in Labrador City and Wabush: rlpSPHERE CRM, Smart Leads, Buffini training, national referral network.",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "Labrador West Realty",
+      "url": "https://labwestrealty.com"
+    },
+    "about": {
+      "@type": "Organization",
+      "name": "Royal LePage Turner Realty (2014) Inc.",
+      "foundingDate": "1998",
+      "url": "https://royallepageturner.com",
+      "award": [
+        "Chairman's Club Top 1% — 9 Consecutive Years",
+        "#43 Brokerage by Units (2025)",
+        "A.E. LePage Brokerage of the Year — 2018, 2020",
+        "Best in Tech — 2021, 2022, 2024",
+        "Award of Excellence — 2023–2025",
+        "Executive Circle — 2022–2025",
+        "Top Ten East Coast Team — 10 Consecutive Years"
+      ]
+    },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://labwestrealty.com/"},
+        {"@type": "ListItem", "position": 2, "name": "Why Join"}
+      ]
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What's the commission split at Royal LePage Turner Realty?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Our splits are competitive with the strongest Atlantic Canada brokerages and scale with your production. Rather than publish a generic grid, we discuss splits, caps, and any desk-fee structure one-on-one so we can tailor them to your volume, business plan, and how much mentorship or independence you want. Book a confidential conversation with Mike Turner, Broker of Record, to see real numbers for your situation."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I transfer my real estate licence to Royal LePage in Labrador West?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Transferring your NLAR licence is straightforward. You submit a Transfer of Registration form through the Newfoundland and Labrador Association of REALTORS®, and we handle the brokerage side — sponsoring-broker paperwork, MLS/Matrix reassignment, rlpSPHERE CRM onboarding, and Royal LePage national-systems access. Most transfers complete in three to five business days with no gap in your ability to list or sell."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do I need to move to Gander or work out of a physical office?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Labrador West agents work remotely from Labrador City or Wabush. Our Gander HQ (204 Airport Boulevard) handles administrative support, compliance, trust accounting, and broker supervision — you don't commute there. You list, show, and close locally; we handle the back office."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What does rlpSPHERE CRM actually include?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "rlpSPHERE is Royal LePage's proprietary Smart CRM — contact management, automated drip campaigns, listing presentations, transaction management, and lead routing all integrated in one platform. It also connects to Smart Leads (national lead distribution from royallepage.ca), automated market reports, Marketing Autopilot, and the 20,000+ REALTOR® Royal LePage referral network across Canada. There is no separate monthly tech fee."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What training and mentorship is included for agents at Royal LePage Turner?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Every Turner agent gets rlpCAMPUS self-directed online training, weekly live webinars, Buffini & Company coaching, Chris Leader's Peak Producers program, and twice-yearly in-person Marketing Workshops. You also get direct mentorship from Mike Turner (Broker of Record since 1998) and our Chairman's Club Top 1% team. Onboarding is tailored to where you are — new licensee or experienced producer."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is Labrador West a big enough market to build a real estate career?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Labrador City and Wabush have a combined population of roughly 10,000, anchored by one of North America's largest iron-ore mining operations (IOC/Rio Tinto and Tacora Resources). Mining-driven employment creates consistent housing turnover — engineers, trades, and management relocate in and out on multi-year cycles. It's an under-served MLS market with real room for a focused agent to dominate, and Royal LePage Turner brings the brand, technology, and leads to compete on day one."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
 <div class="lw">
@@ -249,7 +362,7 @@
   <!-- HERO -->
   <section class="hero">
     <div class="hero-content">
-      <h1>Why Choose <em>Royal LePage Turner</em>?</h1>
+      <h1>Why Join <em>Royal LePage Turner</em> in Labrador West</h1>
       <p class="hero-sub">We give you the tools, training, support, and community you need to build a thriving real estate career in Labrador West.</p>
     </div>
   </section>
@@ -412,6 +525,47 @@
     </div>
   </section>
 
+  <!-- FAQ -->
+  <section class="faq-section">
+    <div class="section-inner">
+      <div class="section-eyebrow">Questions from licensed agents</div>
+      <h2 class="section-title">What REALTORS® ask us before joining</h2>
+      <p class="section-desc">Straight answers on splits, licence transfers, technology, training, and what it's actually like working Labrador West from a Gander-based brokerage.</p>
+
+      <div class="faq-list">
+        <div class="faq-item">
+          <h3>What's the commission split at Royal LePage Turner Realty?</h3>
+          <p>Our splits are competitive with the strongest Atlantic Canada brokerages and scale with your production. Rather than publish a generic grid, we discuss splits, caps, and any desk-fee structure one-on-one so we can tailor them to your volume, business plan, and how much mentorship or independence you want. Book a confidential conversation with Mike Turner, Broker of Record, to see real numbers for your situation — <a href="contact.html">get in touch</a>.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How do I transfer my real estate licence to Royal LePage in Labrador West?</h3>
+          <p>Transferring your NLAR licence is straightforward. You submit a Transfer of Registration form through the Newfoundland and Labrador Association of REALTORS®, and we handle the brokerage side — sponsoring-broker paperwork, MLS/Matrix reassignment, rlpSPHERE CRM onboarding, and Royal LePage national-systems access. Most transfers complete in three to five business days with no gap in your ability to list or sell.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Do I need to move to Gander or work out of a physical office?</h3>
+          <p>No. Labrador West agents work remotely from Labrador City or Wabush. Our Gander HQ at 204 Airport Boulevard handles administrative support, compliance, trust accounting, and broker supervision — you don't commute there. You list, show, and close locally; we handle the back office.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>What does rlpSPHERE CRM actually include?</h3>
+          <p>rlpSPHERE is Royal LePage's proprietary Smart CRM — contact management, automated drip campaigns, listing presentations, transaction management, and lead routing, all integrated in one platform. It also connects to Smart Leads (national lead distribution from royallepage.ca), automated market reports, Marketing Autopilot, and the 20,000+ REALTOR® Royal LePage referral network across Canada. There's no separate monthly tech fee.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>What training and mentorship is included?</h3>
+          <p>Every Turner agent gets rlpCAMPUS self-directed online training, weekly live webinars, Buffini & Company coaching, Chris Leader's Peak Producers program, and twice-yearly in-person Marketing Workshops. You also get direct mentorship from Mike Turner (Broker of Record since 1998) and our Chairman's Club Top 1% team. Onboarding is tailored to where you are — new licensee or experienced producer.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Is Labrador West a big enough market to build a real estate career?</h3>
+          <p>Yes. Labrador City and Wabush have a combined population of roughly 10,000, anchored by one of North America's largest iron-ore mining operations (IOC/Rio Tinto and Tacora Resources). Mining-driven employment creates consistent housing turnover — engineers, trades, and management relocate in and out on multi-year cycles. It's an under-served MLS market with real room for a focused agent to dominate, and Royal LePage Turner brings the brand, technology, and leads to compete on day one. See the <a href="labrador-west.html">Labrador West market overview</a> for the numbers.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- CTA BANNER -->
   <section class="cta-banner">
     <div class="section-inner">
@@ -458,7 +612,13 @@
       &copy; 1998&ndash;2026 Royal LePage Turner Realty (2014) Inc. Each office independently owned and operated.<br>
       Labrador West office recruiting licensed REALTORS&reg;.
     </div>
-  </footer>
+  <!-- crea-compliance:v1 -->
+<aside class="crea-compliance" role="contentinfo" aria-label="REALTOR and MLS trademark statement">
+  <p>The information contained on this page is based in whole or in part on information that is provided by members of The Canadian Real Estate Association, who are responsible for its accuracy. CREA reproduces and distributes this information as a service for its members and assumes no responsibility for its accuracy. Royal LePage Turner Realty (2014) Inc. is a member of The Canadian Real Estate Association.</p>
+  <p>REALTOR®, REALTORS®, and the REALTOR® logo are certification marks owned or controlled by The Canadian Real Estate Association (CREA) and identify real estate professionals who are members of CREA. The trademarks MLS®, Multiple Listing Service®, and the associated logos identify professional services rendered by REALTOR® members of CREA to effect the purchase, sale and lease of real estate as part of a cooperative selling system.</p>
+</aside>
+<!-- /crea-compliance:v1 -->
+</footer>
 
 </div>
 
@@ -467,9 +627,12 @@
   var btn = document.querySelector('.lw .nav-toggle');
   var links = document.querySelector('.lw .nav-links');
   if(btn && links){
-    btn.addEventListener('click', function(){ btn.classList.toggle('active'); links.classList.toggle('open'); });
+    btn.addEventListener('click', function(){ btn.classList.toggle('active'); links.classList.toggle('open'); document.body.classList.toggle('nav-menu-open', links.classList.contains('open'));});
+    links.addEventListener('click', function(ev){ if(ev.target.tagName==='A'){ btn.classList.remove('active'); links.classList.remove('open'); document.body.classList.remove('nav-menu-open'); } });
   }
 })();
 </script>
+  <script>window.TURNER_SITE='labwest';</script>
+  <script src="js/turner-network.js" defer></script>
 </body>
 </html>

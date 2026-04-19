@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lab West Market Statistics - Royal LePage Turner Realty</title>
+  <title>Labrador West Real Estate Market Statistics — NLAR MLS Data (Labrador City & Wabush)</title>
 
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-T84T2D5RLH"></script>
@@ -19,7 +19,7 @@
   <meta name="keywords" content="Lab West real estate, market statistics, MLS data, Labrador City, Wabush, property prices, NLAR">
 
   <!-- Open Graph -->
-  <meta property="og:title" content="Lab West Market Statistics - Royal LePage Turner Realty">
+  <meta property="og:title" content="Labrador West Real Estate Market Statistics — NLAR MLS Data">
   <meta property="og:description" content="Comprehensive Lab West real estate market data and trends.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://labwestrealty.com/market-stats.html">
@@ -145,6 +145,41 @@
     /* ===== FOOTER ===== */
     .ms-footer { background: #fff; border-top: 4px solid var(--red); padding: 2rem; text-align: center; color: #999; font-size: 0.85rem; }
   </style>
+  <script src="js/analytics-events.js" defer></script>
+  <link rel="canonical" href="https://labwestrealty.com/market-stats.html">
+  <link rel="stylesheet" href="css/turner-network.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Dataset",
+    "name": "Labrador West MLS Real Estate Market Statistics",
+    "description": "Monthly and annual MLS market statistics for Labrador City and Wabush, Newfoundland & Labrador. Average sale price, days on market, monthly sales volume, and five-year trends.",
+    "url": "https://labwestrealty.com/market-stats.html",
+    "keywords": ["Labrador City real estate", "Wabush real estate", "Labrador West MLS", "NL market statistics", "real estate trends Labrador"],
+    "spatialCoverage": {
+      "@type": "Place",
+      "name": "Labrador West, Newfoundland and Labrador, Canada"
+    },
+    "creator": {
+      "@type": "Organization",
+      "name": "Royal LePage Turner Realty (2014) Inc.",
+      "url": "https://royallepageturner.com"
+    },
+    "isBasedOn": "Newfoundland & Labrador Association of REALTORS® MLS® System",
+    "license": "https://www.nlar.ca",
+    "temporalCoverage": "2021-01-01/2026-12-31"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://labwestrealty.com/"},
+      {"@type": "ListItem", "position": 2, "name": "Market Statistics"}
+    ]
+  }
+  </script>
 </head>
 <body class="ms">
   <!-- NAVIGATION -->
@@ -167,7 +202,7 @@
     <div class="ms-hero-content">
       <div class="ms-hero-badge">2026 MARKET INTELLIGENCE</div>
       <div class="ms-hero-eyebrow">Proven Opportunity</div>
-      <h1 class="ms-hero-title">Lab West Market Snapshot</h1>
+      <h1 class="ms-hero-title">Labrador West Real Estate Market Snapshot</h1>
       <p class="ms-hero-subtitle">Comprehensive real estate data for Labrador City & Wabush. Active market dynamics with strong fundamentals and growing demand signals.</p>
       <p class="ms-hero-source">Data sourced from NLAR MLS through April 2026 | Updated Monthly</p>
     </div>
@@ -671,7 +706,13 @@
   <!-- FOOTER -->
   <footer class="ms-footer">
     <p>&copy; 2026 Royal LePage Turner Realty. Lab West Market Intelligence. | <a href="privacy.html" style="color: var(--red); text-decoration: none;">Privacy Policy</a> | <a href="contact.html" style="color: var(--red); text-decoration: none;">Contact</a></p>
-  </footer>
+  <!-- crea-compliance:v1 -->
+<aside class="crea-compliance" role="contentinfo" aria-label="REALTOR and MLS trademark statement">
+  <p>The information contained on this page is based in whole or in part on information that is provided by members of The Canadian Real Estate Association, who are responsible for its accuracy. CREA reproduces and distributes this information as a service for its members and assumes no responsibility for its accuracy. Royal LePage Turner Realty (2014) Inc. is a member of The Canadian Real Estate Association.</p>
+  <p>REALTOR®, REALTORS®, and the REALTOR® logo are certification marks owned or controlled by The Canadian Real Estate Association (CREA) and identify real estate professionals who are members of CREA. The trademarks MLS®, Multiple Listing Service®, and the associated logos identify professional services rendered by REALTOR® members of CREA to effect the purchase, sale and lease of real estate as part of a cooperative selling system.</p>
+</aside>
+<!-- /crea-compliance:v1 -->
+</footer>
 
   <!-- CHART.JS CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
@@ -816,5 +857,7 @@
       }
     })();
   </script>
+  <script>window.TURNER_SITE='labwest';</script>
+  <script src="js/turner-network.js" defer></script>
 </body>
 </html>

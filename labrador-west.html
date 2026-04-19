@@ -9,7 +9,7 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="canonical" href="https://labwestrealty.com/labrador-west.html">
   <meta name="description" content="Labrador West real estate market opportunity. Labrador City & Wabush, NL. Growing market driven by mining, community growth, and housing demand.">
-  <title>Labrador West Real Estate Market — Opportunity</title>
+  <title>Labrador West Real Estate — Labrador City & Wabush Market Opportunity</title>
   <meta property="og:title" content="Labrador West Real Estate Market">
   <meta property="og:description" content="Explore the growing real estate opportunity in Labrador City & Wabush. Mining-driven economy, housing demand, and community growth.">
   <meta property="og:url" content="https://labwestrealty.com/labrador-west.html">
@@ -215,9 +215,11 @@
       .lw .nav-brand-divider, .lw .nav-brand-sub { display: none; }
       .lw .nav-toggle { display: flex; }
       .lw .nav-links {
-        display: none; flex-direction: column; position: absolute; top: 60px; left: 0; right: 0;
-        background: #fff; border-bottom: 1px solid #e8e8e8; padding: 8px 0; box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+        display: none; flex-direction: column; position: fixed; top: 60px; left: 0; right: 0;
+        max-height: calc(100vh - 60px); max-height: calc(100dvh - 60px); overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
+        background: #fff; border-bottom: 1px solid #e8e8e8; padding: 8px 0; box-shadow: 0 8px 24px rgba(0,0,0,0.06); z-index: 1000;
       }
+      body.nav-menu-open { overflow: hidden; touch-action: none; }
       .lw .nav-links.open { display: flex; }
       .lw .nav-links li a { padding: 12px 24px; font-size: 15px; }
       .lw .nav-right { display: none; }
@@ -243,6 +245,41 @@
     .lw .scenic-band h2 { font-family: 'Raleway', sans-serif; font-weight: 900; font-size: clamp(28px, 3.6vw, 40px); line-height: 1.15; margin: 0 0 12px; color: #fff; letter-spacing: -0.02em; }
     .lw .scenic-band p { font-size: 16px; line-height: 1.6; color: rgba(255,255,255,0.92); margin: 0; }
   </style>
+  <script src="js/analytics-events.js" defer></script>
+  <link rel="stylesheet" href="css/turner-network.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "url": "https://labwestrealty.com/labrador-west.html",
+    "name": "Labrador West Real Estate Market — Labrador City & Wabush Opportunity",
+    "description": "Labrador West real estate market overview: demographics, mining and industrial employment drivers, housing demand in Labrador City and Wabush, NL.",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "Labrador West Realty",
+      "url": "https://labwestrealty.com"
+    },
+    "about": [
+      {
+        "@type": "Place",
+        "name": "Labrador City",
+        "address": {"@type": "PostalAddress", "addressLocality": "Labrador City", "addressRegion": "NL", "addressCountry": "CA"}
+      },
+      {
+        "@type": "Place",
+        "name": "Wabush",
+        "address": {"@type": "PostalAddress", "addressLocality": "Wabush", "addressRegion": "NL", "addressCountry": "CA"}
+      }
+    ],
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://labwestrealty.com/"},
+        {"@type": "ListItem", "position": 2, "name": "The Market"}
+      ]
+    }
+  }
+  </script>
 </head>
 <body>
 <div class="lw">
@@ -436,7 +473,13 @@
       &copy; 1998&ndash;2026 Royal LePage Turner Realty (2014) Inc. Each office independently owned and operated.<br>
       Labrador West office recruiting licensed REALTORS&reg;.
     </div>
-  </footer>
+  <!-- crea-compliance:v1 -->
+<aside class="crea-compliance" role="contentinfo" aria-label="REALTOR and MLS trademark statement">
+  <p>The information contained on this page is based in whole or in part on information that is provided by members of The Canadian Real Estate Association, who are responsible for its accuracy. CREA reproduces and distributes this information as a service for its members and assumes no responsibility for its accuracy. Royal LePage Turner Realty (2014) Inc. is a member of The Canadian Real Estate Association.</p>
+  <p>REALTOR®, REALTORS®, and the REALTOR® logo are certification marks owned or controlled by The Canadian Real Estate Association (CREA) and identify real estate professionals who are members of CREA. The trademarks MLS®, Multiple Listing Service®, and the associated logos identify professional services rendered by REALTOR® members of CREA to effect the purchase, sale and lease of real estate as part of a cooperative selling system.</p>
+</aside>
+<!-- /crea-compliance:v1 -->
+</footer>
 
 </div>
 
@@ -445,9 +488,12 @@
   var btn = document.querySelector('.lw .nav-toggle');
   var links = document.querySelector('.lw .nav-links');
   if(btn && links){
-    btn.addEventListener('click', function(){ btn.classList.toggle('active'); links.classList.toggle('open'); });
+    btn.addEventListener('click', function(){ btn.classList.toggle('active'); links.classList.toggle('open'); document.body.classList.toggle('nav-menu-open', links.classList.contains('open'));});
+    links.addEventListener('click', function(ev){ if(ev.target.tagName==='A'){ btn.classList.remove('active'); links.classList.remove('open'); document.body.classList.remove('nav-menu-open'); } });
   }
 })();
 </script>
+  <script>window.TURNER_SITE='labwest';</script>
+  <script src="js/turner-network.js" defer></script>
 </body>
 </html>

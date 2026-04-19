@@ -8,10 +8,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="canonical" href="https://labwestrealty.com/">
-  <meta name="description" content="Join Royal LePage Turner Realty's Labrador West office. Recruiting experienced REALTORS® in Labrador City & Wabush, NL. Award-winning brokerage, cutting-edge tools, national support.">
-  <title>Labrador West Realty — Join Royal LePage Turner | Recruiting</title>
-  <meta property="og:title" content="Labrador West Realty — Join Royal LePage Turner">
-  <meta property="og:description" content="Recruiting licensed REALTORS® for Labrador West. Be the first RLP agent in Lab City & Wabush. Chairman's Club Top 1% nationally.">
+  <meta name="description" content="Real estate career in Labrador City & Wabush, NL. Royal LePage Turner Realty is recruiting licensed REALTORS® — Chairman's Club Top 1%, rlpSPHERE CRM, Smart Leads, Buffini training, national referral network. Be the first RLP agent in Lab West.">
+  <title>Real Estate Career in Labrador City & Wabush | Royal LePage Turner Recruiting</title>
+  <meta property="og:title" content="Real Estate Career in Labrador City & Wabush | Royal LePage Turner">
+  <meta property="og:description" content="Recruiting licensed REALTORS® for Labrador West. Be the first RLP agent in Lab City & Wabush. Chairman's Club Top 1% nationally, award-winning NL brokerage since 1998.">
   <meta property="og:url" content="https://labwestrealty.com/">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Labrador West Realty">
@@ -210,9 +210,11 @@
       .lw .nav-brand-divider, .lw .nav-brand-sub { display: none; }
       .lw .nav-toggle { display: flex; }
       .lw .nav-links {
-        display: none; flex-direction: column; position: absolute; top: 60px; left: 0; right: 0;
-        background: #fff; border-bottom: 1px solid #e8e8e8; padding: 8px 0; box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+        display: none; flex-direction: column; position: fixed; top: 60px; left: 0; right: 0;
+        max-height: calc(100vh - 60px); max-height: calc(100dvh - 60px); overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
+        background: #fff; border-bottom: 1px solid #e8e8e8; padding: 8px 0; box-shadow: 0 8px 24px rgba(0,0,0,0.06); z-index: 1000;
       }
+      body.nav-menu-open { overflow: hidden; touch-action: none; }
       .lw .nav-links.open { display: flex; }
       .lw .nav-links li a { padding: 12px 24px; font-size: 15px; }
       .lw .nav-right { display: none; }
@@ -238,6 +240,8 @@
     .lw .scenic-band h2 { font-family: 'Raleway', sans-serif; font-weight: 900; font-size: clamp(28px, 3.6vw, 40px); line-height: 1.15; margin: 0 0 12px; color: #fff; letter-spacing: -0.02em; }
     .lw .scenic-band p { font-size: 16px; line-height: 1.6; color: rgba(255,255,255,0.92); margin: 0; }
   </style>
+  <script src="js/analytics-events.js" defer></script>
+  <link rel="stylesheet" href="css/turner-network.css">
 </head>
 <body>
 <div class="lw">
@@ -445,7 +449,13 @@
       &copy; 1998&ndash;2026 Royal LePage Turner Realty (2014) Inc. Each office independently owned and operated.<br>
       Labrador West office recruiting licensed REALTORS&reg;.
     </div>
-  </footer>
+  <!-- crea-compliance:v1 -->
+<aside class="crea-compliance" role="contentinfo" aria-label="REALTOR and MLS trademark statement">
+  <p>The information contained on this page is based in whole or in part on information that is provided by members of The Canadian Real Estate Association, who are responsible for its accuracy. CREA reproduces and distributes this information as a service for its members and assumes no responsibility for its accuracy. Royal LePage Turner Realty (2014) Inc. is a member of The Canadian Real Estate Association.</p>
+  <p>REALTOR®, REALTORS®, and the REALTOR® logo are certification marks owned or controlled by The Canadian Real Estate Association (CREA) and identify real estate professionals who are members of CREA. The trademarks MLS®, Multiple Listing Service®, and the associated logos identify professional services rendered by REALTOR® members of CREA to effect the purchase, sale and lease of real estate as part of a cooperative selling system.</p>
+</aside>
+<!-- /crea-compliance:v1 -->
+</footer>
 
 </div>
 
@@ -454,7 +464,8 @@
   var btn = document.querySelector('.lw .nav-toggle');
   var links = document.querySelector('.lw .nav-links');
   if(btn && links){
-    btn.addEventListener('click', function(){ btn.classList.toggle('active'); links.classList.toggle('open'); });
+    btn.addEventListener('click', function(){ btn.classList.toggle('active'); links.classList.toggle('open'); document.body.classList.toggle('nav-menu-open', links.classList.contains('open'));});
+    links.addEventListener('click', function(ev){ if(ev.target.tagName==='A'){ btn.classList.remove('active'); links.classList.remove('open'); document.body.classList.remove('nav-menu-open'); } });
   }
 })();
 </script>
@@ -475,12 +486,12 @@
     "postalCode": "A1V 1L6",
     "addressCountry": "CA"
   },
-  "geo": {
-    "@type": "GeoCoordinates",
-    "latitude": 52.8086,
-    "longitude": -66.6496
+  "description": "Recruiting licensed REALTORS® for Labrador West. Royal LePage Turner Realty is an award-winning Newfoundland & Labrador brokerage (founded 1998) now expanding service into Labrador City and Wabush. No physical Labrador West office — the brokerage is headquartered in Gander, NL. Contact Broker of Record Mike Turner to discuss joining.",
+  "makesOffer": {
+    "@type": "Offer",
+    "name": "Real Estate Career Opportunity — Labrador West",
+    "description": "Join Royal LePage Turner Realty as a licensed REALTOR® serving Labrador City and Wabush. Includes rlpSPHERE CRM, Smart Leads, Buffini training, and national referral network."
   },
-  "description": "Recruiting licensed REALTORS® for Labrador West office of Royal LePage Turner Realty. Be the first RLP agent in Labrador City & Wabush.",
   "areaServed": [
     {"@type": "City", "name": "Labrador City"},
     {"@type": "City", "name": "Wabush"}
@@ -488,9 +499,26 @@
   "parentOrganization": {
     "@type": "Organization",
     "name": "Royal LePage Turner Realty (2014) Inc.",
-    "url": "https://royallepageturner.com"
+    "url": "https://royallepageturner.com",
+    "foundingDate": "1998",
+    "founder": {
+      "@type": "Person",
+      "name": "Mike Turner",
+      "jobTitle": "Broker of Record"
+    },
+    "award": [
+      "Chairman's Club Top 1% — 9 Consecutive Years",
+      "#43 Brokerage by Units (2025)",
+      "A.E. LePage Brokerage of the Year — 2018, 2020",
+      "Best in Tech — 2021, 2022, 2024",
+      "Award of Excellence — 2023–2025",
+      "Executive Circle — 2022–2025",
+      "Top Ten East Coast Team — 10 Consecutive Years"
+    ]
   }
 }
 </script>
+  <script>window.TURNER_SITE='labwest';</script>
+  <script src="js/turner-network.js" defer></script>
 </body>
 </html>

@@ -2,3 +2,6 @@
    All styles are currently scoped inline in index.html
    This file reserved for future shared utilities
 */
+
+.crea-compliance{max-width:1100px;margin:0 auto;padding:20px 24px 32px;border-top:1px solid #1e1e1e;font-family:"Roboto",sans-serif;font-size:11px;line-height:1.6;color:rgba(255,255,255,0.38);}.crea-compliance p{margin:0 0 10px;}.crea-compliance p:last-child{margin-bottom:0;}.site-footer .crea-compliance{padding-top:24px;margin-top:0;}
+
