@@ -322,8 +322,8 @@
 
           <!-- Honeypot - hidden from humans -->
           <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;" aria-hidden="true">
-            <label for="rf_company">Company</label>
-            <input type="text" name="company" id="rf_company" autocomplete="off" tabindex="-1">
+            <label for="rf_hp_check">Verify</label>
+            <input type="text" name="rf_hp_check" id="rf_hp_check" autocomplete="off" tabindex="-1">
           </div>
           <button type="submit" class="btn-submit">Send Inquiry</button>
         </form>
@@ -437,7 +437,7 @@
       e.preventDefault();
 
       // Bot protection
-      var hp = document.getElementById('rf_company');
+      var hp = document.getElementById('rf_hp_check');
       if (hp && hp.value.trim() !== '') { alert('Thank you! Your inquiry has been sent.'); return; }
       if ((Date.now() - formLoadTime) / 1000 < 3) { alert('Thank you! Your inquiry has been sent.'); return; }
 
