@@ -18,6 +18,14 @@ Checks:
   5. Nav present (WARN) — any class containing "nav".
   6. Placeholder content (WARN) — visible "PLACEHOLDER", "lorem ipsum".
   7. Missing local images (WARN) — relative src paths that don't resolve.
+  8. Asset refs resolve to tracked files (ERROR) — <link rel="stylesheet" href>
+     and <script src> must point to files that exist on disk AND are tracked
+     in git. Catches the "file on disk but forgotten in git add" / path-typo
+     failure mode that 404s assets on Netlify. Precedent: 2026-04-22 Goosebay
+     js/js/rechat-forms.js typo on 32 pages + css/turner-network.css untracked
+     on 3 sites broke the footer strip render. Project-wide this is "Check #10"
+     per CLAUDE.md Convention #14; numbered #8 here because this lean profile
+     has only 7 pre-existing checks.
 
 This is intentionally more lenient than the Turner-brand check used on
 realestategander-site/goosebay-site. The site-specific design-system
@@ -27,11 +35,43 @@ are out of scope here because these sites don't share those tokens.
 
 import os
 import re
+import subprocess
 import sys
 import glob
 
 SITE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAGES = os.path.join(SITE, "pages")
+
+# ═══════════════════════════════════════════
+# CHECK #8 — ASSET REFERENCE HELPERS
+# (project-wide this is "Check #10" per CLAUDE.md Convention #14;
+#  numbered #8 here because this lean profile has only 7 other checks)
+# ═══════════════════════════════════════════
+ASSET_REF_RE = re.compile(
+    r'<(?:link\s+[^>]*?href|script\s+[^>]*?src)\s*=\s*["\']([^"\']+)["\']',
+    re.IGNORECASE,
+)
+_EXTERNAL_PREFIXES = (
+    "http://", "https://", "//", "data:",
+    "mailto:", "tel:", "javascript:", "#",
+)
+
+
+def _load_tracked_files():
+    """Return the set of git-tracked paths (relative to SITE), or None if git
+    is unavailable / this isn't a repo. Called once before the main loop."""
+    try:
+        out = subprocess.check_output(
+            ["git", "-C", SITE, "ls-files"],
+            stderr=subprocess.DEVNULL,
+            text=True,
+        )
+    except (subprocess.CalledProcessError, FileNotFoundError, OSError):
+        return None
+    return set(out.splitlines())
+
+
+TRACKED_FILES = _load_tracked_files()
 
 html_files = sorted(
     glob.glob(os.path.join(SITE, "*.html")) +
@@ -136,6 +176,37 @@ for filepath in html_files:
         target = os.path.normpath(os.path.join(file_dir, src))
         if not os.path.exists(target):
             add_issue(relpath, "WARN", f"Missing image: {src}")
+
+    # ── 8. ASSET REFS RESOLVE TO TRACKED FILES ──
+    # Every <link rel="stylesheet" href="..."> and <script src="..."> must
+    # point to a file that exists on disk AND is tracked in git. Otherwise
+    # Netlify serves a 404 for the asset on deploy and the page renders
+    # broken (unstyled footer, dead JS widget, etc.) — a silent-break failure
+    # mode because the HTML itself still returns 200.
+    # Precedent (2026-04-22): Goosebay js/js/rechat-forms.js typo silently 404d
+    # the inquiry form on 32 pages (f900dc4); css/turner-network.css untracked
+    # on 3 sites → footer strip rendered unstyled.
+    # Skip if git is unavailable (e.g., tarball install, CI setup issue).
+    if TRACKED_FILES is not None:
+        file_dir = os.path.dirname(filepath)
+        for m in ASSET_REF_RE.finditer(content):
+            url = m.group(1).split("?", 1)[0].split("#", 1)[0].strip()
+            if not url or url.lower().startswith(_EXTERNAL_PREFIXES):
+                continue
+            if url.startswith("/"):
+                asset_abs = os.path.normpath(os.path.join(SITE, url.lstrip("/")))
+            else:
+                asset_abs = os.path.normpath(os.path.join(file_dir, url))
+            if not asset_abs.startswith(SITE):
+                continue
+            rel_to_site = os.path.relpath(asset_abs, SITE)
+            if not os.path.exists(asset_abs):
+                add_issue(relpath, "ERROR",
+                          f"Asset missing on disk: {url} → {rel_to_site}")
+            elif rel_to_site not in TRACKED_FILES:
+                add_issue(relpath, "ERROR",
+                          f"Asset untracked in git: {url} → {rel_to_site} "
+                          "— will 404 on deploy ('git add' the file to fix)")
 
 
 # ═══════════════════════════════════════════
