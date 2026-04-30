@@ -48,9 +48,12 @@ PAGES = os.path.join(SITE, "pages")
 #  numbered #8 here because this lean profile has only 7 other checks)
 # ═══════════════════════════════════════════
 ASSET_REF_RE = re.compile(
-    r'<(?:link\s+[^>]*?href|script\s+[^>]*?src)\s*=\s*["\']([^"\']+)["\']',
+    r'<(?:link\s+[^>]*?href|script\s+[^>]*?src|iframe\s+[^>]*?src)\s*=\s*["\']([^"\']+)["\']',
     re.IGNORECASE,
 )
+# iframe added 2026-04-29 — Convention #15 propagation from Gander 0d38a9c
+# (#214) after the pages/_map-embed.html silent-404 (#213) showed v1's regex
+# missed iframe srcs. Lean profile gets the same protection as full sites.
 _EXTERNAL_PREFIXES = (
     "http://", "https://", "//", "data:",
     "mailto:", "tel:", "javascript:", "#",
@@ -207,6 +210,29 @@ for filepath in html_files:
                 add_issue(relpath, "ERROR",
                           f"Asset untracked in git: {url} → {rel_to_site} "
                           "— will 404 on deploy ('git add' the file to fix)")
+
+    # ── 9. CONVENTION #44 — NETLIFY URL REWRITER FONT-FAMILY ──
+    # (Project-wide this is "Check #16" per CLAUDE.md; numbered #9 here
+    # because the lean profile has only 8 other checks.)
+    # Convention #15 propagation from Gander 0d38a9c (#211).
+    # Detects <a> tags with quoted font names in inline styles. Netlify
+    # mangles `style="font-family:'Raleway',sans-serif"` at deploy time;
+    # browser parses broken value, font inherits to default serif/italic.
+    # Workaround: drop quotes around single-word font names.
+    for m in re.finditer(
+        r'<a\b[^>]*\bstyle\s*=\s*"[^"]*font-family\s*:\s*[\'"]',
+        content, re.IGNORECASE,
+    ):
+        snippet = m.group(0)[:140]
+        add_issue(
+            relpath, "ERROR",
+            f"Check #16: <a> tag with quoted font-family in inline "
+            f"style — Netlify URL rewriter will mangle the quote "
+            f"escaping and the font will render as default serif/"
+            f"italic on live. Drop quotes: "
+            f"font-family:Raleway,sans-serif (no quotes around "
+            f"single-word font names). Match: {snippet}"
+        )
 
 
 # ═══════════════════════════════════════════
