@@ -1,0 +1,20 @@
+# Netlify configuration — labwestrealty-site
+
+# ═══ Security headers (2026-04-15) ═══
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Force HTTPS for 2 years, include subdomains, allow preload-list submission
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+    # Prevent MIME sniffing attacks
+    X-Content-Type-Options = "nosniff"
+    # Prevent clickjacking — only same-origin may iframe these pages
+    X-Frame-Options = "SAMEORIGIN"
+    # Minimize referer leakage to third parties
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    # Deny device APIs we don't use
+    Permissions-Policy = "geolocation=(), camera=(), microphone=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"
+    # Cross-origin isolation — conservative defaults
+    Cross-Origin-Opener-Policy = "same-origin-allow-popups"
+    # Content-Security-Policy REMOVED 2026-04-15 — was breaking RealtyVis widget fetches.
+    # Re-add once RealtyVis provides the complete list of origins their widget calls.
