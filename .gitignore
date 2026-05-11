@@ -1,2 +1,12 @@
 # Local Netlify folder
 .netlify
+
+# macOS Finder metadata (added 2026-05-10 — Convention #15 fleet prop)
+.DS_Store
+
+# macOS FUSE filesystem artefacts (added 2026-05-10 — Convention #15 fleet prop)
+.fuse_hidden*
+
+# Python build artefacts (added 2026-05-10 — Convention #15 fleet prop)
+__pycache__/
+*.pyc
