@@ -147,12 +147,20 @@ for filepath in html_files:
         add_issue(relpath, "ERROR", "Missing footer (neither <footer> tag nor footer.js)")
 
     # ── 4. BROKEN INTERNAL LINKS ──
+    # Convention #46 (banked 2026-04-29): site-absolute hrefs (`/pages/foo.html`)
+    # must resolve from site root, not relative to file_dir. Without this branch,
+    # os.path.join(file_dir, "/pages/foo.html") returns "/pages/foo.html" which
+    # fails os.path.exists. Live site works fine because Netlify resolves
+    # absolute paths correctly. Propagated 2026-05-06 from Gander canonical.
     for match in re.finditer(r'href="([^"#]*\.html)"', content):
         href = match.group(1)
-        if href.startswith("http") or href.startswith("mailto") or href.startswith("tel"):
+        if href.startswith("http") or href.startswith("mailto") or href.startswith("tel") or href.startswith("//"):
             continue
         file_dir = os.path.dirname(filepath)
-        target = os.path.normpath(os.path.join(file_dir, href))
+        if href.startswith("/"):
+            target = os.path.normpath(os.path.join(SITE, href.lstrip("/")))
+        else:
+            target = os.path.normpath(os.path.join(file_dir, href))
         if not os.path.exists(target):
             add_issue(relpath, "ERROR", f"Broken link: {href}")
 
@@ -233,6 +241,77 @@ for filepath in html_files:
             f"font-family:Raleway,sans-serif (no quotes around "
             f"single-word font names). Match: {snippet}"
         )
+
+
+
+# Check #21 — cache-bust auto-detect (Convention #106(b) reflexive guardrail).
+# Convention #15 byte-symmetric port from realestategander-site canonical
+# (commit 8e2c8ea9a, 2026-05-19). When a tracked js/*.js file is modified
+# vs HEAD AND any HTML in the site references it via <script src="...js/
+# <name>.js?v=stamp"> AND none of those HTML files have ALSO modified the
+# stamp, emit WARN: "JS logic changed without cache-bust bump." Would have
+# caught the 2026-05-19 morning auth.js shim ship at commit-time.
+#
+# WARN-only on first ship to clear any baseline noise — promote to ERROR
+# after baseline clean per Convention #19. Sites without listings/ tree
+# skip silently (lean siblings).
+def check_21_cache_bust_drift():
+    """Walk staged JS files; verify cache-bust stamps moved too."""
+    import subprocess
+    try:
+        result = subprocess.run(
+            ["git", "diff", "--name-only", "HEAD"],
+            capture_output=True, text=True, cwd=SITE, timeout=10
+        )
+        if result.returncode != 0:
+            return
+        changed_files = [f.strip() for f in result.stdout.split("\n") if f.strip()]
+    except (subprocess.TimeoutExpired, FileNotFoundError, OSError):
+        return
+    changed_js = [f for f in changed_files if f.startswith("js/") and f.endswith(".js")]
+    if not changed_js:
+        return
+    import re as _re
+    for js_path in changed_js:
+        js_name = os.path.basename(js_path)
+        pat = _re.compile(
+            r'<script\s+[^>]*src=["\'][^"\']*?'
+            + _re.escape(js_name)
+            + r'\?v=([\w\-.]+)["\']',
+            _re.IGNORECASE
+        )
+        referrers = []
+        for root, dirs, files in os.walk(SITE):
+            dirs[:] = [d for d in dirs if d not in (".git", "node_modules", ".netlify")]
+            for fname in files:
+                if not fname.endswith((".html", ".py")):
+                    continue
+                fpath = os.path.join(root, fname)
+                try:
+                    with open(fpath, "r", encoding="utf-8", errors="ignore") as f:
+                        content = f.read()
+                except (OSError, UnicodeDecodeError):
+                    continue
+                for m in pat.finditer(content):
+                    rel = os.path.relpath(fpath, SITE)
+                    referrers.append((rel, m.group(1)))
+        if not referrers:
+            continue
+        referrer_paths = {r[0] for r in referrers}
+        modified_referrers = referrer_paths & set(changed_files)
+        if not modified_referrers:
+            stamps = sorted({r[1] for r in referrers})
+            add_issue(
+                js_path, "WARN",
+                f"Convention #106(b): {js_name} modified but no cache-bust stamp "
+                f"bump detected in any of {len(referrers)} referrer(s). "
+                f"Current stamp(s): {', '.join(stamps[:3])}{' …' if len(stamps) > 3 else ''}. "
+                f"Browsers + CDN may serve stale JS until stamp changes. "
+                f"Bump in same commit."
+            )
+
+
+check_21_cache_bust_drift()
 
 
 # ═══════════════════════════════════════════
