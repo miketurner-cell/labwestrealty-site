@@ -464,21 +464,55 @@
         } catch (evErr) { /* no-op */ }
       }
 
-      // Build mailto subject and body
-      var subject = encodeURIComponent('Labrador West Recruiting Inquiry from ' + name);
-      var body = encodeURIComponent(
-        'Name: ' + name + '\n' +
-        'Email: ' + email + '\n' +
-        'Phone: ' + phone + '\n' +
-        'License Status: ' + license + '\n\n' +
-        'Message:\n' + message
-      );
+      // Route the recruiting lead through the shared lead-receive pipeline
+      // (kvCORE + Supabase + Postmark), tagged Recruitment + routed to the
+      // broker (Mike). Replaces the old mailto so no inquiry is ever lost.
+      var parts = name.trim().split(/\s+/);
+      var firstName = parts.shift() || name;
+      var lastName = parts.join(' ');
 
-      // Assemble email address
-      var brokerEmail = 'miketurner' + '@' + 'royallepage.ca';
+      var btn = form.querySelector('.btn-submit');
+      var status = document.getElementById('formStatus');
+      if (!status) {
+        status = document.createElement('p');
+        status.id = 'formStatus';
+        status.style.cssText = 'margin:16px 0 0;font-size:0.95rem;font-weight:600;display:none;';
+        form.appendChild(status);
+      }
+      var btnLabel = btn ? btn.textContent : '';
+      if (btn) { btn.disabled = true; btn.textContent = 'Sending...'; }
+      status.style.display = 'none';
 
-      // Navigate to mailto
-      window.location.href = 'mailto:' + brokerEmail + '?subject=' + subject + '&body=' + body;
+      var noteParts = ['License status: ' + (license || 'Not specified')];
+      if (message) noteParts.push('Message: ' + message);
+
+      fetch('https://realestategander.com/.netlify/functions/lead-receive', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          source: 'web',
+          first_name: firstName,
+          last_name: lastName,
+          email: email,
+          phone_number: phone,
+          note: 'Agent recruiting inquiry (Labrador West) — ' + noteParts.join(' | '),
+          tag: ['Recruitment', 'Agent Recruiting', 'Labrador West'],
+          lead_source: 'Source: LabWest Contact — Agent Recruiting',
+          referer_url: location.href,
+          assignees: [{ email: 'miketurner@royallepage.ca' }]
+        })
+      }).then(function(res){
+        if (res.ok || res.status === 200 || res.status === 201 || res.status === 204) {
+          form.reset();
+          status.style.display = 'block'; status.style.color = '#2e7d32';
+          status.textContent = 'Thank you — your inquiry is completely confidential. Mike will be in touch personally, usually within one business day.';
+        } else { throw new Error('bad status'); }
+        if (btn) { btn.disabled = false; btn.textContent = btnLabel; }
+      }).catch(function(){
+        status.style.display = 'block'; status.style.color = '#EA002A';
+        status.innerHTML = 'Something went wrong. Please email <a href="mailto:miketurner@royallepage.ca" style="color:#EA002A;">miketurner@royallepage.ca</a> or call 709-256-7999.';
+        if (btn) { btn.disabled = false; btn.textContent = btnLabel; }
+      });
     });
   }
 })();
