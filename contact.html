@@ -205,6 +205,13 @@
     }
   </style>
   <script src="js/analytics-events.js" defer></script>
+  <!-- Soft "Did you mean …?" guard on the email field (2026-07-19). This form
+       posts to the shared realestategander.com lead-receive pipeline, so a
+       mistyped address costs us the lead here exactly as it does on Gander.
+       Byte-identical to realestategander-site/js/email-typo-guard.js — keep in
+       sync (Convention #15). defer is safe: the guard listens in the CAPTURE
+       phase, so it runs ahead of the form's own handler regardless of order. -->
+  <script src="js/email-typo-guard.js?v=20260719-typo-guard" defer></script>
   <link rel="stylesheet" href="css/turner-network.css">
   <script type="application/ld+json">
   {
