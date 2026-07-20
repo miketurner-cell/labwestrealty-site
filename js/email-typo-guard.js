@@ -41,13 +41,25 @@
         'hotmail.com', 'hotmail.ca', 'hotmail.co.uk',
         'outlook.com', 'outlook.ca',
         'yahoo.com', 'yahoo.ca', 'yahoo.co.uk',
+        // ymail.com and rocketmail.com are REAL Yahoo domains. Both sit 1 edit
+        // from gmail.com, so without listing them here the fuzzy tier would
+        // "correct" a working address. Found by the 2026-07-20 backfill audit,
+        // which flagged two real ymail.com clients as typos.
+        'ymail.com', 'rocketmail.com',
         'live.com', 'live.ca',
         'icloud.com', 'me.com', 'mac.com',
         'aol.com', 'msn.com',
         'protonmail.com', 'proton.me',
-        'gmx.com', 'mail.com', 'zoho.com',
+        'gmx.com', 'gmx.net', 'mail.com', 'zoho.com',
         // Canadian / NL ISPs + local business domains
-        'bellaliant.net', 'bell.net', 'sympatico.ca', 'nf.sympatico.ca',
+        'bellaliant.net', 'bell.net',
+        // Sympatico is REGIONAL — every province has its own subdomain and they
+        // are all 1 edit apart (ns/nf/nb/…), so the full set must be listed or
+        // an out-of-province client gets "corrected" onto the NL domain. The
+        // backfill audit caught exactly that on a real ns.sympatico.ca client.
+        'sympatico.ca', 'nf.sympatico.ca', 'ns.sympatico.ca', 'nb.sympatico.ca',
+        'pe.sympatico.ca', 'qc.sympatico.ca', 'on.sympatico.ca', 'mb.sympatico.ca',
+        'sk.sympatico.ca', 'ab.sympatico.ca', 'bc.sympatico.ca',
         'eastlink.ca', 'rogers.com', 'nl.rogers.com', 'shaw.ca', 'telus.net',
         'personainternet.com', 'nlbroadband.ca',
         'royallepage.ca', 'realestategander.com', 'nlar.ca'
