@@ -314,6 +314,75 @@ def check_21_cache_bust_drift():
 check_21_cache_bust_drift()
 
 
+# ── Check #27: JSON-LD SYNTAX VALIDITY ─────────────────────────────────────
+# Every <script type="application/ld+json"> block must parse as JSON.
+#
+# WHY (2026-07-28): Search Console emailed "Unparsable structured data …
+# Parsing error: Missing '}' or object member name" for avalonrealestate.ca on
+# 07-22. NOTHING in the fleet validated JSON-LD syntax at build time, so a
+# hand-typed JSON error surfaces as a GSC email days later instead of failing
+# the deploy. GENERATED blocks are already safe by construction —
+# _fleet_genutils.ja() is json.dumps-backed AND escapes "</" so a string value
+# cannot close the tag — so the real exposure is hand-authored blocks in
+# index.html + pages/*.html.
+#
+# Convention #19: this ships at ERROR only because the baseline was PROVEN
+# clean first — 9,912 ld+json blocks across 7,796 HTML files on all 5 sites,
+# 0 malformed, 0 empty.
+#
+# Convention #97: the message carries the JSON error with line/col AND a
+# snippet, because a bare count is undiagnosable on an ephemeral CI runner.
+#
+# MALFORMED is ERROR (Google cannot parse it; the rich result is lost).
+# EMPTY is WARN — Google reads an empty block as "no structured data" rather
+# than a parse error, and a future JS-injected-JSON-LD placeholder would be a
+# legitimate reason to have one.
+#
+# `import json as _json27` is function-local ON PURPOSE: the lean variants
+# (labwestrealty, royallepageturner) do NOT import json at module level, so a
+# module-level reference would NameError on those two while passing on the
+# other three (Convention #70/#96 dependency parity). The alias also cannot
+# shadow the module-level `json` on the sites that do have it.
+LDJSON_RE_27 = re.compile(
+    r'<script[^>]*\btype\s*=\s*["\']application/ld\+json["\'][^>]*>(.*?)</script>',
+    re.IGNORECASE | re.DOTALL,
+)
+
+
+def check_27_jsonld_valid(html_files):
+    """Every application/ld+json block must be parseable JSON."""
+    import json as _json27
+
+    for fp in html_files:
+        rel = os.path.relpath(fp, SITE)
+        try:
+            with open(fp, "r", encoding="utf-8") as fh:
+                content = fh.read()
+        except (OSError, UnicodeDecodeError):
+            continue
+        for idx, m in enumerate(LDJSON_RE_27.finditer(content), 1):
+            block = m.group(1).strip()
+            if not block:
+                add_issue(rel, "WARN",
+                    f"Check #27: application/ld+json block {idx} is EMPTY. "
+                    f"Google reads this as no structured data. If a script "
+                    f"fills it at runtime that is expected; otherwise the "
+                    f"emitter produced nothing.")
+                continue
+            try:
+                _json27.loads(block)
+            except ValueError as exc:
+                snippet = " ".join(block[:160].split())
+                add_issue(rel, "ERROR",
+                    f"Check #27: application/ld+json block {idx} is MALFORMED "
+                    f"JSON — {exc}. Google cannot parse it, the rich result is "
+                    f"lost, and GSC reports it as 'Unparsable structured "
+                    f"data'. Block starts: {snippet}")
+
+
+check_27_jsonld_valid(html_files)
+
+
 # ═══════════════════════════════════════════
 # REPORT
 # ═══════════════════════════════════════════
