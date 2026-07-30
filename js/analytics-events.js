@@ -36,6 +36,32 @@
     } catch (e) { /* no-op */ }
   }
 
+  // ── 1b. Meta Pixel base tag ─────────────────────────────────────
+  // Installs fbq() so the mirror below (section 2, mirrorToMeta) can
+  // actually fire -- until this ran, window.fbq was never a function
+  // and every mirror call was a silent no-op (verified 2026-07-30:
+  // zero fbq()/connect.facebook.net hits anywhere on the fleet before
+  // this shipped, despite an earlier note claiming the Pixel already
+  // fired fleet-wide). Gated on the SAME isPreview check above --
+  // preview/staging traffic must never pollute the real Pixel's
+  // audience data, matching the noindex gate's own reasoning.
+  // Pixel: "Turner Realty Website Pixel", dataset 1505026148048549,
+  // created under the Royal LePage Turner Realty Business Manager.
+  if (!isPreview) {
+    (function (f, b, e, v, n, t, s) {
+      if (f.fbq) return;
+      n = f.fbq = function () {
+        n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+      };
+      if (!f._fbq) f._fbq = n;
+      n.push = n; n.loaded = true; n.version = '2.0'; n.queue = [];
+      t = b.createElement(e); t.async = true; t.src = v;
+      s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s);
+    })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+    window.fbq('init', '1505026148048549');
+    window.fbq('track', 'PageView');
+  }
+
   // ── 2. Helper: safe gtag call + ad-platform mirror ─────────────
   // Mirrors key events to Meta Pixel (if fbq loaded) and Google Ads
   // conversion (if window.GOOGLE_ADS_CONVERSION is set as
