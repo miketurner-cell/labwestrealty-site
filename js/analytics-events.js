@@ -47,7 +47,14 @@
   // audience data, matching the noindex gate's own reasoning.
   // Pixel: "Turner Realty Website Pixel", dataset 1505026148048549,
   // created under the Royal LePage Turner Realty Business Manager.
-  if (!isPreview) {
+  // Also excluded on NLAR/CREA sold-price-gated pages (2026-07-30 fix):
+  // /listings/sold/ never loads this file today, but /property/ (Gander's
+  // ~383-page per-record sold archive) DOES load it -- an explicit path
+  // check is the only thing standing between this Pixel and third-party
+  // tracking on price-gated pages, so it can't be left to coincidence.
+  var GATED_PATH_RE = /^\/(?:listings\/sold\/|property\/)/i;
+  var isGatedPricePage = GATED_PATH_RE.test(location.pathname || '');
+  if (!isPreview && !isGatedPricePage) {
     (function (f, b, e, v, n, t, s) {
       if (f.fbq) return;
       n = f.fbq = function () {
