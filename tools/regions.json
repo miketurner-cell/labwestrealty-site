@@ -1,0 +1,228 @@
+{
+  "_comment": "The region registry -- one canonical definition per NL Network region. Live 3 regions (gander/avalon/goosebay) are DERIVED from the existing source maps (fb-post.py:REGION_POSTAL, each site's tools/_fleet_config.json, tools/agent_roster.json, community-agent-map.json, live-aggregates.json, region-config/*.yml). The 6 future/peer regions are seeded from public Canada Post / Statistics Canada geography and the peer brokerages' own published service-area claims -- NOT derived from any Turner system where Turner has no presence. No agent rosters, NAP, or listing data is invented for unstaffed regions -- state:'recruiting' regions carry no roster and no domain until a real agent/team is assigned. Operator values: 'turner' (Turner-operated -- includes labrador-city, which is Turner's own recruiting-only labwestrealty.com site with no listings feed), 'peer' (an independently-operating Royal LePage sibling brokerage we backlink to but do not operate, share data with, or share tech with), null (genuinely unclaimed 'recruiting' white space with no operator of any kind yet).",
+  "_schema_version": 2,
+  "_generated": "2026-09-08",
+  "_field_notes": {
+    "territory": "The region key, repeated as a field so consumers reading a single region object never need the parent key -- this is the field name to use everywhere a 'region' concept is threaded through code (payloads, columns, JS globals). Deliberately NOT named region_key: that name is already a load-bearing column on market_stats/market_report_subs with a DIFFERENT meaning (a market-aggregate label like 'Gander and Area', not a territory slug) -- see market_region_keys below for that vocabulary.",
+    "site_id": "Supabase site_id vocabulary (js/saved-search.js SITE_ID_MAP, vow-funnel-event.ts VALID_SITES). null where the region has no Supabase-backed consumer surface (peer regions, pure-recruiting regions, and labrador-city -- Turner-operated but no listings/saved-search feature there today).",
+    "r2_slug": "Cloudflare R2 photo-bucket slug (tools/_fleet_config.json:r2_site_slug, agent_territory.py:R2_SLUG). null where the region has no listing photos of its own.",
+    "repo_dir": "Local folder / GitHub repo name (fleet/manifest.json:sites, agent_territory.py:SITE_DIR, agent_roster.json:home_site). null for peer and pure-recruiting regions -- no Turner-controlled repo exists for them.",
+    "office_key": "js/turner-network.js OFFICES[].key vocabulary. null where the region is not one of the network-strip offices (peer regions, pure-recruiting regions).",
+    "site_key": "tools/_fleet_config.json:site_key / fleet/manifest.json site keys ('hub'/'gander'/'avalon'/'goosebay'/'labwest'). null where none applies.",
+    "nav_label": "Short label for a region strip / nav tab (fleet/canonical/js/nav.js REGIONS[].label uses this vocabulary today, e.g. 'Grand Falls' not the full 'label' text). label stays the long/display form used in page copy and cards.",
+    "towns": "Human-readable coverage towns/communities, for portal cards and recruiting-page copy. Sourced from CLAUDE.md's Geographic facts section, each site's tools/region-config/*.yml children, and tools/idx-cache/live-aggregates.json region keys where those three agree.",
+    "market_region_keys": "The subset of tools/idx-cache/live-aggregates.json 'regions' keys (== market_stats.region_key / market_report_subs.region_key) that belong to this territory -- lets a portal market tile join straight to the aggregate without re-deriving the mapping. Only populated for live turner regions (peer/recruiting regions have no Turner-side market aggregate)."
+  },
+  "_ambiguous_prefixes": {
+    "A0E": {
+      "claimed_by": ["clarenville", "burin-south-coast"],
+      "resolution": "Route by towns[] match first (each region's town list is authoritative). Mike's decision (2026-09-08): a postal-code-only match with no town match (an A0E FSA lookup that can't be resolved to a specific town) falls to clarenville as the tiebreak -- flagged, not silent, wherever this fires (log the fallback; the town lists should be refined over time to shrink how often this path is hit)."
+    }
+  },
+  "regions": {
+    "gander": {
+      "territory": "gander",
+      "label": "Gander and Area",
+      "nav_label": "Gander and Area",
+      "state": "live",
+      "operator": "turner",
+      "domain": "https://realestategander.com",
+      "site_id": "realestategander",
+      "r2_slug": "gander",
+      "repo_dir": "realestategander-site",
+      "site_key": "gander",
+      "office_key": "gander",
+      "postal_prefixes": ["A1V", "A0G"],
+      "towns": ["Gander", "Gander Bay", "Appleton", "Glenwood", "Gambo", "Glovertown", "Lewisporte", "Twillingate", "Eastport Peninsula", "Fogo Island", "Change Islands", "Notre Dame Bay"],
+      "market_region_keys": ["Gander and Area", "Appleton & Glenwood", "Gander Loop", "Gambo", "Lewisporte", "Eastport Peninsula", "Twillingate / Fogo", "Glovertown / Tray Town", "Fogo Island & Change Islands", "Notre Dame Bay"],
+      "roster": [
+        "ashley-bullen",
+        "crystal-hynes",
+        "danielle-pike",
+        "dwayne-kean",
+        "gaye-turner",
+        "kayla-tulk",
+        "matt-wheaton",
+        "mike-turner"
+      ],
+      "office": {
+        "name": "Royal LePage Turner Realty",
+        "address": "204 Airport Blvd, Gander, NL A1V 1L6",
+        "phone": "709-256-7999",
+        "email": "office@realestategander.com"
+      },
+      "_provenance": "fb-post.py:REGION_POSTAL['gander']; tools/_fleet_config.json; community-agent-map.json:communities.gander; tools/region-config/central-newfoundland.yml children; tools/idx-cache/live-aggregates.json"
+    },
+    "avalon": {
+      "territory": "avalon",
+      "label": "Avalon",
+      "nav_label": "Avalon",
+      "state": "live",
+      "operator": "turner",
+      "domain": "https://avalonrealestate.ca",
+      "site_id": "avalonrealestate",
+      "r2_slug": "avalon",
+      "repo_dir": "stjohns-site",
+      "site_key": "avalon",
+      "office_key": "avalon",
+      "postal_prefixes": ["A1A", "A1B", "A1C", "A1E", "A1G", "A1H", "A1K", "A1L", "A1M", "A1N", "A1S", "A1W", "A1X", "A1Y", "A1Z", "A0A", "A0B"],
+      "towns": ["St. John's", "Mount Pearl", "Conception Bay South", "Paradise", "Torbay", "Portugal Cove-St. Philip's", "Holyrood", "Bay Bulls", "Southern Shore"],
+      "market_region_keys": ["St. John's Metro", "St. John's", "Mount Pearl", "Conception Bay South", "Paradise", "Torbay", "Downtown St. John's", "East End St. John's", "West End St. John's", "Galway St. John's", "Kenmount St. John's", "North End St. John's", "South St. John's", "Portugal Cove and St. Philips", "Holyrood and Area", "Bay Bulls and Southern Shore"],
+      "roster": [
+        "chris-morrison"
+      ],
+      "office": {
+        "name": "Royal LePage Turner Realty (Avalon)",
+        "address": "St. John's, NL",
+        "phone": "709-725-6520",
+        "email": "cmorrison@royallepage.ca"
+      },
+      "_provenance": "fb-post.py:REGION_POSTAL['avalon'] (2026-08-07-corrected, copied verbatim from avalonrealestate-site's own idx-photo-sync.py:AVALON_POSTAL_PREFIXES); tools/_fleet_config.json; tools/region-config/avalon.yml children; tools/idx-cache/live-aggregates.json; office phone/email from stjohns-site/pages/chris-morrison.html + CLAUDE.md canonical inquiry table (address was previously blank in fleet/config/avalon.json and js/turner-network.js SITE_NAP -- filled here from the same canonical table)"
+    },
+    "goosebay": {
+      "territory": "goosebay",
+      "label": "Labrador",
+      "nav_label": "Labrador",
+      "state": "live",
+      "operator": "turner",
+      "domain": "https://goosebayrealestate.ca",
+      "site_id": "goosebayrealestate",
+      "r2_slug": "goosebay",
+      "repo_dir": "goosebay-site",
+      "site_key": "goosebay",
+      "office_key": "goosebay",
+      "postal_prefixes": ["A0P"],
+      "towns": ["Happy Valley-Goose Bay", "North West River"],
+      "market_region_keys": ["Happy Valley / Goose Bay"],
+      "roster": [
+        "karen-pomeroy",
+        "roberta-primmer"
+      ],
+      "office": {
+        "name": "Royal LePage Turner Realty (Happy Valley-Goose Bay)",
+        "address": "371 Hamilton River Road, Suite 102, Happy Valley-Goose Bay, NL A0P 1C0",
+        "phone": "709-896-5001",
+        "email": "goosebay@royallepage.ca"
+      },
+      "_provenance": "fb-post.py:REGION_POSTAL['goosebay']; tools/_fleet_config.json; tools/region-config/labrador.yml children; tools/idx-cache/live-aggregates.json; office address/phone/email from CLAUDE.md canonical Office/NAP facts (was previously null in this file)"
+    },
+    "clarenville": {
+      "territory": "clarenville",
+      "label": "Clarenville & Random Island",
+      "nav_label": "Clarenville",
+      "state": "recruiting",
+      "operator": null,
+      "domain": null,
+      "site_id": null,
+      "r2_slug": null,
+      "repo_dir": null,
+      "site_key": null,
+      "office_key": null,
+      "postal_prefixes": ["A0E"],
+      "towns": ["Clarenville", "Random Island", "Shoal Harbour", "Bonavista Bay South"],
+      "roster": [],
+      "office": null,
+      "_provenance": "researched (Canada Post FSA A0E), not derived from Turner systems"
+    },
+    "burin-south-coast": {
+      "territory": "burin-south-coast",
+      "label": "Burin Peninsula & South Coast",
+      "nav_label": "Burin Peninsula",
+      "state": "recruiting",
+      "operator": null,
+      "domain": null,
+      "site_id": null,
+      "r2_slug": null,
+      "repo_dir": null,
+      "site_key": null,
+      "office_key": null,
+      "postal_prefixes": ["A0E"],
+      "towns": ["Marystown", "Burin", "Grand Bank", "Fortune", "St. Lawrence"],
+      "roster": [],
+      "office": null,
+      "_provenance": "researched (Canada Post FSA A0E), not derived from Turner systems",
+      "_note": "Shares FSA A0E with clarenville -- see top-level _ambiguous_prefixes. This region's own towns[] should always be checked before falling back to the A0E tiebreak."
+    },
+    "grand-falls-windsor": {
+      "territory": "grand-falls-windsor",
+      "label": "Grand Falls-Windsor & Central",
+      "nav_label": "Grand Falls",
+      "state": "live",
+      "operator": "peer",
+      "domain": "https://generationrealty.ca",
+      "site_id": null,
+      "r2_slug": null,
+      "repo_dir": null,
+      "site_key": null,
+      "office_key": null,
+      "postal_prefixes": ["A2A"],
+      "towns": ["Grand Falls-Windsor", "Bishop's Falls", "Botwood", "Badger & Buchans", "Norris Arm", "Springdale & South Brook", "Baie Verte", "Bay D'Espoir & Harbour Breton"],
+      "roster": [],
+      "office": {
+        "name": "Royal LePage Generation Realty",
+        "address": "28 Cromer Avenue, Grand Falls-Windsor, NL",
+        "phone": "709-489-7000"
+      },
+      "_provenance": "generationrealty.ca, fetched 2026-08-26",
+      "_note": "Generation Realty's own site (generationrealty.ca) also lists Lewisporte and Twillingate in its nav menu -- both are Turner's own actively-served towns (region: gander, agent: crystal-hynes, full live page suite). Deliberately excluded from towns[] above per Mike's directive, 2026-08-26: \"Yes, we do overlap Lewisporte and Twillingate, but Gander right now should supersede anything Generation Realty is doing until we bring them into the fold.\""
+    },
+    "corner-brook-west-coast": {
+      "territory": "corner-brook-west-coast",
+      "label": "Corner Brook & West Coast",
+      "nav_label": "Corner Brook",
+      "state": "live",
+      "operator": "peer",
+      "domain": "https://royallepagenlrealty.ca",
+      "site_id": null,
+      "r2_slug": null,
+      "repo_dir": null,
+      "site_key": null,
+      "office_key": null,
+      "postal_prefixes": ["A2H"],
+      "towns": ["Corner Brook", "Deer Lake", "Stephenville", "Pasadena"],
+      "roster": [],
+      "office": {
+        "name": "Royal LePage NL Realty, Brokerage (Independently owned and operated)",
+        "address": "104-29 Humber Road, Corner Brook, NL A2H 1E3",
+        "phone": "709-634-4444"
+      },
+      "_provenance": "royallepagenlrealty.ca, fetched 2026-08-26. Site describes its own service area as \"Corner Brook and Western Newfoundland\" -- narrower than Mike's own belief the territory runs to St. Anthony. Per Mike's 2026-08-26 call, used only what they publish about themselves, not his broader estimate."
+    },
+    "northern-peninsula": {
+      "territory": "northern-peninsula",
+      "label": "Northern Peninsula",
+      "nav_label": "Northern Peninsula",
+      "state": "recruiting",
+      "operator": null,
+      "domain": null,
+      "site_id": null,
+      "r2_slug": null,
+      "repo_dir": null,
+      "site_key": null,
+      "office_key": null,
+      "postal_prefixes": ["A0K"],
+      "towns": ["St. Anthony", "Port Saunders", "Rocky Harbour"],
+      "roster": [],
+      "office": null,
+      "_provenance": "researched (Canada Post FSA A0K), not derived from Turner systems"
+    },
+    "labrador-city": {
+      "territory": "labrador-city",
+      "label": "Labrador West",
+      "nav_label": "Labrador West",
+      "state": "recruiting",
+      "operator": "turner",
+      "domain": "https://labwestrealty.com",
+      "site_id": null,
+      "r2_slug": null,
+      "repo_dir": "labwestrealty-site",
+      "site_key": "labwest",
+      "office_key": "labwest",
+      "postal_prefixes": ["A2V"],
+      "towns": ["Labrador City", "Wabush"],
+      "roster": [],
+      "office": null,
+      "_provenance": "researched (Canada Post FSA A2V), not derived from Turner systems -- but the SITE itself (labwestrealty-site / labwestrealty.com) is a live Turner-operated recruiting site (fleet/manifest.json site key 'labwest'), unlike the other 'recruiting' regions which have no Turner presence at all. Corrected 2026-09-08 (fleet review): domain/repo_dir/site_key/office_key were all null/missing in schema v1 even though the site has been live since before this registry existed -- state stays 'recruiting' (no listings feed, no roster) but operator is 'turner', not null."
+    }
+  }
+}
