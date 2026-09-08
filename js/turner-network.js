@@ -28,9 +28,19 @@
 
   var currentSite = (window.TURNER_SITE || '').toLowerCase();
 
-  var creditLine = currentSite === 'avalon'
-    ? 'A family-owned Newfoundland brokerage, serving the province since 1998.'
-    : 'Chairman\'s Club Top 1% nationally since 2017 &middot; Award of Excellence 2023&ndash;2025';
+  // Decided 2026-08-26: one credit line everywhere -- predates the Royal
+  // LePage affiliation, so it holds regardless of any future brand/marketplace
+  // change (was previously Avalon-only, with Chairman's Club shown elsewhere).
+  var creditLine = 'A family-owned Newfoundland brokerage, serving the province since 1998.';
+
+  // Per-site NAP for the meta line below. Hub + Labrador West (no physical
+  // office) fall through to the Gander HQ default -- unchanged from before
+  // this fix; only Avalon and Goose Bay were showing the wrong office.
+  var SITE_NAP = {
+    avalon:   { addr: '', tel: '7097256520', phone: '709-725-6520' },
+    goosebay: { addr: '371 Hamilton River Road, Suite 102, Happy Valley-Goose Bay, NL A0P 1C0', tel: '7098965001', phone: '709-896-5001' }
+  };
+  var nap = SITE_NAP[currentSite] || { addr: '204 Airport Blvd, Gander, NL A1V 1L6', tel: '7092567999', phone: '709-256-7999' };
 
   function buildHTML() {
     var cards = OFFICES.map(function (o) {
@@ -68,9 +78,8 @@
             cards +
           '</nav>' +
           '<p class="turner-network-meta">' +
-            '<strong>Royal LePage Turner Realty (2014) Inc.</strong> &middot; ' +
-            '204 Airport Blvd, Gander, NL A1V 1L6 &middot; ' +
-            '<a href="tel:7092567999">709-256-7999</a>' +
+            '<strong>Royal LePage Turner Realty (2014) Inc.</strong>' + (nap.addr ? ' &middot; ' + nap.addr : '') + ' &middot; ' +
+            '<a href="tel:' + nap.tel + '">' + nap.phone + '</a>' +
             '<br>' + creditLine +
           '</p>' +
         '</div>' +
