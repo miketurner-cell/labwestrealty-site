@@ -1,2 +1,4 @@
 # Block /tools/* — internal build tooling must not be publicly served. (security audit 2026-08-21 P3)
 /tools/*  /404.html  404!
+
+/agent                       https://realestategander.com/pages/agent.html  301!

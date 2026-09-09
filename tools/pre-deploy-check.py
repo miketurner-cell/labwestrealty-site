@@ -119,7 +119,14 @@ for filepath in html_files:
     ) is not None
 
     # ── 1. CREA COMPLIANCE BLOCK (Rule 6(c)(i)/(ii)) ──
-    if 'crea-compliance:v1' not in content and 'class="lst-ddr"' not in content:
+    # Slice 3 step 4 (2026-09-09): footer.js now injects the CREA aside at
+    # runtime for every page on this site -- there is no longer a static
+    # <footer> skeleton left in source for it to replace (unlike Gander/
+    # Avalon/Goose Bay, whose generators still emit one). 'footer.js' in
+    # content is therefore a real, not a lazy, substitute check here.
+    if ('crea-compliance:v1' not in content
+            and 'class="lst-ddr"' not in content
+            and 'footer.js' not in content):
         add_issue(relpath, "ERROR",
                   "Missing CREA trademark/disclaimer block "
                   "(Rule 6(c)(i)) — run tools/inject-crea-footer.py --apply")
@@ -165,8 +172,9 @@ for filepath in html_files:
             add_issue(relpath, "ERROR", f"Broken link: {href}")
 
     # ── 5. NAV PRESENT (lenient) ──
-    has_nav = re.search(r'class="[^"]*\bnav\b[^"]*"', content) is not None or \
-              re.search(r'<nav\b', content) is not None
+    has_nav = (re.search(r'class="[^"]*\bnav\b[^"]*"', content) is not None or
+               re.search(r'<nav\b', content) is not None or
+               'nav.js' in content)
     if not has_nav:
         add_issue(relpath, "WARN", "No nav element or class detected")
 
