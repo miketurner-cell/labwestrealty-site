@@ -77,6 +77,17 @@ def check(data, verbose=False):
         if "towns" not in r:
             errors.append(f"region '{key}' has no towns[] key at all (empty list is fine, absent is not)")
 
+    # 6. order must be present, an int, and globally unique
+    seen_orders = {}
+    for key, r in regions.items():
+        o = r.get("order")
+        if not isinstance(o, int):
+            errors.append(f"region '{key}' has no integer 'order' field")
+            continue
+        if o in seen_orders:
+            errors.append(f"region '{key}' and '{seen_orders[o]}' both have order={o} -- must be unique")
+        seen_orders[o] = key
+
     if verbose:
         print(f"[regions_check] {len(regions)} region(s) checked, {len(errors)} error(s)")
     return errors
