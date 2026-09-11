@@ -156,4 +156,68 @@
     }
   }
   document.addEventListener('click', onDocClick, true);
+
+  // ── 5. First-party listing-view beacon (M4 prep, 2026-07-14; widened
+  //      2026-08-20 to also capture organic signed-in browsing) ──────────
+  // Two attribution paths converge on one beacon send:
+  //   (a) alert-click — visitor arrived via an alert digest link carrying
+  //       ?ss=<saved_search_id>; remembered for the session so every
+  //       listing page they browse this visit attributes back to their
+  //       alert (the kvCORE-style behavioral signal, on our own spine).
+  //   (b) organic — a SIGNED-IN visitor just browsing, no alert involved.
+  //       Anonymous (signed-out) visits still send NOTHING — GA4 already
+  //       counts raw traffic, and there's no consented identity to attach
+  //       the row to anyway. Sends the session's access token, not a raw
+  //       user id — listing-view.ts verifies it server-side via GoTrue
+  //       (mirrors portal-profile.ts's verifyCaller) rather than trusting
+  //       a client-supplied id, which anyone could spoof in a POST body.
+  // One session-scoped dedup guard covers both paths (neither had one
+  // before this — a widened beacon firing on every revisit/refresh would
+  // write-spam listing_views otherwise): one row per mls per browser
+  // session, first attribution wins.
+  try {
+    var ssParam = new URLSearchParams(location.search).get('ss');
+    if (ssParam && /^[0-9a-f-]{36}$/i.test(ssParam)) {
+      sessionStorage.setItem('turner_ss', ssParam);
+    }
+    var ssTok = sessionStorage.getItem('turner_ss');
+    // Listing detail pages: /listings/<town>/<street>-<mls>.html (mls = trailing digit run).
+    var mlsMatch = location.pathname.match(/\/listings\/.+-(\d{6,8})(?:\.html)?\/?$/);
+
+    function sendListingViewBeacon(mls, extra) {
+      var dedupKey = 'turner_lv_' + mls;
+      try {
+        if (sessionStorage.getItem(dedupKey)) return; // already recorded this mls this session
+        sessionStorage.setItem(dedupKey, '1');
+      } catch (e) { /* sessionStorage blocked — send anyway, worst case is one extra row */ }
+      var payload = JSON.stringify(Object.assign({ mls: mls, path: location.pathname }, extra || {}));
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon('/.netlify/functions/listing-view',
+          new Blob([payload], { type: 'application/json' }));
+      } else {
+        fetch('/.netlify/functions/listing-view', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: payload, keepalive: true
+        }).catch(function () { /* beacon is best-effort */ });
+      }
+    }
+
+    if (mlsMatch) {
+      if (ssTok) {
+        sendListingViewBeacon(mlsMatch[1], { ss: ssTok });
+      } else if (window.TurnerAuth && window.TurnerAuth.ready &&
+                 typeof window.TurnerAuth.ready.then === 'function') {
+        // Wait for session state to resolve — calling getSession() synchronously
+        // here would race the SDK's own session restore and false-negative a
+        // signed-in visitor whose session hasn't loaded yet.
+        window.TurnerAuth.ready.then(function () {
+          try {
+            var sess = window.TurnerAuth.getSession && window.TurnerAuth.getSession();
+            var tok = sess && sess.access_token;
+            if (tok) sendListingViewBeacon(mlsMatch[1], { tok: tok });
+          } catch (e) { /* never break a page for telemetry */ }
+        });
+      }
+    }
+  } catch (e) { /* never break a page for telemetry */ }
 })();
