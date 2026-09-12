@@ -1938,9 +1938,18 @@ def check_19_tawk_presence(html_files):
     no-op.
 
     Caught the 2026-05-11 sold-detail.html omission shape: new template
-    that forgets the Tawk snippet. ERROR severity from day one per
-    Convention #19 (baseline confirmed clean during the 2026-05-10
-    rollout sweep)."""
+    that forgets the Tawk snippet. Was ERROR severity on Gander alone (its
+    own baseline confirmed clean during the 2026-05-10 rollout sweep) --
+    demoted to WARN fleet-wide at the 2026-09-12 canonicalization, per this
+    project's own Convention #19 staged-promotion discipline: propagating
+    this check to Avalon for the first time surfaced that its entire
+    listings/ tree (67 pages under the STRICT --scope listings/ CI gate)
+    has never carried the chat widget at all -- shipping ERROR immediately
+    would have hard-blocked every future Avalon deploy for a pre-existing
+    gap, not a regression. Gander's own baseline stays 0 errors under WARN
+    too (nothing there actually changes); promote back to ERROR fleet-wide
+    once Avalon's listing-detail generator adds the widget and re-confirms
+    clean."""
     tawk_path = os.path.join(SITE, "js", "tawk.js")
     if not os.path.exists(tawk_path):
         return  # Site doesn't run Tawk — skip silently
@@ -1966,7 +1975,7 @@ def check_19_tawk_presence(html_files):
         if _TAWK_SCRIPT_RE.search(content):
             continue
         # Missing Tawk on a consumer-facing page.
-        add_issue(relpath, "ERROR",
+        add_issue(relpath, "WARN",
             f"Check #19: live-chat script missing (chat-widget.js or tawk.js). "
             f'Add <script src="{{prefix}}js/chat-widget.js" async></script> '
             f"before </body>. If this page is intentionally chat-less "
