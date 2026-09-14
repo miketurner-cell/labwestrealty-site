@@ -133,10 +133,12 @@
 
   var navMainHTML =
     '<button class="nav-toggle" aria-label="Toggle navigation" type="button"><span></span><span></span><span></span></button>' +
-    '<ul class="nav-main-links">' + MENU.map(menuItem).join('') + '</ul>' +
+    '<ul class="nav-main-links">' +
+      '<li class="nav-menu-cta"><a href="' + SITE.ctaHref + '" class="nav-cta-outline">Free Evaluation</a></li>' +
+      MENU.map(menuItem).join('') + '</ul>' +
     '<div class="nav-main-right">' +
       '<a href="' + SITE.ctaHref + '" class="nav-cta-outline">Free Evaluation</a>' +
-      '<a href="tel:' + SITE.phoneTel + '" class="nav-phone-pill">' + phoneSVG +
+      '<a href="tel:' + SITE.phoneTel + '" class="nav-phone-pill" aria-label="Call ' + SITE.phone + '">' + phoneSVG +
         '<span class="nav-phone-num">' + SITE.phone + '</span></a>' +
     '</div>';
 
@@ -346,6 +348,11 @@
         var isOpen = links.classList.contains('open');
         document.body.classList.toggle('nav-menu-open', isOpen);
         if (!isOpen) closeAllDropdowns(mainBar);
+        // Compact-header fix (2026-09-13): Avalon's mobile menu panel reads
+        // --nav-panel-top to sit flush under the header; nothing ever set it,
+        // so it fell back to a hardcoded 60px under a taller real header.
+        // Harmless on sites that never read the var.
+        try { document.documentElement.style.setProperty('--nav-panel-top', mainBar.getBoundingClientRect().bottom + 'px'); } catch (e) {}
       });
     }
     // Dropdown tap (mobile only ≤1024 — desktop uses :hover)
