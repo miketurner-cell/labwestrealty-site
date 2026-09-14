@@ -141,3 +141,13 @@
   .turner-network-grid { grid-template-columns: 1fr; }
   .turner-network { padding: 36px 20px 28px; }
 }
+
+/* Follow Up Boss visitor-tracking pixel (tools/inject-fub-pixel.py) also
+   self-renders a live "Call/Text" CTA widget (iframe name="widgetCta") on
+   top of every page. Mike only asked for the analytics pixel (2026-09-12)
+   and it now visually collides with the site's own chat bubble and sticky
+   CTA bar (2026-09-14: "2 chat bubbles"). Hiding it here leaves the
+   underlying tracking script running untouched -- only its own UI is
+   suppressed. This file is loaded fleet-wide on every page, same as the
+   pixel, so one rule covers all 5 sites. */
+iframe[name="widgetCta"] { display: none !important; }
