@@ -1983,6 +1983,154 @@ def check_19_tawk_presence(html_files):
             f"_TAWK_SKIP_PATTERNS in pre-deploy-check.py.")
 
 
+# Pre-compiled patterns for Check #31 (shared-chrome CSS coverage).
+# A class is "emitted" by a chrome JS file two ways: the literal HTML
+# string `class="..."` the script concatenates into markup (footer.js/
+# next-page.js), and a direct `el.className = '...'` assignment (nav.js
+# builds .nav-top-bar/.region-strip/.nav-cue/.nav-main-bar/.nav-toggle
+# this way, not via a class= literal).
+_CHROME_CLASS_ATTR_RE = re.compile(r'''class=\\?["']([^"'\\]+)''')
+_CHROME_CLASSNAME_RE = re.compile(r'''\.className\s*=\s*['"]([^'"]+)['"]''')
+# CSS selector tokens: any `.foo` selector, not just `lst-` prefixed
+# (Check #20's narrower pattern doesn't cover nav-*/footer-*/etc).
+_CHROME_SELECTOR_RE = re.compile(r'\.([A-Za-z_][A-Za-z0-9_-]*)')
+_CHROME_SCRIPT_SRC_RE = re.compile(r'<script[^>]+src\s*=\s*["\']([^"\']+)["\']', re.IGNORECASE)
+_CHROME_JS_BASENAMES = ("nav.js", "footer.js", "next-page.js", "mobile-nav.js")
+# Classes deliberately excluded from the coverage requirement:
+#   footer-network-line / footer-proudly-canadian — inline-styled by
+#     js/footer.js itself (style="..." attribute), no external rule needed.
+#   current / dom / open / active / peer / muted — state-hook classes
+#     built by string concatenation with a variable (e.g. `(isPeer ? '
+#     peer' : '')`), not statically extractable by the regexes above —
+#     excluded so the check never false-positives on a class it can't
+#     actually see being constructed dynamically.
+_CHROME_CLASS_ALLOWLIST = {
+    "footer-network-line", "footer-proudly-canadian",
+    "current", "dom", "open", "active", "peer", "muted",
+}
+_CHECK32_SEVERITY = "ERROR"
+
+
+def check_32_shared_chrome_css_coverage(html_files):
+    """Assert every class js/nav.js, js/footer.js, js/next-page.js (or
+    js/mobile-nav.js) emits on an element has a matching CSS selector
+    reachable from a representative page.
+
+    Scope-independent (like Check #20): checks index.html, 404.html,
+    pages/contact.html (or root contact.html), and the first listing-
+    detail page if one exists, regardless of the `--scope` the caller
+    was invoked with. A page that loads none of the chrome JS files
+    skips silently (lean sibling pages, iframe partials).
+
+    CSS reachability mirrors Check #20: inline <style> blocks plus local
+    <link> stylesheets resolved relative to the page (Conv #171: a
+    cache-bust query string after .css is tolerated).
+    """
+    candidates = ["index.html", "404.html", "pages/contact.html", "contact.html"]
+    listings_dir = os.path.join(SITE, "listings")
+    listing_page = None
+    if os.path.isdir(listings_dir):
+        for city in sorted(os.listdir(listings_dir)):
+            city_path = os.path.join(listings_dir, city)
+            if not os.path.isdir(city_path) or city in ("discover", "sold"):
+                continue
+            for fname in sorted(os.listdir(city_path)):
+                if fname.endswith(".html") and fname != "index.html":
+                    listing_page = os.path.join("listings", city, fname)
+                    break
+            if listing_page:
+                break
+    pages = [c for c in candidates if os.path.isfile(os.path.join(SITE, c))]
+    if listing_page:
+        pages.append(listing_page)
+    if not pages:
+        return
+
+    js_class_cache = {}
+
+    def _classes_from_js(js_path):
+        cached = js_class_cache.get(js_path)
+        if cached is not None:
+            return cached
+        toks = set()
+        try:
+            with open(js_path, "r", encoding="utf-8", errors="ignore") as fh:
+                src = fh.read()
+        except OSError:
+            js_class_cache[js_path] = toks
+            return toks
+        for m in _CHROME_CLASS_ATTR_RE.finditer(src):
+            toks.update(m.group(1).split())
+        for m in _CHROME_CLASSNAME_RE.finditer(src):
+            toks.update(m.group(1).split())
+        js_class_cache[js_path] = toks
+        return toks
+
+    scanned = 0
+    for rel in pages:
+        full = os.path.join(SITE, rel)
+        try:
+            with open(full, "r", encoding="utf-8", errors="ignore") as fh:
+                html = fh.read()
+        except OSError:
+            continue
+        page_dir = os.path.dirname(full)
+
+        used = set()
+        for m in _CHROME_SCRIPT_SRC_RE.finditer(html):
+            src = m.group(1)
+            if src.startswith(("http://", "https://", "//")):
+                continue
+            src_path = src.split("?")[0]
+            basename = os.path.basename(src_path)
+            if basename not in _CHROME_JS_BASENAMES:
+                continue
+            if src_path.startswith("/"):
+                js_path = os.path.join(SITE, src_path.lstrip("/"))
+            else:
+                js_path = os.path.normpath(os.path.join(page_dir, src_path))
+            if os.path.isfile(js_path):
+                used |= _classes_from_js(js_path)
+        if not used:
+            continue
+        scanned += 1
+
+        inline_blobs = [m.group(1) for m in re.finditer(r'<style[^>]*>(.*?)</style>', html, re.DOTALL)]
+        linked_css_text = []
+        for m in re.finditer(r'<link[^>]+href\s*=\s*["\']([^"\'?]+\.css)(?:\?[^"\']*)?["\']', html, re.IGNORECASE):
+            href = m.group(1)
+            if href.startswith(("http://", "https://", "//")):
+                continue
+            css_path = (os.path.join(SITE, href.lstrip("/")) if href.startswith("/")
+                        else os.path.normpath(os.path.join(page_dir, href)))
+            if os.path.isfile(css_path):
+                try:
+                    with open(css_path, "r", encoding="utf-8", errors="ignore") as fh:
+                        linked_css_text.append(fh.read())
+                except OSError:
+                    pass
+        corpus = "\n".join(inline_blobs + linked_css_text)
+        defined = {m.group(1) for m in _CHROME_SELECTOR_RE.finditer(corpus)}
+
+        missing = sorted((used - defined) - _CHROME_CLASS_ALLOWLIST)
+        if missing:
+            display = ", ".join(missing[:8])
+            if len(missing) > 8:
+                display += f", … (+{len(missing) - 8} more)"
+            add_issue(rel, _CHECK32_SEVERITY,
+                f"Check #32: {len(missing)} shared-chrome class(es) emitted "
+                f"by a loaded js/nav.js|footer.js|next-page.js but undefined "
+                f"in any CSS reachable from {rel}: {display}. The class is "
+                f"real (the JS builds it into the DOM) but no linked/inline "
+                f"stylesheet defines it — likely a Tier-3 css/main.css that "
+                f"never received a fleet-canonical chrome CSS block, or a "
+                f"one-off script whose CSS was never shipped. Convention "
+                f"#91's sibling trap for shared nav/footer chrome.")
+
+    if not args.quiet:
+        print(f"[check32] scanned {scanned} page(s) with chrome JS for shared-chrome CSS coverage")
+
+
 # Pre-compiled patterns for Check #20.
 # Class-attribute on any HTML element: catches `class="x"`, `class='x y'`,
 # and the rare `class="x y z"` multi-class case. We then split on whitespace
@@ -2410,6 +2558,26 @@ check_19_tawk_presence(html_files)
 # is WARN pending one clean post-regen baseline, then promotes to ERROR
 # (_CHECK20_SEVERITY above); sites without a listings/ tree skip silently.
 check_20_listing_css_coverage(html_files)
+
+
+# Check #32 — shared-chrome CSS coverage (nav.js / footer.js / next-page.js).
+# Convention #91's sibling trap, but for the SHARED CHROME layer instead of
+# listing-detail cards. Banked 2026-09-14: Mike reported Avalon's footer
+# rendering unstyled (stacked, default bullets, ~1,940px tall) on every
+# page. Root cause: the 2026-09-09 js/footer.js convergence to the fleet-
+# canonical Tier-1 script changed the emitted markup to .site-footer >
+# .footer-inner > .footer-brand/.footer-heading/.footer-links/... — that
+# CSS block reached the sites whose css/main.css is Tier-1 (gander,
+# labwest, hub), but Avalon and Goose Bay hand-carry their own Tier-3
+# main.css, which never got it. Nothing caught this: Check #20 only scans
+# `lst-*` classes inside listings/, and a Tier-3 main.css sits outside
+# fleet-check.py's drift detection entirely. Severity ERROR from day one —
+# calibrated clean across all 5 sites before shipping (gander/goosebay
+# were already clean; avalon/hub/labwest fixed in the same pass, see
+# avalonrealestate-site #35/#36, royallepageturner-site #3,
+# labwestrealty-site #4).
+check_32_shared_chrome_css_coverage(html_files)
+
 
 
 # Check #21 — cache-bust auto-detect (Convention #106(b) reflexive guardrail).
