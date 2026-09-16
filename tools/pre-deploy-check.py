@@ -561,14 +561,8 @@ for filepath in html_files:
     real_placeholders = []
     for p in placeholders:
         if p.lower() == 'placeholder':
-            # Only flag if it appears in visible text, not as an HTML attribute or class name
-            for m in re.finditer(r'(?i)placeholder', content_no_base64):
-                start = max(0, m.start() - 80)
-                end = min(len(content_no_base64), m.end() + 30)
-                ctx = content_no_base64[start:end]
-                if not re.search(r'placeholder=|class=|Placeholder\'|Placeholder"|input|textarea|select', ctx, re.I):
-                    real_placeholders.append(p)
-                    break
+            continue  # "placeholder" is scanned once for the whole file below, not once
+            # per literal occurrence findall() counted here — see the block after this loop.
         elif p.upper() == 'XXX':
             # Only flag XXX if it's in visible text (not CSS, not attributes)
             for m in re.finditer(r'(?i)\bXXX\b', content_no_base64):
@@ -579,6 +573,26 @@ for filepath in html_files:
                     break
         else:
             real_placeholders.append(p)
+
+    # "placeholder" scan: one pass over the whole file, independent of how many literal
+    # occurrences findall() counted above, so e.g. a hero form emitting both
+    # `data-ai-placeholder="..."` and `data-ai-placeholder-short="..."` can't multiply into
+    # N identical warnings for the same non-issue.
+    if any(p.lower() == 'placeholder' for p in placeholders):
+        for m in re.finditer(r'(?i)placeholder', content_no_base64):
+            # A match immediately followed by `=` or `-<word>=` IS the attribute name itself
+            # (e.g. the "-short" in `data-ai-placeholder-short="..."`) — classify it directly
+            # rather than relying on the window scan below, which can miss it when a preceding
+            # sibling attribute's value pushes the literal `placeholder=` text out of the fixed
+            # 80-char lookback window.
+            tail = content_no_base64[m.end():m.end() + 20]
+            if re.match(r'(-[\w-]+)?\s*=', tail):
+                continue
+            start = max(0, m.start() - 80)
+            end = min(len(content_no_base64), m.end() + 30)
+            ctx = content_no_base64[start:end]
+            if not re.search(r'placeholder(-[\w-]+)?=|class=|Placeholder\'|Placeholder"|input|textarea|select', ctx, re.I):
+                real_placeholders.append('placeholder')
 
     for p in real_placeholders:
         add_issue(relpath, "WARN", f"Placeholder content found: '{p}'")
@@ -2191,15 +2205,27 @@ def _check33_exempt(rel):
     return fname in INTERNAL_TOOL_PAGES
 
 
+_HEAD_INERT_RE = re.compile(r'<style\b[^>]*>.*?</style\s*>|<!--.*?-->', re.IGNORECASE | re.DOTALL)
+
+
 def _check33_nested_scripts(head_text):
     """Return a list of (open_offset, prev_open_offset) pairs for every
     <script> opened while a previous <script> was still open. Self-closing
     `<script .../>` never opens a block; a `document.write('<scr'+'ipt')`
     split is invisible to the regex by construction (which is exactly why
-    authors split it)."""
+    authors split it).
+
+    Regions where the text "<script>" is NOT a tag are blanked first
+    (offset-preserving, so reported line numbers stay right): <style>
+    blocks and HTML comments. Conv #20 ground truth, 2026-09-16: the first
+    CI run flagged all 435 Gander listing pages because a CSS comment inside
+    the generator's inline <style> reads "page <script> emit" -- text, not
+    a tag. A "<script" immediately preceded by a quote or a + inside an open
+    script is a JS string literal, likewise skipped."""
+    text = _HEAD_INERT_RE.sub(lambda m: " " * len(m.group(0)), head_text)
     nested = []
     open_at = None
-    for m in _SCRIPT_TAG_RE.finditer(head_text):
+    for m in _SCRIPT_TAG_RE.finditer(text):
         closing = m.group(1) == "/"
         if closing:
             open_at = None
@@ -2207,6 +2233,9 @@ def _check33_nested_scripts(head_text):
         if m.group(2).rstrip().endswith("/"):
             continue  # self-closing, no script-data state entered
         if open_at is not None:
+            before = text[max(0, m.start() - 1):m.start()]
+            if before in ("'", '"', "`", "+"):
+                continue  # a '<script…' literal inside the open script's JS
             nested.append((m.start(), open_at))
         open_at = m.start()
     return nested
