@@ -120,6 +120,19 @@ Check (filesystem-walking, runs after per-file loop):
      #226 — MLS 1296533 transient feed drop; this check catches the
      inverse (file persists when cache loses the listing).
 
+Check (whole-site scan, run after the loop):
+ 33. Viewport meta + HEAD sanity (mobile/iPad review, 2026-09-16).
+     For every non-partial page: (a) exactly one <meta name="viewport"> in
+     <head>; (b) its content carries width=device-width; (c) it carries
+     viewport-fit=cover (WARN until A3 lands it fleet-wide, then ERROR);
+     (d) HEAD-SANITY -- no <script> opened inside <head> before the previous
+     <script> closed. Nested script tags make the browser treat everything
+     up to the NEXT </script> as script text, so every <meta>/<link> after
+     it is pushed into the body and never applied (Gander 404.html,
+     2026-07-24 -> 2026-09-16: a diagnostics <script> pasted inside the gtag
+     script). (a)-(c) WARN per Convention #19; (d) ERROR from day one -- it
+     is unambiguous and was proven on the real 404.html before shipping.
+
 Special modes:
   --list-rv-surfaces          Print RealtyVis surface inventory and exit.
   --update-rv-surfaces-allowed  Rewrite .rv-surfaces.allowed from current scan.
@@ -2131,6 +2144,162 @@ def check_32_shared_chrome_css_coverage(html_files):
         print(f"[check32] scanned {scanned} page(s) with chrome JS for shared-chrome CSS coverage")
 
 
+# ═══════════════════════════════════════════
+# CHECK #33 — VIEWPORT META + HEAD SANITY
+# ═══════════════════════════════════════════
+# Banked 2026-09-16 (mobile/iPad review). Two failure classes, one check:
+#   * The viewport meta is the single tag that makes a page render at device
+#     width on a phone; a page without it (or with two disagreeing ones)
+#     renders the desktop layout shrunk to fit. `viewport-fit=cover` is what
+#     lets the sticky bottom chrome extend under the iPhone home indicator
+#     (with env(safe-area-inset-*) padding) instead of leaving a white band.
+#   * A <script> opened inside <head> before the previous one closed: the
+#     HTML parser is in script-data state after the first <script>, so the
+#     inner "<script>" is script TEXT, the first "</script>" closes the outer
+#     tag, and the outer script's tail ("gtag('config'...)" + "</script>")
+#     plus EVERY <meta>/<link> after it is emitted as body text -- viewport,
+#     description, OG tags, stylesheets, all silently unapplied. Gander's
+#     404.html carried exactly this from 2026-07-24 (a diagnostics <script>
+#     pasted inside the gtag snippet) to 2026-09-16; nothing caught it because
+#     every existing check greps the raw text, where the tags still "exist".
+_VIEWPORT_META_RE = re.compile(r'<meta\s+[^>]*?name\s*=\s*["\']viewport["\'][^>]*>', re.IGNORECASE)
+_META_CONTENT_RE = re.compile(r'content\s*=\s*["\']([^"\']*)["\']', re.IGNORECASE)
+_HEAD_BLOCK_RE = re.compile(r'<head\b[^>]*>(.*?)</head\s*>', re.IGNORECASE | re.DOTALL)
+_SCRIPT_TAG_RE = re.compile(r'<(/?)script\b([^>]*)>', re.IGNORECASE)
+# (a)/(b)/(c) ship WARN (Convention #19: another pass is adding
+# viewport-fit=cover across the fleet in parallel; until it lands, (c) fires
+# on essentially every page and would hard-block every deploy).
+_CHECK33_SEVERITY = "WARN"  # TODO promote to ERROR after A3 lands fleet-wide
+# (d) is unambiguous -- a nested <script> in <head> is never intentional.
+_CHECK33_NESTED_SCRIPT_SEVERITY = "ERROR"
+
+
+def _check33_exempt(rel):
+    """Partials, templates, iframe targets and the per-site internal-tool
+    pages (INTERNAL_TOOL_PAGES, injected from fleet/config) are exempt from
+    the viewport rules (a)-(c). The nested-script rule (d) exempts nothing --
+    a broken <head> is broken on an internal page too."""
+    fname = os.path.basename(rel)
+    if fname.startswith("_") or "/_partials/" in rel or "/templates/" in rel:
+        return True
+    # Print artifacts (noindexed, no site chrome, same prefixes the per-file
+    # loop's is_minimal_page uses) are laid out for paper, not a phone. NOT
+    # exempt: lp-* (paid mobile landing pages) and links.html (link-in-bio) --
+    # both are phone-first surfaces that need the viewport meta most.
+    if fname.startswith(("listing-presentation-", "pre-listing-", "leave-behind-")):
+        return True
+    return fname in INTERNAL_TOOL_PAGES
+
+
+def _check33_nested_scripts(head_text):
+    """Return a list of (open_offset, prev_open_offset) pairs for every
+    <script> opened while a previous <script> was still open. Self-closing
+    `<script .../>` never opens a block; a `document.write('<scr'+'ipt')`
+    split is invisible to the regex by construction (which is exactly why
+    authors split it)."""
+    nested = []
+    open_at = None
+    for m in _SCRIPT_TAG_RE.finditer(head_text):
+        closing = m.group(1) == "/"
+        if closing:
+            open_at = None
+            continue
+        if m.group(2).rstrip().endswith("/"):
+            continue  # self-closing, no script-data state entered
+        if open_at is not None:
+            nested.append((m.start(), open_at))
+        open_at = m.start()
+    return nested
+
+
+def check_33_viewport_meta(html_files):
+    """Viewport meta presence/shape + nested-<script>-in-<head> detector.
+    Walks the same html_files list the per-file loop uses; see the header
+    docstring for the rule list and the precedent."""
+    scanned = 0
+    counts = {"missing": 0, "multi": 0, "no_device_width": 0,
+              "no_viewport_fit": 0, "nested_script": 0}
+    for fp in html_files:
+        rel = os.path.relpath(fp, SITE)
+        try:
+            with open(fp, "r", encoding="utf-8") as fh:
+                content = fh.read()
+        except (OSError, UnicodeDecodeError):
+            continue
+        scanned += 1
+        hm = _HEAD_BLOCK_RE.search(content)
+        if hm:
+            head_text, head_off = hm.group(1), hm.start(1)
+        else:
+            # No well-formed <head>...</head>: fall back to everything before
+            # <body> so a page with a missing </head> still gets checked.
+            bm = re.search(r'<body\b', content, re.IGNORECASE)
+            head_text, head_off = content[: bm.start() if bm else len(content)], 0
+
+        # (d) HEAD-SANITY -- runs on every page, including exempt ones.
+        for open_pos, prev_pos in _check33_nested_scripts(head_text):
+            line = content.count("\n", 0, head_off + open_pos) + 1
+            prev_line = content.count("\n", 0, head_off + prev_pos) + 1
+            counts["nested_script"] += 1
+            add_issue(rel, _CHECK33_NESTED_SCRIPT_SEVERITY,
+                f"Check #33.d: <script> opened at line {line} inside the "
+                f"<script> still open from line {prev_line} (nested script "
+                f"tags in <head>). The browser reads the inner tag as script "
+                f"text and closes the OUTER script at the first </script>, so "
+                f"the outer script's tail and every <meta>/<link> after it "
+                f"are pushed into the body unapplied (viewport, description, "
+                f"OG tags, stylesheets). Move the inner <script>…</script> "
+                f"block out of the outer one. Precedent: Gander 404.html, "
+                f"2026-07-24.")
+
+        if _check33_exempt(rel):
+            continue
+
+        # (a) exactly one viewport meta in <head>
+        metas = _VIEWPORT_META_RE.findall(head_text)
+        if not metas:
+            counts["missing"] += 1
+            add_issue(rel, _CHECK33_SEVERITY,
+                "Check #33.a: no <meta name=\"viewport\"> in <head> -- phones "
+                "render the desktop layout shrunk to fit. Add "
+                "<meta name=\"viewport\" content=\"width=device-width, "
+                "initial-scale=1, viewport-fit=cover\">.")
+            continue
+        if len(metas) > 1:
+            counts["multi"] += 1
+            add_issue(rel, _CHECK33_SEVERITY,
+                f"Check #33.a: {len(metas)} <meta name=\"viewport\"> tags in "
+                f"<head> (expected exactly one) -- the last one wins and the "
+                f"page's mobile layout depends on tag order. Keep one.")
+        cm = _META_CONTENT_RE.search(metas[0])
+        vcontent = (cm.group(1) if cm else "").replace(" ", "").lower()
+
+        # (b) width=device-width
+        if "width=device-width" not in vcontent:
+            counts["no_device_width"] += 1
+            add_issue(rel, _CHECK33_SEVERITY,
+                f"Check #33.b: viewport content \"{cm.group(1) if cm else ''}\" "
+                f"lacks width=device-width -- the page will not lay out at "
+                f"device width on phones.")
+
+        # (c) viewport-fit=cover -- TODO promote to ERROR after A3 lands fleet-wide
+        if "viewport-fit=cover" not in vcontent:
+            counts["no_viewport_fit"] += 1
+            add_issue(rel, _CHECK33_SEVERITY,
+                "Check #33.c: viewport content lacks viewport-fit=cover -- "
+                "fixed bottom chrome stops above the iPhone home-indicator "
+                "band instead of extending under it (env(safe-area-inset-*) "
+                "padding has no effect without it). Append "
+                "\", viewport-fit=cover\" to the viewport content.")
+
+    if not args.quiet:
+        print(f"[check33] scanned {scanned} page(s): viewport missing "
+              f"{counts['missing']}, multiple {counts['multi']}, "
+              f"no-device-width {counts['no_device_width']}, "
+              f"no-viewport-fit {counts['no_viewport_fit']}, "
+              f"nested-script {counts['nested_script']}")
+
+
 # Pre-compiled patterns for Check #20.
 # Class-attribute on any HTML element: catches `class="x"`, `class='x y'`,
 # and the rare `class="x y z"` multi-class case. We then split on whitespace
@@ -2577,6 +2746,15 @@ check_20_listing_css_coverage(html_files)
 # avalonrealestate-site #35/#36, royallepageturner-site #3,
 # labwestrealty-site #4).
 check_32_shared_chrome_css_coverage(html_files)
+
+
+# Check #33 — viewport meta + HEAD sanity (mobile/iPad review, 2026-09-16).
+# (a)-(c) WARN (Convention #19: viewport-fit=cover is being added fleet-wide
+# in a parallel pass; promote _CHECK33_SEVERITY to ERROR once that lands and
+# a live [check33] heartbeat reads "no-viewport-fit 0"). (d) nested <script>
+# in <head> is ERROR from day one -- proven against the real Gander 404.html
+# (fires) and a de-nested copy (clean) before shipping.
+check_33_viewport_meta(html_files)
 
 
 
