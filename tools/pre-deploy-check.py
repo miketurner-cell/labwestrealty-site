@@ -1171,6 +1171,96 @@ OG_IMAGE_RE_14 = re.compile(
     r'<meta\s+[^>]*property\s*=\s*["\']og:image["\']',
     re.IGNORECASE,
 )
+# Ship 3 (2026-09-19): og:image / twitter:image CONTENT VALUE — the original
+# Rule 6 only checked the tag existed, never that its URL actually resolved.
+# 26 market-stats pages fleet-wide passed this check clean for however long
+# they'd carried a 404'ing og:image (see CLAUDE.md "share images" ship);
+# Convention #217 — presence is not a semantic.
+OG_IMAGE_CONTENT_RE_14 = re.compile(
+    r'<meta\s+[^>]*property\s*=\s*["\']og:image["\']\s+content\s*=\s*["\']([^"\']*)["\']',
+    re.IGNORECASE,
+)
+TWITTER_IMAGE_CONTENT_RE_14 = re.compile(
+    r'<meta\s+[^>]*name\s*=\s*["\']twitter:image["\']\s+content\s*=\s*["\']([^"\']*)["\']',
+    re.IGNORECASE,
+)
+OG_IMAGE_WIDTH_RE_14 = re.compile(
+    r'<meta\s+[^>]*property\s*=\s*["\']og:image:width["\']\s+content\s*=\s*["\'](\d+)["\']',
+    re.IGNORECASE,
+)
+OG_IMAGE_HEIGHT_RE_14 = re.compile(
+    r'<meta\s+[^>]*property\s*=\s*["\']og:image:height["\']\s+content\s*=\s*["\'](\d+)["\']',
+    re.IGNORECASE,
+)
+# The fleet's own domains -- an absolute URL on one of these is same-origin
+# and MUST resolve to a real file; anything else (an R2/CDN host, a third-
+# party image) is out of this check's reach and exempted, not assumed broken.
+FLEET_DOMAINS_14 = {
+    "realestategander.com", "avalonrealestate.ca", "goosebayrealestate.ca",
+    "labwestrealty.com", "royallepageturner.com",
+}
+
+
+def _resolve_share_image_14(url, tag_label, rel):
+    """Check ONE share-image URL (og:image or twitter:image content value).
+    Returns an ERROR message, or None when the URL is fine or out of reach
+    (cross-origin, e.g. an R2/CDN photo — Ship 1's own accuracy bar doesn't
+    extend to a site we don't control the disk contents of)."""
+    url = (url or "").strip()
+    if not url:
+        return f"Check #14.6: {tag_label} content is empty."
+    if url.startswith("http://") or url.startswith("https://"):
+        m = re.match(r'https?://([^/]+)(/.*)?$', url)
+        if not m:
+            return f"Check #14.6: {tag_label} is not a well-formed URL ({url!r})."
+        host, path = m.group(1), (m.group(2) or "")
+        if host not in FLEET_DOMAINS_14:
+            return None  # cross-origin (R2 photos.*, etc.) -- not ours to verify
+    elif url.startswith("/"):
+        path = url
+    else:
+        return (f"Check #14.6: {tag_label} is a relative path ({url!r}) -- "
+                f"social scrapers need an absolute URL (Convention from the "
+                f"2026-05-14 Facebook ddf-generate-pages.py fix).")
+    on_disk = os.path.normpath(os.path.join(SITE, path.lstrip("/")))
+    if not on_disk.startswith(SITE) or not os.path.isfile(on_disk):
+        return (f"Check #14.6: {tag_label} points at {url!r}, which does not "
+                f"exist on disk. iMessage/Facebook/Slack previews show no "
+                f"image at all when this 404s.")
+    return None
+
+
+def _og_image_dims_mismatch_14(content, rel):
+    """When the page DECLARES og:image:width/height, verify they match the
+    real file's dimensions. Pillow-optional (Conv #74): skipped silently,
+    never a false failure, if Pillow isn't importable in this environment."""
+    wm = OG_IMAGE_WIDTH_RE_14.search(content)
+    hm = OG_IMAGE_HEIGHT_RE_14.search(content)
+    om = OG_IMAGE_CONTENT_RE_14.search(content)
+    if not (wm and hm and om):
+        return None
+    url = om.group(1).strip()
+    m = re.match(r'https?://([^/]+)(/.*)?$', url)
+    if m and m.group(1) not in FLEET_DOMAINS_14:
+        return None  # cross-origin -- not ours to check
+    path = m.group(2) if m else (url if url.startswith("/") else None)
+    if not path:
+        return None
+    on_disk = os.path.normpath(os.path.join(SITE, path.lstrip("/")))
+    if not on_disk.startswith(SITE) or not os.path.isfile(on_disk):
+        return None  # the missing-file case is already Check #14.6's own error
+    try:
+        from PIL import Image
+        with Image.open(on_disk) as im:
+            real_w, real_h = im.size
+    except Exception:  # noqa: BLE001 -- Pillow unavailable or unreadable image
+        return None
+    decl_w, decl_h = int(wm.group(1)), int(hm.group(1))
+    if (decl_w, decl_h) != (real_w, real_h):
+        return (f"Check #14.6: og:image:width/height declares {decl_w}x{decl_h} "
+                f"but the real file is {real_w}x{real_h} -- a scraper that "
+                f"trusts the declared size will misjudge the crop.")
+    return None
 
 
 def _is_marketing_page_14(relpath):
@@ -1266,11 +1356,33 @@ def check_14_seo_gate(html_files):
                 "Check #14.5: <link rel=\"canonical\"> missing. Critical "
                 "for multi-site fleet to avoid duplicate-content signals.")
 
-        # Rule 6 — Open Graph image
-        if not OG_IMAGE_RE_14.search(content):
-            add_issue(rel, "WARNING",
-                "Check #14.6: <meta property=\"og:image\"> missing. Hurts "
-                "social-share appearance which feeds back into brand signals.")
+        # Rule 6 — Open Graph image (Ship 3, 2026-09-19: upgraded from
+        # "tag exists" to "tag resolves"). A page carrying a noindex robots
+        # tag is gated/internal by construction (same self-deriving signal
+        # Check #19 already uses) -- a broken share image on a page nobody
+        # can reach through search or a public share is noise, not a bug.
+        is_noindexed_14 = re.search(
+            r'<meta\s+name="robots"\s+content="[^"]*noindex', content, re.I
+        ) is not None
+        om = OG_IMAGE_CONTENT_RE_14.search(content)
+        if not om:
+            if not is_noindexed_14:
+                add_issue(rel, "WARNING",
+                    "Check #14.6: <meta property=\"og:image\"> missing. Hurts "
+                    "social-share appearance which feeds back into brand signals.")
+        else:
+            err = _resolve_share_image_14(om.group(1), 'og:image', rel)
+            if err:
+                add_issue(rel, "ERROR", err)
+            else:
+                dim_err = _og_image_dims_mismatch_14(content, rel)
+                if dim_err:
+                    add_issue(rel, "ERROR", dim_err)
+            tm = TWITTER_IMAGE_CONTENT_RE_14.search(content)
+            if tm:
+                terr = _resolve_share_image_14(tm.group(1), 'twitter:image', rel)
+                if terr:
+                    add_issue(rel, "ERROR", terr)
 
 
 # ═══════════════════════════════════════════════════════════════════
