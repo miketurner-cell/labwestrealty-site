@@ -2036,6 +2036,28 @@ _CHROME_CLASS_ALLOWLIST = {
     "current", "dom", "open", "active", "peer", "muted",
 }
 _CHECK32_SEVERITY = "ERROR"
+# Check #34 (banked 2026-09-19, see below for the incident): dry-run against
+# a fresh origin/main of all 5 sites BEFORE shipping (Convention #19/#20)
+# found real, currently-live pre-existing backlog on 3 of 5 -- gander 152,
+# avalon 596, goosebay 3 (labwest/hub 0) -- distinct-file counts, mostly
+# individual property/*.html detail pages and listings/sold/<city>/
+# rollups that predate the 2026-08-26/09-08 Tier-1 nav.js convergence and
+# were never converted. Spot-verified LIVE, not just in source: a real
+# Gander property page's baked, fully-populated nav was silently reduced
+# to a 1-item stub (just "Free Evaluation") client-side, because nav.js's
+# injectNav() overwrites .nav-main-bar UNCONDITIONALLY (mainBar.innerHTML
+# = navMainHTML) even when it already holds good server-baked content --
+# this is a live, currently-happening degradation on real pages, not a
+# theoretical one. Its size and shape (hundreds of pre-existing pages
+# across 2 sites) is a bigger, separate piece of work from the market-
+# stats bug this check exists to catch, so it is flagged for its own
+# investigation+fix rather than mass-patched here. Start at WARN
+# (Convention #19 staged promotion, same pattern as Check #20/#33);
+# promote to ERROR once a live run's [check34] heartbeat reads "0".
+_CHECK34_SEVERITY = "WARN"
+_NAV_CONFIG_SCRIPT_RE = re.compile(
+    r'<script\b([^>]*)\bsrc\s*=\s*["\']([^"\']+)["\']([^>]*)>', re.IGNORECASE)
+_NAV_CONFIG_EXCLUDE_DIRS = ("tools", "_archive", "_research", "node_modules")
 
 
 def check_32_shared_chrome_css_coverage(html_files):
@@ -2337,6 +2359,137 @@ _CLASS_ATTR_RE = re.compile(r'''class\s*=\s*["']([^"']+)["']''')
 # CSS rule selector tokens: any `.lst-foo` selector. Matches `.lst-foo {`,
 # `.lst-foo:hover`, `.lst-foo .lst-bar`, `.lst-foo[attr=…]`, etc.
 _CSS_SELECTOR_RE = re.compile(r'\.(lst-[a-z0-9_-]+)')
+
+
+def check_34_nav_config_precedes_nav():
+    """Assert every page that loads js/nav.js (or js/footer.js) also loads
+    js/nav-config.js — the per-site window.SITE/window.MENU/window.FOOTER
+    data both renderers read.
+
+    Banked 2026-09-19: Avalon's market-stats pages (all 15) plus a hand-
+    authored agent page (pages/chris-morrison.html) loaded js/nav.js
+    without js/nav-config.js — window.SITE/window.MENU came back undefined,
+    so nav.js's own Ship-5 fail-safe silently rendered a stub bar (Free
+    Evaluation + Sign in only, zero menu items) instead of crashing loud or
+    doing nothing visible. The footer degraded the same way. Nothing caught
+    it: Check #9's "Missing standard site-nav" check only looks for the
+    `<nav class="nav-main-bar">` PLACEHOLDER element, which was present and
+    therefore passed — it has no notion of which scripts feed that element.
+    Mike found it by eye on the live site.
+
+    Full-tree scan (like Check #20/#32), scope-independent — always walks
+    the whole site regardless of the `--scope` the caller was invoked with.
+    Every .html file on disk is checked EXCEPT: partials (leading-
+    underscore filenames, e.g. _nav.html/_footer.html/_scripts.html —
+    fragments a generator assembles into a real page, not pages
+    themselves) and non-page directories (tools/, _archive/, _research/,
+    node_modules/, and any dot-directory such as .git/ or .claude/). Pages
+    that load neither nav.js nor footer.js (an old baked-nav page still on
+    js/mobile-nav.js, or a lean iframe partial) are not this renderer's
+    contract and skip silently — this check is about pages that DO use the
+    injected-nav pattern, not a requirement that every page use it.
+
+    js/nav.js additionally requires nav-config.js to appear BEFORE it in
+    document order, with the SAME defer state (a deferred nav-config.js
+    paired with a non-deferred nav.js — or vice versa — can execute out of
+    order and read window.SITE before it's set; js/nav.js's own header
+    comment documents this exact hazard). js/footer.js only requires
+    nav-config.js to be present somewhere on the page — footer.js reads
+    window.SITE/FOOTER inside its own DOMContentLoaded handler, which
+    always fires after every deferred script has run, so position doesn't
+    matter there.
+
+    Deliberately NOT checked here: js/regions-data.js. Its absence
+    degrades to nav.js's last-known-good FALLBACK_REGIONS list — a stale-
+    but-visible region strip, not a menu-less bar — and is a known,
+    widespread, non-visually-broken gap fleet-wide (see
+    [[nl-network-portal]]). Folding it into this check's severity would
+    make ERROR unshippable fleet-wide for an unrelated, lower-severity
+    problem.
+    """
+    scanned = 0
+    flagged = 0
+    for dirpath, dirnames, filenames in os.walk(SITE):
+        dirnames[:] = [
+            d for d in dirnames
+            if d not in _NAV_CONFIG_EXCLUDE_DIRS and not d.startswith(".")
+        ]
+        for fname in filenames:
+            if not fname.endswith(".html") or fname.startswith("_"):
+                continue
+            fp = os.path.join(dirpath, fname)
+            rel = os.path.relpath(fp, SITE)
+            try:
+                with open(fp, "r", encoding="utf-8", errors="ignore") as fh:
+                    html = fh.read()
+            except OSError:
+                continue
+            scanned += 1
+            page_flagged = False
+
+            scripts = []  # (position, basename, is_deferred)
+            for m in _NAV_CONFIG_SCRIPT_RE.finditer(html):
+                src = m.group(2)
+                if src.startswith(("http://", "https://", "//")):
+                    continue
+                basename = os.path.basename(src.split("?")[0])
+                if basename not in ("nav.js", "nav-config.js", "footer.js"):
+                    continue
+                attrs = m.group(1) + m.group(3)
+                is_deferred = bool(re.search(r'\bdefer\b', attrs, re.IGNORECASE))
+                scripts.append((m.start(), basename, is_deferred))
+
+            nav_js = next((s for s in scripts if s[1] == "nav.js"), None)
+            footer_js = next((s for s in scripts if s[1] == "footer.js"), None)
+            nav_configs = [s for s in scripts if s[1] == "nav-config.js"]
+
+            if nav_js is not None:
+                earlier = [c for c in nav_configs if c[0] < nav_js[0]]
+                if not earlier:
+                    page_flagged = True
+                    if nav_configs:
+                        add_issue(rel, _CHECK34_SEVERITY,
+                            "Check #34: js/nav-config.js is loaded AFTER "
+                            "js/nav.js -- window.SITE/window.MENU are "
+                            "still undefined when nav.js runs, so it "
+                            "renders a menu-less fallback nav. Move the "
+                            "nav-config.js <script> tag before nav.js's.")
+                    else:
+                        add_issue(rel, _CHECK34_SEVERITY,
+                            "Check #34: page loads js/nav.js without "
+                            "js/nav-config.js -- window.SITE/window.MENU "
+                            "are undefined, so nav.js's fail-safe renders "
+                            "a menu-less nav (Free Evaluation + Sign in "
+                            "only, no menu items). Add "
+                            "<script src=\"../js/nav-config.js\" defer> "
+                            "before nav.js's <script> tag.")
+                elif nav_js[2] != earlier[-1][2]:
+                    page_flagged = True
+                    add_issue(rel, _CHECK34_SEVERITY,
+                        "Check #34: js/nav-config.js and js/nav.js have "
+                        "mismatched defer state (one deferred, one not) "
+                        "-- they can execute out of order. Give both "
+                        "scripts the same defer attribute.")
+
+            if footer_js is not None and not nav_configs:
+                page_flagged = True
+                add_issue(rel, _CHECK34_SEVERITY,
+                    "Check #34: page loads js/footer.js without "
+                    "js/nav-config.js -- window.SITE/window.FOOTER are "
+                    "undefined, so footer.js's fail-safe renders a "
+                    "minimal fallback footer instead of the real one. "
+                    "Add <script src=\"../js/nav-config.js\" defer> "
+                    "somewhere on the page.")
+
+            if page_flagged:
+                flagged += 1
+
+    if scanned == 0:
+        add_issue(".", "WARN",
+            "Check #34: skipped -- no .html files found on disk to scan.")
+    else:
+        print(f"[check34] scanned {scanned} page(s), {flagged} missing "
+              f"js/nav-config.js next to js/nav.js or js/footer.js")
 
 
 # Conv #19/#95: this rewrite (full-tree scan, 2026-09-12) found 2 real,
@@ -2784,6 +2937,22 @@ check_32_shared_chrome_css_coverage(html_files)
 # in <head> is ERROR from day one -- proven against the real Gander 404.html
 # (fires) and a de-nested copy (clean) before shipping.
 check_33_viewport_meta(html_files)
+
+
+# Check #34 — nav-config.js must precede js/nav.js / accompany js/footer.js
+# (banked 2026-09-19: Avalon's 15 market-stats pages + chris-morrison.html
+# loaded js/nav.js with no js/nav-config.js, so window.SITE/window.MENU came
+# back undefined and nav.js's own fail-safe rendered a menu-less nav stub —
+# Mike found it by eye on the live site; Check #9 only checks for the <nav>
+# PLACEHOLDER element, never which scripts feed it, so it passed clean).
+# Full-tree, scope-independent (like Check #20/#32). Real pre-existing
+# backlog found fleet-wide before shipping (gander 152, avalon 596,
+# goosebay 3 distinct pages, mostly pre-2026-08-26 property/listing-
+# detail pages) -- WARN, not ERROR, per Convention #19 staged promotion;
+# see the severity constant's own comment above for the live-verified
+# detail. See avalonrealestate-site#72 for the fix this check would have
+# caught before it shipped.
+check_34_nav_config_precedes_nav()
 
 
 
