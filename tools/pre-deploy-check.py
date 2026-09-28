@@ -476,7 +476,12 @@ for filepath in html_files:
         rule_re = re.compile(r'([^{}@][^{}]*?)\{([^{}]*)\}')
         light_bg_selectors = set()
         rule_spans = []  # list of (selector_group, body_start, body_end)
-        for rm in rule_re.finditer(all_css):
+        # Bounded to the text before the last '}' (2026-09-28, T6): a match must
+        # end at a '}', so nothing after the last one can match, and without the
+        # bound the lazy scan restarts at every character of the brace-free
+        # inline-style tail (O(n^2): 26 s per buyer-presentation page, 7.4 min
+        # per CI run). Same matches, same spans.
+        for rm in rule_re.finditer(all_css, 0, all_css.rfind('}') + 1):
             selector_group = rm.group(1).strip()
             body = rm.group(2)
             rule_spans.append((selector_group, rm.start(2), rm.end(2)))
