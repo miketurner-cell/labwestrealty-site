@@ -2,3 +2,11 @@
 /tools/*  /404.html  404!
 
 /agent                       https://realestategander.com/agent/  301!
+
+# Footer legal links (site worker, 2026-09-28): the shared Tier-1 js/footer.js
+# links /pages/privacy-policy.html, /pages/terms-of-use.html and
+# /pages/accessibility.html, but this site keeps those pages at the root, so
+# all three 404'd on every page (site audit 2026-09-28).
+/pages/privacy-policy.html   /privacy-policy.html   301
+/pages/terms-of-use.html     /terms-of-use.html     301
+/pages/accessibility.html    /accessibility.html    301
