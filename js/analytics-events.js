@@ -202,7 +202,22 @@
       }
     }
 
-    if (mlsMatch) {
+    // Ship 3 (the-new-lead-on-kind-stroustrup plan, 2026-09-20) fix: this used
+    // to check window.TurnerAuth synchronously right here, at parse time. On
+    // every real listing page, js/analytics-events.js is deferred and tagged
+    // BEFORE js/auth.js — deferred scripts run in document/tag order, so at
+    // this exact line window.TurnerAuth simply doesn't exist yet (auth.js
+    // hasn't executed). The `.ready` promise below only ever solves "auth.js
+    // loaded but its SDK is still initializing" — it can't solve "auth.js
+    // hasn't run at all," since there's no object to call .ready on. Net
+    // effect: the organic (b) path has been silently dead since it shipped —
+    // listing_views had 14 lifetime rows, all alert-click, zero organic,
+    // against 487 contacts with a signed-in session. Deferring this whole
+    // check to DOMContentLoaded fixes it for free: every deferred script on
+    // the page, auth.js included, has already run by the time that event
+    // fires, regardless of tag order.
+    function checkOrganicView() {
+      if (!mlsMatch) return;
       if (ssTok) {
         sendListingViewBeacon(mlsMatch[1], { ss: ssTok });
       } else if (window.TurnerAuth && window.TurnerAuth.ready &&
@@ -218,6 +233,27 @@
           } catch (e) { /* never break a page for telemetry */ }
         });
       }
+    }
+    // 2026-10-05 fix to the fix: the Ship 3 version tested readyState ===
+    // 'loading', but a deferred script runs AFTER parsing ends, when
+    // readyState is already 'interactive' and DOMContentLoaded has not fired
+    // yet. So it took the "already past" branch and checked TurnerAuth
+    // synchronously again (proven in a browser on deploy preview 755: this
+    // script saw readyState=interactive, TurnerAuth undefined; auth.js ran
+    // next; DOMContentLoaded last). Only 'complete' means we are truly late;
+    // otherwise wait for DOMContentLoaded, with 'load' as the fallback for a
+    // late injection after DOMContentLoaded. Run once either way.
+    var organicChecked = false;
+    function checkOrganicViewOnce() {
+      if (organicChecked) return;
+      organicChecked = true;
+      checkOrganicView();
+    }
+    if (document.readyState === 'complete') {
+      checkOrganicViewOnce();
+    } else {
+      document.addEventListener('DOMContentLoaded', checkOrganicViewOnce);
+      window.addEventListener('load', checkOrganicViewOnce);
     }
   } catch (e) { /* never break a page for telemetry */ }
 })();
