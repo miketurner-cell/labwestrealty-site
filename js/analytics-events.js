@@ -234,12 +234,26 @@
         });
       }
     }
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', checkOrganicView);
-    } else {
-      // Already past DOMContentLoaded by the time this ran (e.g. a script
-      // injected late) — every deferred script has already executed either way.
+    // 2026-10-05 fix to the fix: the Ship 3 version tested readyState ===
+    // 'loading', but a deferred script runs AFTER parsing ends, when
+    // readyState is already 'interactive' and DOMContentLoaded has not fired
+    // yet. So it took the "already past" branch and checked TurnerAuth
+    // synchronously again (proven in a browser on deploy preview 755: this
+    // script saw readyState=interactive, TurnerAuth undefined; auth.js ran
+    // next; DOMContentLoaded last). Only 'complete' means we are truly late;
+    // otherwise wait for DOMContentLoaded, with 'load' as the fallback for a
+    // late injection after DOMContentLoaded. Run once either way.
+    var organicChecked = false;
+    function checkOrganicViewOnce() {
+      if (organicChecked) return;
+      organicChecked = true;
       checkOrganicView();
+    }
+    if (document.readyState === 'complete') {
+      checkOrganicViewOnce();
+    } else {
+      document.addEventListener('DOMContentLoaded', checkOrganicViewOnce);
+      window.addEventListener('load', checkOrganicViewOnce);
     }
   } catch (e) { /* never break a page for telemetry */ }
 })();
