@@ -37,6 +37,9 @@
     ctaHref: p + 'contact.html', phoneTel: '7092567999', phone: '709-256-7999'
   };
   var MENU = Array.isArray(window.MENU) ? window.MENU : [];
+  // The menu's phone/desktop breakpoint (2026-10-08): Lab West and the hub carried 1024 in their own copies; every other site
+  // 1023. One file now, so the value is per-site config (nav-config.js SITE.navBreakpoint), default 1023.
+  var NAV_BP = (typeof SITE.navBreakpoint === 'number' && SITE.navBreakpoint > 0) ? SITE.navBreakpoint : 1023;
   if (!window.SITE || !Array.isArray(window.MENU)) {
     try { console.warn('[nav.js] window.SITE/window.MENU missing on this page -- nav-config.js was not loaded before nav.js. Rendering a minimal fallback nav; fix the page\'s generator to emit nav-config.js.'); } catch (e) {}
   }
@@ -176,6 +179,253 @@
     { site: 'corner-brook-west-coast', site_key: null, label: 'Corner Brook', url: 'https://royallepagenlrealty.ca/' }
   ];
 
+  // ── Header search (2026-09-25) ──────────────────────────────────────
+  // A persistent search control in the main bar: an inline field on
+  // desktop, a 44px icon beside the phone + hamburger on phones that
+  // opens a full-screen sheet. The heavy logic (typeahead, AI parse,
+  // recents, chips) lives in js/site-search.js, lazy-loaded on first
+  // interaction; everything here works as a plain GET to /listings/?q=
+  // before that file arrives.
+  //
+  // Enabled by window.SITE.search (js/nav-config.js). SEARCH_DEFAULT_SITES
+  // covers a 30-day-cached nav-config.js that predates the key: a freshly
+  // stamped nav.js still turns search on there. It lists ONLY the sites
+  // whose site-search.js, search-index.json and CSS have shipped -- this
+  // file is Tier-1 and reaches sites before their search does. An explicit
+  // SITE.search.enabled wins either way.
+  var SITE_SEARCH_STAMP = '20260925-site-search';
+  var SEARCH_DEFAULT_SITES = ['avalon'];
+  var NAV_SRC = (document.currentScript && document.currentScript.src) || '';
+  var searchSVG = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/></svg>';
+
+  function hostSiteKey() {
+    if (window.TURNER_SITE) return window.TURNER_SITE;
+    var host = (window.location.hostname || '').replace(/^www\./, '');
+    var reg = window.TURNER_REGIONS;
+    if (reg) {
+      for (var k in reg) {
+        var d = reg[k] && reg[k].domain ? reg[k].domain.replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/$/, '') : '';
+        if (reg[k] && reg[k].site_key && d === host) return reg[k].site_key;
+      }
+    }
+    for (var i = 0; i < FALLBACK_REGIONS.length; i++) {
+      if (FALLBACK_REGIONS[i].site_key && FALLBACK_REGIONS[i].url.indexOf('//' + host + '/') !== -1) return FALLBACK_REGIONS[i].site_key;
+    }
+    return null;
+  }
+  function searchConfig() {
+    var s = SITE.search;
+    if (s === false || (s && s.enabled === false)) return null;
+    var key = hostSiteKey();
+    if (!(s && s.enabled) && SEARCH_DEFAULT_SITES.indexOf(key) === -1) return null;
+    s = (s && typeof s === 'object') ? s : {};
+    var region = regionBySiteKey(key);
+    var action = s.action || (region && region.routes && region.routes.listings) || '/listings/';
+    return {
+      action: action,
+      placeholder: s.placeholder || 'Town, street or MLS#',
+      placeholderShort: s.placeholderShort || 'Search listings',
+      index: s.index || action + 'search-index.json',
+      ai: s.ai !== false,
+      chips: Array.isArray(s.chips) ? s.chips : null,
+      site: key
+    };
+  }
+  function escAttrNav(v) { return String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
+  function searchInlineHTML(cfg) {
+    return '<form class="nav-search" role="search" action="' + escAttrNav(cfg.action) + '" method="get">' +
+      '<span class="nav-search-icon">' + searchSVG + '</span>' +
+      '<input class="nav-search-input" id="nav-search-input" type="search" name="q" placeholder="' + escAttrNav(cfg.placeholder) + '" aria-label="Search listings" autocomplete="off" inputmode="search" enterkeyhint="search" spellcheck="false">' +
+    '</form>';
+  }
+  function searchBtnHTML(handoff) {
+    return '<button class="nav-search-btn" type="button" aria-label="Search listings"' +
+      (handoff ? ' data-nav-search-handoff="1"' : ' aria-haspopup="dialog" aria-expanded="false" aria-controls="nav-search-sheet"') +
+      '>' + searchSVG + '</button>';
+  }
+  function searchSheetHTML(cfg) {
+    return '<div class="nav-search-sheet" id="nav-search-sheet" role="dialog" aria-modal="true" aria-label="Search listings">' +
+      '<div class="nav-search-backdrop" data-nav-search-close="1"></div>' +
+      '<div class="nav-search-panel">' +
+        '<form class="nav-search-form" role="search" action="' + escAttrNav(cfg.action) + '" method="get">' +
+          '<div class="nav-search-field">' +
+            '<span class="nav-search-icon">' + searchSVG + '</span>' +
+            '<input class="nav-search-input" id="nav-search-sheet-input" type="search" name="q" placeholder="' + escAttrNav(cfg.placeholderShort) + '" aria-label="Search listings" autocomplete="off" inputmode="search" enterkeyhint="search" spellcheck="false">' +
+            '<button class="nav-search-clear" type="button" aria-label="Clear search" hidden>&times;</button>' +
+          '</div>' +
+          '<button class="nav-search-cancel" type="button" data-nav-search-close="1">Cancel</button>' +
+        '</form>' +
+        '<div class="nav-search-body">' +
+          '<div class="nav-search-recents" hidden></div>' +
+          '<div class="nav-search-chips" hidden></div>' +
+          '<div class="nav-search-results" hidden></div>' +
+        '</div>' +
+      '</div></div>';
+  }
+
+  var searchSheet = null, ssLoading = null;
+  function siteSearchSrc() {
+    var base = NAV_SRC && /nav\.js(\?[^#]*)?(#.*)?$/.test(NAV_SRC)
+      ? NAV_SRC.replace(/nav\.js(\?[^#]*)?(#.*)?$/, 'site-search.js')
+      : '/js/site-search.js';
+    return base + '?v=' + (typeof SITE.searchStamp === 'string' && SITE.searchStamp ? SITE.searchStamp : SITE_SEARCH_STAMP);
+  }
+  function loadSiteSearch() {
+    if (window.TurnerSearch && window.TurnerSearch.ready) return window.TurnerSearch.ready;
+    if (ssLoading) return ssLoading;
+    ssLoading = new Promise(function (resolve, reject) {
+      var tag = document.querySelector('script[src*="site-search.js"]');
+      if (!tag) {
+        tag = document.createElement('script');
+        tag.src = siteSearchSrc();
+        tag.async = true;
+        document.head.appendChild(tag);
+      } else if (window.TurnerSearch) { resolve(); return; }
+      tag.addEventListener('load', function () { resolve(); });
+      tag.addEventListener('error', function () { ssLoading = null; reject(new Error('site-search.js failed to load')); });
+    }).then(function () { return window.TurnerSearch && window.TurnerSearch.ready; });
+    return ssLoading;
+  }
+  function closeMenuIfOpen(bar) {
+    var l = bar && bar.querySelector('.nav-main-links.open'), t = bar && bar.querySelector('.nav-toggle');
+    if (l && t) t.click();   // reuse the hamburger's own handler (scroll lock + --nav-panel-top stay consistent)
+  }
+  function ensureSearchSheet(cfg) {
+    searchSheet = document.getElementById('nav-search-sheet');
+    if (searchSheet) return searchSheet;
+    var wrap = document.createElement('div');
+    wrap.innerHTML = searchSheetHTML(cfg);
+    searchSheet = wrap.firstChild;
+    document.body.appendChild(searchSheet);
+    var input = searchSheet.querySelector('.nav-search-input'), clear = searchSheet.querySelector('.nav-search-clear');
+    searchSheet.addEventListener('click', function (e) {
+      if (e.target.closest && e.target.closest('[data-nav-search-close]')) { e.preventDefault(); closeSearchSheet(); }
+    });
+    searchSheet.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' || e.key === 'Esc') { e.preventDefault(); closeSearchSheet(); }
+    });
+    input.addEventListener('input', function () { clear.hidden = !input.value; });
+    clear.addEventListener('click', function () {
+      input.value = ''; clear.hidden = true; input.focus();
+      try { input.dispatchEvent(new Event('input', { bubbles: true })); } catch (e) {}
+    });
+    return searchSheet;
+  }
+  function openSearchSheet(trigger, cfg, bar) {
+    var s = ensureSearchSheet(cfg);
+    closeMenuIfOpen(bar);
+    s.__trigger = trigger || null;
+    s.classList.add('open');
+    document.body.classList.add('nav-search-open');
+    if (trigger) trigger.setAttribute('aria-expanded', 'true');
+    var input = s.querySelector('.nav-search-input');
+    try { input.focus({ preventScroll: true }); } catch (e) { input.focus(); }   // synchronous inside the tap: iOS opens the keyboard
+    try { document.dispatchEvent(new CustomEvent('turner:nav-search-open')); } catch (e) {}
+    loadSiteSearch()['catch'](function () {});
+  }
+  function closeSearchSheet() {
+    if (!searchSheet || !searchSheet.classList.contains('open')) return;
+    searchSheet.classList.remove('open');
+    document.body.classList.remove('nav-search-open');
+    var t = searchSheet.__trigger;
+    if (t) { t.setAttribute('aria-expanded', 'false'); if (document.body.contains(t)) { try { t.focus({ preventScroll: true }); } catch (e) { t.focus(); } } }
+    try { document.dispatchEvent(new CustomEvent('turner:nav-search-close')); } catch (e) {}
+  }
+  // The search CSS ships in each site's css/main.css. A page whose cached
+  // main.css predates it (generated pages keep their old ?v= stamp until the
+  // next rebuild) must not get unstyled search markup -- the sheet would
+  // render as plain content at the foot of the page. Probe for the rule
+  // (.nav-search-sheet is display:none until opened) before mounting.
+  function searchCssLoaded() {
+    try {
+      var probe = document.createElement('div');
+      probe.className = 'nav-search-sheet';
+      probe.style.cssText = 'position:absolute;visibility:hidden;';
+      document.body.appendChild(probe);
+      var ok = window.getComputedStyle(probe).display === 'none';
+      document.body.removeChild(probe);
+      return ok;
+    } catch (e) { return false; }
+  }
+  function mountSearch(bar, cfg) {
+    var right = bar.querySelector('.nav-main-right');
+    if (!right || right.querySelector('.nav-search-btn')) return;
+    if (!searchCssLoaded()) {
+      try { console.info('[nav.js] header search skipped: this page\'s css/main.css has no search styles yet (stale cache-bust stamp).'); } catch (e) {}
+      return;
+    }
+    var discovery = !!document.getElementById('ldisc-search-input');
+    var h0 = bar.getBoundingClientRect().height;
+    right.insertAdjacentHTML('afterbegin', (discovery ? '' : searchInlineHTML(cfg)) + searchBtnHTML(discovery));
+    var form = right.querySelector('.nav-search'), btn = right.querySelector('.nav-search-btn');
+    var warm = function () { loadSiteSearch()['catch'](function () {}); };
+    if (discovery) {
+      // /listings/ + rollups: the page's own search bar sits right under the
+      // nav, so the icon focuses it instead of opening a second search.
+      btn.addEventListener('click', function () {
+        var t = document.getElementById('ldisc-search-input');
+        if (!t) { openSearchSheet(btn, cfg, bar); return; }
+        closeMenuIfOpen(bar);
+        try { t.scrollIntoView({ block: 'nearest' }); } catch (e) {}
+        try { t.focus({ preventScroll: true }); } catch (e) { t.focus(); }
+        try { t.select(); } catch (e) {}
+      });
+    } else {
+      ensureSearchSheet(cfg);
+      btn.addEventListener('click', function () { openSearchSheet(btn, cfg, bar); });
+      btn.addEventListener('pointerdown', warm);
+      if (form) {
+        form.addEventListener('pointerdown', warm);
+        form.addEventListener('focusin', warm);
+      }
+    }
+    // Desktop fit guard: if the inline field would widen the bar OR make it
+    // taller (menu labels wrapping), swap it for the icon instead. The bar
+    // never changes height because of search (the /listings/ top bar sticks
+    // under it via --site-nav-h). nav-has-search lets each site's CSS tighten
+    // menu padding / keep labels on one line while search is present.
+    bar.classList.add('nav-has-search');
+    var fit = function () {
+      if (!form) return;
+      bar.classList.remove('nav-search-collapsed');
+      if (window.innerWidth < 1024) return;
+      var prev = form.style.display;
+      form.style.display = 'none';
+      var hWithout = bar.getBoundingClientRect().height;
+      form.style.display = prev;
+      var hWith = bar.getBoundingClientRect().height;
+      if (bar.scrollWidth > bar.clientWidth + 1 || hWith > hWithout + 1) bar.classList.add('nav-search-collapsed');
+    };
+    fit();
+    if (!window.__navSearchResize) {
+      window.__navSearchResize = true;
+      var raf = 0;
+      window.addEventListener('resize', function () {
+        if (raf) return;
+        raf = requestAnimationFrame(function () { raf = 0; var b = document.querySelector('.nav-main-bar'); if (b && b.__navSearchFit) b.__navSearchFit(); });
+      });
+      window.addEventListener('pageshow', function (e) { if (e.persisted) closeSearchSheet(); });
+    }
+    bar.__navSearchFit = fit;
+    // The control must never change the bar's height (the /listings/ top bar
+    // sticks under it via --site-nav-h); if it somehow did, let the page re-measure.
+    if (Math.abs(bar.getBoundingClientRect().height - h0) > 1) {
+      try { window.dispatchEvent(new Event('resize')); } catch (e) {}
+    }
+    window.TurnerNavSearch = {
+      config: cfg, open: function (t) { openSearchSheet(t || btn, cfg, bar); }, close: closeSearchSheet,
+      sheet: function () { return searchSheet; }, load: loadSiteSearch, stamp: SITE_SEARCH_STAMP
+    };
+    // Idle prefetch of the module (skipped on Save-Data).
+    if (!discovery && !(navigator.connection && navigator.connection.saveData) && !document.querySelector('script[src*="site-search.js"]') && !window.__navSearchPrefetch) {
+      window.__navSearchPrefetch = true;
+      (window.requestIdleCallback || function (f) { setTimeout(f, 3000); })(function () {
+        var l = document.createElement('link'); l.rel = 'prefetch'; l.as = 'script'; l.href = siteSearchSrc();
+        document.head.appendChild(l);
+      });
+    }
+  }
+
   function liveRegions() {
     var reg = window.TURNER_REGIONS;
     if (!reg || typeof reg !== 'object') {
@@ -281,13 +531,89 @@
     '</div>';
   }
 
+
+  // ---------------------------------------------------------------- One header, everywhere (redesign, D-1008-86)
+  // Mike approved the drawing as drawn (_research/site_audit_2026-10/build_brand_pages.py, pictures
+  // _ops/previews/2026-10-08/redesign_brand_header_*): four words (Buy, Sell, Sold prices, Communities), the search bar in the
+  // middle, one "Get my home's value" button and the phone; the top line carries the brokerage, the region and the office; the
+  // region strip and the second CTA go (the regions move into the phone menu's More line). OFF unless the site's nav-config.js
+  // sets SITE.header = 'v2'; ?header=v2 on any page previews it, ?header=v1 forces the old header. Content is per site:
+  // SITE.header2 = {region, office, menu: [{label, href, items: [[label, href], ...]}], more: [[label, href], ...], bar: true|false}.
+  // A site without SITE.header2.menu keeps the old header whatever the switch says (Conv #74).
+  var H2 = (SITE.header2 && typeof SITE.header2 === 'object') ? SITE.header2 : null;
+  var HEADER_V2_STAMP = '20261008-header-v2';
+  function header2On() {
+    if (!H2 || !Array.isArray(H2.menu) || !H2.menu.length) return false;
+    var q = window.location.search || '';
+    if (/[?&]header=v1(&|$)/.test(q)) return false;
+    return SITE.header === 'v2' || /[?&]header=v2(&|$)/.test(q);
+  }
+  // The header's own search (SITE.header2.search, same keys as SITE.search): used only by the new header, so a site can have the
+  // full search in the new header without it appearing in the old one. Falls back to SITE.search (Avalon) when absent.
+  function search2Config() {
+    var s = H2 && H2.search;
+    if (!s || typeof s !== 'object' || s.enabled === false) return null;
+    var key = hostSiteKey(), region = regionBySiteKey(key);
+    var action = s.action || (region && region.routes && region.routes.listings) || '/listings/';
+    return { action: action, placeholder: s.placeholder || 'Search an address, a town, an MLS#', placeholderShort: s.placeholderShort || 'Search',
+      index: s.index || action + 'search-index.json', ai: s.ai !== false, chips: Array.isArray(s.chips) ? s.chips : null, site: key, v2: true };
+  }
+  function loadHeader2Css() {
+    if (document.querySelector('link[data-header-v2]')) return;
+    // critical: the search sheet stays hidden until header-v2.css arrives (the sheet is built at once; the CSS loads after)
+    var crit = document.createElement('style');
+    crit.setAttribute('data-header-v2-critical', '1');
+    crit.textContent = '.nav-search-sheet:not(.open){display:none}';
+    document.head.appendChild(crit);
+    var base = NAV_SRC && /js\/nav\.js(\?[^#]*)?(#.*)?$/.test(NAV_SRC)
+      ? NAV_SRC.replace(/js\/nav\.js(\?[^#]*)?(#.*)?$/, 'css/header-v2.css') : '/css/header-v2.css';
+    var l = document.createElement('link');
+    l.rel = 'stylesheet'; l.href = base + '?v=' + HEADER_V2_STAMP; l.setAttribute('data-header-v2', '1');
+    document.head.appendChild(l);
+  }
+  function top2HTML() {
+    return '<div class="nav2-top-l"><a href="' + r + 'index.html" class="nav2-brokerage">Royal LePage Turner Realty</a>' +
+      (H2.region ? '<span class="nav2-tag">' + H2.region + '</span>' : '') + '</div>' +
+      '<div class="nav2-top-r">' + (H2.office ? '<span class="nav2-office">' + H2.office + '</span>' : '') +
+      '<a class="nav2-signin" href="/pages/account.html">Sign in</a></div>';
+  }
+  var menuSVG = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h16M4 12h16M4 17h16"/></svg>';
+  function more2HTML() {
+    var items = (Array.isArray(H2.more) ? H2.more.slice() : []);
+    var cur = window.TURNER_SITE;
+    liveRegions().forEach(function (rg) { if (!(rg.site_key && rg.site_key === cur)) items.push([rg.label, rg.url]); });
+    if (!items.length) return '';
+    return '<li class="nav2-more"><span class="nav2-more-h">More</span>' + items.map(function (it) { return '<a href="' + it[1] + '">' + it[0] + '</a>'; }).join('') + '</li>';
+  }
+  function navMain2HTML(sCfg) {
+    var action = (sCfg && sCfg.action) || H2.barAction || '/listings/';
+    var bar = (H2.bar === false || sCfg) ? '' :
+      '<form class="nav-search nav2-bar" role="search" action="' + escAttrNav(action) + '" method="get">' +
+        '<span class="nav-search-icon">' + searchSVG + '</span>' +
+        '<input class="nav-search-input" type="search" name="q" placeholder="' + escAttrNav(H2.placeholder || 'Search an address, a town, an MLS#') + '" aria-label="Search" autocomplete="off" inputmode="search" enterkeyhint="search" spellcheck="false"></form>';
+    var findBtn = (H2.bar === false || sCfg) ? '' : '<a class="nav2-ico nav2-find" href="' + escAttrNav(action) + '" aria-label="Search">' + searchSVG + '</a>';
+    return '<a href="' + r + 'index.html" class="nav2-brand">Turner <span>Realty</span></a>' +
+      '<ul class="nav-main-links nav2-links">' + H2.menu.map(menuItem).join('') + more2HTML() + '</ul>' +
+      '<div class="nav-main-right nav2-right">' + bar +
+        '<a href="' + (H2.ctaHref || SITE.ctaHref) + '" class="nav2-cta">Get my home&rsquo;s value</a>' +
+        '<a href="tel:' + SITE.phoneTel + '" class="nav2-phone" aria-label="Call ' + SITE.phone + '">' + phoneSVG + '<span>' + SITE.phone + '</span></a>' +
+        findBtn +
+        '<a href="tel:' + SITE.phoneTel + '" class="nav2-ico nav2-call" aria-label="Call ' + SITE.phone + '">' + phoneSVG + '</a>' +
+        '<button class="nav-toggle nav2-ico nav2-menu" aria-label="Menu" type="button">' + menuSVG + '<span></span><span></span><span></span></button>' +
+      '</div>';
+  }
+
   function injectNav() {
     var topBar = document.querySelector('.nav-top-bar');
     if (!topBar) { topBar = document.createElement('div'); topBar.className = 'nav-top-bar'; document.body.insertBefore(topBar, document.body.firstChild); }
-    topBar.innerHTML = topBarHTML();
+    var v2 = header2On();
+    if (v2) { loadHeader2Css(); document.documentElement.classList.add('header-v2'); }
+    topBar.innerHTML = v2 ? top2HTML() : topBarHTML();
+    topBar.classList.toggle('nav2-top', v2);
     var regionStrip = document.querySelector('.region-strip');
     if (!regionStrip) { regionStrip = document.createElement('div'); regionStrip.className = 'region-strip'; topBar.parentNode.insertBefore(regionStrip, topBar.nextSibling); }
     regionStrip.innerHTML = regionStripHTML();
+    regionStrip.hidden = v2;   // header v2: the regions live in the phone menu's More line
 
     // Arrival cue -- lives between the strip and the main bar, matching the
     // canvas's chrome order. Only ever rendered for a real #via= hop; a
@@ -315,7 +641,12 @@
 
     var mainBar = document.querySelector('.nav-main-bar');
     if (!mainBar) { mainBar = document.createElement('nav'); mainBar.className = 'nav-main-bar'; regionStrip.parentNode.insertBefore(mainBar, (document.querySelector('.nav-cue') || regionStrip).nextSibling); }
-    mainBar.innerHTML = navMainHTML;
+    var sCfg = v2 ? (search2Config() || searchConfig()) : searchConfig();
+    mainBar.innerHTML = v2 ? navMain2HTML(sCfg) : navMainHTML;
+    mainBar.classList.toggle('nav2', v2);
+    // Header search (2026-09-25) -- inserted before the hamburger wiring and
+    // before turner:nav-injected, so nav-auth.js still appends once per pass.
+    if (sCfg) { try { mountSearch(mainBar, sCfg); } catch (e) { try { console.warn('[nav.js] header search failed to mount:', e); } catch (x) {} } }
 
     // Ship 5 (2026-09-08): fleet-wide skip link, injected once here instead
     // of relying on each generator/hand-authored page to add its own (that
@@ -355,11 +686,11 @@
         try { document.documentElement.style.setProperty('--nav-panel-top', mainBar.getBoundingClientRect().bottom + 'px'); } catch (e) {}
       });
     }
-    // Dropdown tap (mobile only ≤1024 — desktop uses :hover)
+    // Dropdown tap (mobile only ≤1023 — desktop uses :hover)
     var dt = mainBar.querySelectorAll('.nav-dropdown > a');
     for (var i = 0; i < dt.length; i++) (function (trigger) {
       trigger.addEventListener('click', function (e) {
-        if (window.innerWidth <= 1024) {
+        if (window.innerWidth <= NAV_BP) {
           e.preventDefault();
           var parent = trigger.parentElement;
           var od = mainBar.querySelectorAll('.nav-dropdown.open');
@@ -372,12 +703,12 @@
     var st = mainBar.querySelectorAll('.nav-submenu > a');
     for (var s = 0; s < st.length; s++) (function (trigger) {
       trigger.addEventListener('click', function (e) {
-        if (window.innerWidth <= 1024) { e.preventDefault(); trigger.parentElement.classList.toggle('open'); }
+        if (window.innerWidth <= NAV_BP) { e.preventDefault(); trigger.parentElement.classList.toggle('open'); }
       });
     })(st[s]);
     // Close menu/dropdowns on outside tap (mobile)
     document.addEventListener('click', function (e) {
-      if (window.innerWidth <= 1024 && !(e.target.closest && e.target.closest('.nav-main-bar'))) {
+      if (window.innerWidth <= NAV_BP && !(e.target.closest && e.target.closest('.nav-main-bar'))) {
         closeAllDropdowns(mainBar);
         if (links && links.classList.contains('open')) {
           links.classList.remove('open');
@@ -400,7 +731,7 @@
       for (var a = 0; a < ra.length; a++) (function (link) {
         if (link.parentElement && link.parentElement.classList.contains('nav-dropdown')) return;
         link.addEventListener('click', function () {
-          if (window.innerWidth <= 1024) {
+          if (window.innerWidth <= NAV_BP) {
             links.classList.remove('open');
             if (toggle) toggle.classList.remove('active');
             document.body.classList.remove('nav-menu-open');
