@@ -2275,6 +2275,16 @@ def check_32_shared_chrome_css_coverage(html_files):
                         linked_css_text.append(fh.read())
                 except OSError:
                     pass
+        # Header v2 (redesign, D-1008-86): js/nav.js links css/header-v2.css itself, and only while the new header is on, so
+        # that file is reachable from every page that loads nav.js even though no page carries a <link> to it. Its rules
+        # count; every class nav.js emits must still be styled somewhere.
+        hv2 = os.path.join(SITE, "css", "header-v2.css")
+        if os.path.isfile(hv2):
+            try:
+                with open(hv2, "r", encoding="utf-8", errors="ignore") as fh:
+                    linked_css_text.append(fh.read())
+            except OSError:
+                pass
         corpus = "\n".join(inline_blobs + linked_css_text)
         defined = {m.group(1) for m in _CHROME_SELECTOR_RE.finditer(corpus)}
 

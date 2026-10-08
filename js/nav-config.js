@@ -33,7 +33,9 @@
     email: 'miketurner@royallepage.ca',
     phone: '709-256-7999', phoneTel: '7092567999',
     facebook: '#', instagram: '#', youtube: '#',
-    ctaHref: p + 'contact.html'
+    ctaHref: p + 'contact.html',
+    // js/nav.js is one fleet file now (2026-10-08); this site's own copy used 1024 as the menu breakpoint, kept here.
+    navBreakpoint: 1024
   };
 
   // Top-level MENU entries are {label, href} objects (nav.js's menuItem()
