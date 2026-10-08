@@ -69,13 +69,14 @@ All styles use the `.lw` prefix for scoped styling, matching the corporate light
 
 - Royal LePage Turner Realty (2014) Inc. — Founded 1998
 - Broker of Record: Mike Turner (licensed 2009, BOR since 2022)
-- Chairman's Club Top 1% nationally (9 consecutive years)
-- #43 nationally by units (2025)
-- Top Ten East Coast Team (10 consecutive years)
-- 3× Best in Tech (2021, 2022, 2024)
-- Award of Excellence & Executive Circle (2022–2025)
-- 2× A.E. LePage Brokerage of the Year, East Coast (2018, 2020)
-- Lead Manager of the Year Finalist (2023)
+- Turner Realty Team: Royal LePage® National Chairman's Club™ Top 1% by units, 2017–2025
+- #43 in the 2025 Royal LePage® National Chairman's Club™, by units (Turner Realty Team)
+- Royal LePage® Top Ten Award®, East Coast, Turner Realty Team (2016–2025)
+- Best in Tech (2021, 2022, 2024)
+- Award of Excellence™: Michael Turner (Team Lead), 2022–2025
+- Royal LePage® Executive Circle™ Award, East Coast (2023, 2024, 2025)
+- A.E. LePage Brokerage of the Year, East Coast (2018, 2020)
+- Source: Royal LePage award-winner lists (rlpNetwork). Wording and years must match that record (D-1008-66). Pages that list awards carry the rlp.ca/notices trademark notice.
 - 3 offices across NL, 11 REALTORS®
 
 ## Contact Information
