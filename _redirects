@@ -10,3 +10,9 @@
 /pages/privacy-policy.html   /privacy-policy.html   301
 /pages/terms-of-use.html     /terms-of-use.html     301
 /pages/accessibility.html    /accessibility.html    301
+
+# Top-bar address link (site worker, 2026-10-08): the shared Tier-1 js/nav.js hard-codes
+# p=/pages/ in topBarHTML(), so the address link points at /pages/contact.html,
+# but this site keeps contact.html at the root. 404 on every page (site audit 2026-10-08).
+# Source fix belongs in the fleet canonical nav.js; this is the per-site fix + safety net for old links.
+/pages/contact.html   /contact.html   301
