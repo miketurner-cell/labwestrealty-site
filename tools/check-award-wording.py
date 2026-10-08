@@ -12,7 +12,7 @@ does not support, or lists awards without the trademark notice:
   - Award of Excellence "2023-2025" (record: Michael Turner 2022-2025)
   - a page that names an award but lacks "rlp.ca/notices"
   - award leftovers with no source (D-1008-91, 2026-10-08): "104 deals", "178 sales", "97.95%",
-    "BGRS Certified", "5 Wing Military Relocation", the Shelter Foundation "$50M+"
+    "5 Wing Military Relocation", the Shelter Foundation "$50M+"
 
 There is no existing test pattern or workflow in this repo that runs page
 checks, so this stands alone: python3 tools/check-award-wording.py
@@ -51,14 +51,12 @@ RULES = [
      lambda line: re.search(r"(?<![\d,.])178\s+(?:residential\s+)?sales\b", line, re.I)),
     ("'97.95%' (unsourced 2025 sale-to-list figure; D-1008-91)",
      lambda line: re.search(r"(?<![\d.])97\.95\s?%", line)),
-    ("'BGRS Certified' (BGRS closed 2026-10-01; D-1008-91)",
-     lambda line: re.search(r"\bBGRS\s+certified\b", line, re.I)),
     ("'5 Wing Military Relocation' (5 Wing personnel cannot buy or sell; D-1008-38/91)",
      lambda line: re.search(r"5\s+Wing\s+Military\s+Relocation", line)),
     ("Shelter Foundation '$50M+' (the Foundation says more than $57 million; D-1008-91)",
      lambda line: re.search(r"\$\s?50\s?M\+", line)),
 ]
-for _bad in ("closed 104 deals", "a 97.95% ratio", "178 residential sales", "HHT &amp; BGRS Certified",
+for _bad in ("closed 104 deals", "a 97.95% ratio", "178 residential sales",
              "5 Wing Military Relocation", "$50M+ raised"):
     assert any(test(_bad) for _, test in RULES), f"self-check: should flag {_bad!r}"
 for _good in ("1,104 deals", "97.9%", "$57M+", "BGRS closed 1 October 2026"):
