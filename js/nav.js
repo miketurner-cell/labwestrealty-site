@@ -548,8 +548,23 @@
     if (/[?&]header=v1(&|$)/.test(q)) return false;
     return SITE.header === 'v2' || /[?&]header=v2(&|$)/.test(q);
   }
+  // The header's own search (SITE.header2.search, same keys as SITE.search): used only by the new header, so a site can have the
+  // full search in the new header without it appearing in the old one. Falls back to SITE.search (Avalon) when absent.
+  function search2Config() {
+    var s = H2 && H2.search;
+    if (!s || typeof s !== 'object' || s.enabled === false) return null;
+    var key = hostSiteKey(), region = regionBySiteKey(key);
+    var action = s.action || (region && region.routes && region.routes.listings) || '/listings/';
+    return { action: action, placeholder: s.placeholder || 'Search an address, a town, an MLS#', placeholderShort: s.placeholderShort || 'Search',
+      index: s.index || action + 'search-index.json', ai: s.ai !== false, chips: Array.isArray(s.chips) ? s.chips : null, site: key, v2: true };
+  }
   function loadHeader2Css() {
     if (document.querySelector('link[data-header-v2]')) return;
+    // critical: the search sheet stays hidden until header-v2.css arrives (the sheet is built at once; the CSS loads after)
+    var crit = document.createElement('style');
+    crit.setAttribute('data-header-v2-critical', '1');
+    crit.textContent = '.nav-search-sheet:not(.open){display:none}';
+    document.head.appendChild(crit);
     var base = NAV_SRC && /js\/nav\.js(\?[^#]*)?(#.*)?$/.test(NAV_SRC)
       ? NAV_SRC.replace(/js\/nav\.js(\?[^#]*)?(#.*)?$/, 'css/header-v2.css') : '/css/header-v2.css';
     var l = document.createElement('link');
@@ -626,7 +641,7 @@
 
     var mainBar = document.querySelector('.nav-main-bar');
     if (!mainBar) { mainBar = document.createElement('nav'); mainBar.className = 'nav-main-bar'; regionStrip.parentNode.insertBefore(mainBar, (document.querySelector('.nav-cue') || regionStrip).nextSibling); }
-    var sCfg = searchConfig();
+    var sCfg = v2 ? (search2Config() || searchConfig()) : searchConfig();
     mainBar.innerHTML = v2 ? navMain2HTML(sCfg) : navMainHTML;
     mainBar.classList.toggle('nav2', v2);
     // Header search (2026-09-25) -- inserted before the hamburger wiring and
