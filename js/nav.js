@@ -268,7 +268,7 @@
     var base = NAV_SRC && /nav\.js(\?[^#]*)?(#.*)?$/.test(NAV_SRC)
       ? NAV_SRC.replace(/nav\.js(\?[^#]*)?(#.*)?$/, 'site-search.js')
       : '/js/site-search.js';
-    return base + '?v=' + SITE_SEARCH_STAMP;
+    return base + '?v=' + (typeof SITE.searchStamp === 'string' && SITE.searchStamp ? SITE.searchStamp : SITE_SEARCH_STAMP);
   }
   function loadSiteSearch() {
     if (window.TurnerSearch && window.TurnerSearch.ready) return window.TurnerSearch.ready;
