@@ -16,10 +16,11 @@
  * recruiting-focused menu, per the canvas's decision (d). No physical
  * office (recruiting-only, per CLAUDE.md); NAP borrowed from Gander HQ,
  * matching what this site's own pre-existing footer already showed.
- * No real social accounts exist for this sub-brand (verified against
- * the existing pages before this ship -- none were linked anywhere) --
- * '#' placeholders match js/nav.js's own FALLBACK_SITE convention for
- * "no real account", not a broken link left by mistake.
+ * No social accounts exist for this sub-brand. Until 2026-10-09 the icons
+ * pointed at '#' (dead links); D-1009-17 points them at the brokerage's
+ * own profiles, the same three the hub (royallepageturner-site
+ * js/nav-config.js) and Gander (realestategander-site js/nav-config.js)
+ * already link.
  */
 (function () {
   'use strict';
@@ -32,7 +33,10 @@
     address: '204 Airport Blvd, Gander',
     email: 'miketurner@royallepage.ca',
     phone: '709-256-7999', phoneTel: '7092567999',
-    facebook: '#', instagram: '#', youtube: '#',
+    facebook: 'https://www.facebook.com/realestategander', instagram: 'https://www.instagram.com/turnerrealty2014', youtube: 'https://www.youtube.com/playlist?list=PLr4XcQLT7UeO_8OZSgtx6h2N6dvsmsY_Y',
+    // D-1009-17: no evaluations are offered here (no office or agent in Labrador West);
+    // read by js/nav.js (SITE.ctaLabel, default 'Free Evaluation') once the fleet nav.js carries it.
+    ctaLabel: 'Get in Touch',
     ctaHref: p + 'contact.html',
     // js/nav.js is one fleet file now (2026-10-08); this site's own copy used 1024 as the menu breakpoint, kept here.
     navBreakpoint: 1024,
@@ -82,7 +86,7 @@
   // FOOTER (the Turner Network column was missing Avalon on every
   // page).
   var FOOTER = {
-    copyright: '&copy; 1998&ndash;{year} Royal LePage Turner Realty (2014) Inc. Labrador West office recruiting licensed REALTORS&reg;.',
+    copyright: '&copy; 1998&ndash;{year} Royal LePage Turner Realty (2014) Inc. Recruiting licensed REALTORS&reg; for Labrador West; no office in Labrador West.',
     columns: [
       { heading: 'Recruiting', links: [
         ['Why Join', p + 'why-join.html'],
