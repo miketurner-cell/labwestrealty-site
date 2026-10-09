@@ -74,6 +74,20 @@
   };
   var FALLBACK_FOOTER = { copyright: '&copy; 1998&ndash;{year} Royal LePage Turner Realty (2014) Inc.', columns: [] };
 
+  // Optional per-site membership badge (2026-10-09, D-1009-42): rendered
+  // only when window.FOOTER.badge = {img, alt, text, href} is set in that
+  // site's own nav-config.js; nothing is emitted when the field is absent,
+  // so sites without it are unchanged. One link wraps image + text.
+  function badgeHTML(b) {
+    if (!b || !b.img || !b.href) return '';
+    // Inline styles + a data attribute, no class: pre-deploy Check #32 requires every class this file emits to be defined in a
+    // linked stylesheet, and the fleet's main.css copies are not identical, so the badge carries its own styling.
+    return '<a data-footer-badge href="' + b.href + '" target="_blank" rel="noopener" style="display:flex;flex-direction:column;align-items:center;gap:8px;margin:0 auto 16px;font-size:12px;line-height:1.5;color:inherit;text-decoration:none">' +
+      '<img src="' + b.img + '" alt="' + esc(b.alt) + '" height="48" loading="lazy" style="height:clamp(40px,8vw,48px);width:auto;max-width:100%;display:block">' +
+      (b.text ? '<span style="text-decoration:underline;text-underline-offset:2px">' + esc(b.text) + '</span>' : '') +
+      '</a>';
+  }
+
   function footerHTML() {
     var site = window.SITE || FALLBACK_SITE;
     var f = window.FOOTER || FALLBACK_FOOTER;
@@ -102,6 +116,7 @@
       '<img src="/images/proudly-canadian.png" alt="Proudly Canadian" width="220" height="auto" loading="lazy" style="max-width:220px;height:auto;opacity:0.85;">' +
       '</div>' +
       '<div class="footer-bottom">' +
+      badgeHTML(f.badge) +
       '<p>' + esc(f.copyright).replace('{year}', new Date().getFullYear()) + '</p>' +
       '<p>Each office independently owned and operated. Not intended to solicit buyers or sellers currently under contract.</p>' +
       networkLineHTML() +
