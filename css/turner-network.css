@@ -132,6 +132,7 @@
   color: #FF8496;
   text-decoration: underline;
   text-underline-offset: 2px;
+  white-space: nowrap; /* keep the phone number on one line at 390px */
 }
 .turner-network-meta a:hover { text-decoration: none; }
 
