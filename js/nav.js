@@ -137,10 +137,10 @@
   var navMainHTML =
     '<button class="nav-toggle" aria-label="Toggle navigation" type="button"><span></span><span></span><span></span></button>' +
     '<ul class="nav-main-links">' +
-      '<li class="nav-menu-cta"><a href="' + SITE.ctaHref + '" class="nav-cta-outline">Free Evaluation</a></li>' +
+      '<li class="nav-menu-cta"><a href="' + SITE.ctaHref + '" class="nav-cta-outline">' + (SITE.ctaLabel || 'Free Evaluation') + '</a></li>' +
       MENU.map(menuItem).join('') + '</ul>' +
     '<div class="nav-main-right">' +
-      '<a href="' + SITE.ctaHref + '" class="nav-cta-outline">Free Evaluation</a>' +
+      '<a href="' + SITE.ctaHref + '" class="nav-cta-outline">' + (SITE.ctaLabel || 'Free Evaluation') + '</a>' +
       '<a href="tel:' + SITE.phoneTel + '" class="nav-phone-pill" aria-label="Call ' + SITE.phone + '">' + phoneSVG +
         '<span class="nav-phone-num">' + SITE.phone + '</span></a>' +
     '</div>';
@@ -175,9 +175,24 @@
     { site: 'gander',   site_key: 'gander',   label: 'Gander and Area', url: 'https://realestategander.com/' },
     { site: 'avalon',   site_key: 'avalon',   label: 'Avalon',     url: 'https://avalonrealestate.ca/' },
     { site: 'goosebay', site_key: 'goosebay', label: 'Labrador',   url: 'https://goosebayrealestate.ca/' },
-    { site: 'grand-falls-windsor',     site_key: null, label: 'Grand Falls',  url: 'https://generationrealty.ca/' },
-    { site: 'corner-brook-west-coast', site_key: null, label: 'Corner Brook', url: 'https://royallepagenlrealty.ca/' }
+    { site: 'grand-falls-windsor',     site_key: null, label: 'Grand Falls',  url: 'https://generationrealty.ca/', peer: true },
+    { site: 'corner-brook-west-coast', site_key: null, label: 'Corner Brook', url: 'https://royallepagenlrealty.ca/', peer: true }
   ];
+
+  // Partner brokerages labelled in every header and phone menu (D-1009-17,
+  // 2026-10-09): Grand Falls and Corner Brook are independent Royal LePage
+  // brokerages (tools/regions.json operator:"peer"), not Turner offices. The
+  // wording is the hub's own region grid badge, verbatim ("Partner
+  // Brokerage", royallepageturner.com index.html), so the strip and the
+  // More menu say what the hub already says.
+  var PEER_BADGE = 'Partner Brokerage';
+  function regionLinkText(r) {
+    // Plain text, no new class: every class nav.js emits needs CSS on all five sites (pre-deploy Check #32).
+    return r.peer ? r.label + ' &middot; ' + PEER_BADGE : r.label;
+  }
+  function regionLinkTitle(r) {
+    return r.peer ? ' title="' + PEER_BADGE + ': an independent Royal LePage brokerage we partner with"' : '';
+  }
 
   // ── Header search (2026-09-25) ──────────────────────────────────────
   // A persistent search control in the main bar: an inline field on
@@ -435,7 +450,7 @@
     var keys = Object.keys(reg).filter(function (k) { return reg[k] && reg[k].state === 'live'; });
     keys.sort(function (a, b) { return (reg[a].order || 0) - (reg[b].order || 0); });
     return keys.map(function (k) {
-      return { site: k, site_key: reg[k].site_key || null, label: reg[k].nav_label || reg[k].label || k, url: (reg[k].domain || '') + '/' };
+      return { site: k, site_key: reg[k].site_key || null, label: reg[k].nav_label || reg[k].label || k, url: (reg[k].domain || '') + '/', peer: reg[k].operator === 'peer' };
     });
   }
 
@@ -488,8 +503,8 @@
       // in a territory-keyed loop.
       var reg = (window.TURNER_REGIONS && window.TURNER_REGIONS[r.site]) || null;
       var href = reg ? regionHref(reg, kind, cur) : r.url;
-      var peerCls = (reg && reg.operator === 'peer') ? ' peer' : '';
-      return '<a href="' + href + '"' + (peerCls ? ' class="' + peerCls.trim() + '"' : '') + '>' + r.label + '</a>';
+      var peerCls = (r.peer || (reg && reg.operator === 'peer')) ? ' peer' : '';
+      return '<a href="' + href + '"' + (peerCls ? ' class="' + peerCls.trim() + '"' : '') + regionLinkTitle(r) + '>' + regionLinkText(r) + '</a>';
     }).join('');
     var label = isChooser ? 'Choose your region:' : 'Serving:';
     var badge = (cur === 'labwest') ? '<span class="strip-badge">Labrador West &middot; recruiting</span>' : '';
@@ -581,7 +596,7 @@
   function more2HTML() {
     var items = (Array.isArray(H2.more) ? H2.more.slice() : []);
     var cur = window.TURNER_SITE;
-    liveRegions().forEach(function (rg) { if (!(rg.site_key && rg.site_key === cur)) items.push([rg.label, rg.url]); });
+    liveRegions().forEach(function (rg) { if (!(rg.site_key && rg.site_key === cur)) items.push([regionLinkText(rg), rg.url]); });
     if (!items.length) return '';
     return '<li class="nav2-more"><span class="nav2-more-h">More</span>' + items.map(function (it) { return '<a href="' + it[1] + '">' + it[0] + '</a>'; }).join('') + '</li>';
   }
@@ -595,7 +610,7 @@
     return '<a href="' + r + 'index.html" class="nav2-brand">Turner <span>Realty</span></a>' +
       '<ul class="nav-main-links nav2-links">' + H2.menu.map(menuItem).join('') + more2HTML() + '</ul>' +
       '<div class="nav-main-right nav2-right">' + bar +
-        '<a href="' + (H2.ctaHref || SITE.ctaHref) + '" class="nav2-cta">Get my home&rsquo;s value</a>' +
+        '<a href="' + (H2.ctaHref || SITE.ctaHref) + '" class="nav2-cta">' + (H2.ctaLabel || SITE.ctaLabel || 'Get my home&rsquo;s value') + '</a>' +
         '<a href="tel:' + SITE.phoneTel + '" class="nav2-phone" aria-label="Call ' + SITE.phone + '">' + phoneSVG + '<span>' + SITE.phone + '</span></a>' +
         findBtn +
         '<a href="tel:' + SITE.phoneTel + '" class="nav2-ico nav2-call" aria-label="Call ' + SITE.phone + '">' + phoneSVG + '</a>' +
