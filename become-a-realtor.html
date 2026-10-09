@@ -56,6 +56,9 @@
     .lw .section-eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #EA002A; margin-bottom: 12px; }
     .lw .section-title { font-family: 'Raleway', sans-serif; font-weight: 900; font-size: clamp(26px, 3.5vw, 38px); color: #1a1a1a; margin: 0 0 16px; letter-spacing: -0.02em; }
     .lw .section-desc { font-size: 17px; color: #666; line-height: 1.75; max-width: 640px; margin-bottom: 48px; }
+    /* 2026-10-09 (redesign): the three sections on the dark background carry white titles and a light description; the rule above was written for the light sections and made these titles near-invisible. */
+    .lwbr-dark .section-title { color: #fff; }
+    .lwbr-dark .section-desc { color: rgba(255,255,255,.78); }
 
     /* ── FOOTER ── */
     .lw .site-footer { background: #fafafa; border-top: 1px solid #e8e8e8; padding: 56px 48px 0; }
@@ -235,7 +238,7 @@
   </section>
 
   <!-- PATHWAY -->
-  <section id="pathway">
+  <section id="pathway" class="lwbr-dark">
     <div class="section-inner">
       <div class="section-eyebrow">The Pathway</div>
       <h2 class="section-title">Your Path to a Licence — 5 Steps</h2>
@@ -294,7 +297,7 @@
   </section>
 
   <!-- WHY -->
-  <section>
+  <section class="lwbr-dark">
     <div class="section-inner">
       <div class="section-eyebrow" style="text-align:center;">Why Turner</div>
       <h2 class="section-title" style="text-align:center;">Why Get Licensed With Royal LePage Turner</h2>
@@ -329,7 +332,7 @@
   </section>
 
   <!-- FAQ -->
-  <section class="lwbr-faq" aria-label="Licensing FAQ">
+  <section class="lwbr-faq lwbr-dark" aria-label="Licensing FAQ">
     <div class="lwbr-faq-inner">
       <div class="section-eyebrow" style="text-align:center;">FAQ</div>
       <h2 class="section-title" style="text-align:center;margin-bottom:40px;">Questions, Answered</h2>
