@@ -38,7 +38,7 @@
   font-size: 10px;
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: #EA002A;
+  color: #FF8496; /* contrast 2026-10-09: light brand-red tint, >=8:1 on the dark strip (#EA002A was 4.27:1) */
   margin: 0 0 10px;
 }
 .turner-network-title {
@@ -94,17 +94,17 @@
   line-height: 1.2;
 }
 .turner-network-card.active .turner-network-city {
-  color: #EA002A;
+  color: #FF8496;
 }
 .turner-network-url {
   font-size: 11px;
-  color: rgba(255,255,255,0.45);
+  color: rgba(255,255,255,0.6);
   letter-spacing: 0.02em;
   font-weight: 400;
   word-break: break-word;
 }
 .turner-network-card.active .turner-network-url {
-  color: rgba(234,0,42,0.75);
+  color: rgba(255,132,150,0.9);
 }
 .turner-network-active-tag {
   display: inline-block;
@@ -112,7 +112,7 @@
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #EA002A;
+  color: #FF8496;
   margin-top: 4px;
 }
 .turner-network-meta {
@@ -121,7 +121,7 @@
   padding-top: 22px;
   border-top: 1px solid #1a1a1a;
   font-size: 12px;
-  color: rgba(255,255,255,0.45);
+  color: rgba(255,255,255,0.6);
   line-height: 1.7;
 }
 .turner-network-meta strong {
@@ -129,10 +129,12 @@
   font-weight: 500;
 }
 .turner-network-meta a {
-  color: #EA002A;
-  text-decoration: none;
+  color: #FF8496;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  white-space: nowrap; /* keep the phone number on one line at 390px */
 }
-.turner-network-meta a:hover { text-decoration: underline; }
+.turner-network-meta a:hover { text-decoration: none; }
 
 @media (max-width: 900px) {
   .turner-network-grid { grid-template-columns: repeat(2, 1fr); }
