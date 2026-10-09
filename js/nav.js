@@ -818,6 +818,22 @@
     // (re)written via innerHTML, so it can (re)append the state-aware
     // Sign in / My Account entry that innerHTML replacement wipes.
     try { document.dispatchEvent(new CustomEvent('turner:nav-injected')); } catch (e) { /* old browsers: link renders on DOMContentLoaded instead */ }
+    loadSiteFeedback();
+  }
+
+  // Consumer feedback button (redesign, D-1009-72 (2), 2026-10-09). This only loads js/site-feedback.js, which shows nothing
+  // until Gander's site-feedback function answers its probe {enabled:true} (gate SITE_FEEDBACK, default off). A site can opt out
+  // with SITE.siteFeedback = 'off' in its nav-config. SITE_FEEDBACK_STAMP = sha256[:8] of js/site-feedback.js (the STRICT
+  // site-feedback test fails when it is stale and prints the value). The file skips the signed-in tool routes itself.
+  var SITE_FEEDBACK_STAMP = 'df3ec53b';
+  function loadSiteFeedback() {
+    try {
+      if (SITE.siteFeedback === 'off' || document.querySelector('script[src*="site-feedback.js"]')) return;
+      var s = document.createElement('script');
+      s.src = (NAV_SRC && /nav\.js(\?[^#]*)?(#.*)?$/.test(NAV_SRC) ? NAV_SRC.replace(/nav\.js(\?[^#]*)?(#.*)?$/, 'site-feedback.js') : '/js/site-feedback.js') + '?v=' + SITE_FEEDBACK_STAMP;
+      s.async = true;
+      document.head.appendChild(s);
+    } catch (e) { /* the button is optional */ }
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', injectNav);
