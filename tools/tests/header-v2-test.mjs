@@ -7,13 +7,16 @@
  *   - the CSS is loaded only by nav.js while the header is on, and every rule is scoped to html.header-v2 (so with the switch
  *     off nothing on the page changes);
  *   - every link in the site's header2 (menu items, More) is a page that exists in this repo (no dead links in the header);
- *   - the menu breakpoint is per-site config, default 1023.
+ *   - the menu breakpoint is per-site config, default 1023;
+ *   - the desktop More menu (button, aria-expanded/-controls, Escape, arrows), the official Royal LePage lockup in the header, and
+ *     header-v2.css's content-hash stamp in nav-config (D-1009-55/-56).
  * Run: node tools/tests/header-v2-test.mjs
  */
 import { readFileSync, existsSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import vm from 'node:vm';
+import { createHash } from 'node:crypto';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const read = (rel) => readFileSync(join(ROOT, rel), 'utf8');
@@ -66,6 +69,36 @@ if (h2) {
 } else {
   ok(true, 'no header2 on this site yet: the old header stays (its words need Mike’s word first)');
 }
+
+// ---- the desktop "More" menu, the Royal LePage logo and the CSS stamp (redesign, D-1009-55 / D-1009-56) ----
+// More: one button (aria-expanded, aria-controls -> the panel), the panel's links are the config's header2.more plus the other regions
+ok(/<button class="nav2-more-btn" type="button" aria-expanded="false" aria-controls="nav2-more-panel">More<\/button>/.test(nav)
+  && /<div class="nav2-more-panel" id="nav2-more-panel">/.test(nav), 'a "More" button with aria-expanded and aria-controls over its panel of links');
+ok(/Array\.isArray\(H2\.more\) \? H2\.more\.slice\(\)/.test(nav) && /liveRegions\(\)\.forEach/.test(nav), 'the More links are header2.more plus the other regions and partner brokerages, no words added in nav.js');
+ok(/k === 'Escape'/.test(nav) && /setOpen\(false\); btn\.focus\(\);/.test(nav) && /k === 'ArrowDown'/.test(nav) && /k === 'ArrowUp'/.test(nav) && /'focusout'/.test(nav),
+  'More: Escape closes and returns focus to the button, arrows move, focus leaving closes it');
+ok(/setAttribute\('aria-expanded', o \? 'true' : 'false'\)/.test(nav), 'More: aria-expanded follows the open state');
+const navLinksOrder = /'<ul class="nav-main-links nav2-links">' \+ H2\.menu\.map\(menuItem\)\.join\(''\) \+ more2HTML\(\)/.test(nav);
+ok(navLinksOrder, 'More comes last, after the four words');
+ok(/\.nav2-more-btn \{[^}]*\}/.test(css) && /\.nav2-more\.open > \.nav2-more-panel \{ display: block; \}/.test(css) && /\.nav2-more-panel \{ display: none; position: absolute; top: 100%;/.test(css)
+  && /@media \(max-width: 1023px\)[\s\S]*\.nav2-more-btn \{ display: none; \}/.test(css), 'More: styled like the dropdowns on desktop; on the phone sheet the button is hidden and the links show');
+const moreCfg = (SITE.header2 && SITE.header2.more) || [];
+ok(!SITE.header2 || moreCfg.length >= 2, `header2.more holds the links the desktop More shows (${moreCfg.length})`);
+// logo: the official lockup, whole, alt "Royal LePage", 44px tall in the header; the file is the one Mike added 2026-06-24 (sha256 below)
+ok(/class="nav2-logo" src="' \+ escAttrNav\(logoSrc\) \+ '" alt="Royal LePage" width="87" height="44"/.test(nav) && /r \+ 'images\/rlp-turner-lockup\.png'/.test(nav), 'the header carries the official lockup image, alt "Royal LePage", 87x44');
+ok(/\.nav2-logo \{[^}]*height: 44px;/.test(css), 'the logo is 44px tall (its mark is 25px: not under 24px)');
+const lock = join(ROOT, 'images', 'rlp-turner-lockup.png');
+if (existsSync(lock)) {
+  const buf = readFileSync(lock);
+  const isPng = buf.slice(0, 8).toString('hex') === '89504e470d0a1a0a', w = buf.readUInt32BE(16), h = buf.readUInt32BE(20);
+  const sha = createHash('sha256').update(buf).digest('hex');
+  ok(isPng && w === 1280 && h === 647 && w >= 2 * 87 && h >= 2 * 44, `the logo file is a ${w}x${h} PNG, at least 2x its 87x44 box`);
+  ok(sha === '8e87ca19f481159663d5d2f85152f7a6d3561d20262a6d71c486b1eef960e3ee', 'the logo file is the official lockup, byte for byte (never edited or cropped)', sha);
+} else ok(false, 'images/rlp-turner-lockup.png exists');
+// the CSS stamp: the content hash, kept in nav-config (nav.js reads it), never a fixed date
+const cssHash = createHash('sha256').update(readFileSync(join(ROOT, 'css', 'header-v2.css'))).digest('hex').slice(0, 8);
+ok(SITE.header2Stamp === cssHash, `nav-config's header2Stamp is the sha256[:8] of css/header-v2.css (${cssHash})`, `it reads ${SITE.header2Stamp}; set header2Stamp: '${cssHash}'`);
+ok(/function header2Stamp\(\)/.test(nav) && /\+ \(header2Stamp\(\) \? '\?v=' \+ header2Stamp\(\) : ''\)/.test(nav) && !/20261008-header-v2/.test(nav), 'nav.js loads header-v2.css with that stamp, not a fixed date');
 
 console.log(`\n${passes} passed, ${FAIL.length} failed`);
 if (FAIL.length) process.exit(1);

@@ -24,8 +24,11 @@ html.header-v2 .region-strip[hidden] { display: none !important; }
 /* ---- the main bar: brand · four words · the bar · one CTA · the phone ---- */
 html.header-v2 .nav-main-bar.nav2 { display: flex; align-items: center; justify-content: flex-start; gap: var(--h2-gap); min-height: var(--h2-h); height: auto; padding: 0 var(--h2-pad); background: var(--h2-bg); border-bottom: 1px solid var(--h2-line); position: sticky; top: 0; z-index: 1000; flex-wrap: nowrap; }
 html.header-v2 .nav-main-bar.nav2::before { content: none; }
-html.header-v2 .nav2-brand { font: 900 17px/1 'Raleway', sans-serif; color: var(--h2-text); text-decoration: none; letter-spacing: -.01em; margin-right: 10px; white-space: nowrap; }
-html.header-v2 .nav2-brand span { color: var(--h2-red); }
+html.header-v2 .nav2-brand { display: inline-flex; align-items: center; gap: 12px; font: 900 17px/1 'Raleway', sans-serif; color: var(--h2-text); text-decoration: none; letter-spacing: -.01em; margin-right: 10px; white-space: nowrap; }
+html.header-v2 .nav2-brand-name span { color: var(--h2-red); }
+/* the official Royal LePage Turner Realty lockup (D-1009-56), whole and unaltered: its own white ground is the clear space the brand
+   standards ask for, so nothing is drawn over or beside it closer than the gap above; 44px tall puts the red-and-black mark at 25px */
+html.header-v2 .nav2-logo { display: block; flex: 0 0 auto; width: auto; height: 44px; max-width: none; border-radius: 3px; }
 html.header-v2 .nav2-links { display: flex; align-items: center; list-style: none; margin: 0; padding: 0; gap: 0; flex: 0 0 auto; }
 html.header-v2 .nav2-links > li > a { display: block; padding: 10px 11px; font: 700 12px/1.2 'Raleway', sans-serif; letter-spacing: .08em; text-transform: uppercase; color: var(--h2-text-2); text-decoration: none; white-space: nowrap; }
 html.header-v2 .nav2-links > li > a:hover, html.header-v2 .nav2-links > li > a[aria-current="page"] { color: var(--h2-red); }
@@ -38,7 +41,18 @@ html.header-v2 .nav2-links .nav-dropdown-content { display: none; position: abso
 html.header-v2 .nav2-links .nav-dropdown:hover > .nav-dropdown-content, html.header-v2 .nav2-links .nav-dropdown:focus-within > .nav-dropdown-content, html.header-v2 .nav2-links .nav-dropdown.open > .nav-dropdown-content { display: block; }
 html.header-v2 .nav2-links .nav-dropdown-content a { display: block; padding: 10px 20px; font: 400 13px/1.3 'Roboto', sans-serif; letter-spacing: .02em; text-transform: none; color: var(--h2-text-2); text-decoration: none; border: 0; }
 html.header-v2 .nav2-links .nav-dropdown-content a:hover { background: var(--h2-field); color: var(--h2-red); }
-html.header-v2 .nav2-more { display: none; }
+/* "More" (D-1009-55): a disclosure button over a panel that looks like the other dropdowns; js/nav.js wires it (aria-expanded, Escape, arrows) */
+html.header-v2 .nav2-more { position: relative; }
+html.header-v2 .nav2-more-h { display: none; }
+html.header-v2 .nav2-more-btn { display: block; margin: 0; padding: 10px 11px; border: 0; border-radius: 0; background: none; cursor: pointer; font: 700 12px/1.2 'Raleway', sans-serif; letter-spacing: .08em; text-transform: uppercase; color: var(--h2-text-2); white-space: nowrap; }
+html.header-v2 .nav2-more-btn::after { content: ''; display: inline-block; width: 0; height: 0; border-left: 3.5px solid transparent; border-right: 3.5px solid transparent; border-top: 4px solid rgba(255,255,255,.4); margin-left: 6px; vertical-align: middle; }
+html.header-v2 .nav2-more-btn:hover, html.header-v2 .nav2-more-btn[aria-expanded="true"] { color: var(--h2-text); }
+html.header-v2 .nav2-more-btn:focus-visible { outline: 2px solid var(--h2-red); outline-offset: -2px; }
+html.header-v2 .nav2-more-panel { display: none; position: absolute; top: 100%; left: 0; min-width: 240px; padding: 8px 0; background: var(--h2-bg); border: 1px solid var(--h2-line); border-radius: 0 0 6px 6px; box-shadow: 0 12px 36px rgba(0,0,0,.5); z-index: 999; }
+html.header-v2 .nav2-more.open > .nav2-more-panel { display: block; }
+html.header-v2 .nav2-more-panel a { display: block; padding: 10px 20px; font: 400 13px/1.3 'Roboto', sans-serif; letter-spacing: .02em; text-transform: none; color: var(--h2-text-2); text-decoration: none; white-space: nowrap; }
+html.header-v2 .nav2-more-panel a:hover { background: var(--h2-field); color: var(--h2-red); }
+html.header-v2 .nav2-more-panel a:focus-visible { outline: 2px solid var(--h2-red); outline-offset: -2px; background: var(--h2-field); }
 html.header-v2 .nav2-right { display: flex; align-items: center; gap: 8px; flex: 1 1 auto; min-width: 0; justify-content: flex-end; width: auto; padding: 0; }
 html.header-v2 .nav2-right .nav-search { flex: 1 1 auto; min-width: 140px; max-width: 560px; display: flex; align-items: center; gap: 10px; margin: 0 10px 0 4px; padding: 0 14px; height: 40px; background: var(--h2-field); border: 1px solid var(--h2-field-line); border-radius: var(--h2-pill); color: var(--h2-text-3); }
 html.header-v2 .nav2-right .nav-search .nav-search-icon { display: inline-flex; width: 16px; height: 16px; flex: 0 0 16px; position: static; transform: none; margin: 0; }
@@ -64,7 +78,7 @@ html.header-v2 .nav2 .nav-search-btn { display: none; }
 /* ---- a phone or a narrow window: brand left; the magnifier, call and menu as round buttons; the menu a sheet ---- */
 @media (max-width: 1023px) {
   html.header-v2 .nav-top-bar.nav2-top { display: none; }
-  html.header-v2 .nav-main-bar.nav2 { padding: 0 14px; min-height: 56px; flex-wrap: wrap; }
+  html.header-v2 .nav-main-bar.nav2 { padding: 6px 14px; min-height: 56px; flex-wrap: wrap; }
   html.header-v2 .nav2-brand { margin-right: auto; font-size: 15px; }
   html.header-v2 .nav2-right { flex: 0 0 auto; gap: 8px; }
   html.header-v2 .nav2-right .nav-search, html.header-v2 .nav2-cta, html.header-v2 .nav2-phone { display: none; }
@@ -82,8 +96,21 @@ html.header-v2 .nav2 .nav-search-btn { display: none; }
   html.header-v2 .nav2-links .nav-auth-link { display: block; }
   html.header-v2 .nav2-more { display: block; padding: 12px 4px; font: 600 13px/1.9 'Roboto', sans-serif; color: var(--h2-text-3); }
   html.header-v2 .nav2-more-h { display: block; font-weight: 700; color: var(--h2-text-2); }
-  html.header-v2 .nav2-links > li.nav2-more > a { display: inline-block; min-height: 0; padding: 0; border: 0; font: 600 13px/1.9 'Roboto', sans-serif; letter-spacing: 0; text-transform: none; color: var(--h2-text-3); text-decoration: none; margin-right: 14px; white-space: nowrap; }
-  html.header-v2 .nav2-more a:hover { color: var(--h2-text); }
+  html.header-v2 .nav2-more-btn { display: none; }
+  html.header-v2 .nav2-more-panel { display: block; position: static; min-width: 0; padding: 0; background: none; border: 0; border-radius: 0; box-shadow: none; }
+  html.header-v2 .nav2-more-panel a { display: inline-block; min-height: 0; padding: 0; border: 0; font: 600 13px/1.9 'Roboto', sans-serif; letter-spacing: 0; text-transform: none; color: var(--h2-text-3); text-decoration: none; margin-right: 14px; white-space: nowrap; }
+  html.header-v2 .nav2-more-panel a:hover { background: none; color: var(--h2-text); }
+}
+
+/* ---- small phones: the logo (44px tall, 87px wide) and the name still sit on one line beside the three round buttons.
+   Under 351px the name is kept for readers and search engines but not drawn: the lockup already reads "Turner Realty". ---- */
+@media (max-width: 420px) {
+  html.header-v2 .nav-main-bar.nav2 { padding: 6px 10px; }
+  html.header-v2 .nav2-brand { gap: 8px; font-size: 14px; }
+  html.header-v2 .nav2-right { gap: 6px; }
+}
+@media (max-width: 350px) {
+  html.header-v2 .nav2-brand-name { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 }
 
 /* ---- the search sheet (verbatim from Avalon's css/main.css, origin/main 2026-10-08): js/nav.js builds it when a site turns search on (SITE.search); the new header's bar uses it on every site from the search row (D-1008-86). Avalon's main.css keeps its own copy. ---- */
