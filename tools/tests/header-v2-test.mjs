@@ -84,6 +84,9 @@ ok(/\.nav2-more-btn \{[^}]*\}/.test(css) && /\.nav2-more\.open > \.nav2-more-pan
   && /@media \(max-width: 1023px\)[\s\S]*\.nav2-more-btn \{ display: none; \}/.test(css), 'More: styled like the dropdowns on desktop; on the phone sheet the button is hidden and the links show');
 const moreCfg = (SITE.header2 && SITE.header2.more) || [];
 ok(!SITE.header2 || moreCfg.length >= 2, `header2.more holds the links the desktop More shows (${moreCfg.length})`);
+// D-1009-65: "Our team" is in More on every site that has a team page (Lab West has none: its pages are recruiting pages, never linked as a team)
+const moreLabels = moreCfg.map((m) => m[0]), isLabWest = !!(SITE.header2 && (SITE.header2.menu || []).some((m) => m.label === 'Why join'));
+ok(!SITE.header2 || isLabWest ? !moreLabels.includes('Our team') : moreLabels.includes('Our team'), isLabWest ? 'Lab West: no "Our team" (no team page exists)' : 'More has "Our team" (D-1009-65)');
 // logo: the official lockup, whole, alt "Royal LePage", 44px tall in the header; the file is the one Mike added 2026-06-24 (sha256 below)
 ok(/class="nav2-logo" src="' \+ escAttrNav\(logoSrc\) \+ '" alt="Royal LePage" width="87" height="44"/.test(nav) && /r \+ 'images\/rlp-turner-lockup\.png'/.test(nav), 'the header carries the official lockup image, alt "Royal LePage", 87x44');
 ok(/\.nav2-logo \{[^}]*height: 44px;/.test(css), 'the logo is 44px tall (its mark is 25px: not under 24px)');
