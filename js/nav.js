@@ -556,7 +556,14 @@
   // SITE.header2 = {region, office, menu: [{label, href, items: [[label, href], ...]}], more: [[label, href], ...], bar: true|false}.
   // A site without SITE.header2.menu keeps the old header whatever the switch says (Conv #74).
   var H2 = (SITE.header2 && typeof SITE.header2 === 'object') ? SITE.header2 : null;
-  var HEADER_V2_STAMP = '20261008-header-v2';
+  // header-v2.css's cache stamp (D-1009-55 follow-up): the content hash of css/header-v2.css, kept as SITE.header2Stamp in each
+  // site's nav-config.js (tools/tests/header-v2-test.mjs fails when it is not the file's sha256[:8], and prints the right value).
+  // Without it, the stamp falls back to this script's own ?v= (the stamper's hash of js/nav.js), never to a fixed date.
+  function header2Stamp() {
+    if (typeof SITE.header2Stamp === 'string' && SITE.header2Stamp) return SITE.header2Stamp;
+    var m = /[?&]v=([^&#]+)/.exec(NAV_SRC || '');
+    return m ? m[1] : '';
+  }
   function header2On() {
     if (!H2 || !Array.isArray(H2.menu) || !H2.menu.length) return false;
     var q = window.location.search || '';
@@ -583,7 +590,7 @@
     var base = NAV_SRC && /js\/nav\.js(\?[^#]*)?(#.*)?$/.test(NAV_SRC)
       ? NAV_SRC.replace(/js\/nav\.js(\?[^#]*)?(#.*)?$/, 'css/header-v2.css') : '/css/header-v2.css';
     var l = document.createElement('link');
-    l.rel = 'stylesheet'; l.href = base + '?v=' + HEADER_V2_STAMP; l.setAttribute('data-header-v2', '1');
+    l.rel = 'stylesheet'; l.href = base + (header2Stamp() ? '?v=' + header2Stamp() : ''); l.setAttribute('data-header-v2', '1');
     document.head.appendChild(l);
   }
   function top2HTML() {
@@ -598,7 +605,11 @@
     var cur = window.TURNER_SITE;
     liveRegions().forEach(function (rg) { if (!(rg.site_key && rg.site_key === cur)) items.push([regionLinkText(rg), rg.url]); });
     if (!items.length) return '';
-    return '<li class="nav2-more"><span class="nav2-more-h">More</span>' + items.map(function (it) { return '<a href="' + it[1] + '">' + it[0] + '</a>'; }).join('') + '</li>';
+    // One set of links. Desktop: the "More" button opens them as a dropdown (wired in injectNav). Phone: the button is hidden by CSS and
+    // the heading plus the links show as a block at the foot of the sheet, as before.
+    return '<li class="nav2-more"><span class="nav2-more-h">More</span>' +
+      '<button class="nav2-more-btn" type="button" aria-expanded="false" aria-controls="nav2-more-panel">More</button>' +
+      '<div class="nav2-more-panel" id="nav2-more-panel">' + items.map(function (it) { return '<a href="' + it[1] + '">' + it[0] + '</a>'; }).join('') + '</div></li>';
   }
   function navMain2HTML(sCfg) {
     var action = (sCfg && sCfg.action) || H2.barAction || '/listings/';
@@ -607,7 +618,11 @@
         '<span class="nav-search-icon">' + searchSVG + '</span>' +
         '<input class="nav-search-input" type="search" name="q" placeholder="' + escAttrNav(H2.placeholder || 'Search an address, a town, an MLS#') + '" aria-label="Search" autocomplete="off" inputmode="search" enterkeyhint="search" spellcheck="false"></form>';
     var findBtn = (H2.bar === false || sCfg) ? '' : '<a class="nav2-ico nav2-find" href="' + escAttrNav(action) + '" aria-label="Search">' + searchSVG + '</a>';
-    return '<a href="' + r + 'index.html" class="nav2-brand">Turner <span>Realty</span></a>' +
+    // The official Royal LePage Turner Realty lockup, whole and unaltered (D-1009-56), beside the Turner Realty name; one link home.
+    // SITE.header2.logo overrides the file, false leaves it out. 87x44 is the file's 1280x647 ratio at the header's height.
+    var logoSrc = H2.logo === false ? '' : (H2.logo || r + 'images/rlp-turner-lockup.png');
+    var logo = logoSrc ? '<img class="nav2-logo" src="' + escAttrNav(logoSrc) + '" alt="Royal LePage" width="87" height="44" decoding="async">' : '';
+    return '<a href="' + r + 'index.html" class="nav2-brand">' + logo + '<span class="nav2-brand-name">Turner <span>Realty</span></span></a>' +
       '<ul class="nav-main-links nav2-links">' + H2.menu.map(menuItem).join('') + more2HTML() + '</ul>' +
       '<div class="nav-main-right nav2-right">' + bar +
         '<a href="' + (H2.ctaHref || SITE.ctaHref) + '" class="nav2-cta">' + (H2.ctaLabel || SITE.ctaLabel || 'Get my home&rsquo;s value') + '</a>' +
@@ -755,6 +770,42 @@
         });
       })(ra[a]);
     }
+    // Desktop "More" (D-1009-55): a disclosure button (aria-expanded / aria-controls) over the panel of links. Opens on hover or on
+    // click/Enter/Space/ArrowDown; Escape closes and puts focus back on the button; ArrowDown/ArrowUp/Home/End move between the links;
+    // Tab walks them in order and closes the panel when focus leaves it; a click or tap outside closes it. Off on the phone sheet,
+    // where the button is hidden and the links always show.
+    var moreLi = mainBar.querySelector('.nav2-more');
+    var moreBtn = moreLi && moreLi.querySelector('.nav2-more-btn'), morePanel = moreLi && moreLi.querySelector('.nav2-more-panel');
+    if (moreLi && moreBtn && morePanel) (function (li, btn, panel) {
+      var pinned = false;   // opened by a click or the keyboard (stays until closed); hover alone is not pinned
+      function isOpen() { return btn.getAttribute('aria-expanded') === 'true'; }
+      function setOpen(o) { btn.setAttribute('aria-expanded', o ? 'true' : 'false'); li.classList.toggle('open', o); if (!o) pinned = false; }
+      function focusables() { return Array.prototype.slice.call(panel.querySelectorAll('a[href]')); }
+      btn.addEventListener('click', function () {
+        if (window.innerWidth <= NAV_BP) return;
+        if (isOpen() && !pinned) pinned = true; else if (isOpen()) setOpen(false); else { setOpen(true); pinned = true; }
+      });
+      li.addEventListener('mouseenter', function () { if (window.innerWidth > NAV_BP) setOpen(true); });
+      li.addEventListener('mouseleave', function () { if (!pinned) setOpen(false); });
+      li.addEventListener('keydown', function (e) {
+        if (window.innerWidth <= NAV_BP) return;
+        var k = e.key, list = focusables(), i = list.indexOf(document.activeElement);
+        if (k === 'Escape' || k === 'Esc') { if (isOpen()) { e.preventDefault(); setOpen(false); btn.focus(); } return; }
+        if (k === 'ArrowDown') {
+          e.preventDefault();
+          if (!isOpen()) { setOpen(true); pinned = true; }
+          if (list.length) list[Math.min(i + 1, list.length - 1)].focus();
+        } else if (k === 'ArrowUp') {
+          e.preventDefault();
+          if (i > 0) list[i - 1].focus(); else if (i === 0) btn.focus();
+        } else if ((k === 'Home' || k === 'End') && i >= 0 && list.length) {
+          e.preventDefault(); (k === 'Home' ? list[0] : list[list.length - 1]).focus();
+        }
+      });
+      li.addEventListener('focusout', function (e) { if (e.relatedTarget && !li.contains(e.relatedTarget)) setOpen(false); });
+      document.addEventListener('click', function (e) { if (isOpen() && !(e.target.closest && e.target.closest('.nav2-more'))) setOpen(false); });
+      window.addEventListener('resize', function () { if (window.innerWidth <= NAV_BP && isOpen()) setOpen(false); });
+    })(moreLi, moreBtn, morePanel);
     // Highlight current page (Avalon)
     var here = window.location.pathname.split('/').pop() || 'index.html';
     var allLinks = mainBar.querySelectorAll('a[href]');
