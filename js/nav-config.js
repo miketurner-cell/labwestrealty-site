@@ -35,7 +35,33 @@
     facebook: '#', instagram: '#', youtube: '#',
     ctaHref: p + 'contact.html',
     // js/nav.js is one fleet file now (2026-10-08); this site's own copy used 1024 as the menu breakpoint, kept here.
-    navBreakpoint: 1024
+    navBreakpoint: 1024,
+    // The new header (redesign, D-1009-10: Lab West "as drawn"). OFF: nothing changes until Mike's GO flips this to 'v2'
+    // (?header=v2 previews it on any page). Four words, one button, the phone; no search bar (this site has no listings);
+    // the regions sit in the phone menu's More line (js/nav.js adds them after the two links below).
+    header: 'off',
+    header2: {
+      region: 'Labrador West &middot; recruiting',
+      office: 'Royal LePage Turner Realty &middot; 204 Airport Blvd, Gander &middot; 709-256-7999',
+      bar: false, signIn: false, sheetCta: true,
+      ctaLabel: 'Book a confidential call',
+      // the confidential broker form (D-1008-106): js/recruit-form.js opens it on this hash when its gate is open; with the
+      // gate closed the visitor lands on the page, whose own button is the mailto
+      ctaHref: p + 'become-a-realtor.html#confidential-inquiry',
+      menu: [
+        { label: 'Why join', href: p + 'why-join.html' },
+        { label: 'Get licensed', href: p + 'become-a-realtor.html' },
+        { label: 'The market', href: p + 'labrador-west.html' },
+        { label: 'About Turner', href: p + 'about-turner.html', items: [
+          ['About Turner', p + 'about-turner.html'],
+          ['Contact', p + 'contact.html']
+        ] }
+      ],
+      more: [
+        ['Home', r + 'index.html'],
+        ['Contact', p + 'contact.html']
+      ]
+    }
   };
 
   // Top-level MENU entries are {label, href} objects (nav.js's menuItem()
@@ -73,6 +99,34 @@
       ] }
     ]
   };
+
+  // Header v2 touch-ups that are this site's own (D-1009-10), done here so the shared js/nav.js and css/header-v2.css stay byte-identical
+  // fleet-wide (always-on #27): nav.js hard-codes the button's words ("Get my home's value") and a Sign in link, and its phone sheet has no
+  // button (the listing sites' bottom action bar carries it; this site has none). On turner:nav-injected, and only while the new header
+  // is on (html.header-v2), this applies SITE.header2.ctaLabel / signIn:false / sheetCta:true. With the switch off it does nothing.
+  if (typeof document.addEventListener === 'function') document.addEventListener('turner:nav-injected', function () {
+    var h2 = SITE.header2, root = document.documentElement;
+    if (!h2 || !root.classList.contains('header-v2')) return;
+    var cta = document.querySelector('.nav2-cta');
+    if (cta && h2.ctaLabel) cta.innerHTML = h2.ctaLabel;
+    if (h2.signIn === false) { var si = document.querySelector('.nav2-signin'); if (si && si.parentNode) si.parentNode.removeChild(si); }
+    var links = document.querySelector('.nav2-links');
+    if (h2.sheetCta === true && links && !links.querySelector('.nav2-sheet-cta')) {
+      var li = document.createElement('li');
+      li.className = 'nav2-sheet-cta';
+      li.innerHTML = '<a href="' + (h2.ctaHref || SITE.ctaHref) + '">' + (h2.ctaLabel || cta && cta.innerHTML || '') + '</a>';
+      links.appendChild(li);
+    }
+    if (!document.getElementById('nav2-site-style')) {
+      var st = document.createElement('style');
+      st.id = 'nav2-site-style';
+      st.textContent = 'html.header-v2 .nav2-sheet-cta{display:none}' +
+        '@media (max-width:1023px){html.header-v2 .nav2-links>li.nav2-sheet-cta{display:block;padding:4px 0 8px}' +
+        'html.header-v2 .nav2-links>li.nav2-sheet-cta>a{display:flex;align-items:center;justify-content:center;min-height:48px;padding:0 20px;border:0;border-radius:999px;background:var(--h2-red);color:#fff;text-decoration:none;font:800 15px/1 Raleway,sans-serif;letter-spacing:.01em;text-transform:none}' +
+        'html.header-v2 .nav2-links>li.nav2-sheet-cta>a:hover{background:var(--h2-red-hover)}}';
+      document.head.appendChild(st);
+    }
+  });
 
   window.SITE = SITE;
   window.MENU = MENU;
