@@ -44,20 +44,25 @@ const cfgSrc = read('js/nav-config.js');
 const win = {};
 vm.runInNewContext(cfgSrc, { window: win, document: { currentScript: null } });
 const SITE = win.SITE || {};
-ok(SITE.header !== 'v2', "this site's header switch is not on (Mike's GO flips it)", String(SITE.header));
+// the switch: 'off' (or unset), or 'v2' only with a full header2 (Mike switched Gander, Avalon and Goose Bay on, D-1008-103)
+ok(SITE.header === undefined || SITE.header === 'off' || (SITE.header === 'v2' && SITE.header2 && Array.isArray(SITE.header2.menu) && SITE.header2.menu.length === 4),
+  "the header switch is 'off', or 'v2' with the four words configured", String(SITE.header));
 const h2 = SITE.header2;
 if (h2) {
   const hrefs = [];
   for (const m of h2.menu || []) { if (m.href) hrefs.push(m.href); for (const it of m.items || []) hrefs.push(it[1]); }
   for (const it of h2.more || []) hrefs.push(it[1]);
+  if (h2.ctaHref) hrefs.push(h2.ctaHref);   // the one button's target (a #fragment is stripped below)
   const dead = hrefs.filter((h) => {
     if (/^(https?:|tel:|mailto:)/.test(h)) return false;
     const p = h.split('#')[0].split('?')[0];
     const f = p.endsWith('/') ? join(ROOT, p, 'index.html') : join(ROOT, p);
     return !existsSync(f);
   });
-  ok(hrefs.length >= 8 && !dead.length, `every header link is a page on this site (${hrefs.length} links)`, dead.join(', '));
-  ok((h2.menu || []).map((m) => m.label).join('|') === 'Buy|Sell|Sold prices|Communities', 'the four words, in the drawn order');
+  ok(hrefs.length >= 6 && !dead.length, `every header link is a page on this site (${hrefs.length} links)`, dead.join(', '));
+  // the drawn words: the three listing sites share one set; Lab West and the hub (D-1009-10) have their own
+  const DRAWN = ['Buy|Sell|Sold prices|Communities', 'Why join|Get licensed|The market|About Turner', 'Offices|Our team|Awards|Careers'];
+  ok(DRAWN.includes((h2.menu || []).map((m) => m.label).join('|')), 'the four words, in the drawn order');
 } else {
   ok(true, 'no header2 on this site yet: the old header stays (its words need Mike’s word first)');
 }
