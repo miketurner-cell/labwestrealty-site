@@ -14,7 +14,7 @@ import { fileURLToPath } from 'url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const js = fs.readFileSync(path.join(root, 'js', 'site-feedback.js'), 'utf8');
 const nav = fs.readFileSync(path.join(root, 'js', 'nav.js'), 'utf8');
-const SHA = 'df3ec53b80de3e3e1e1367a8822d053df1954901a56ec8f6db0128ad74cf5e6f';
+const SHA = '677a36643b6c047d4eb3922ec7f29426569d59617df8559fb19ae769c1c98f7d';
 let fails = 0;
 const check = (c, m) => { if (c) console.log('ok   ' + m); else { fails++; console.error('FAIL ' + m); } };
 
@@ -52,6 +52,7 @@ check(/min-height:44px/.test(js) && /width:44px;height:44px/.test(js), '44 px ta
 check(/font:16px/.test(js), 'inputs are 16 px (no iOS zoom)');
 check(/e\.key === 'Escape'/.test(js) && /aria-label="Close feedback"/.test(js) && /role: 'dialog'/.test(js) && /'aria-labelledby'/.test(js), 'Escape closes; dialog + labelled close button');
 check(/left:12px;bottom:16px/.test(js) && /56px \+ 12px \+ env\(safe-area-inset-bottom/.test(js), 'bottom-left; on phones sits above the 56 px Call/Text bar');
+check(/@media\(max-width:767px\)\{\.tsf-tab\{left:18px;bottom:calc\(56px \+ 15px/.test(js) && /width:44px;height:44px/.test(js) && js.includes("'aria-label': 'Feedback'") && js.includes('tsf-lbl'), 'phones (<768 px): icon-only round 44x44 tab, level with the chat bubble, label kept for screen readers');
 check(/z-index:9300/.test(js), 'sits at z 9300, under the chat bubble (z 9500, bottom-right)');
 check(js.includes('agent|agent-sales|office|broker|app|client|deal|deals|login|auth'), 'skips the signed-in tool routes');
 

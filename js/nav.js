@@ -825,7 +825,7 @@
   // until Gander's site-feedback function answers its probe {enabled:true} (gate SITE_FEEDBACK, default off). A site can opt out
   // with SITE.siteFeedback = 'off' in its nav-config. SITE_FEEDBACK_STAMP = sha256[:8] of js/site-feedback.js (the STRICT
   // site-feedback test fails when it is stale and prints the value). The file skips the signed-in tool routes itself.
-  var SITE_FEEDBACK_STAMP = 'df3ec53b';
+  var SITE_FEEDBACK_STAMP = '677a3664';
   function loadSiteFeedback() {
     try {
       if (SITE.siteFeedback === 'off' || document.querySelector('script[src*="site-feedback.js"]')) return;

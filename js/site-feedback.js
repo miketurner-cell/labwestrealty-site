@@ -74,7 +74,9 @@
       '.tsf-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;}' +
       '.tsf-thanks p{font-size:16px;line-height:1.5;margin:4px 40px 12px 0;font-weight:600;}' +
       '@media(max-width:1023px){.tsf-tab{bottom:calc(56px + 12px + env(safe-area-inset-bottom,0px));}' +
-        '.tsf-card{left:8px;right:8px;width:auto;max-width:none;bottom:calc(144px + env(safe-area-inset-bottom,0px));max-height:calc(100vh - 180px);}}' +
+        '.tsf-card{left:8px;right:8px;width:auto;max-width:none;bottom:calc(131px + env(safe-area-inset-bottom,0px));max-height:calc(100vh - 180px);}}' +
+      '@media(max-width:767px){.tsf-tab{left:18px;bottom:calc(56px + 15px + env(safe-area-inset-bottom,0px));width:44px;height:44px;min-height:44px;padding:0;justify-content:center;border-radius:50%;gap:0;}' +
+        '.tsf-tab .tsf-lbl{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}.tsf-tab svg{width:20px;height:20px;}}' +
       '@media print{.tsf-tab,.tsf-card{display:none;}}';
     document.head.appendChild(st);
   }
@@ -89,8 +91,8 @@
   function mount() {
     if (document.querySelector('.tsf-tab')) return;
     css();
-    var tab = el('button', { type: 'button', class: 'tsf-tab', 'aria-haspopup': 'dialog', 'aria-expanded': 'false', 'aria-label': 'Feedback: tell us what would make this site better' },
-      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Feedback');
+    var tab = el('button', { type: 'button', class: 'tsf-tab', 'aria-haspopup': 'dialog', 'aria-expanded': 'false', 'aria-label': 'Feedback' },
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="tsf-lbl">Feedback</span>');
     var card = el('div', { class: 'tsf-card', role: 'dialog', 'aria-labelledby': 'tsf-title', hidden: '' },
       '<button type="button" class="tsf-x" aria-label="Close feedback">&times;</button>' +
       '<form class="tsf-form" novalidate>' +
