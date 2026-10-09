@@ -112,7 +112,7 @@
     }).join('');
 
     return (
-      '<section class="turner-network" aria-label="Royal LePage Turner Realty office network">' +
+      '<section class="turner-network" aria-label="Royal LePage Turner Realty network">' +
         '<div class="turner-network-inner">' +
           '<div class="turner-network-lead">' +
             '<p class="turner-network-eyebrow">Royal LePage Turner Realty Network</p>' +
@@ -120,7 +120,7 @@
             '<p class="turner-network-sub">Serving buyers and sellers from the Avalon Peninsula to the Labrador coast. ' +
             'One brokerage, one standard of service.</p>' +
           '</div>' +
-          '<nav class="turner-network-grid" aria-label="Office sites">' +
+          '<nav class="turner-network-grid" aria-label="Network sites">' +
             cards +
           '</nav>' +
           '<p class="turner-network-meta">' +

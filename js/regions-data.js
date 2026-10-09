@@ -10,7 +10,7 @@ window.TURNER_REGIONS = {
     "label": "Avalon",
     "nav_label": "Avalon",
     "office": {
-      "address": "St. John's, NL",
+      "address": "",
       "email": "cmorrison@royallepage.ca",
       "name": "Royal LePage Turner Realty (Avalon)",
       "phone": "709-725-6520"
