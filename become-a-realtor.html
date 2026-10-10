@@ -53,7 +53,8 @@
     .lw .btn-outline:hover { border-color: #EA002A; color: #EA002A; }
     .lw section { padding: 96px 48px; }
     .lw .section-inner { max-width: 1100px; margin: 0 auto; }
-    .lw .section-eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #EA002A; margin-bottom: 12px; }
+    .lw .section-eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--red-text-tint, #ff4d6d); margin-bottom: 12px; }
+    .lw .section-eyebrow.on-light { color: var(--red-hover, #c8001f); }
     .lw .section-title { font-family: 'Raleway', sans-serif; font-weight: 900; font-size: clamp(26px, 3.5vw, 38px); color: #1a1a1a; margin: 0 0 16px; letter-spacing: -0.02em; }
     .lw .section-desc { font-size: 17px; color: #666; line-height: 1.75; max-width: 640px; margin-bottom: 48px; }
     /* 2026-10-09 (redesign): the three sections on the dark background carry white titles and a light description; the rule above was written for the light sections and made these titles near-invisible. */
@@ -81,7 +82,7 @@
     .lw .lwbr-hero { background: linear-gradient(135deg, #f8f8f8 0%, #fff 50%, #f5f5f5 100%); padding: 96px 48px 76px; text-align: center; position: relative; overflow: hidden; border-bottom: 3px solid #EA002A; }
     .lw .lwbr-hero::before { content: ''; position: absolute; inset: 0; opacity: 0.025; background: repeating-linear-gradient(90deg, #EA002A 0px, #EA002A 1px, transparent 1px, transparent 80px); }
     .lw .lwbr-hero-inner { max-width: 800px; margin: 0 auto; position: relative; z-index: 1; }
-    .lw .lwbr-badge { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: #EA002A; background: rgba(234,0,42,0.06); border: 1px solid rgba(234,0,42,0.15); padding: 8px 20px; border-radius: 24px; margin-bottom: 28px; }
+    .lw .lwbr-badge { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--red-hover, #c8001f); background: rgba(234,0,42,0.06); border: 1px solid rgba(234,0,42,0.15); padding: 8px 20px; border-radius: 24px; margin-bottom: 28px; }
     .lw .lwbr-hero h1 { font-family: 'Raleway', sans-serif; font-weight: 900; font-size: clamp(32px, 5vw, 52px); line-height: 1.12; margin: 0 0 20px; color: #1a1a1a; letter-spacing: -0.03em; }
     .lw .lwbr-hero h1 em { font-style: normal; color: #EA002A; }
     .lw .lwbr-hero p { font-size: clamp(16px, 2vw, 19px); color: #666; line-height: 1.7; margin: 0 auto 36px; font-weight: 300; max-width: 720px; }
@@ -112,7 +113,7 @@
     .lw .lwbr-costs td:first-child { color: #1a1a1a; font-weight: 500; }
     .lw .lwbr-costs td:nth-child(2) { color: #EA002A; font-weight: 700; white-space: nowrap; }
     .lw .lwbr-costs tr.lwbr-total td { background: #faf3f4; font-weight: 800; color: #1a1a1a; border-top: 2px solid #EA002A; }
-    .lw .lwbr-costs tr.lwbr-total td:nth-child(2) { color: #EA002A; }
+    .lw .lwbr-costs tr.lwbr-total td:nth-child(2) { color: var(--red-hover, #c8001f); }
     .lw .lwbr-muted { color: #999; font-size: 12.5px; }
     .lw .lwbr-costs-note { max-width: 920px; margin: 22px auto 0; font-size: 14.5px; color: #666; line-height: 1.75; text-align: center; }
     .lw .lwbr-costs-note strong { color: #1a1a1a; }
@@ -130,8 +131,8 @@
     .lw .lwbr-card h3 { font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 17px; color: #EA002A; margin: 0 0 10px; }
     .lw .lwbr-card p { font-size: 15px; color: #666; line-height: 1.7; margin: 0; }
     .lw .lwbr-center-link { text-align: center; margin-top: 44px; }
-    .lw .lwbr-center-link a { display: inline-block; color: #EA002A; text-decoration: none; font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 15px; border-bottom: 2px solid #EA002A; padding-bottom: 4px; transition: all .2s; }
-    .lw .lwbr-center-link a:hover { color: #1a1a1a; border-color: #1a1a1a; }
+    .lw .lwbr-center-link a { display: inline-block; color: var(--red-text-tint, #ff4d6d); text-decoration: none; font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 15px; border-bottom: 2px solid #EA002A; padding-bottom: 4px; transition: all .2s; }
+    .lw .lwbr-center-link a:hover { color: #fff; border-color: #fff; }
 
     /* Resources */
     .lw .lwbr-resources { background: #f7f7f7; }
@@ -272,7 +273,7 @@
   <!-- COSTS -->
   <section style="background:#f7f7f7;">
     <div class="section-inner" style="text-align:center;">
-      <div class="section-eyebrow">No Surprises</div>
+      <div class="section-eyebrow on-light">No Surprises</div>
       <h2 class="section-title" style="margin-bottom:16px;">What It Costs to Get Started</h2>
       <p class="section-desc" style="margin:0 auto 40px;">A realistic picture of the up-front investment to get licensed in NL. Figures are approximate and follow the standard salesperson path — we'll confirm the current amounts with you.</p>
       <div class="lwbr-costs">
@@ -317,7 +318,7 @@
   <!-- RESOURCES -->
   <section class="lwbr-resources">
     <div class="section-inner" style="text-align:center;">
-      <div class="section-eyebrow">Go to the Source</div>
+      <div class="section-eyebrow on-light">Go to the Source</div>
       <h2 class="section-title" style="margin-bottom:16px;">Official Resources</h2>
       <p class="section-desc" style="margin:0 auto 40px;">Want to go straight to the source? These are the official NL licensing links — and you can always call us to make sense of any of it.</p>
       <ul class="lwbr-res-list" style="text-align:left;">
