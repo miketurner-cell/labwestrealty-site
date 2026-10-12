@@ -139,7 +139,11 @@ jobs:
             echo "[PROJECT] skipped - idx-cache/listings.json absent"
           fi
 
-      - name: Regenerate listing pages (Labrador City + Wabush homes for sale, with sweep)
+      - name: Install the sold-listings shell (template -> listings/sold/index.html)
+        if: steps.change_gate.outputs.should_regen == 'true'
+        run: python3 tools/labwest-sold-shell.py
+
+      - name: Regenerate listing pages (Labrador City + Wabush homes for sale, sold pages, sweep)
         if: steps.change_gate.outputs.should_regen == 'true'
         working-directory: tools
         env:

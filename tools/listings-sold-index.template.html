@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!-- Google tag (gtag.js). Sold pages had none until 2026-10-05 (redesign slice 1), so
+     registrations completed here never reached GA. page_title is pinned: sold-detail.js
+     writes the sold price into document.title after sign-in, and the sold price (VOW,
+     CREA Rule 5(k)) must never go to a third party. GA only: the Meta Pixel
+     (analytics-events.js) stays off price-gated pages. The per-city sold pages are cloned
+     from this template, so they inherit it. -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=GT-M38MJCDZ"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('set',{page_title:'Sold Listings — Royal LePage Turner Realty'});gtag('config','GT-M38MJCDZ',{page_title:'Sold Listings — Royal LePage Turner Realty'});</script>
+<meta name="viewport" content="width=device-width,initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#EA002A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Lab West Realty">
+<meta name="robots" content="index,follow">
+<title>Sold Listings Labrador City & Wabush — Royal LePage Turner Realty</title>
+<link rel="canonical" href="https://labwestrealty.com/listings/sold/">
+<meta name="description" content="Search sold home prices across Labrador City & Wabush. Free registration required to view sold prices. Royal LePage Turner Realty.">
+<meta property="og:url" content="https://labwestrealty.com/listings/sold/">
+<meta property="og:title" content="Sold Listings Labrador City & Wabush — Royal LePage Turner Realty">
+<meta property="og:description" content="Search sold home prices across Labrador City & Wabush. Free registration required to view sold prices.">
+<meta property="og:image" content="https://labwestrealty.com/images/og/pages-sold-listing-search-og.jpg">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Sold Listings Labrador City & Wabush — Royal LePage Turner Realty">
+<meta name="twitter:description" content="Search sold home prices across Labrador City & Wabush. Free registration required to view sold prices.">
+<meta name="twitter:image" content="https://labwestrealty.com/images/og/pages-sold-listing-search-og.jpg">
+
+<!-- Schema.org paywall-content markup. Per Google's documentation
+     (https://developers.google.com/search/docs/appearance/structured-data/paywalled-content)
+     the `isAccessibleForFree: false` + `hasPart.cssSelector` pattern
+     declares the content as gated so Google understands the registration
+     flow and does not flag the page as soft-404 or thin content.
+
+     Compliance basis: Angie Liang (NLAR) email thread 19e08d5a1f73f7b3
+     2026-05-11. NLAR Rules & Regulations October 2025 treat IDX/VOW
+     displays as advertising/public-facing with attribution + brokerage
+     name + MLS# requirements. Mike's directive 2026-05-12: gate stays
+     for the sold-price reveal, but Google can index the page metadata.
+     Source: Mike Turner. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Sold Listings Labrador City & Wabush",
+  "url": "https://labwestrealty.com/listings/sold/",
+  "description": "Search sold home prices across Labrador City & Wabush. Free registration required to view sold prices.",
+  "isAccessibleForFree": false,
+  "hasPart": {
+    "@type": "WebPageElement",
+    "isAccessibleForFree": false,
+    "cssSelector": ".sold-data-gated"
+  },
+  "publisher": {
+    "@type": "RealEstateAgent",
+    "name": "Royal LePage Turner Realty",
+    "url": "https://labwestrealty.com/",
+    "telephone": "709-256-7999"
+  }
+}
+</script>
+
+<style>
+:root {
+  --bg: #0e0e10;
+  --panel: #18181b;
+  --border: #2a2a2e;
+  --text: #e6e6e6;
+  --text-dim: #a0a0a8;
+  --accent: #EA002A;
+  --accent-2: #1976d2;
+  --good: #2e7d32;
+  --bad: #c62828;
+  --r: 8px;
+  --topbar-h: 88px;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text);
+             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+/* Mobile UX fixes 2026-05-19 — defensive horizontal-scroll guard.
+   A stray long MLS attribution line or wide table could push horizontal
+   overflow on narrow viewports. body overflow-x: hidden contains it.
+   Use body (not html) so position:sticky still resolves correctly on iOS
+   Safari (which gets confused when overflow is applied to html). */
+body { overflow-x: hidden; }
+a { color: inherit; }
+
+/* ============== VOW GATE OVERLAY ============== */
+.vow-gate {
+  position: fixed; inset: 0; background: rgba(14,14,16,0.95);
+  display: flex; align-items: center; justify-content: center; z-index: 9999;
+  backdrop-filter: blur(4px); padding: 20px;
+}
+.vow-card {
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 32px;
+  width: 100%; max-width: 480px; max-height: 92vh; overflow-y: auto;
+  max-height: calc(100dvh - 32px); -webkit-overflow-scrolling: touch; /* 2026-09-16: iOS toolbar clipped the 92vh card */
+}
+.vow-card h2 { margin: 0 0 8px; font-size: 22px; }
+.sold-public { max-width: 1280px; margin: 48px auto 0; padding: 0 24px; }
+.sold-public h2 { font-size: clamp(22px, 3vw, 30px); margin: 0 0 10px; }
+.sold-public-intro, .sold-public-note { color: var(--text-dim); font-size: 14px;
+  line-height: 1.6; max-width: 70ch; margin: 0 0 18px; }
+.sold-public-note { margin: 14px 0 0; }
+.sold-public-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.sold-public-table th, .sold-public-table td { text-align: left; padding: 9px 10px;
+  border-bottom: 1px solid var(--border); vertical-align: top; }
+.sold-public-table th { color: var(--text-dim); font-size: 12px;
+  text-transform: uppercase; letter-spacing: .5px; font-weight: 600; }
+.sold-public-table a { color: inherit; text-decoration: underline; }
+.sold-public-table a:hover { color: var(--accent); }
+.sold-public-city { display: block; color: var(--text-dim); font-size: 12px; }
+@media (max-width: 640px) {
+  .sold-public { padding: 0 16px; }
+  .sold-public-table { font-size: 13px; }
+  .sold-public-table th:nth-child(4), .sold-public-table td:nth-child(4),
+  .sold-public-table th:nth-child(5), .sold-public-table td:nth-child(5) { display: none; }
+}
+.vow-card .vow-sub { color: var(--text-dim); font-size: 14px; margin: 0 0 20px; line-height: 1.5; }
+.vow-form-row { display: flex; gap: 10px; margin-bottom: 12px; }
+.vow-form-row > div { flex: 1; }
+.vow-card label { display: block; color: var(--text-dim); font-size: 12px;
+                  text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
+.vow-card input[type=text], .vow-card input[type=email] {
+  width: 100%; padding: 12px 14px; border: 1px solid var(--border);
+  border-radius: 6px; background: var(--bg); color: var(--text); font-size: 16px;
+  font-family: inherit;
+  /* font-size 16px prevents iOS Safari auto-zoom on focus.
+     padding 12px×14px provides comfortable tap target. */
+}
+.vow-card input:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+.vow-consent { display: flex; gap: 10px; padding: 12px; background: var(--bg);
+               border: 1px solid var(--border); border-radius: 6px; margin: 16px 0;
+               font-size: 13px; line-height: 1.5; align-items: flex-start; }
+.vow-consent input[type=checkbox] { margin-top: 3px; flex-shrink: 0;
+                                    accent-color: var(--accent); width: 18px; height: 18px; }
+.vow-consent label { color: var(--text); font-size: 13px;
+                     text-transform: none; letter-spacing: 0; margin: 0; }
+.vow-submit {
+  width: 100%; padding: 14px; border: 0; border-radius: 6px;
+  background: var(--accent); color: #fff; font-weight: 600; font-size: 16px;
+  cursor: pointer; font-family: inherit;
+  /* 14px padding + 16px font yields ~48px touch target (Apple HIG: 44px+).
+     16px font ALSO prevents iOS Safari zoom on focus when keyboard takes
+     focus from a preceding text input. */
+  min-height: 48px;
+}
+.vow-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+.vow-error { color: var(--bad); font-size: 13px; min-height: 18px; margin-top: 6px; }
+.vow-fineprint { color: var(--text-dim); font-size: 11px; margin-top: 16px; line-height: 1.5; }
+
+/* ============== MAIN PAGE ============== */
+.page { max-width: 1280px; margin: 0 auto; padding: 24px 24px 80px;
+        display: none; }
+.page.live { display: block; }
+.topbar { display: flex; align-items: baseline; justify-content: space-between;
+          border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 24px;
+          flex-wrap: wrap; gap: 8px; }
+.topbar h1 { margin: 0; font-size: 24px; }
+.topbar .meta { color: var(--text-dim); font-size: 13px; }
+.user-strip { display: flex; gap: 12px; align-items: center; font-size: 13px;
+              color: var(--text-dim); }
+.user-strip button { background: transparent; border: 1px solid var(--border);
+                     color: var(--text-dim); padding: 4px 10px; border-radius: 4px;
+                     cursor: pointer; font-size: 12px; }
+
+.filter-toggle { display: none; }
+@media (max-width: 1023px) {
+  /* Mobile: collapse the filter rail behind a "Filters" button so sold
+     listings are visible immediately (default collapsed). Ported from
+     Gander's sold hub (#134 mobile fix 2026-05-29, 3-pane shell 2026-08-06)
+     by the site worker 2026-09-28: the markup + js/sold-listings.js toggle
+     were already here, only this CSS was missing, so phones got an
+     unstyled "Filters" button and an always-open filter wall. (The removed
+     .layout rule matched no element.) */
+  .filter-rail { position: static; padding: 0; border: none; background: transparent; }
+  .filter-rail h2 { display: none; }
+  .filter-toggle { display: flex; align-items: center; justify-content: space-between;
+    gap: 8px; width: 100%; padding: 13px 15px; background: var(--panel);
+    color: var(--text); border: 1px solid var(--border); border-radius: 8px;
+    font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; }
+  .filter-toggle .filter-toggle-caret { transition: transform .15s ease; font-size: 12px; }
+  .filter-rail:not(.open) > *:not(.filter-toggle) { display: none; }
+  .filter-rail.open { padding: 16px; border: 1px solid var(--border); background: var(--panel); }
+  .filter-rail.open > .filter-toggle { margin-bottom: 14px; }
+}
+
+/* Smart search bar (ported from Gander 2026-09-28; the input was unstyled
+   here). 16px font + 10x14 padding = iOS-zoom-safe, ~44px target. */
+.sold-search-wrap { margin-bottom: 16px; }
+.sold-search { width: 100%; padding: 10px 14px; border: 1px solid var(--border);
+  border-radius: 6px; background: var(--bg); color: var(--text); font-size: 16px;
+  font-family: inherit; }
+.sold-search:focus { outline: none; border-color: var(--accent); }
+.sold-search::placeholder { color: var(--text-dim); }
+
+/* Filter rail */
+.filter-rail { background: var(--panel); border: 1px solid var(--border);
+               border-radius: var(--r); padding: 16px; position: sticky; top: 16px; }
+.filter-rail h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .5px;
+                  color: var(--text-dim); margin: 0 0 16px; }
+.filter-group { margin-bottom: 18px; }
+.filter-group h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .5px;
+                   color: var(--text-dim); margin: 0 0 8px; }
+.chip-set { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { background: transparent; border: 1px solid var(--border); color: var(--text-dim);
+        padding: 4px 10px; border-radius: 999px; font-size: 12px; cursor: pointer;
+        font-family: inherit; }
+.chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.filter-rail select, .filter-rail input[type=text] {
+  width: 100%; padding: 10px 12px; border: 1px solid var(--border);
+  border-radius: 6px; background: var(--bg); color: var(--text); font-size: 16px;
+  font-family: inherit;
+  /* 16px prevents iOS Safari auto-zoom when user taps the city dropdown or
+     search box. 10×12 padding yields ~42px height which is right at the
+     Apple HIG 44px target with the border. */
+}
+.clear-btn { width: 100%; padding: 8px; border: 1px solid var(--border); background: transparent;
+             color: var(--text-dim); border-radius: 6px; cursor: pointer; font-size: 12px;
+             margin-top: 8px; font-family: inherit; }
+.clear-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Card list */
+.cards-section h2 { font-size: 14px; color: var(--text-dim); font-weight: 600;
+                    text-transform: uppercase; letter-spacing: .5px; margin: 0 0 12px; }
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+             gap: 16px; }
+.sold-card-link { text-decoration: none; color: inherit; display: block; }
+.sold-card-link:hover .sold-card { border-color: var(--accent); }
+.sold-card-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.sold-card { background: var(--panel); border: 1px solid var(--border);
+             border-radius: var(--r); overflow: hidden; transition: border-color .2s; }
+/* Image area — top of card. Aspect 3:2 matches /listings/discover/ pattern
+ * (Convention #15 visual symmetry across consumer surfaces). Photo URLs
+ * not yet populated in tools/idx-cache/sold-listings.json — RETS feed
+ * gives PhotoCount + PhotoModificationTimestamp but not URLs (those need
+ * GetObject calls or a Matrix public-URL pattern from NLAR). Until that
+ * lands, every card shows the fallback placeholder. When emit_sold_data
+ * starts emitting r.photo, every card lights up automatically. */
+.sold-card-img { aspect-ratio: 3 / 2; background: #0a0a0a;
+                 overflow: hidden; position: relative; }
+.sold-card-img img { width: 100%; height: 100%;
+                     object-fit: cover; display: block;
+                     transition: transform .4s; }
+.sold-card:hover .sold-card-img img { transform: scale(1.04); }
+.sold-card-img-fallback { position: absolute; inset: 0;
+                          display: flex; align-items: center; justify-content: center;
+                          color: rgba(255, 255, 255, 0.25);
+                          font-weight: 800; font-size: 13px;
+                          letter-spacing: 1.5px; text-transform: uppercase;
+                          background: linear-gradient(135deg, #1a1a1a, #0f0f0f); }
+.sold-badge { position: absolute; top: 10px; left: 10px; background: var(--accent);
+              color: #fff; padding: 4px 10px; border-radius: 4px;
+              font-size: 11px; font-weight: 700; text-transform: uppercase;
+              letter-spacing: .5px; z-index: 2; }
+.sold-badge.sold-badge-pending { background: #d97706; }  /* amber — firm pending */
+.sold-card-body { padding: 14px; }
+.sold-price { font-size: 22px; font-weight: 700; margin: 0 0 4px; }
+.sold-price-sub { display: flex; gap: 8px; font-size: 12px; color: var(--text-dim);
+                  align-items: center; flex-wrap: wrap; margin-bottom: 8px; }
+.sold-price-sub .ratio-good { color: var(--good); font-weight: 600; }
+.sold-price-sub .ratio-bad { color: var(--bad); font-weight: 600; }
+.sold-price-sub .ratio-pending { color: #d97706; font-weight: 600; }  /* amber — firm pending */
+.sold-address { font-size: 14px; line-height: 1.4; margin: 0 0 4px; }
+.sold-meta { font-size: 12px; color: var(--text-dim); margin: 0; }
+.sold-card-tag { display: inline-block; padding: 2px 8px; background: var(--bg);
+                 border: 1px solid var(--border); border-radius: 4px; font-size: 11px;
+                 color: var(--text-dim); }
+
+.results-header { display: flex; justify-content: space-between; align-items: center;
+                  margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
+.sort-set { display: flex; gap: 6px; }
+.empty-state { padding: 60px 24px; text-align: center; color: var(--text-dim); }
+
+/* Active-filter banner (Ship 3, 2026-05-17 — wires per-agent widget
+   click-through filters). Visible only when ?team= or ?agent= is on URL. */
+#sold-active-filter {
+  margin: 0 0 16px 0;
+  background: #1a1a1a;
+  border-left: 3px solid #EA002A;
+  border-radius: 4px;
+  padding: 12px 16px;
+}
+.sold-active-filter-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.sold-active-filter-label {
+  font-family: "Roboto", sans-serif;
+  font-size: 0.92rem;
+  color: #e6e6e6;
+}
+.sold-active-filter-label strong { color: #fff; font-weight: 700; }
+.sold-active-filter-clear {
+  background: transparent;
+  color: #EA002A;
+  border: 1px solid #EA002A;
+  border-radius: 4px;
+  padding: 4px 12px;
+  font-family: "Roboto", sans-serif;
+  font-size: 0.82rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.sold-active-filter-clear:hover { background: #EA002A; color: #fff; }
+
+.load-more { display: block; width: 100%; margin: 32px auto 0; padding: 12px 24px;
+             background: var(--accent); color: #fff; border: 0; border-radius: 6px;
+             font-weight: 600; cursor: pointer; font-size: 14px; font-family: inherit;
+             max-width: 320px; }
+
+    /* VOW Synthesis Ship #1 — per-agent link on sold cards (Hemnet pattern).
+       Card wrapper is <a class="sold-card-link"> so the agent link is
+       a <span role="link"> handled by event delegation in
+       js/sold-listings.js:setupAgentLinkDelegation(). */
+    .sold-card-agent {
+      font-family: "Roboto", sans-serif;
+      font-weight: 300;
+      font-size: 0.92rem;
+      color: #b8b8b8;
+      margin: 6px 0 4px;
+      line-height: 1.4;
+    }
+    .sold-card-agent-link {
+      color: #EA002A;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(234, 0, 42, 0.3);
+      transition: border-color 0.15s ease, color 0.15s ease;
+    }
+    .sold-card-agent-link:hover,
+    .sold-card-agent-link:focus-visible {
+      color: #ff4d6d;
+      border-bottom-color: #ff4d6d;
+      outline: none;
+    }
+    .sold-card-agent-link:focus-visible {
+      outline: 2px solid rgba(234, 0, 42, 0.5);
+      outline-offset: 2px;
+      border-radius: 2px;
+    }
+  
+/* Batch C (2026-08-05): seller-intent CTAs on /listings/sold/ -- ported
+   from build_viewpoint_page's .vp-hvcta / .vp-office (VIEWPOINT_CSS,
+   /property/ pages). This page loads its OWN inline style block above, not
+   viewpoint.css, so the rules travel with the markup (Convention #91 --
+   a bare class here would render unstyled). Free propagation: this file
+   is the TEMPLATE emit_sold_city_rollups() reads for every per-city
+   rollup, so both blocks land on ~121 pages with zero generator change. */
+.sc-hvcta { background:#faf7f8; border:1px solid #f3d4d8; border-radius:12px;
+  padding:18px 20px; margin:24px 0; display:flex; align-items:center;
+  justify-content:space-between; flex-wrap:wrap; gap:10px; }
+.sc-hvcta-h { font-weight:700; color:#1f1f1f; }
+.sc-hvcta-link { color:#EA002A; font-weight:700; text-decoration:none; }
+.sc-hvcta-link:hover { text-decoration:underline; }
+.sc-office { border:1px solid #e3e3e6; border-radius:10px; padding:20px 22px;
+  margin:0 0 24px; background:#fff; }
+.sc-office-h { font-weight:700; font-size:.95rem; color:#1a1a1a; margin-bottom:4px; }
+.sc-office-sub { color:#6a6a72; font-size:.82rem; margin-bottom:14px; }
+.sc-office-actions { display:flex; gap:10px; flex-wrap:wrap; }
+.sc-office-call { display:inline-block; background:#EA002A; color:#fff;
+  text-decoration:none; font-weight:600; font-size:.9rem; padding:11px 20px;
+  border-radius:6px; }
+.sc-office-call:hover { background:#c8001f; }
+.sc-office-msg { display:inline-block; border:1px solid #c9c9ce; color:#333;
+  text-decoration:none; font-weight:600; font-size:.9rem; padding:11px 20px;
+  border-radius:6px; }
+.sc-office-msg:hover { border-color:#EA002A; color:#EA002A; }
+@media (max-width:480px){ .sc-office-actions a { flex:1 1 100%;
+  text-align:center; display:block; } }
+  </style>
+
+<!-- Site nav + footer + CREA disclaimer styles inherit from main + turner-network -->
+<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/css/turner-network.css">
+<link rel="stylesheet" href="/css/favorites.css">
+<link rel="stylesheet" href="/css/auth.css">  <!-- Batch A3: sold-alerts opt-in reuses saved-search.js's toast/modal, styled here -->
+<link rel="stylesheet" href="/css/sold-discover.css">  <!-- Map-search redesign, ported from Gander/Avalon 2026-08-07 -->
+
+<!-- fub-pixel:v1 -->
+<!-- begin Widget Tracker Code -->
+<script>
+(function(w,i,d,g,e,t){w["WidgetTrackerObject"]=g;(w[g]=w[g]||function() {(w[g].q=w[g].q||[]).push(arguments);}),(w[g].ds=1*new Date());(e="script"), (t=d.createElement(e)),(e=d.getElementsByTagName(e)[0]);t.async=1;t.src=i; e.parentNode.insertBefore(t,e);}) (window,"https://widgetbe.com/agent",document,"widgetTracker"); window.widgetTracker("create", "WT-ZOUGZFEJ"); window.widgetTracker("send", "pageview");
+</script>
+<!-- end Widget Tracker Code -->
+<!-- /fub-pixel:v1 -->
+</head>
+<body>
+
+<!-- Standard Turner Realty nav (mirrors /listings/discover/index.html) -->
+<a href="#main-content" class="skip-nav" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">Skip to content</a>
+<div class="nav-top-bar"></div>
+<nav class="nav-main-bar"></nav>
+
+<!-- VOW gate overlay -->
+<div class="vow-gate" id="vow-gate">
+  <div class="vow-card" id="vow-register">
+    <h2>NL Sold Prices — Free Access</h2>
+    <p class="vow-sub">
+      Newfoundland &amp; Labrador is one of the few markets where sold prices
+      stay private. See the same data REALTORS&reg; use to price homes &mdash;
+      register once, then browse the full sold archive across Labrador West
+      and across Newfoundland. Free.
+    </p>
+
+    <!-- vow-gate.js replaces this innerHTML unconditionally on load
+         (see js/vow-gate.js:renderSignIn) -- this is a no-JS fallback only,
+         deliberately with no form/consent surface of its own (Conv #32,
+         2026-08-05: the old Netlify Forms fallback asked for name + a
+         REQUIRED consent checkbox, a different and stricter posture than
+         the real optional/never-pre-checked one vow-gate.js renders). -->
+    <noscript>
+      <p class="vow-sub">Please enable JavaScript to sign in and view sold listings &mdash; this page uses a one-time email link, so no separate account or password is needed.</p>
+    </noscript>
+  </div>
+</div>
+
+<!-- Main page (revealed after VOW gate) -->
+<div class="page" id="page">
+  <div class="topbar">
+    <div>
+      <h1>Sold Listings</h1>
+      <div class="meta" id="meta-strip">Loading…</div>
+    </div>
+    <div class="user-strip" id="user-strip"></div>
+  </div>
+
+  <!-- Same status-row control as the unified /listings/ search
+       (Mike, 2026-08-07: "the same thing for the sold that just
+       starts at the sold listings"). This page IS the sold view,
+       so Sold is pre-active; For Sale/Both are real navigations
+       into the unified engine rather than a second copy of its
+       fetch/render/filter logic bolted onto this VOW-gated shell. -->
+  <nav class="ldisc-status-row" role="group" aria-label="Listing status">
+    <a href="/listings/">For Sale</a>
+    <a href="#" class="ldisc-active" aria-current="page" onclick="return false;">Sold</a>
+    <a href="/listings/">Both</a>
+  </nav>
+
+  <div class="sold-shell sold-data-gated" id="sold-shell">
+    <aside class="filter-rail">
+      <button type="button" id="filter-toggle" class="filter-toggle" aria-expanded="false" aria-controls="filter-rail">
+        <span id="filter-toggle-label">Filters</span>
+        <span class="filter-toggle-caret" aria-hidden="true">&#9662;</span>
+      </button>
+      <h2>Filters</h2>
+
+      <div class="filter-group">
+        <h3>Sold within</h3>
+        <div class="chip-set" id="chip-recency">
+          <button class="chip" data-recency="3m">3 mo</button>
+          <button class="chip" data-recency="6m">6 mo</button>
+          <button class="chip" data-recency="1y">1 yr</button>
+          <button class="chip active" data-recency="2y">2 yr</button>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <h3>Property type</h3>
+        <div class="chip-set" id="chip-ptype">
+          <button class="chip active" data-ptype="">All</button>
+          <button class="chip" data-ptype="Residential">House</button>
+          <button class="chip" data-ptype="Lots">Land</button>
+          <button class="chip" data-ptype="Commercial">Commercial</button>
+        </div>
+      </div>
+
+      <div class="filter-group sold-area-group" id="area-group">
+        <h3>Area</h3>
+        <select id="area-select"><option value="">All areas</option></select>
+      </div>
+
+      <button class="clear-btn" id="clear-filters">Clear all filters</button>
+    </aside>
+
+    <main class="cards-section" id="main-content">
+      <form class="sold-search-wrap" id="sold-search-form" role="search">
+        <input class="sold-search" id="sold-search-input" type="search"
+               placeholder="MLS#, address, street, or community"
+               aria-label="Search sold listings by MLS number, address, street, or community"
+               autocomplete="off" inputmode="search">
+      </form>
+      <div class="results-header">
+        <h2 id="result-count">— sold</h2>
+        <div class="sort-set" id="chip-sort">
+          <button class="chip active" data-sort="date-desc">Newest sold</button>
+          <button class="chip" data-sort="price-desc">Price &darr;</button>
+          <button class="chip" data-sort="price-asc">Price &uarr;</button>
+        </div>
+        <button type="button" class="sold-view-btn" id="sold-view-btn" aria-label="Switch to map view" aria-pressed="false">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+          Map
+        </button>
+      </div>
+
+      <!--
+        Per-agent widget click-through banner (Ship 3, 2026-05-17).
+        When ?team= or ?agent= is set on URL, js/sold-listings.js populates
+        this with "Filtered by X — clear" so consumers see why the result
+        set is narrow + can release without finding the Clear-all button.
+        Convention #74 fail-safe — empty when no URL filter is active.
+      -->
+      <div id="sold-active-filter" style="display:none;"></div>
+
+      <div class="card-grid" id="card-grid"></div>
+
+      <div class="empty-state" id="empty-state" style="display:none;">
+        No sold listings match your filters. Try widening the date range, removing filters, or panning/zooming out on the map.
+      </div>
+
+      <button class="load-more" id="load-more" style="display:none;">Load more</button>
+    </main>
+
+    <!-- Map pane (redesigned 2026-08-06 on Gander, ported here 2026-08-07)
+         to sit always-visible beside the cards on desktop. Same pinned
+         Leaflet + MarkerCluster CDN as the active /listings/ discovery
+         shell -- see the CDN block near the bottom of this file. -->
+    <aside class="sold-map-pane" id="sold-map-pane" aria-label="Map of sold listings">
+      <div id="sold-map" role="application" aria-label="Map of sold listings"></div>
+
+      <!-- Mobile-only escape hatches (mirrors the active shell's Chris
+           Morrison mobile fix, 2026-04-27) + all-breakpoint Recenter. -->
+      <div class="sold-map-overlay-actions" aria-label="Map controls">
+        <button type="button" class="sold-map-exit" aria-label="Exit map view">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
+          Exit Map
+        </button>
+        <button type="button" class="sold-map-filters" aria-label="Open filters">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M3 6h18"/><path d="M7 12h10"/><path d="M11 18h2"/></svg>
+          Filters
+        </button>
+      </div>
+
+      <button type="button" class="sold-map-recenter" aria-label="Recenter map">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="3"/><path d="M12 2v3"/><path d="M12 19v3"/><path d="M2 12h3"/><path d="M19 12h3"/></svg>
+      </button>
+      <!-- The list auto-updates as the map is panned/zoomed -- see
+           js/sold-listings.js's moveend handler in initSoldMap(). -->
+
+      <noscript>
+        <div class="sold-map-noscript">
+          <p><strong>Map requires JavaScript</strong></p>
+          <p>Browse sold listings in the list, or enable JavaScript to use the map.</p>
+        </div>
+      </noscript>
+    </aside>
+  </div>
+</div>
+
+<!-- Crawler-visible recent sales. OUTSIDE #page on purpose: .page is
+     display:none until the gate passes, so anything inside it is discounted.
+     Ungated fields only (address / sold date / asking price / days on market /
+     beds-baths-type) — per Mike's 2026-05-18 T&C reading, the final sold
+     price is the only field CREA Rule 5(k) requires behind registration. The
+     generator rewrites everything between these markers on every run;
+     hand-edits inside them are wiped. -->
+<!-- SOLD_PUBLIC_RECORDS:BEGIN -->
+<!-- SOLD_PUBLIC_RECORDS:END -->
+
+<div class="sc-office">
+  <div class="sc-office-h">Questions about buying or selling in Labrador West?</div>
+  <div class="sc-office-sub">Royal LePage Turner Realty &middot; Labrador City &amp; Wabush</div>
+  <div class="sc-office-actions">
+    <a class="sc-office-call" href="tel:7092567999">Call 709-256-7999</a>
+    <a class="sc-office-msg" href="mailto:miketurner@royallepage.ca">Email Mike</a>
+  </div>
+</div>
+
+<!-- CREA Rule 6(c)(i) trademark + DDR disclaimer (lst-ddr satisfies pre-deploy Check #9 in lieu of crea-compliance:v1 sentinel) -->
+<aside class="lst-ddr" style="background:#0a0a0a;color:#a0a0a8;padding:24px;font-size:12px;line-height:1.5;border-top:1px solid var(--border);margin-top:48px;">
+  <p style="max-width:1200px;margin:0 auto;">
+    The trademarks REALTOR®, REALTORS®, and the REALTOR® logo are controlled by The Canadian Real Estate Association (CREA) and identify real estate professionals who are members of CREA. The trademarks MLS®, Multiple Listing Service® and the associated logos are owned by CREA and identify the quality of services provided by real estate professionals who are members of CREA. The information contained on this site is based in whole or in part on information that is provided by members of The Canadian Real Estate Association, who are responsible for its accuracy. CREA reproduces and distributes this information as a service for its members and assumes no responsibility for its accuracy.
+    <br><br>
+    <strong>Sold listing data</strong> is provided under CREA's Virtual Office Website (VOW) rules and the NLAR IDX/VOW feed agreement. Access requires consumer registration and agent-consent acknowledgment.
+  </p>
+</aside>
+
+<!-- Lab West footer (Mike Turner, Broker of Record; no office address) -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <img loading="lazy" src="/images/rlp-logo.png" alt="Royal LePage Turner Realty" width="80">
+      <p>Mike Turner, Broker of Record<br>Royal LePage Turner Realty<br><a href="tel:7092567999">709-256-7999</a> &middot; <a href="mailto:miketurner@royallepage.ca">miketurner@royallepage.ca</a></p>
+    </div>
+    <div>
+      <div class="footer-heading">Quick Links</div>
+      <ul class="footer-links">
+        <li><a href="/index.html">Home</a></li>
+        <li><a href="/listings/">Homes for Sale</a></li>
+        <li><a href="/labrador-west.html">Labrador West Market</a></li>
+        <li><a href="/contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 1998&ndash;2026 Royal LePage Turner Realty (2014) Inc. &middot; Est. 1998. Serving Newfoundland &amp; Labrador.</p>
+    <p>Each office independently owned and operated. Not intended to solicit buyers or sellers currently under contract.</p>
+  </div>
+<!-- crea-compliance:v1 -->
+<aside class="crea-compliance" role="contentinfo" aria-label="REALTOR and MLS trademark statement">
+  <p>The information contained on this page is based in whole or in part on information that is provided by members of The Canadian Real Estate Association, who are responsible for its accuracy. CREA reproduces and distributes this information as a service for its members and assumes no responsibility for its accuracy. Royal LePage Turner Realty (2014) Inc. is a member of The Canadian Real Estate Association.</p>
+  <p>REALTOR®, REALTORS®, and the REALTOR® logo are certification marks owned or controlled by The Canadian Real Estate Association (CREA) and identify real estate professionals who are members of CREA. The trademarks MLS®, Multiple Listing Service®, and the associated logos identify professional services rendered by REALTOR® members of CREA to effect the purchase, sale and lease of real estate as part of a cooperative selling system.</p>
+</aside>
+<!-- /crea-compliance:v1 -->
+</footer>
+
+<!-- Supabase JS SDK (PHASE B1 auth ship 2026-05-19). Loads global `supabase`
+     used by /js/auth.js to construct the TurnerAuth singleton. Pinned to
+     v2 major. Subresource integrity not pinned because Supabase ships
+     dot-releases under the same v2 major bucket. -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
+<script src="/js/auth.js" defer></script>
+<script src="/js/vow-gate.js" defer></script>
+<!-- Batch A3 (2026-08-05): sold-alerts opt-in banner. TURNER_SITE must be set
+     explicitly here — this page never loads turner-network.js, so
+     saved-search.js's site_id derivation would otherwise silently default
+     to realestategander on every site. -->
+<script>window.TURNER_SITE = 'labwest';</script>
+<script src="/js/saved-search.js" defer></script>
+<script src="/js/sold-alerts-optin.js" defer></script>
+<!-- Labrador City + Wabush initial viewport. No cage. -->
+<script>window.SOLD_MARKET = {
+  bounds: [[52.80, -67.10], [53.05, -66.70]],
+  minZoom: 8, maxZoom: 18
+};</script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" integrity="sha384-pmjIAcz2bAn0xukfxADbZIb3t8oRT9Sv0rvO+BR5Csr6Dhqq+nZs59P0pPKQJkEV" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" integrity="sha384-wgw+aLYNQ7dlhK47ZPK7FRACiq7ROZwgFNg0m04avm4CaXS+Z9Y7nMu8yNjBKYC+" crossorigin="anonymous">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin="anonymous" defer></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js" integrity="sha384-eXVCORTRlv4FUUgS/xmOyr66XBVraen8ATNLMESp92FKXLAMiKkerixTiBvXriZr" crossorigin="anonymous" defer></script>
+<script src="/js/sold-listings.js" defer></script>
+<script src="/js/favorites.js" defer></script>
+<script src="/js/regions-data.js" defer></script>
+<script src="/js/nav-config.js" defer></script>
+<script src="/js/nav-config-listings.js" defer></script>
+<script src="/js/nav.js" defer></script>
+</body>
+</html>

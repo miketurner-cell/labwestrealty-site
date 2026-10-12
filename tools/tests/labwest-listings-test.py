@@ -36,6 +36,7 @@ if (ROOT / "listings").is_dir():
     print("A. off proof: skipped (listings/ is committed: the switch has been flipped)")
 else:
     check(not (ROOT / "property").exists(), "A: property/ exists while the switch has never been on")
+    check("sold-data" not in (ROOT / "_redirects").read_text(), "A: _redirects routes sold data while off")
     for sm in ("sitemap-listings.xml", "sitemap-property.xml"):
         check(not (ROOT / sm).exists(), f"A: {sm} exists while off")
     idx = (ROOT / "sitemap-index.xml").read_text()
@@ -60,9 +61,16 @@ try:
     cache = work / "tools" / "idx-cache"
     cache.mkdir(parents=True, exist_ok=True)
     (cache / "listings.json").write_text(json.dumps({"fetched_at": "2026-10-12T18:00:00Z", "rows": rows}))
+    # sold cache: Lab West sales plus filler rows so it clears the generator's 1 MB suspect-cache floor (the real cache is the whole board)
+    sold_rows = json.loads((ROOT / "tools/tests/fixtures/labwest-sold-rows.json").read_text())["rows"]
+    filler = [dict(sold_rows[2], MLSNumber=str(1000000 + i), StreetName="Filler", CityText="Gander", PostalCode="A1V 1L6",
+                   Subdistrict="Gander and Area", Latitude="48.95", Longitude="-54.6", PublicRemarks="x" * 400) for i in range(4000)]
+    (cache / "sold-listings.json").write_text(json.dumps({"fetched_at": "2026-10-12T00:00:00Z", "rows": sold_rows + filler}))
     env = {"PATH": os.environ.get("PATH", "/usr/bin:/bin"), "R2_BASE_URL": "https://photos.example.test"}
     r = subprocess.run([sys.executable, "tools/idx-project-to-ddf-shape.py"], cwd=work, env=env, capture_output=True, text=True)
     check(r.returncode == 0, f"B: projector failed: {r.stderr[-300:]}")
+    r = subprocess.run([sys.executable, "tools/labwest-sold-shell.py"], cwd=work, env=env, capture_output=True, text=True)
+    check(r.returncode == 0, f"B: sold shell install failed: {r.stderr[-200:]}")
     r = subprocess.run([sys.executable, "tools/ddf-generate-pages.py"], cwd=work, env=env, capture_output=True, text=True)
     check(r.returncode == 0, f"B: generator failed (exit {r.returncode}): {(r.stdout + r.stderr)[-600:]}")
     check("self-check passed" in r.stdout, "B: the generator's own listings pre-deploy self-check did not pass")
@@ -106,6 +114,21 @@ try:
             else:
                 check(False, "B: no listingAgent JSON-LD on a detail page")
 
+    # sold surface: ungated facts only, no sold price anywhere in any generated file (CREA 5(k) / VOW)
+    gen_files = [p for d in ("listings", "property") for p in (work / d).rglob("*") if p.is_file() and p.suffix in (".html", ".json", ".xml")]
+    blob = "\n".join(p.read_text(encoding="utf-8", errors="ignore") for p in gen_files)
+    for sr in sold_rows:
+        cp = int(float(sr["ClosePrice"]))
+        check(str(cp) not in blob.replace(",", "") or str(cp) in {str(int(float(x["ListPrice"]))) for x in sold_rows}, f"B: a sold price ({cp}) appears in a generated file")
+    check(not re.search(r'"close_price"|"sold_price"|"sa_ratio"', blob), "B: a sold-price key reached a generated file")
+    sold_index = (work / "listings" / "sold" / "index.html").read_text()
+    check("sold-public-table" in sold_index and "/property/labrador-city/" in sold_index, "B: the sold index must list recent sales with property links")
+    check("Hamilton" not in sold_index and "Goose" not in sold_index and "896-5001" not in sold_index, "B: Goose Bay text in the sold shell")
+    check(len(list((work / "property").rglob("*.html"))) >= 20, "B: too few property (sold record) pages")
+    sdata = json.loads((work / "listings" / "sold" / "data.json").read_text())
+    check(len(sdata["rows"]) == 28, f"B: sold data.json should hold the 28 published in-scope sales, has {len(sdata['rows'])}")
+    check(all(r.get("city_slug") in ("labrador-city", "wabush") for r in sdata["rows"]), "B: a sold row outside Labrador City / Wabush")
+
     # every local href/src resolves
     miss = set()
     for p, t in allhtml.items():
@@ -117,7 +140,7 @@ try:
             tgt = tgt.resolve()
             if u.endswith("/"):
                 tgt = tgt / "index.html"
-            if not tgt.exists():
+            if not tgt.exists() and not tgt.with_name(tgt.name + ".html").exists():  # Netlify pretty URLs: /property/x/y -> y.html
                 miss.add(u)
     check(not miss, f"B: dead local links in generated pages: {sorted(miss)[:8]}")
 
@@ -127,6 +150,7 @@ try:
 
     # ------------------------------------------------------------ C
     idx0 = (work / "sitemap-index.xml").read_text()
+    red0 = (work / "_redirects").read_text()
     st = [sys.executable, str(work / "tools/labwest-listings-state.py")]
     r0 = subprocess.run(st + ["off", "--root", str(work)], capture_output=True, text=True)
     check(r0.returncode == 0 and (work / "sitemap-index.xml").read_text() == idx0, "C: off must change nothing")
@@ -134,6 +158,9 @@ try:
     gen = [p for p in work.glob("listings/**/*.html")]
     check(all('<meta name="robots" content="noindex,nofollow">' in p.read_text() for p in gen), "C: preview must noindex every generated page")
     check((work / "sitemap-index.xml").read_text() == idx0, "C: preview must not register sitemaps")
+    red1 = (work / "_redirects").read_text()
+    check(red1.count("lab-west-sold-gate") == 2 and "/listings/sold/data.json            /.netlify/functions/sold-data?f=data.json  200!" in red1, "C: preview must put the sold-gate rewrites in _redirects")
+    check(red1.endswith(red0.lstrip("\n")) or red0 in red1, "C: the sold-gate block must not remove existing redirects")
     snap = {p: p.read_text() for p in gen}
     subprocess.run(st + ["preview", "--root", str(work)], check=True, capture_output=True)
     check(all(p.read_text() == snap[p] for p in gen), "C: preview is not idempotent")
