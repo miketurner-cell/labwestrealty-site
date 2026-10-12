@@ -57,6 +57,18 @@ for f in files:
             errors.append(f"{f.name}: job {name} does not need the switch job")
         if not re.search(r"needs\.switch\.outputs\.state\s*==\s*'(on|preview)'", block):
             errors.append(f"{f.name}: job {name} is not gated on needs.switch.outputs.state")
+    # the gate must name `on`; `preview` is only allowed together with workflow_dispatch (a deliberate manual run)
+    for name, block in jobs.items():
+        if name == "switch":
+            continue
+        m = re.search(r"^\s+if:\s*(.+)$", block, re.M)
+        cond = m.group(1) if m else ""
+        if "state == 'on'" not in cond:
+            errors.append(f"{f.name}: job {name} gate must include state == 'on'")
+        if "'preview'" in cond and "workflow_dispatch" not in cond:
+            errors.append(f"{f.name}: job {name} may run on preview only for workflow_dispatch")
+    if re.search(r"^\s+schedule:", text, re.M) or re.search(r"^\s+push:", text, re.M):
+        pass  # a schedule/push trigger is fine only because every job above is gated on state == 'on'
     # any RETS secret must sit inside a gated job
     for name, block in jobs.items():
         if name != "switch" and "NLAR_RETS" in block and "needs.switch.outputs.state" not in block:

@@ -91,6 +91,22 @@ spec2.loader.exec_module(idxf)
 check("TransactionType" in idxf.SAFE_FIELDS_ACTIVE and "TransactionType" not in idxf.NEVER_PROJECT, "TransactionType must be a kept field")
 check("Subdistrict" in idxf.SAFE_FIELDS_ACTIVE, "Subdistrict must be a kept field (scope uses it)")
 
+# 6. The ingest skip-gate filter and the photo-sync scope are this same in_scope (no second copy of the rules).
+sys.path.insert(0, str(TOOLS))
+try:
+    sp = importlib.util.spec_from_file_location("ing", TOOLS / "idx-ingest.py")
+    ing = importlib.util.module_from_spec(sp)
+    sp.loader.exec_module(ing)
+    check(ing._load_region_filter() is not None, "idx-ingest region filter did not load (smoke row must be in Lab West)")
+    sp = importlib.util.spec_from_file_location("ps", TOOLS / "idx-photo-sync.py")
+    ps = importlib.util.module_from_spec(sp)
+    sp.loader.exec_module(ps)
+    check(ps.R2_SITE_SLUG == "labwest", "photo sync R2 prefix must be labwest")
+    check(ps.is_in_scope({"PostalCode": "A0R 1B0", "CityText": "Wabush"}), "photo sync: Wabush must be in scope")
+    check(not ps.is_in_scope({"PostalCode": "A0P 1E0", "CityText": "Happy Valley-Goose Bay"}), "photo sync: Goose Bay must be out of scope")
+except Exception as e:  # fail loud (always-on #16)
+    errors.append(f"ingest/photo-sync import failed: {e!r}")
+
 src = (TOOLS / "idx-project-to-ddf-shape.py").read_text()
 check(not re.search(r"\d+\s+(Hamilton|Airport|Avalon|Humphrey|Loring)\b", src), "street address in projector")
 

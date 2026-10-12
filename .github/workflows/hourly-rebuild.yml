@@ -1,0 +1,183 @@
+name: Hourly listings rebuild
+
+# Lab West (labwestrealty.com) NLAR pull -> project -> diff-gated commit (sites, D-1012-34, component 3).
+# Ported from goosebayrealestate-site's hourly-rebuild.yml (closest twin); later components add
+# the page-generation steps where marked.
+#
+# DARK BY DESIGN
+#   - No native `schedule:`. The fleet cadence lives in realestategander-site tools/runner/schedules.json
+#     (box dispatch), and nothing there names this repo until Mike flips LABWEST_LISTINGS. When it does,
+#     use an unused minute (4,19,34,49) so no two NLAR pulls share a minute.
+#   - The `switch` job reads vars.LABWEST_LISTINGS (unset = off). The `rebuild` job needs it and runs only
+#     when the value is `on` (or `preview` on a deliberate workflow_dispatch). When it does not run, no
+#     step runs at all: there is no RETS login, no secret read, no commit. The `switch` job prints
+#     "switch off, nothing pulled" so a skipped run still says why (always-on #8).
+#   - NLAR allows ONE login per account (memory nlar-rets-one-session). A 4th puller must never log in
+#     while the switch is off; tools/tests/labwest-switch-test.py enforces the gate.
+
+on:
+  workflow_dispatch:
+    inputs:
+      force_regen:
+        description: "Force full regen even with zero data changes (code/template ships)"
+        type: boolean
+        default: false
+
+concurrency:
+  group: ddf-rebuild
+  cancel-in-progress: false
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+permissions:
+  contents: write
+
+jobs:
+  switch:
+    name: Lab West switch
+    runs-on: ubuntu-latest
+    outputs:
+      state: ${{ steps.read.outputs.state }}
+    steps:
+      - name: Read LABWEST_LISTINGS
+        id: read
+        env:
+          RAW: ${{ vars.LABWEST_LISTINGS }}
+        run: |
+          s="${RAW:-off}"
+          case "$s" in on|preview|off) ;; *) s=off ;; esac
+          echo "state=$s" >> "$GITHUB_OUTPUT"
+          if [ "$s" = on ] || { [ "$s" = preview ] && [ "$GITHUB_EVENT_NAME" = workflow_dispatch ]; }; then
+            echo "LABWEST_LISTINGS=$s: the rebuild job will run."
+          else
+            echo "LABWEST_LISTINGS=$s: switch off, nothing pulled (no RETS login, no commit)."
+          fi
+
+  rebuild:
+    name: Pull -> project -> commit
+    needs: switch
+    if: needs.switch.outputs.state == 'on' || (github.event_name == 'workflow_dispatch' && needs.switch.outputs.state == 'preview')
+    runs-on: ${{ vars.CI_RUNS_ON || 'ubuntu-latest' }}
+    timeout-minutes: 30
+    steps:
+      - name: Checkout (current tip of the branch)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.ref }}
+          filter: blob:none
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Restore IDX/VOW active cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            tools/idx-cache/listings.json
+            tools/idx-cache/listings-projected.json
+            tools/idx-cache/pending-listings.json
+          key: idx-active-cache-${{ github.run_id }}
+          restore-keys: |
+            idx-active-cache-
+
+      - name: Pull IDX/VOW feed (NLAR direct)
+        # Tolerated failure (NLAR maintenance, 20022 backoff inside rets_login): the projection step
+        # then runs on the last good cache. Missing secrets fail loud in idx-ingest.py, never silently.
+        env:
+          NLAR_RETS_USER: ${{ secrets.NLAR_RETS_USER }}
+          NLAR_RETS_PASS: ${{ secrets.NLAR_RETS_PASS }}
+        working-directory: tools
+        continue-on-error: true
+        run: |
+          python3 -m pip install --quiet requests
+          python3 idx-ingest.py --pull active
+
+      - name: Sync IDX/VOW photos to R2
+        env:
+          NLAR_RETS_USER: ${{ secrets.NLAR_RETS_USER }}
+          NLAR_RETS_PASS: ${{ secrets.NLAR_RETS_PASS }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET_NAME: ${{ secrets.R2_BUCKET_NAME }}
+          R2_BASE_URL: ${{ secrets.R2_BASE_URL }}
+        working-directory: tools
+        continue-on-error: true
+        run: |
+          python3 -m pip install --quiet Pillow
+          if [ -n "${R2_BUCKET_NAME:-}" ]; then
+            python3 -m pip install --quiet boto3
+          fi
+          python3 idx-photo-sync.py --all
+
+      - name: Soft-mark photo folders for removed listings
+        working-directory: tools
+        continue-on-error: true
+        run: python3 idx-photo-cleanup.py soft-mark
+
+      - name: Detect changes (skip-regen gate)
+        id: change_gate
+        run: python3 tools/check-changes-gate.py >> $GITHUB_OUTPUT
+        env:
+          FORCE_REGEN: ${{ inputs.force_regen && '1' || '' }}
+
+      - name: Project IDX -> DDF shape (Lab West scope, no leases)
+        if: steps.change_gate.outputs.should_regen == 'true'
+        working-directory: tools
+        continue-on-error: true
+        env:
+          R2_BASE_URL: ${{ secrets.R2_BASE_URL }}
+        run: |
+          if [ -f idx-cache/listings.json ]; then
+            python3 idx-project-to-ddf-shape.py
+          else
+            echo "[PROJECT] skipped - idx-cache/listings.json absent"
+          fi
+
+      # NEXT COMPONENTS ADD THEIR STEPS HERE, in plan order: listing pages (4), fragments and homepage (7),
+      # asset stamps and the rebuild gates (4, 7). Each is gated by the same `rebuild` job condition.
+
+      - name: Diff-gated commit and push
+        run: |
+          git config user.name  "Turner DDF Bot"
+          git config user.email "ddf-bot@royallepageturner.com"
+          # Stage exactly what the rebuild can change; a missing optional path is a no-op for that path only.
+          git add -A -- images/listings 2>/dev/null || true
+          for _p in tools/idx-cache/listings-projected.json; do
+            git add -- "$_p" 2>/dev/null || true
+          done
+          if git diff --cached --quiet; then
+            echo "No changes - feed unchanged this hour."
+            exit 0
+          fi
+          # skip-actions tag: stops the push from re-triggering workflows. Never the CI-skip tag, which
+          # Netlify also honours and would leave the live site stuck on the last human commit.
+          git commit -m "Hourly listings rebuild: Lab West feed cache [skip actions]"
+          _ok=0
+          _br="${GITHUB_REF#refs/heads/}"
+          for _attempt in 1 2 3 4 5; do
+            if git pull --rebase --autostash origin "$_br" && git push origin "HEAD:$_br"; then
+              _ok=1; echo "pushed (attempt $_attempt)"; break
+            fi
+            git rebase --abort 2>/dev/null || true
+            echo "push race or conflict, retry $_attempt"; sleep $((RANDOM % 8 + 4))
+          done
+          if [ "$_ok" != 1 ]; then
+            echo "::error::push failed after 5 attempts"
+            exit 1
+          fi
+
+      - name: Save IDX/VOW active cache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            tools/idx-cache/listings.json
+            tools/idx-cache/listings-projected.json
+            tools/idx-cache/pending-listings.json
+          key: idx-active-cache-${{ github.run_id }}
