@@ -69,6 +69,12 @@ for f in files:
             errors.append(f"{f.name}: job {name} may run on preview only for workflow_dispatch")
     if re.search(r"^\s+schedule:", text, re.M) or re.search(r"^\s+push:", text, re.M):
         pass  # a schedule/push trigger is fine only because every job above is gated on state == 'on'
+    # IndexNow must run only when the state is on (preview pages are noindex)
+    for name, block in jobs.items():
+        if "indexnow-submit" in block:
+            m = re.search(r"- name: Notify IndexNow[^\n]*\n\s+if:\s*([^\n]+)", block)
+            if not m or "state == 'on'" not in m.group(1) or "preview" in m.group(1):
+                errors.append(f"{f.name}: the IndexNow step must be gated on state == 'on' only")
     # any RETS secret must sit inside a gated job
     for name, block in jobs.items():
         if name != "switch" and "NLAR_RETS" in block and "needs.switch.outputs.state" not in block:

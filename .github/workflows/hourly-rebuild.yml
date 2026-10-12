@@ -219,6 +219,11 @@ jobs:
             exit 1
           fi
 
+      - name: Notify IndexNow (Bing) of changed URLs (only when the switch is on; preview pages are noindex and are never submitted)
+        if: needs.switch.outputs.state == 'on'
+        continue-on-error: true
+        run: python3 tools/indexnow-submit.py --host labwestrealty.com
+
       - name: Save IDX/VOW active cache
         if: always()
         uses: actions/cache/save@v4

@@ -103,6 +103,14 @@ try:
     r = subprocess.run([sys.executable, str(work / "tools/tests/labwest-no-address-test.py")], capture_output=True, text=True)
     check(r.returncode == 0, f"3: no-address test fails on the generated pages: {r.stdout[-300:]}")
 
+    # structured data on the generated pages: no ratings or review counts (always-on #35), own-domain canonicals
+    for n in ("market-stats.html", "labrador-city.html", "wabush.html"):
+        raw = (work / "pages" / n).read_text(encoding="utf-8")
+        for m in re.finditer(r'<script type="application/ld\+json">(.*?)</script>', raw, re.S):
+            check(not re.search(r'aggregateRating|reviewCount|ratingValue|ratingCount', m.group(1)), f"2: {n} carries a rating in structured data")
+        c = re.search(r'<link rel="canonical" href="([^"]+)"', raw)
+        check(c is not None and c.group(1) == f"https://labwestrealty.com/pages/{n}", f"2: {n} canonical is {c and c.group(1)}")
+
     # 5. state script
     st = [sys.executable, str(work / "tools" / "labwest-listings-state.py")]
     idx0 = (work / "sitemap-index.xml").read_text()
