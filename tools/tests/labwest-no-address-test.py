@@ -28,6 +28,19 @@ SKIP_DIRS = {".git", ".claude", "node_modules", "listings", "property", "tests",
 OTHER_OFFICES = ("204 Airport Blvd", "371 Hamilton River", "1 Loring Drive", "Hamilton River Road")
 
 
+def generated_page_files():
+    """pages/ files the nightly generates (market statistics, one per community YAML). They show real sold homes' own
+    addresses (notable sales), like listing pages, so they get the broker-contact-block checks, not the place-name heuristic."""
+    names = {"market-stats.html"}
+    cfg = ROOT / "tools" / "community-config"
+    if cfg.is_dir():
+        names |= {p.stem + ".html" for p in cfg.glob("*.yml")}
+    return {ROOT / "pages" / n for n in names}
+
+
+GEN_PAGES = generated_page_files()
+
+
 def files():
     for p in ROOT.rglob("*"):
         if not p.is_file() or p.suffix not in (".html", ".js", ".css", ".json", ".py", ".txt", ".xml", ".md", ".toml"):
@@ -35,6 +48,8 @@ def files():
         rel = p.relative_to(ROOT)
         if any(part in SKIP_DIRS for part in rel.parts):
             continue
+        if p in GEN_PAGES:
+            continue  # checked below with the generated trees
         yield p, rel
 
 
@@ -82,11 +97,14 @@ for p, rel in files():
                             errors.append(f"{rel}: JSON-LD {node.get('@type')} carries a Lab West PostalAddress")
 
 # generated pages, when present
+gen_files = []
 for d in ("listings", "property"):
     base = ROOT / d
-    if not base.is_dir():
-        continue
-    for p in base.rglob("*.html"):
+    if base.is_dir():
+        gen_files += list(base.rglob("*.html"))
+gen_files += [p for p in GEN_PAGES if p.is_file()]
+if gen_files:
+    for p in gen_files:
         text = p.read_text(encoding="utf-8")
         rel = p.relative_to(ROOT)
         for bad in OTHER_OFFICES:
@@ -97,6 +115,10 @@ for d in ("listings", "property"):
                 d_ = json.loads(m.group(1))
             except Exception:
                 continue
+            if isinstance(d_, dict) and d_.get("@type") in ("Organization", "LocalBusiness", "RealEstateAgent", "Person", "ContactPage", "AboutPage"):
+                for pa in postal_nodes(d_):
+                    if str(pa.get("streetAddress", "")).strip():
+                        errors.append(f"{rel}: JSON-LD {d_.get('@type')} carries a street address")
             la = d_.get("listingAgent") if isinstance(d_, dict) else None
             if la and "PostalAddress" in json.dumps(la):
                 errors.append(f"{rel}: listingAgent carries a PostalAddress")
