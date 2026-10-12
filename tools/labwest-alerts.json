@@ -1,0 +1,4 @@
+{
+  "backend_ready": false,
+  "_note": "Listing Text Alerts / Listing Email Alerts / saved searches post to Gander functions (sms-subscribe, client-alerts) and Supabase saved_searches. Those only know gander, avalon and goosebay today (sms-subscribe SITE map + ALLOWED_ORIGINS; saved-search.js SITE_ID_MAP; client-alerts site table), so Lab West sign-ups would be refused by CORS or filed under Gander. While this is false the generator emits NO alerts markup or scripts and no text-alerts page is installed. Sites sets it true in the same change that confirms Gander accepts labwest (D-1012-34)."
+}

@@ -177,6 +177,37 @@ try:
     r = subprocess.run([sys.executable, str(work / "tools/tests/labwest-no-address-test.py")], capture_output=True, text=True)
     check(r.returncode == 0, f"B: no-address test fails on the generated tree: {r.stdout[-400:]}")
 
+    # alerts (component 8): off by default, and only when the backend is ready
+    check("alert-inline" not in joined and "data-lta" not in joined and "saved-search.js" not in joined and "save-nudge.js" not in joined,
+          "B: alerts markup or scripts are emitted while backend_ready is false")
+    check(not (work / "pages" / "text-alerts.html").exists(), "B: a text-alerts page exists while backend_ready is false")
+    flag = work / "tools" / "labwest-alerts.json"
+    flag_off = flag.read_text()
+    flag.write_text(json.dumps({"backend_ready": True}))
+    r = subprocess.run([sys.executable, "tools/labwest-alerts-page.py"], cwd=work, env=env, capture_output=True, text=True)
+    check(r.returncode == 0 and (work / "pages" / "text-alerts.html").exists(), f"B: text-alerts page not installed when ready: {r.stderr[-200:]}")
+    r = subprocess.run([sys.executable, "tools/ddf-generate-pages.py"], cwd=work, env=env, capture_output=True, text=True)
+    check(r.returncode == 0, "B: generator failed with alerts ready")
+    ready_html = "\n".join(p.read_text(encoding="utf-8") for p in (work / "listings").rglob("*.html"))
+    check("alert-inline.js" in ready_html and "data-lta-inline" in ready_html and "Listing Text Alerts" in ready_html, "B: alerts markup missing when ready")
+    check("window.TURNER_SITE='labwest'" in ready_html, "B: pages must set TURNER_SITE to labwest before the alert scripts")
+    ta = (work / "pages" / "text-alerts.html").read_text(encoding="utf-8")
+    check("Listing Text Alerts" in ta and "data-lta-inline" in ta and "TURNER_SITE='labwest'" in ta, "B: text-alerts page lacks the widget or the site id")
+    for needle in ("Goose Bay", "goosebay", "Hamilton", "896-5001", "Dynamic Duo"):
+        check(needle.lower() not in ta.lower(), f"B: text-alerts page contains {needle!r}")
+    import re as _re
+    for txt in (ta, ready_html):
+        plain_t = _re.sub(r"<style.*?</style>|<script.*?</script>", "", txt, flags=_re.S)
+        check(not _re.search(r"(?<!Listing )(?<!Listing\xa0)\b(?:sms|text) alerts\b", plain_t, _re.I), "B: a bare 'text alerts' or 'SMS alerts' name (use Listing Text Alerts)")
+    subprocess.run([sys.executable, "tools/labwest-listings-state.py", "preview"], cwd=work, check=True, capture_output=True)
+    check("/text-alerts   /pages/text-alerts.html   200" in (work / "_redirects").read_text(), "B: the /text-alerts redirect is missing while the page exists")
+    flag.write_text(flag_off)
+    shutil.rmtree(work / "pages" / "text-alerts.html", ignore_errors=True) if (work / "pages" / "text-alerts.html").is_dir() else (work / "pages" / "text-alerts.html").unlink()
+    r = subprocess.run([sys.executable, "tools/ddf-generate-pages.py"], cwd=work, env=env, capture_output=True, text=True)
+    check(r.returncode == 0, "B: generator failed after resetting alerts")
+    subprocess.run([sys.executable, "tools/labwest-listings-state.py", "preview"], cwd=work, check=True, capture_output=True)
+    check("/text-alerts" not in (work / "_redirects").read_text(), "B: the /text-alerts redirect stays after the page is gone")
+
     # ------------------------------------------------------------ C
     idx0 = (work / "sitemap-index.xml").read_text()
     red0 = (work / "_redirects").read_text()

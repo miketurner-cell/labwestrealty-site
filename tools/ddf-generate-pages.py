@@ -133,6 +133,26 @@ def _nav_auth_script(prefix: str) -> str:
     return f'<script src="{prefix}js/nav-auth.js?v=20260818-portal" defer></script>'
 
 
+def _alerts_ready() -> bool:
+    """tools/labwest-alerts.json backend_ready. False (or unreadable) = emit NO alerts markup or scripts: the Gander sign-up
+    backends do not know the labwest site yet, so a sign-up here would be refused or filed under Gander."""
+    try:
+        return json.loads((Path(__file__).resolve().parent / "labwest-alerts.json").read_text(encoding="utf-8")).get("backend_ready") is True
+    except Exception:
+        return False
+
+
+def _alert_inline_script() -> str:
+    return '<script src="/js/alert-inline.js?v=20260724-lta-city" defer></script>' if _alerts_ready() else ""
+
+
+def _saved_search_scripts(prefix: str) -> str:
+    if not _alerts_ready():
+        return ""
+    return (f'<script src="{prefix}js/saved-search.js?v=20260925-tq-token" defer></script>\n'
+            f'<script src="{prefix}js/save-nudge.js?v=20260929-noprojected" defer></script>')
+
+
 def _page_exists(name: str) -> bool:
     """True when pages/<name> exists in this repo. Lab West has no marketing pages/ yet (they arrive with the
     homepage component), so every link to one is emitted only when the page is really there (Convention #17:
@@ -3979,6 +3999,8 @@ def lta_band(city: str = "") -> str:
     Called with no city (rollups, which legitimately span towns) it returns
     the original site-wide band byte-for-byte.
     """
+    if not _alerts_ready():
+        return ""
     if city:
         c = (city.replace("&", "&amp;").replace("<", "&lt;").replace('"', "&quot;"))
         attrs = f' data-lta-city="{c}" data-lta-label="New listings in {c}"'
@@ -4326,7 +4348,7 @@ def build_listing_page(listing: dict, all_listings: list | None = None) -> str:
 <script src="../../js/recently-viewed.js" defer></script>
 {_chat_script("../../")}
 {lta_band(city_name)}
-<script src="/js/alert-inline.js?v=20260724-lta-city" defer></script>
+{_alert_inline_script()}
 <script src="../../js/listing-share.js" defer></script>
 <script src="../../js/listing-audio.js" defer></script>
 <script src="../../js/lightbox.js" defer></script>
@@ -4334,8 +4356,7 @@ def build_listing_page(listing: dict, all_listings: list | None = None) -> str:
 <script src="../../js/auth.js?v=20260929-sold-auth" defer></script>
 <script src="../../js/agent-registry-link.js?v=20260911-safebottom" defer></script>
 <script src="../../js/favorites.js?v=20260929-noprojected" defer></script>
-<script src="../../js/saved-search.js?v=20260925-tq-token" defer></script>
-<script src="../../js/save-nudge.js?v=20260929-noprojected" defer></script>
+{_saved_search_scripts("../../")}
 <script src="../../js/budget-v1.js?v=20261009-budget" defer></script>
 <script>
   // Wire both sidebar forms + tab toggle (Book a Showing / Ask a Question).
@@ -5005,7 +5026,7 @@ def build_city_page(city_slug: str, listings: list[dict]) -> str:
 <script src="{prefix}js/turner-network.js" defer></script>
 {_chat_script(prefix)}
 {lta_band(city)}
-<script src="/js/alert-inline.js?v=20260724-lta-city" defer></script>
+{_alert_inline_script()}
 <script src="{prefix}js/recently-viewed.js" defer></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {{
@@ -5218,7 +5239,7 @@ def build_rollup_page(cfg: dict, matching: list[dict]) -> str:
 <script src="{prefix}js/turner-network.js" defer></script>
 {_chat_script(prefix)}
 {LTA_INLINE_BAND}
-<script src="/js/alert-inline.js?v=20260724-lta-city" defer></script>
+{_alert_inline_script()}
 <script src="{prefix}js/recently-viewed.js" defer></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {{

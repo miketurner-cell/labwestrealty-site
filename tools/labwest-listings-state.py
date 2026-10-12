@@ -23,7 +23,7 @@ GENERATED_DIRS = ("listings", "property")
 GENERATED_SITEMAPS = ("sitemap-listings.xml", "sitemap-property.xml", "sitemap-pages.xml")
 # pages/ holds only what the nightly generates (the market-statistics page and one page per tools/community-config/*.yml);
 # a hand-written page is never listed here, so it is never noindexed or put in the generated sitemap.
-GENERATED_PAGE_FILES = ("market-stats.html",)
+GENERATED_PAGE_FILES = ("market-stats.html", "text-alerts.html")
 ORIGIN = "https://labwestrealty.com"
 
 
@@ -122,6 +122,29 @@ REDIRECT_RULES = """/listings/sold/data.json            /.netlify/functions/sold
 /listings/sold/:town/data.json      /.netlify/functions/sold-data?town=:town  200!"""
 
 
+ALERTS_BEGIN = "# BEGIN lab-west-alerts (tools/labwest-listings-state.py; do not edit by hand)"
+ALERTS_END = "# END lab-west-alerts"
+ALERTS_RULES = "/text-alerts   /pages/text-alerts.html   200"
+
+
+def set_alerts_redirect(root: Path) -> int:
+    """/text-alerts -> the generated page, only while that page exists; removed again when it does not."""
+    path = root / "_redirects"
+    text = path.read_text(encoding="utf-8") if path.exists() else ""
+    want = (root / "pages" / "text-alerts.html").exists()
+    has = ALERTS_BEGIN in text
+    block = f"{ALERTS_BEGIN}\n{ALERTS_RULES}\n{ALERTS_END}\n"
+    if want and not has:
+        path.write_text(block + "\n" + text, encoding="utf-8")
+        return 1
+    if not want and has:
+        a = text.index(ALERTS_BEGIN)
+        b = text.index(ALERTS_END) + len(ALERTS_END)
+        path.write_text((text[:a] + text[b:].lstrip("\n")).lstrip("\n"), encoding="utf-8")
+        return 1
+    return 0
+
+
 def set_sold_redirects(root: Path, want: bool) -> int:
     """Forced (200!) rewrites that send the sold JSON URLs to the sign-in function, so the static copies are never served.
     They sit at the top of _redirects (first match wins, before the generator's 301s)."""
@@ -158,7 +181,7 @@ def main(argv=None) -> int:
     n = sum(1 for p in pages if set_noindex(p, a.state == "preview"))
     write_pages_sitemap(root, a.state == "on")
     s = set_sitemaps(root, a.state == "on")
-    r = set_sold_redirects(root, True)
+    r = set_sold_redirects(root, True) + set_alerts_redirect(root)
     print(f"[state] {a.state}: {len(pages)} generated page(s), {n} changed; sitemap-index entries changed: {s}; sold redirects added: {r}")
     return 0
 
