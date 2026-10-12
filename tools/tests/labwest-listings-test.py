@@ -100,6 +100,17 @@ try:
     check("Listed by" in ours and "Mike Turner" in ours, "B: a Turner-listed home must say Listed by Mike Turner")
     check("Listed by" not in other.split("lst-cta-agent")[1][:400] if "lst-cta-agent" in other else False, "B: another brokerage's home must not say Listed by")
     check("Questions about this home?" in other and "Mike Turner" in other, "B: another brokerage's home must name Mike as the contact")
+    # inquiry forms (component 10): the shared forms, aimed at Mike, no review tab, and only Gander's lead endpoints
+    check('data-review=' not in other and 'data-review=' not in ours, "B: a personal-review tab is emitted (off on Lab West: no agent, no review counts)")
+    for t in (other, ours):
+        check('id="lst-showing-form"' in t and 'id="lst-inquiry-form"' in t, "B: the showing and inquiry forms must be on every detail page")
+        check(t.count('data-agent-email="miketurner@royallepage.ca"') >= 1, "B: the inquiry forms must be addressed to Mike Turner")
+        check('/js/lead-shim.js' in t and 'js/boldtrail-forms.js' in t, "B: the form scripts must be on the detail page")
+    bt = (ROOT / "js" / "boldtrail-forms.js").read_text(encoding="utf-8")
+    ls = (ROOT / "js" / "lead-shim.js").read_text(encoding="utf-8")
+    hosts = set(re.findall(r"https://([a-z0-9.-]+)/\.netlify/functions/", bt + ls))
+    check(hosts == {"realestategander.com"}, f"B: form scripts post to {sorted(hosts)}; only Gander's functions are allowed")
+    check("referer_url" in bt and "referer_url" in ls, "B: the form payloads must carry referer_url (the labwestrealty.com page) for lead routing")
     check("chat-widget.js" in other and "chat-widget.js" in ours, "B: generated detail pages must load the chat widget (the function exists)")
     check("Century 21" in other, "B: the listing brokerage must still be shown (CREA)")
     for needle in ("Dynamic Duo", "goosebay", "Goose Bay", "896-5001", "A0P 1", "karen", "roberta", "goosebay@royallepage.ca"):
