@@ -36,6 +36,10 @@ if (ROOT / "listings").is_dir():
     print("A. off proof: skipped (listings/ is committed: the switch has been flipped)")
 else:
     check(not (ROOT / "property").exists(), "A: property/ exists while the switch has never been on")
+    check("/api/chat" not in (ROOT / "_redirects").read_text(), "A: _redirects routes /api/chat while off")
+    for p in ROOT.glob("*.html"):
+        check("chat-widget" not in p.read_text(encoding="utf-8", errors="ignore") and "/api/chat" not in p.read_text(encoding="utf-8", errors="ignore"),
+              f"A: {p.name} loads the chat widget or calls /api/chat")
     check(not (ROOT / "home-preview.html").exists(), "A: home-preview.html exists while off")
     check("lwh-" not in (ROOT / "index.html").read_text(), "A: the committed index.html carries the new homepage while off")
     check("sold-data" not in (ROOT / "_redirects").read_text(), "A: _redirects routes sold data while off")
@@ -96,6 +100,7 @@ try:
     check("Listed by" in ours and "Mike Turner" in ours, "B: a Turner-listed home must say Listed by Mike Turner")
     check("Listed by" not in other.split("lst-cta-agent")[1][:400] if "lst-cta-agent" in other else False, "B: another brokerage's home must not say Listed by")
     check("Questions about this home?" in other and "Mike Turner" in other, "B: another brokerage's home must name Mike as the contact")
+    check("chat-widget.js" in other and "chat-widget.js" in ours, "B: generated detail pages must load the chat widget (the function exists)")
     check("Century 21" in other, "B: the listing brokerage must still be shown (CREA)")
     for needle in ("Dynamic Duo", "goosebay", "Goose Bay", "896-5001", "A0P 1", "karen", "roberta", "goosebay@royallepage.ca"):
         check(needle.lower() not in joined.lower(), f"B: generated pages contain {needle!r}")
