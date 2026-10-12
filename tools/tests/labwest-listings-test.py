@@ -1,0 +1,158 @@
+#!/usr/bin/env python3
+"""STRICT: Lab West listing pages (sites, D-1012-34, component 4) -- dark while off, correct when generated.
+
+A. OFF PROOF on the committed tree. While the switch has never been turned on there is no listings/ or property/
+   tree, no generated sitemap, sitemap-index.xml and robots.txt name only the recruiting sitemap, and no hand-written
+   page links to /listings or /property. (Once listings/ is committed -- after the flip -- this part reports "flipped" and
+   skips: the point is to prove nothing leaks BEFORE the flip.)
+B. GENERATED TREE. Copies the repo to a temp dir, runs the real projector and generator over synthetic feed rows
+   (tools/tests/fixtures/labwest-feed-rows.json) and checks: only Labrador City + Wabush homes; the lease row is absent;
+   a Turner-listed home says "Listed by Mike Turner", another brokerage's home names Mike as the contact and never
+   "Listed by"; the contact is miketurner@royallepage.ca / 709-256-7999 only; no Goose Bay office, Dynamic Duo or A0P
+   text; the broker JSON-LD has no address; every local href/src resolves; no sold price anywhere.
+C. STATE SCRIPT. preview adds noindex to every generated page and registers no sitemap; on registers the generated
+   sitemaps and removes the noindex; off touches nothing; a second run changes nothing.
+"""
+import json
+import os
+import re
+import shutil
+import subprocess
+import sys
+import tempfile
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+errors = []
+
+
+def check(c, m):
+    if not c:
+        errors.append(m)
+
+
+# ---------------------------------------------------------------- A
+if (ROOT / "listings").is_dir():
+    print("A. off proof: skipped (listings/ is committed: the switch has been flipped)")
+else:
+    check(not (ROOT / "property").exists(), "A: property/ exists while the switch has never been on")
+    for sm in ("sitemap-listings.xml", "sitemap-property.xml"):
+        check(not (ROOT / sm).exists(), f"A: {sm} exists while off")
+    idx = (ROOT / "sitemap-index.xml").read_text()
+    check(re.findall(r"<loc>([^<]+)</loc>", idx) == ["https://labwestrealty.com/sitemap.xml"], "A: sitemap-index.xml names more than the recruiting sitemap")
+    check("listings" not in (ROOT / "sitemap.xml").read_text() and "/property" not in (ROOT / "sitemap.xml").read_text(), "A: sitemap.xml lists a listing or property URL")
+    robots = (ROOT / "robots.txt").read_text()
+    check("sitemap-listings" not in robots and "sitemap-property" not in robots, "A: robots.txt names a generated sitemap")
+    for p in ROOT.glob("*.html"):
+        t = p.read_text(encoding="utf-8")
+        for m in re.finditer(r'(?:href|src|action)="([^"]*)"', t):
+            u = m.group(1)
+            if re.match(r"^(?:https://labwestrealty\.com)?/?(?:\.\./)*(?:listings|property)(?:/|$|\.|\?)", u):
+                check(False, f"A: {p.name} links to {u}")
+    print("A. off proof: committed tree has no listings, no property pages, no generated sitemap, no links to them")
+
+# ---------------------------------------------------------------- B, C
+tmp = Path(tempfile.mkdtemp(prefix="lwtest-"))
+try:
+    work = tmp / "site"
+    shutil.copytree(ROOT, work, ignore=shutil.ignore_patterns(".git", ".claude", "node_modules", "__pycache__", "listings", "property"))
+    rows = json.loads((ROOT / "tools/tests/fixtures/labwest-feed-rows.json").read_text())["rows"]
+    cache = work / "tools" / "idx-cache"
+    cache.mkdir(parents=True, exist_ok=True)
+    (cache / "listings.json").write_text(json.dumps({"fetched_at": "2026-10-12T18:00:00Z", "rows": rows}))
+    env = {"PATH": os.environ.get("PATH", "/usr/bin:/bin"), "R2_BASE_URL": "https://photos.example.test"}
+    r = subprocess.run([sys.executable, "tools/idx-project-to-ddf-shape.py"], cwd=work, env=env, capture_output=True, text=True)
+    check(r.returncode == 0, f"B: projector failed: {r.stderr[-300:]}")
+    r = subprocess.run([sys.executable, "tools/ddf-generate-pages.py"], cwd=work, env=env, capture_output=True, text=True)
+    check(r.returncode == 0, f"B: generator failed (exit {r.returncode}): {(r.stdout + r.stderr)[-600:]}")
+    check("self-check passed" in r.stdout, "B: the generator's own listings pre-deploy self-check did not pass")
+
+    L = work / "listings"
+    pages = sorted(L.rglob("*.html"))
+    check(len(pages) > 8, f"B: too few generated pages ({len(pages)})")
+    detail = {p.name: p for p in L.glob("*/*-13000*.html")}
+    mls = sorted(re.search(r"-(\d{7})\.html", n).group(1) for n in detail)
+    check(mls == ["1300001", "1300002", "1300004", "1300005", "1300007", "1300008", "1300009"], f"B: detail page set wrong: {mls}")
+    check("1300003" not in mls, "B: the lease row (McGregor, 1300003) has a page")
+    check("1300006" not in mls, "B: a Goose Bay row has a page")
+    check(not any("3-mcgregor" in str(p) for p in pages), "B: the lease street appears in a page path")
+    allhtml = {p: p.read_text(encoding="utf-8") for p in pages}
+    joined = "\n".join(allhtml.values())
+    check("McGregor" not in joined, "B: the lease row appears on a page")
+
+    ours = next(t for p, t in allhtml.items() if "1300002" in p.name)
+    other = next(t for p, t in allhtml.items() if "1300001" in p.name)
+    check("Listed by" in ours and "Mike Turner" in ours, "B: a Turner-listed home must say Listed by Mike Turner")
+    check("Listed by" not in other.split("lst-cta-agent")[1][:400] if "lst-cta-agent" in other else False, "B: another brokerage's home must not say Listed by")
+    check("Questions about this home?" in other and "Mike Turner" in other, "B: another brokerage's home must name Mike as the contact")
+    check("Century 21" in other, "B: the listing brokerage must still be shown (CREA)")
+    for needle in ("Dynamic Duo", "goosebay", "Goose Bay", "896-5001", "A0P 1", "karen", "roberta", "goosebay@royallepage.ca"):
+        check(needle.lower() not in joined.lower(), f"B: generated pages contain {needle!r}")
+    check("miketurner@royallepage.ca" in joined and "709-256-7999" in joined, "B: Mike's contact is missing")
+    emails = set(re.findall(r"[\w.+-]+@[\w-]+\.[a-z]{2,}", joined))
+    check(emails <= {"miketurner@royallepage.ca"}, f"B: unexpected email addresses in generated pages: {sorted(emails - {'miketurner@royallepage.ca'})}")
+    check(not re.search(r"close_?price|ClosePrice", joined), "B: a close price field reached a page")
+
+    # JSON-LD broker block has no address
+    for p, t in allhtml.items():
+        if p.name.startswith("14-grenfell"):
+            for m in re.finditer(r'<script type="application/ld\+json">(.*?)</script>', t, re.S):
+                d = json.loads(m.group(1))
+                la = d.get("listingAgent")
+                if la:
+                    check("address" not in json.dumps(la).lower(), "B: listingAgent JSON-LD carries an address")
+                    check(la.get("name") == "Mike Turner" and "Royal LePage Turner Realty" in json.dumps(la), "B: listingAgent must be Mike + brokerage")
+                    break
+            else:
+                check(False, "B: no listingAgent JSON-LD on a detail page")
+
+    # every local href/src resolves
+    miss = set()
+    for p, t in allhtml.items():
+        for m in re.finditer(r'(?:href|src)="([^"#?]+?)(?:\?[^"]*)?"', t):
+            u = m.group(1)
+            if u.startswith(("http", "//", "mailto", "tel", "data:", "javascript")):
+                continue
+            tgt = (work / u.lstrip("/")) if u.startswith("/") else (p.parent / u)
+            tgt = tgt.resolve()
+            if u.endswith("/"):
+                tgt = tgt / "index.html"
+            if not tgt.exists():
+                miss.add(u)
+    check(not miss, f"B: dead local links in generated pages: {sorted(miss)[:8]}")
+
+    # the no-address test also passes on the generated tree
+    r = subprocess.run([sys.executable, str(work / "tools/tests/labwest-no-address-test.py")], capture_output=True, text=True)
+    check(r.returncode == 0, f"B: no-address test fails on the generated tree: {r.stdout[-400:]}")
+
+    # ------------------------------------------------------------ C
+    idx0 = (work / "sitemap-index.xml").read_text()
+    st = [sys.executable, str(work / "tools/labwest-listings-state.py")]
+    r0 = subprocess.run(st + ["off", "--root", str(work)], capture_output=True, text=True)
+    check(r0.returncode == 0 and (work / "sitemap-index.xml").read_text() == idx0, "C: off must change nothing")
+    subprocess.run(st + ["preview", "--root", str(work)], check=True, capture_output=True)
+    gen = [p for p in work.glob("listings/**/*.html")]
+    check(all('<meta name="robots" content="noindex,nofollow">' in p.read_text() for p in gen), "C: preview must noindex every generated page")
+    check((work / "sitemap-index.xml").read_text() == idx0, "C: preview must not register sitemaps")
+    snap = {p: p.read_text() for p in gen}
+    subprocess.run(st + ["preview", "--root", str(work)], check=True, capture_output=True)
+    check(all(p.read_text() == snap[p] for p in gen), "C: preview is not idempotent")
+    subprocess.run(st + ["on", "--root", str(work)], check=True, capture_output=True)
+    check(all("noindex" not in p.read_text() for p in gen), "C: on must remove the noindex tag")
+    on_idx = (work / "sitemap-index.xml").read_text()
+    check("https://labwestrealty.com/sitemap-listings.xml" in on_idx and "https://labwestrealty.com/sitemap.xml" in on_idx, "C: on must register the listings sitemap and keep the recruiting one")
+    subprocess.run(st + ["on", "--root", str(work)], check=True, capture_output=True)
+    check((work / "sitemap-index.xml").read_text() == on_idx, "C: on is not idempotent")
+    subprocess.run(st + ["preview", "--root", str(work)], check=True, capture_output=True)
+    check((work / "sitemap-index.xml").read_text() == idx0, "C: going back to preview must deregister the sitemaps")
+    r = subprocess.run(st + ["bogus", "--root", str(work)], capture_output=True, text=True)
+    check(r.returncode == 2, "C: an unknown state must fail loud")
+finally:
+    shutil.rmtree(tmp, ignore_errors=True)
+
+if errors:
+    print("labwest-listings-test FAILED:")
+    for e in errors:
+        print("  -", e)
+    sys.exit(1)
+print("labwest-listings-test OK: dark while off; homes-only, no leases, Mike as contact, no address; state script")

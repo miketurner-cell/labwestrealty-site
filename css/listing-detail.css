@@ -1,0 +1,997 @@
+/**
+ * Listing detail L1 layout — shared CSS for active + sold detail pages.
+ *
+ * Per _research/Client_Full_Parity_Design_Spec_2026-05-11.md, Decision B = L1
+ * (hero + tabbed sections). Layout:
+ *
+ *   [ HERO PHOTO ]
+ *   [ Price banner ]
+ *   [ Quick stats strip ]
+ *   [ Tab nav: Overview / Property / Rooms / Features / Tax & Lot / Map ]
+ *   [ Tab panel content ]
+ *   [ Attribution + CTAs ]
+ *
+ * All Client Full data rendered. Tabs always in DOM (SEO-safe); only active
+ * tab visible via CSS. Native progressive enhancement: no JS = first tab
+ * shown by default.
+ *
+ * Used by:
+ *   - listings/sold/detail.html + js/sold-detail.js
+ *   - server-rendered active listing-detail pages (build_listing_page)
+ *
+ * Convention #15 drift candidate from day one — will need to ship to
+ * stjohns + goosebay generators when those sites adopt the same L1 pattern.
+ */
+
+/* ─── Local CSS variables (consistent with /listings/sold/ + /listings/discover/) ─── */
+.lst-detail {
+  --ld-bg: #0e0e10;
+  --ld-panel: #18181b;
+  --ld-border: #2a2a2e;
+  --ld-text: #e6e6e6;
+  --ld-text-dim: #a0a0a8;
+  --ld-accent: #EA002A;
+  --ld-good: #2e7d32;
+  --ld-bad: #c62828;
+  --ld-r: 8px;
+
+  background: var(--ld-bg);
+  color: var(--ld-text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* ─── Hero photo (full-bleed, 16:9 cap at 560px) ─── */
+.lst-detail-hero {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  max-height: 560px;
+  background: #0a0a0a;
+  overflow: hidden;
+  margin-bottom: 0;
+}
+.lst-detail-hero img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+}
+.lst-detail-hero-fallback {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,0.30);
+  font-weight: 800; font-size: 14px;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  background: linear-gradient(135deg, #1a1a1a, #0f0f0f);
+}
+.lst-detail-status-badge {
+  /* Stage 5 hotfix 2026-05-12: dropped position:absolute + top/left/z-index.
+     Rule originally authored for the hero-overlay layout that was removed
+     in #349 P0-1 fix (commit 55cc8520). Pill now sits inline in the price
+     banner right column — inline placement is the correct rendering. */
+  background: var(--ld-accent); color: #fff;
+  padding: 6px 14px; border-radius: 4px;
+  font-size: 12px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .75px;
+}
+.lst-detail-status-badge.active { background: var(--ld-good); }
+.lst-detail-status-badge.pending { background: #d97706; }
+.lst-detail-status-badge.sold { background: var(--ld-accent); }
+.lst-detail-status-badge.just-listed { background: #EA002A; }   /* Royal LePage red — DOM ≤ 7d */
+.lst-detail-status-badge.price-drop { background: #ed6c02; }    /* Orange — current list < original list */
+
+/* ─── Sticky price banner (below hero) ─── */
+.lst-detail-banner {
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  background: var(--ld-bg);
+  border-bottom: 1px solid var(--ld-border);
+  padding: 16px 24px;
+}
+.lst-detail-banner-inner {
+  max-width: 1280px; margin: 0 auto;
+  display: flex; align-items: center; gap: 20px;
+  flex-wrap: wrap; justify-content: space-between;
+}
+.lst-detail-price {
+  font-size: 42px; font-weight: 800; margin: 0; line-height: 1;
+}
+@media (max-width: 640px) { .lst-detail-price { font-size: 30px; } }
+.lst-detail-address {
+  /* CX8: this is now the page's visible <h1> (was a <p>). Every value is pinned
+     because the tab nav below is position:sticky; top:73px — hard-coded to this
+     banner's height. UA h1 defaults (2em/bold/1em margins) would break the
+     sticky alignment on every listing page. */
+  font-size: 16px; font-weight: 400; line-height: 1.5;
+  color: var(--ld-text); margin: 4px 0 0;
+}
+.lst-detail-city {
+  font-size: 13px; color: var(--ld-text-dim); margin: 2px 0 0;
+}
+.lst-detail-ratio {
+  font-size: 13px; padding: 4px 10px; border-radius: 4px; font-weight: 600;
+}
+.lst-detail-ratio.good { background: rgba(46,125,50,0.15); color: var(--ld-good); }
+.lst-detail-ratio.bad { background: rgba(198,40,40,0.15); color: var(--ld-bad); }
+.lst-detail-ratio.even { background: rgba(160,160,168,0.15); color: var(--ld-text-dim); }
+
+/* ─── Quick stats strip (below banner) ─── */
+.lst-detail-quickstats {
+  background: var(--ld-panel);
+  border-bottom: 1px solid var(--ld-border);
+  padding: 14px 24px;
+}
+.lst-detail-quickstats-inner {
+  max-width: 1280px; margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 8px 16px;
+}
+.lst-qs-cell { text-align: center; }
+.lst-qs-label {
+  font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+  color: var(--ld-text-dim); margin: 0 0 2px;
+}
+.lst-qs-value {
+  font-size: 18px; font-weight: 600; margin: 0; color: var(--ld-text);
+}
+
+/* ─── Resource strip (buying-cost cross-link, W4 2026-08-19) ─── */
+.lst-resource-strip {
+  background: var(--ld-bg);
+  border-bottom: 1px solid var(--ld-border);
+  padding: 10px 24px;
+  text-align: center;
+}
+.lst-resource-strip p {
+  max-width: 1280px; margin: 0 auto;
+  font-size: 13px; color: var(--ld-text-dim);
+}
+.lst-resource-strip a {
+  color: #EA002A; font-weight: 600; text-decoration: none;
+}
+.lst-resource-strip a:hover { text-decoration: underline; }
+
+/* ─── Tab nav ─── */
+.lst-detail-tabs-nav {
+  background: var(--ld-bg);
+  border-bottom: 1px solid var(--ld-border);
+  position: sticky; top: 73px; z-index: 80;
+  overflow-x: auto;
+}
+.lst-detail-tabs-nav-inner {
+  max-width: 1280px; margin: 0 auto;
+  display: flex; gap: 0;
+  padding: 0 12px;
+}
+.lst-tab-btn {
+  background: transparent; border: 0; cursor: pointer;
+  padding: 14px 18px;
+  color: var(--ld-text-dim); font-size: 14px; font-weight: 500;
+  font-family: inherit;
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+  transition: color .15s, border-color .15s;
+}
+.lst-tab-btn:hover { color: var(--ld-text); }
+.lst-tab-btn.active {
+  color: var(--ld-text);
+  border-bottom-color: var(--ld-accent);
+}
+
+/* ─── Tab panel container ─── */
+.lst-detail-panels {
+  max-width: 1280px; margin: 0 auto;
+  padding: 32px 24px 80px;
+}
+.lst-tab-panel { display: none; }
+.lst-tab-panel.active { display: block; }
+/* SEO-safe: panels are always in DOM; only display:none. First panel
+   default-shown via .active. No-JS fallback: first panel renders, others
+   hidden — still SEO-indexable. */
+
+/* ─── Panel sections (cards) ─── */
+.lst-section-card {
+  background: var(--ld-panel);
+  border: 1px solid var(--ld-border);
+  border-radius: var(--ld-r);
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.lst-section-card h2 {
+  font-size: 13px; text-transform: uppercase; letter-spacing: .5px;
+  color: var(--ld-text-dim); font-weight: 600;
+  margin: 0 0 14px;
+}
+.lst-section-card h2.large {
+  font-size: 18px; text-transform: none; letter-spacing: 0;
+  color: var(--ld-text); margin-bottom: 16px;
+}
+
+/* ─── Public remarks (large readable text) ─── */
+.lst-remarks {
+  font-size: 16px; line-height: 1.65; color: var(--ld-text);
+  margin: 0; white-space: pre-wrap;
+}
+
+/* ─── Spec grid (3-column responsive) ─── */
+.lst-spec-group-title {
+  /* CX8: labeled sub-headers inside the Property / Tax&Lot panels */
+  font-size: 12px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--ld-text-dim);
+  margin: 18px 0 8px; padding-bottom: 6px;
+  border-bottom: 1px solid var(--ld-border);
+}
+.lst-spec-group-title:first-child { margin-top: 4px; }
+
+.lst-spec-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 8px 32px;
+}
+.lst-spec-row {
+  display: flex; justify-content: space-between; gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid #232328;
+  font-size: 14px;
+}
+.lst-spec-row:last-child { border-bottom: 0; }
+.lst-spec-label { color: var(--ld-text-dim); }
+.lst-spec-value { color: var(--ld-text); text-align: right; font-weight: 500; }
+
+/* ─── Floor areas — compact horizontal cards ─── */
+.lst-floors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+.lst-floor-card {
+  background: var(--ld-bg);
+  border: 1px solid var(--ld-border);
+  border-radius: 4px;
+  padding: 10px;
+  text-align: center;
+}
+.lst-floor-name {
+  font-size: 10px; text-transform: uppercase; letter-spacing: .5px;
+  color: var(--ld-text-dim); margin: 0 0 4px;
+}
+.lst-floor-sqft {
+  font-size: 16px; font-weight: 600; color: var(--ld-text); margin: 0;
+}
+
+/* ─── Rooms table ─── */
+.lst-rooms-table {
+  width: 100%; border-collapse: collapse;
+  font-size: 14px;
+}
+.lst-rooms-table thead th {
+  text-align: left; padding: 10px 8px;
+  border-bottom: 1px solid var(--ld-border);
+  color: var(--ld-text-dim);
+  font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+  font-weight: 600;
+}
+.lst-rooms-table tbody td {
+  padding: 10px 8px;
+  border-bottom: 1px solid #232328;
+}
+.lst-rooms-table tbody tr:last-child td { border-bottom: 0; }
+.lst-rooms-floor {
+  color: var(--ld-text-dim);
+  font-size: 12px; text-transform: uppercase; letter-spacing: .3px;
+  width: 20%;
+}
+.lst-rooms-name { font-weight: 500; width: 50%; }
+.lst-rooms-size { color: var(--ld-text-dim); text-align: right; }
+
+/* ─── Features chips ─── */
+.lst-feature-chips {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin-top: 8px;
+}
+.lst-feature-chip {
+  background: var(--ld-bg);
+  border: 1px solid var(--ld-border);
+  color: var(--ld-text);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  line-height: 1.4;
+  transition: border-color .15s ease, background .15s ease;
+}
+.lst-feature-chip:hover {
+  border-color: #EA002A;
+  background: var(--ld-surface, var(--ld-bg));
+}
+
+/* ─── Map embed ─── */
+.lst-detail-map {
+  width: 100%; height: 420px;
+  border: 1px solid var(--ld-border);
+  border-radius: var(--ld-r);
+  overflow: hidden;
+}
+
+/* ─── Attribution + Unbranded VT ─── */
+.lst-detail-attribution {
+  background: var(--ld-panel);
+  border: 1px solid var(--ld-border);
+  border-radius: var(--ld-r);
+  padding: 16px;
+  font-size: 13px; color: var(--ld-text-dim); line-height: 1.5;
+  margin-bottom: 16px;
+}
+.lst-detail-attribution strong { color: var(--ld-text); }
+.lst-detail-attribution .att-line + .att-line { margin-top: 6px; }
+.lst-detail-vt-btn {
+  display: inline-block; margin-top: 12px;
+  padding: 8px 16px; border-radius: 4px;
+  background: var(--ld-bg); border: 1px solid var(--ld-border);
+  color: var(--ld-text); text-decoration: none; font-size: 13px;
+  font-weight: 500;
+}
+.lst-detail-vt-btn:hover { border-color: var(--ld-accent); color: var(--ld-accent); }
+
+/* ─── CTA row ─── */
+.lst-detail-cta-row {
+  display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;
+}
+.lst-detail-cta {
+  flex: 1 1 auto; min-width: 200px;
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 14px 24px;
+  border-radius: 6px;
+  font-weight: 600; font-size: 15px;
+  text-decoration: none; cursor: pointer;
+  font-family: inherit; border: 0;
+}
+.lst-detail-cta.primary { background: var(--ld-accent); color: #fff; }
+.lst-detail-cta.secondary {
+  background: transparent; color: var(--ld-text);
+  border: 1px solid var(--ld-border);
+}
+.lst-detail-cta.secondary:hover { border-color: var(--ld-accent); color: var(--ld-accent); }
+
+/* ─── Disclosures small grid ─── */
+.lst-disclosures-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+}
+.lst-disclosure-cell {
+  background: var(--ld-bg); border: 1px solid var(--ld-border);
+  border-radius: 4px; padding: 10px;
+}
+.lst-disclosure-cell .lst-spec-label { font-size: 11px; display: block; }
+.lst-disclosure-cell .lst-spec-value { font-size: 15px; text-align: left; margin-top: 4px; display: block; }
+
+/* ─── Mobile tweaks ─── */
+@media (max-width: 640px) {
+  .lst-detail-tabs-nav-inner { padding: 0 8px; }
+  .lst-tab-btn { padding: 12px 12px; font-size: 13px; }
+  .lst-detail-panels { padding: 20px 16px 60px; }
+  .lst-section-card { padding: 16px; }
+  .lst-detail-quickstats { padding: 10px 16px; }
+  .lst-detail-banner { padding: 12px 16px; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Price-change timeline (Strategic Vision Rec #1 + sold-detail Wave B
+   C1+C4 port 2026-05-18). Same class names as active-listing inline
+   variant (Convention #15 cousin) but ported into the shared external
+   stylesheet so both active + sold can reuse.
+
+   Active-listing usage: renders when there's been a price reduction
+   during marketing. Final row = current asking price.
+   Sold-listing usage: renders when original_list_price differs from
+   close_price by >$1. Final row = SOLD price (consumer is past the
+   VOW gate at this point, so close_price visibility is permitted).
+   ═══════════════════════════════════════════════════════════════════ */
+.lst-price-history {
+  max-width: 1200px;
+  margin: 24px auto 0;
+  padding: 0 20px;
+}
+.lst-price-history-inner {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 20px 24px;
+}
+.lst-price-history-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 14px;
+}
+.lst-price-history-title {
+  font-family: 'Raleway', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #fff;
+  margin: 0;
+}
+.lst-price-history-delta {
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+.lst-price-history-delta--down {
+  background: rgba(234, 0, 42, 0.18);
+  color: #ff4d6d;
+  border: 1px solid rgba(234, 0, 42, 0.45);
+}
+.lst-price-history-delta--up {
+  background: rgba(212, 175, 55, 0.18);
+  color: #d4af37;
+  border: 1px solid rgba(212, 175, 55, 0.45);
+}
+.lst-price-history-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.lst-price-history-row {
+  display: grid;
+  grid-template-columns: minmax(140px, 200px) minmax(120px, 1fr) auto;
+  align-items: baseline;
+  gap: 16px;
+  padding: 8px 0;
+  font-family: 'Roboto', sans-serif;
+}
+.lst-price-history-row + .lst-price-history-row {
+  border-top: 1px dashed rgba(255,255,255,0.08);
+}
+.lst-price-history-label {
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+.lst-price-history-amount {
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-family: 'Raleway', sans-serif;
+}
+/* Original-price row visually muted; current/sold price emphasised. */
+.lst-price-history-row--from .lst-price-history-amount {
+  color: rgba(255,255,255,0.6);
+  text-decoration: line-through;
+  text-decoration-color: rgba(255,255,255,0.35);
+}
+.lst-price-history-row--mid .lst-price-history-amount {
+  color: rgba(255,255,255,0.75);
+}
+.lst-price-history-row--to .lst-price-history-amount {
+  color: #fff;
+  font-size: 1.4rem;
+}
+/* Sold-specific final-row variant: red highlight for the sold price */
+.lst-price-history-row--sold .lst-price-history-amount {
+  color: #fff;
+  font-size: 1.4rem;
+}
+.lst-price-history-row--sold .lst-price-history-label {
+  color: #EA002A;
+}
+.lst-price-history-date {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.45);
+  font-style: italic;
+}
+/* Mobile: stack everything vertically. */
+@media (max-width: 600px) {
+  .lst-price-history-row {
+    grid-template-columns: 1fr;
+    gap: 4px;
+    padding: 10px 0;
+  }
+  .lst-price-history-label {
+    font-size: 0.82rem;
+  }
+  .lst-price-history-amount {
+    font-size: 1.15rem;
+  }
+  .lst-price-history-row--to .lst-price-history-amount,
+  .lst-price-history-row--sold .lst-price-history-amount {
+    font-size: 1.3rem;
+  }
+}
+
+/* ─── Per-agent trust widget (Wave B C8 — 2026-05-18 task #56) ───
+   Convention #15 byte-symmetric drift candidate: same rules live in
+   tools/ddf-generate-pages.py LISTING_PAGE_CSS for active-listing pages.
+   Sold-detail uses external css/listing-detail.css (this file); active
+   uses inline LISTING_PAGE_CSS. Any visual change must land in BOTH. */
+.lst-cta-card {
+  background: #1a1a1a;
+  border: 1px solid #222;
+  border-radius: 4px;
+  padding: 28px;
+  margin-bottom: 20px;
+}
+.lst-trust-card {
+  background: #0e0e0e;
+  border-left: 3px solid #EA002A;
+}
+.lst-trust-eyebrow {
+  font-family: "Raleway", sans-serif;
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #EA002A;
+  margin: 0 0 8px 0;
+}
+.lst-trust-headline { margin: 0 0 12px 0; }
+.lst-trust-h-line {
+  margin: 0 0 10px 0;
+  font-family: "Roboto", sans-serif;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  color: #e6e6e6;
+}
+.lst-trust-h-count {
+  color: inherit;
+  text-decoration: none;
+  display: block;
+}
+.lst-trust-h-count:hover { color: #EA002A; text-decoration: none; }
+.lst-trust-h-count strong { color: #fff; font-weight: 700; }
+.lst-trust-h-window {
+  color: #888;
+  font-size: 0.82rem;
+  display: block;
+  margin-top: 2px;
+}
+.lst-trust-tiles {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin: 12px 0 0 0;
+}
+.lst-trust-tile {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 6px;
+  padding: 10px 8px;
+  text-align: center;
+}
+.lst-trust-tile-v {
+  font-family: "Raleway", sans-serif;
+  font-weight: 800;
+  font-size: 1.35rem;
+  color: #fff;
+  line-height: 1.1;
+}
+.lst-trust-tile-l {
+  font-family: "Roboto", sans-serif;
+  font-size: 0.66rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #888;
+  margin-top: 4px;
+}
+.lst-trust-agent {
+  margin: 14px 0 0 0;
+  padding-top: 12px;
+  border-top: 1px solid #222;
+}
+.lst-trust-agent-line {
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: #c8c8c8;
+}
+.lst-trust-name {
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+}
+.lst-trust-name:hover { color: #EA002A; text-decoration: underline; }
+.lst-trust-count { color: inherit; text-decoration: none; }
+.lst-trust-count:hover { color: #EA002A; text-decoration: underline; }
+@media (min-width: 561px) {
+  .lst-trust-tiles { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* ─── Wave B C6/C7 — Similar Sold + Similar Active grids on sold-detail.
+   Per Sold_Detail_Enrichment_Design_Spec_2026-05-18.md.
+   Convention #15 active drift: matches the lst-similar pattern on active
+   listing-detail pages (LISTING_PAGE_CSS in tools/ddf-generate-pages.py).
+   Any visual change must land in both. */
+.lst-similar {
+  margin-top: 32px;
+  padding: 24px;
+  background: #0e0e0e;
+  border-radius: 6px;
+}
+.lst-similar-inner { max-width: 1200px; margin: 0 auto; }
+.lst-similar-heading {
+  font-family: "Raleway", sans-serif;
+  font-weight: 800;
+  font-size: 1.5rem;
+  color: #fff;
+  margin: 0 0 4px 0;
+}
+.lst-similar-sub {
+  font-family: "Roboto", sans-serif;
+  font-size: 0.92rem;
+  color: #c8c8c8;
+  margin: 0 0 18px 0;
+}
+.lst-similar-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+.lst-similar-card {
+  background: #1a1a1a;
+  border: 1px solid #222;
+  border-radius: 6px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.lst-similar-card:hover {
+  transform: translateY(-2px);
+  border-color: #EA002A;
+}
+.lst-similar-card-img {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1a1a1a, #0f0f0f);
+}
+.lst-similar-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.lst-similar-noimg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 11px;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.lst-similar-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 3px 8px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #fff;
+  z-index: 2;
+}
+.lst-similar-badge.sold-badge { background: #EA002A; }
+.lst-similar-badge.active-badge { background: #16a34a; }
+.lst-similar-card-body { padding: 12px; }
+.lst-similar-card-price {
+  font-family: "Raleway", sans-serif;
+  font-weight: 800;
+  font-size: 1.15rem;
+  color: #fff;
+  margin: 0 0 4px 0;
+}
+.lst-similar-card-addr {
+  font-family: "Roboto", sans-serif;
+  font-size: 0.85rem;
+  color: #e6e6e6;
+  margin: 0 0 4px 0;
+  line-height: 1.3;
+}
+.lst-similar-card-meta {
+  font-family: "Roboto", sans-serif;
+  font-size: 0.78rem;
+  color: #888;
+  margin: 0;
+}
+.lst-similar-viewall {
+  margin: 18px 0 0 0;
+  text-align: right;
+}
+.lst-similar-viewall a {
+  color: #EA002A;
+  font-family: "Roboto", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+.lst-similar-viewall a:hover { text-decoration: underline; }
+@media (max-width: 600px) {
+  .lst-similar { padding: 16px; }
+  .lst-similar-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .lst-similar-card-body { padding: 10px; }
+  .lst-similar-card-price { font-size: 1rem; }
+  .lst-similar-card-addr { font-size: 0.75rem; }
+}
+
+
+/* ============ Wave C Day 1 — Street View Static (sold-detail port) ============
+   Ported 2026-05-19 from generator's LISTING_PAGE_CSS inline-style block.
+   Applies to BOTH active listing-detail (inline) AND sold-detail (this sheet).
+   Convention #15 active drift: any visual change MUST update both copies. */
+.lst-streetview {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 6px;
+  padding: 18px 20px 14px;
+  margin: 18px 0;
+}
+.lst-streetview-h {
+  font-family: "Raleway", sans-serif;
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: #ffffff;
+  margin: 0 0 14px 0;
+  letter-spacing: 0.005em;
+}
+.lst-streetview-img-wrap {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #0a0a0a;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+.lst-streetview-img-wrap img,
+.lst-streetview-img-wrap iframe {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border: 0;
+  object-fit: cover;
+}
+.lst-streetview-attr {
+  font-family: "Roboto", sans-serif;
+  font-size: 0.78rem;
+  color: #a8a8a8;
+  margin: 10px 0 0 0;
+  line-height: 1.4;
+}
+.lst-streetview-attr a {
+  color: #c8c8c8;
+  text-decoration: none;
+  border-bottom: 1px dotted rgba(255,255,255,0.3);
+}
+.lst-streetview-attr a:hover { color: #EA002A; border-bottom-color: #EA002A; }
+@media (max-width: 720px) {
+  .lst-streetview { padding: 14px; }
+  .lst-streetview-h { font-size: 1.05rem; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Photo gallery (A3 Wave C frontend ship 2026-05-20)
+   Mirrors LISTING_PAGE_CSS .lst-gallery-* rules in
+   tools/ddf-generate-pages.py:1226-1294. Renders 1 hero + 4 thumbs +
+   "View all N photos" button when photos.length >= 2. Today most sold
+   listings have photos.length === 1 (Decision E baseline, single
+   001.jpg per MLS) so the multi-photo grid is dormant. Lights up
+   automatically when idx-sold-photo-sync expands beyond 001.jpg.
+═══════════════════════════════════════════════════════════════════ */
+.lst-detail-hero-gallery { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+.lst-detail-hero-gallery .lst-gallery {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 8px;
+}
+.lst-detail-hero-gallery .lst-gallery a {
+  display: block;
+  overflow: hidden;
+  border-radius: 4px;
+  background: #111;
+  cursor: zoom-in;
+  position: relative;
+}
+.lst-detail-hero-gallery .lst-gallery a img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .4s;
+  display: block;
+}
+.lst-detail-hero-gallery .lst-gallery a:hover img { transform: scale(1.04); }
+.lst-detail-hero-gallery .lst-gallery a:nth-child(1) {
+  grid-row: 1 / span 2;
+  aspect-ratio: 1.6 / 1;
+}
+.lst-detail-hero-gallery .lst-gallery a:nth-child(n+2) { aspect-ratio: 1.5 / 1; }
+.lst-detail-hero-gallery .lst-gallery .lst-gallery-hero .lst-detail-status-badge {
+  position: absolute;
+  top: 16px; left: 16px;
+  z-index: 2;
+}
+.lst-detail-hero-gallery .lst-view-all-btn {
+  display: none;
+  margin: 12px auto 0;
+  background: #EA002A; color: #fff;
+  border: none; padding: 12px 24px; border-radius: 4px;
+  font-family: 'Raleway', sans-serif; font-weight: 700;
+  font-size: 0.95rem; letter-spacing: 0.4px;
+  text-transform: uppercase; cursor: pointer;
+  transition: background .15s ease;
+}
+.lst-detail-hero-gallery .lst-view-all-btn:hover,
+.lst-detail-hero-gallery .lst-view-all-btn:focus {
+  background: #c00024; outline: none;
+}
+@media (max-width: 800px) {
+  .lst-detail-hero-gallery .lst-gallery {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 6px;
+  }
+  .lst-detail-hero-gallery .lst-gallery a:nth-child(1) {
+    grid-column: 1 / span 2;
+    grid-row: 1;
+    aspect-ratio: 1.5 / 1;
+  }
+  .lst-detail-hero-gallery .lst-gallery a:nth-child(2),
+  .lst-detail-hero-gallery .lst-gallery a:nth-child(3) {
+    aspect-ratio: 1.5 / 1;
+    grid-row: 2;
+  }
+  .lst-detail-hero-gallery .lst-gallery a:nth-child(n+4) { display: none; }
+  .lst-detail-hero-gallery .lst-view-all-btn { display: block; }
+}
+@media (max-width: 420px) {
+  .lst-detail-hero-gallery .lst-gallery { grid-template-columns: 1fr; }
+  .lst-detail-hero-gallery .lst-gallery a:nth-child(1) { grid-column: 1; }
+  .lst-detail-hero-gallery .lst-gallery a:nth-child(n+2) { display: none; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Walk Score tiles — Wave C C10 sold-detail port 2026-05-20
+   Mirrors LISTING_PAGE_CSS .lst-walkscore-* rules in
+   tools/ddf-generate-pages.py:2435-2504. Per Convention #15 active drift
+   list — when active listing-detail CSS migrates from inline to this
+   external sheet, dedupe these rules at the same time.
+═══════════════════════════════════════════════════════════════════ */
+.lst-walkscore {
+  margin: 0;
+  padding: 20px;
+  background: #0f0f0f;
+  border: 1px solid #1f1f1f;
+  border-radius: 6px;
+}
+.lst-walkscore-h {
+  margin: 0 0 16px;
+  font-family: 'Raleway', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: #fff;
+}
+.lst-walkscore-tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 14px;
+}
+.lst-walkscore-tile {
+  text-align: center;
+  padding: 14px 10px;
+  background: #1a1a1a;
+  border: 1px solid #262626;
+  border-radius: 4px;
+}
+.lst-walkscore-score {
+  font-family: 'Raleway', sans-serif;
+  font-size: 2.6rem;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.lst-walkscore-label {
+  font-family: 'Raleway', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #d0d0d0;
+  margin-bottom: 4px;
+}
+.lst-walkscore-desc {
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.82rem;
+  color: #9a9a9a;
+  line-height: 1.3;
+}
+.lst-walkscore-attr {
+  margin: 14px 0 0;
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.78rem;
+  color: #8a8a8a;
+  text-align: center;
+}
+.lst-walkscore-attr a {
+  color: #b0b0b0;
+  text-decoration: underline;
+}
+.lst-walkscore-attr a:hover { color: #EA002A; }
+@media (max-width: 560px) {
+  .lst-walkscore { padding: 14px; }
+  .lst-walkscore-tiles { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .lst-walkscore-tile { padding: 10px 4px; }
+  .lst-walkscore-score { font-size: 2rem; }
+  .lst-walkscore-label { font-size: 0.7rem; }
+  .lst-walkscore-desc { font-size: 0.72rem; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Virtual tour / video embed — Wave C C12 sold-detail port 2026-05-20
+   Mirrors LISTING_PAGE_CSS .lst-tour-* rules in
+   tools/ddf-generate-pages.py:1246-1267. Per Convention #15 active drift
+   list — when active listing-detail CSS migrates from inline to this
+   external sheet, dedupe these rules at the same time.
+═══════════════════════════════════════════════════════════════════ */
+.lst-tour-section {
+  background: #18181b;
+  border: 1px solid #2a2a2e;
+  border-radius: 6px;
+  padding: 20px;
+  margin: 24px 0 0;
+}
+.lst-tour-section h2 {
+  margin: 0 0 16px;
+  font-family: 'Raleway', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #fff;
+}
+.lst-tour-embed {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 — YouTube default */
+  height: 0;
+  background: #0a0a0a;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 0 0 16px;
+}
+.lst-tour-embed:last-child { margin-bottom: 0; }
+.lst-tour-embed iframe {
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 100%;
+  border: 0;
+}
+/* iGuide / Matterport render taller by default */
+.lst-tour-3d { padding-bottom: 65%; }
+.lst-tour-fallback { margin: 0 0 16px; }
+.lst-tour-fallback a {
+  display: inline-block;
+  padding: 10px 16px;
+  background: #EA002A;
+  color: #fff;
+  border-radius: 4px;
+  text-decoration: none;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.lst-tour-fallback a:hover { background: #c00021; }
+@media (max-width: 720px) {
+  .lst-tour-section { padding: 14px; }
+}

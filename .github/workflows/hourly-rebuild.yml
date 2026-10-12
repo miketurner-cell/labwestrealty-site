@@ -139,8 +139,19 @@ jobs:
             echo "[PROJECT] skipped - idx-cache/listings.json absent"
           fi
 
-      # NEXT COMPONENTS ADD THEIR STEPS HERE, in plan order: listing pages (4), fragments and homepage (7),
-      # asset stamps and the rebuild gates (4, 7). Each is gated by the same `rebuild` job condition.
+      - name: Regenerate listing pages (Labrador City + Wabush homes for sale, with sweep)
+        if: steps.change_gate.outputs.should_regen == 'true'
+        working-directory: tools
+        env:
+          R2_BASE_URL: ${{ secrets.R2_BASE_URL }}
+          GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+        run: python3 ddf-generate-pages.py
+
+      - name: Apply the switch state (preview = noindex and no sitemap; on = indexed and in the sitemap index)
+        run: python3 tools/labwest-listings-state.py "${{ needs.switch.outputs.state }}"
+
+      # NEXT COMPONENTS ADD THEIR STEPS ABOVE THIS LINE, in plan order: sold pages (5), nightly aggregates (6),
+      # fragments and homepage (7), asset stamps and the rebuild gates. Each is gated by the same `rebuild` job condition.
 
       - name: Diff-gated commit and push
         run: |
@@ -148,16 +159,31 @@ jobs:
           git config user.email "ddf-bot@royallepageturner.com"
           # Stage exactly what the rebuild can change; a missing optional path is a no-op for that path only.
           git add -A -- images/listings 2>/dev/null || true
-          for _p in tools/idx-cache/listings-projected.json; do
+          for _p in \
+            listings/ \
+            property/ \
+            sitemap-listings.xml \
+            sitemap-property.xml \
+            sitemap-index.xml \
+            _redirects \
+            tools/idx-cache/listings-projected.json \
+            tools/ddf-cache/deploy-manifest.json \
+            tools/ddf-cache/swept-listings.json \
+            tools/ddf-fragments/; do
             git add -- "$_p" 2>/dev/null || true
           done
           if git diff --cached --quiet; then
             echo "No changes - feed unchanged this hour."
             exit 0
           fi
+          # Rebuild gate: the listings pre-deploy check must pass before the bot commit (this push uses the
+          # workflow token, so no other workflow runs on it).
+          [ -d listings ] || { echo "::error::REBUILD GATE FAILED (no listings/ directory after the rebuild)"; exit 1; }
+          python3 tools/pre-deploy-check.py --scope listings/ || { echo "::error::REBUILD GATE FAILED (pre-deploy-check --scope listings/): commit blocked, nothing pushed"; exit 1; }
           # skip-actions tag: stops the push from re-triggering workflows. Never the CI-skip tag, which
           # Netlify also honours and would leave the live site stuck on the last human commit.
-          git commit -m "Hourly listings rebuild: Lab West feed cache [skip actions]"
+          COUNT=$(python3 -c "import json; print(json.load(open('tools/ddf-cache/deploy-manifest.json'))['listing_count'])" 2>/dev/null || echo "?")
+          git commit -m "Hourly listings rebuild: ${COUNT} active [skip actions]"
           _ok=0
           _br="${GITHUB_REF#refs/heads/}"
           for _attempt in 1 2 3 4 5; do

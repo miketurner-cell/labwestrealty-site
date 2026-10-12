@@ -1,0 +1,108 @@
+/* ============================================
+   GooseBayRealEstate.ca — Mobile Fixes
+   Link AFTER main.css on every page.
+   Dark theme variant (converged with fleet canonical 2026-09-16 — the
+   previous file was a light-theme leftover: white open-menu panel behind
+   white link text, #555 dropdown links, and an UNSCOPED white
+   .nav-cta-outline background that made FREE EVALUATION white-on-white
+   at desktop).
+   ============================================ */
+
+/* --- Hamburger menu background & layout --- */
+@media (max-width: 1023px) {
+  /* .nav-main-bar height lives in main.css (min-height:60px) and the open
+     menu panel's max-height is calc(100dvh - 60px) there — both agree, so
+     no override here. */
+  .nav-main-links.open {
+    background-color: #111111;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    padding-bottom: 12px;
+  }
+
+  /* --- Dropdown tap-to-open (pairs with mobile-nav.js) --- */
+  .nav-dropdown:hover > .nav-dropdown-content,
+  .nav-dropdown:focus-within > .nav-dropdown-content {
+    display: none;             /* disable hover/focus — JS controls visibility */
+  }
+  .nav-dropdown.open > .nav-dropdown-content {
+    display: flex;
+    flex-direction: column;
+    background: #111111;
+    padding-left: 16px;
+  }
+  .nav-dropdown-content a {
+    color: rgba(255, 255, 255, 0.7);
+    padding: 10px 0;
+    display: block;
+    font-size: 14px;
+  }
+  .nav-dropdown-content a:hover,
+  .nav-dropdown-content a:active {
+    color: #EA002A;
+    padding-left: 0;
+    background: transparent;
+  }
+
+  /* Dropdown arrow rotation when open */
+  .nav-dropdown.open > a::after {
+    transform: rotate(180deg);
+    border-top-color: #EA002A;
+  }
+
+  /* --- Submenu tap-to-open --- */
+  .nav-submenu:hover > .nav-submenu-content {
+    display: none;
+  }
+  .nav-submenu.open > .nav-submenu-content {
+    display: flex;
+    flex-direction: column;
+    background: #1a1a1a;
+    padding-left: 16px;
+  }
+
+  /* --- CTA buttons visible in mobile menu --- */
+  .nav-main-links.open ~ .nav-main-right {
+    display: flex;
+  }
+
+  /* --- Goose Bay only: the in-menu FREE EVALUATION button is a white
+     button with dark text (main.css sets color/border #1a1a1a; the white
+     background lived here unscoped and leaked to desktop). Scoped to the
+     in-menu instance only — the header-bar instance keeps main.css's
+     transparent/white-text outline style. --- */
+  .nav-main-links .nav-menu-cta .nav-cta-outline {
+    background-color: #ffffff;
+    color: #1a1a1a;
+    border-color: #1a1a1a;
+    padding: 10px 24px;   /* the generic .nav-main-links > li > a rule zeroes side padding */
+  }
+}
+
+/* --- Phone number wrapping fix --- */
+@media (max-width: 480px) {
+  .nav-phone-pill {
+    white-space: nowrap;
+    padding: 8px 14px 8px 10px;
+  }
+  .nav-phone-pill .nav-phone-num {
+    font-size: 12px;
+  }
+}
+
+/* --- Prevent horizontal overflow --- */
+body {
+  overflow-x: hidden;
+}
+
+/* --- Grid minmax safety for 390px screens --- */
+@media (max-width: 480px) {
+  [style*="minmax(300px"],
+  [style*="minmax(280px"] {
+    grid-template-columns: 1fr !important;
+  }
+  /* Force 2-column inline grids to stack on narrow phones */
+  [style*="grid-template-columns:1fr 1fr"],
+  [style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+}
