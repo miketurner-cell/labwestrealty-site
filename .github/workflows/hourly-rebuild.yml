@@ -139,6 +139,10 @@ jobs:
             echo "[PROJECT] skipped - idx-cache/listings.json absent"
           fi
 
+      - name: Install the Listing Text Alerts page (only when tools/labwest-alerts.json says the backend is ready)
+        if: steps.change_gate.outputs.should_regen == 'true'
+        run: python3 tools/labwest-alerts-page.py
+
       - name: Install the sold-listings shell (template -> listings/sold/index.html)
         if: steps.change_gate.outputs.should_regen == 'true'
         run: python3 tools/labwest-sold-shell.py

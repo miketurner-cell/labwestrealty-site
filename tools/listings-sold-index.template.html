@@ -383,7 +383,7 @@ a { color: inherit; }
 <link rel="stylesheet" href="/css/main.css">
 <link rel="stylesheet" href="/css/turner-network.css">
 <link rel="stylesheet" href="/css/favorites.css">
-<link rel="stylesheet" href="/css/auth.css">  <!-- Batch A3: sold-alerts opt-in reuses saved-search.js's toast/modal, styled here -->
+<link rel="stylesheet" href="/css/auth.css">  <!-- sold-alerts opt-in styles (only used when the alerts backend is ready) -->
 <link rel="stylesheet" href="/css/sold-discover.css">  <!-- Map-search redesign, ported from Gander/Avalon 2026-08-07 -->
 
 <!-- fub-pixel:v1 -->
@@ -622,7 +622,7 @@ a { color: inherit; }
 <script src="/js/vow-gate.js" defer></script>
 <!-- Batch A3 (2026-08-05): sold-alerts opt-in banner. TURNER_SITE must be set
      explicitly here — this page never loads turner-network.js, so
-     saved-search.js's site_id derivation would otherwise silently default
+     the alert scripts' site id would otherwise silently default
      to realestategander on every site. -->
 <script>window.TURNER_SITE = 'labwest';</script>
 <script src="/js/saved-search.js" defer></script>

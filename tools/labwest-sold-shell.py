@@ -26,6 +26,15 @@ def main(argv=None) -> int:
         if marker not in text:
             print(f"[sold-shell] template lacks {marker!r}", file=sys.stderr)
             return 1
+    # The sold-alerts opt-in banner posts to Gander and files saved searches by site; until tools/labwest-alerts.json says the
+    # backend knows labwest, the shell carries neither script (always-on #17).
+    import json as _json, re as _re
+    try:
+        ready = _json.loads((root / "tools" / "labwest-alerts.json").read_text(encoding="utf-8")).get("backend_ready") is True
+    except Exception:
+        ready = False
+    if not ready:
+        text = _re.sub(r'<script src="/js/(?:saved-search|sold-alerts-optin)\.js[^>]*></script>\n?', "", text)
     dest = root / "listings" / "sold" / "index.html"
     dest.parent.mkdir(parents=True, exist_ok=True)
     dest.write_text(text, encoding="utf-8")
