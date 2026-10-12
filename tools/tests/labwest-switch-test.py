@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+"""STRICT: the Lab West listings switch is wired dark (sites, D-1012-34).
+
+Rules, checked from the files alone (no network, no secrets):
+  1. Every workflow other than pre-deploy.yml that is scheduled, dispatched or pushes to main
+     must have a `switch` job (runs-on ubuntu-latest, reads vars.LABWEST_LISTINGS, unset = off)
+     and every other job must `needs: switch` and gate on `needs.switch.outputs.state == 'on'`
+     (or 'preview' where it says so) BEFORE any RETS login step.
+  2. No workflow may reference NLAR_RETS_* secrets outside a job gated that way.
+  3. pre-deploy.yml itself never references RETS or R2 secrets (it is the only workflow that
+     runs while the switch is off).
+Fail loud: a workflow we cannot parse is an error, not a skip (always-on #16).
+"""
+import re
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+WF = ROOT / ".github" / "workflows"
+errors = []
+
+
+def jobs_of(text):
+    """Split a workflow into {job_name: block} using top-level 2-space job keys under `jobs:`."""
+    m = re.search(r"^jobs:\s*$", text, re.M)
+    if not m:
+        return {}
+    body = text[m.end():]
+    parts = re.split(r"^  ([A-Za-z0-9_-]+):\s*$", body, flags=re.M)
+    return {parts[i]: parts[i + 1] for i in range(1, len(parts) - 1, 2)}
+
+
+files = sorted(WF.glob("*.yml")) if WF.is_dir() else []
+if not files:
+    errors.append(".github/workflows has no workflow files")
+
+for f in files:
+    text = f.read_text()
+    jobs = jobs_of(text)
+    if not jobs:
+        errors.append(f"{f.name}: no jobs parsed")
+        continue
+    if f.name == "pre-deploy.yml":
+        if re.search(r"NLAR_RETS|R2_[A-Z_]+|secrets\.", text):
+            errors.append("pre-deploy.yml references secrets; it runs while the switch is off")
+        continue
+    sw = jobs.get("switch")
+    if sw is None:
+        errors.append(f"{f.name}: no `switch` job")
+        continue
+    if "ubuntu-latest" not in sw or "vars.LABWEST_LISTINGS" not in sw or "off" not in sw:
+        errors.append(f"{f.name}: switch job must run on ubuntu-latest and read vars.LABWEST_LISTINGS defaulting to off")
+    for name, block in jobs.items():
+        if name == "switch":
+            continue
+        if not re.search(r"needs:\s*\[?\s*switch", block):
+            errors.append(f"{f.name}: job {name} does not need the switch job")
+        if not re.search(r"needs\.switch\.outputs\.state\s*==\s*'(on|preview)'", block):
+            errors.append(f"{f.name}: job {name} is not gated on needs.switch.outputs.state")
+    # any RETS secret must sit inside a gated job
+    for name, block in jobs.items():
+        if name != "switch" and "NLAR_RETS" in block and "needs.switch.outputs.state" not in block:
+            errors.append(f"{f.name}: job {name} uses RETS secrets without the gate")
+
+if errors:
+    print("labwest-switch-test FAILED:")
+    for e in errors:
+        print("  -", e)
+    sys.exit(1)
+print(f"labwest-switch-test OK: {len(files)} workflow file(s), every pulling job gated on LABWEST_LISTINGS")
