@@ -8045,15 +8045,20 @@ def _render_sold_city_html(template_html: str, city_slug: str, city_label: str, 
     # data.json is pre-filtered to one city and the dropdown would otherwise
     # render confusing "All cities (942) / Paradise (942)" legacy-fallback output.
     # Banked 2026-05-21 evening from Mike's screenshot bug report.
-    sold_listings_js_pattern = '<script src="/js/sold-listings.js?v=20260929-sold-auth'
-    inline_override = (
-        '<script>'
-        'window.SOLD_DATA_URL = "' + data_url + '";'
-        'window.SOLD_CITY_SLUG = "' + city_slug + '";'
-        'window.SOLD_CITY_LABEL = "' + city_label.replace('"', '\\"') + '";'
-        '</script>\n' + sold_listings_js_pattern
-    )
-    out = out.replace(sold_listings_js_pattern, inline_override, 1)
+    # Lab West: match the tag with or without a ?v= stamp (Goose Bay's literal stamp went stale and the per-city data URL
+    # override silently stopped being injected there; this site must never do that).
+    _m = re.search(r'<script src="/js/sold-listings\.js(?:\?v=[^"]*)?"', out)
+    if _m:
+        inline_override = (
+            '<script>'
+            'window.SOLD_DATA_URL = "' + data_url + '";'
+            'window.SOLD_CITY_SLUG = "' + city_slug + '";'
+            'window.SOLD_CITY_LABEL = "' + city_label.replace('"', '\\"') + '";'
+            '</script>\n'
+        )
+        out = out[:_m.start()] + inline_override + out[_m.start():]
+    else:
+        raise SystemExit("ddf-generate-pages: sold index template has no /js/sold-listings.js tag; per-town sold pages would lose their data URL")
 
     return out
 

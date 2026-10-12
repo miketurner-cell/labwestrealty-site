@@ -40,3 +40,9 @@ exit 0
     Cross-Origin-Opener-Policy = "same-origin-allow-popups"
     # Content-Security-Policy REMOVED 2026-04-15 — was breaking RealtyVis widget fetches.
     # Re-add once RealtyVis provides the complete list of origins their widget calls.
+
+# ═══ Sold data behind sign-in (sites, D-1012-34; ported from Goose Bay, Gander site review item 3) ═══
+# The sold JSON files exist only after the gated rebuild writes them (LABWEST_LISTINGS preview/on). The _redirects rules that
+# send those URLs to this function are added by tools/labwest-listings-state.py at the same time. While off the function answers 404.
+[functions."sold-data"]
+  included_files = ["listings/sold/data.json", "listings/sold/*/data.json", "listings/sold/detail/*.json"]
