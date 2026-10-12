@@ -1,0 +1,95 @@
+/* Site-owned mobile/tablet bottom action bar (Tier-1, byte-identical
+   across the fleet) -- fleet/canonical/css/mobile-action-bar.css.
+
+   Replaces two older, redundant bars: Gander's per-generator
+   .lst-mobile-cta (listing-detail only) and js/boldtrail-forms.js's
+   .rf-sticky-bar (marketing pages, all 3 sites -- stickyBar() is now
+   a no-op). Rendered by js/mobile-action-bar.js on every page under
+   1024px wide -- phone AND portrait tablet, matching the B5 tablet-tier
+   breakpoint (1024 -> 1023) the same review pass standardized on.
+
+   Mike 2026-09-17, "Mobile + iPad review of the fleet" plan, Part 1
+   Tier B, row B1. */
+
+.mab-bar { display: none; }
+
+@media (max-width: 1023px) {
+  .mab-bar {
+    display: flex;
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 95;
+    height: 56px;
+    background: #EA002A;
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.35);
+    padding-bottom: env(safe-area-inset-bottom, 0);
+    box-sizing: content-box;
+  }
+
+  .mab-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 56px;
+    background: transparent;
+    color: #fff;
+    border: none;
+    border-right: 1px solid rgba(255, 255, 255, 0.22);
+    margin: 0;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 800;
+    font-size: 0.7rem;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mab-btn:last-child { border-right: none; }
+  .mab-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+  .mab-btn span { line-height: 1.1; }
+
+  .mab-btn-primary {
+    background: #fff;
+    color: #EA002A;
+  }
+
+  body.mab-active {
+    padding-bottom: calc(56px + env(safe-area-inset-bottom, 0));
+  }
+}
+
+/* Floating-element coordination (fleet slice 3, 2026-10-06).
+   While a phone keyboard is up (html.tnr-kb-open, set by the keyboard watch
+   in js/mobile-action-bar.js / js/chat-widget.js / js/app-shell.js) the
+   sticky bar would ride on top of the keyboard and cover the field being
+   typed in -- hide it until the keyboard closes. */
+html.tnr-kb-open .mab-bar,
+html.tnr-kb-open .rf-sticky-bar,
+html.tnr-kb-open .lst-mobile-cta { display: none !important; }
+
+/* A focused form field scrolls clear of the sticky bar (browsers honour
+   scroll-margin when they scroll a focused control into view; the JS in
+   js/mobile-action-bar.js covers the ones that don't). */
+@media (max-width: 1023px) {
+  body.mab-active input:not([type="hidden"]),
+  body.mab-active select,
+  body.mab-active textarea {
+    scroll-margin-bottom: calc(56px + env(safe-area-inset-bottom, 0px) + 24px);
+  }
+}
+
+/* FORM_CLEAR (redesign 2026-10-09, Mike D-1009-77 item 5): while a form is in the
+   viewport or one of its fields has focus on a phone, js/mobile-action-bar.js sets
+   html.tnr-form-clear (only with the FORM_CLEAR switch on) and nothing sits over the
+   fields or the submit button: this bar, the "Get the app" card (css/app-shell.css)
+   and the chat launcher (js/chat-widget.js) all step aside. */
+@media (max-width: 1023px) {
+  html.tnr-form-clear .mab-bar,
+  html.tnr-form-clear .rf-sticky-bar,
+  html.tnr-form-clear .lst-mobile-cta { display: none !important; }
+}

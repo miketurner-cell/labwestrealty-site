@@ -1,0 +1,24 @@
+{
+  "_comment": "Lab West agent roster (sites, D-1012-34). One person: Mike Turner, Broker of Record, is the contact for every Lab West listing and inquiry (D-1012-28/33). Phone is the brokerage line, not his mobile. No office address: Lab West has no physical office.",
+  "agents": [
+    {
+      "slug": "mike-turner",
+      "name": "Mike Turner",
+      "first_name": "Mike",
+      "widget_name": "Mike Turner",
+      "in_widget": true,
+      "phone": "709-256-7999",
+      "direct": "709-256-7999",
+      "email": "miketurner@royallepage.ca",
+      "photo": "/images/mike-turner.jpg",
+      "card_title": "Broker of Record",
+      "team": "Labrador West",
+      "team_widget": "Labrador West",
+      "home_site": "labwestrealty-site",
+      "aliases": [
+        "michael turner",
+        "michael"
+      ]
+    }
+  ]
+}

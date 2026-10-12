@@ -89,3 +89,19 @@ jobs:
 
       - name: Lab West feed scope, lease drop and site config (STRICT — Labrador City + Wabush only, no leases, R2 prefix labwest/)
         run: python3 tools/tests/labwest-scope-test.py
+
+      - name: Lab West listing pages - dark while off, homes only, no leases, Mike as the contact, state script (STRICT)
+        run: python3 tools/tests/labwest-listings-test.py
+
+      - name: No Lab West street address anywhere (STRICT)
+        run: python3 tools/tests/labwest-no-address-test.py
+
+      - name: Feed field list equals Gander's (STRICT)
+        run: python3 tools/tests/idx-fields-parity-test.py
+
+      - name: Header, nav and feedback tests (STRICT)
+        run: |
+          node tools/tests/header-v2-test.mjs
+          node tools/tests/header-nosearch-test.mjs
+          node tools/tests/nav-partner-label-test.mjs
+          node tools/tests/site-feedback-test.mjs
