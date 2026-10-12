@@ -36,6 +36,8 @@ if (ROOT / "listings").is_dir():
     print("A. off proof: skipped (listings/ is committed: the switch has been flipped)")
 else:
     check(not (ROOT / "property").exists(), "A: property/ exists while the switch has never been on")
+    for p in ROOT.glob("*.html"):
+        check("recruit-band" not in p.read_text(encoding="utf-8", errors="ignore"), f"A: {p.name} loads the recruiting band (it belongs on generated pages only)")
     check("/api/chat" not in (ROOT / "_redirects").read_text(), "A: _redirects routes /api/chat while off")
     for p in ROOT.glob("*.html"):
         check("chat-widget" not in p.read_text(encoding="utf-8", errors="ignore") and "/api/chat" not in p.read_text(encoding="utf-8", errors="ignore"),
@@ -112,6 +114,11 @@ try:
     check(hosts == {"realestategander.com"}, f"B: form scripts post to {sorted(hosts)}; only Gander's functions are allowed")
     check("referer_url" in bt and "referer_url" in ls, "B: the form payloads must carry referer_url (the labwestrealty.com page) for lead routing")
     check("chat-widget.js" in other and "chat-widget.js" in ours, "B: generated detail pages must load the chat widget (the function exists)")
+    # recruiting band (component 11): on every generated page that has a footer, never on a hand-written page
+    nob = [str(p.relative_to(work)) for p, t in allhtml.items() if "site-footer" in t and "recruit-band.js" not in t]
+    check(not nob, f"B: generated pages without the recruiting band script: {nob[:5]}")
+    band_js = (ROOT / "js" / "recruit-band.js").read_text(encoding="utf-8")
+    check("aggregateRating" not in band_js and "reviewCount" not in band_js and "ratingValue" not in band_js, "B: the recruiting band carries a rating or review count")
     check("Century 21" in other, "B: the listing brokerage must still be shown (CREA)")
     for needle in ("Dynamic Duo", "goosebay", "Goose Bay", "896-5001", "A0P 1", "karen", "roberta", "goosebay@royallepage.ca"):
         check(needle.lower() not in joined.lower(), f"B: generated pages contain {needle!r}")

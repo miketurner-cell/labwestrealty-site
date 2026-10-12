@@ -95,6 +95,7 @@ try:
         check("GT-M38MJCDZ" in t_raw, f"3: {p.name} lacks Lab West's Google tag")
     check("Mike Turner" in ms_text and "709-256-7999" in ms_text, "3: the market-stats page must name Mike Turner and 709-256-7999")
     cc_text, cc_raw = text_of(work / "pages" / "labrador-city.html")
+    check(all("js/recruit-band.js" in (work / "pages" / n).read_text() for n in ("market-stats.html", "labrador-city.html", "wabush.html")), "4: generated pages must load the recruiting band")
     check("Mike Turner" in cc_text, "4: the community page must name Mike Turner")
     check("cmx-agent" not in cc_raw and "data-team-email" not in cc_raw, "4: a community agent card or lead form appeared (none is configured)")
     check(not (work / "community-v2").exists(), "4: a layout-v2 preview copy was written")
