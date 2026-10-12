@@ -188,6 +188,15 @@ jobs:
           GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
         run: python3 ddf-generate-pages.py --site-root ..
 
+      - name: Build the new homepage (preview = noindex /home-preview.html; on = index.html)
+        # Reads the generated data only. While the switch is only `preview` the committed index.html is never touched.
+        run: |
+          if [ "${{ needs.switch.outputs.state }}" = on ]; then
+            python3 tools/build-labwest-home.py --out index.html
+          else
+            python3 tools/build-labwest-home.py --out home-preview.html
+          fi
+
       - name: Apply the switch state (preview = noindex and no sitemap; on = indexed and in the sitemap index)
         run: python3 tools/labwest-listings-state.py "${{ needs.switch.outputs.state }}"
 
@@ -200,6 +209,8 @@ jobs:
           # Stage exactly what the rebuild can change; a missing optional path is a no-op for that path only.
           git add -A -- images/listings 2>/dev/null || true
           for _p in \
+            index.html \
+            home-preview.html \
             listings/ \
             property/ \
             pages/ \

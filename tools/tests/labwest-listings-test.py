@@ -36,6 +36,8 @@ if (ROOT / "listings").is_dir():
     print("A. off proof: skipped (listings/ is committed: the switch has been flipped)")
 else:
     check(not (ROOT / "property").exists(), "A: property/ exists while the switch has never been on")
+    check(not (ROOT / "home-preview.html").exists(), "A: home-preview.html exists while off")
+    check("lwh-" not in (ROOT / "index.html").read_text(), "A: the committed index.html carries the new homepage while off")
     check("sold-data" not in (ROOT / "_redirects").read_text(), "A: _redirects routes sold data while off")
     check(not (ROOT / "pages").exists() and not (ROOT / "sitemap-pages.xml").exists(), "A: pages/ or sitemap-pages.xml exists while off")
     for sm in ("sitemap-listings.xml", "sitemap-property.xml"):
@@ -130,6 +132,32 @@ try:
     check(len(sdata["rows"]) == 28, f"B: sold data.json should hold the 28 published in-scope sales, has {len(sdata['rows'])}")
     check(all(r.get("city_slug") in ("labrador-city", "wabush") for r in sdata["rows"]), "B: a sold row outside Labrador City / Wabush")
 
+    # homepage (component 7): built from the generated data only; the default output is a preview copy, never index.html
+    idx_before = (work / "index.html").read_bytes()
+    r = subprocess.run([sys.executable, "tools/build-labwest-home.py"], cwd=work, env=env, capture_output=True, text=True)
+    check(r.returncode == 0, f"B: homepage builder failed: {(r.stdout + r.stderr)[-300:]}")
+    check((work / "index.html").read_bytes() == idx_before, "B: the homepage builder touched index.html without --out index.html")
+    home = work / "home-preview.html"
+    check(home.exists(), "B: no home-preview.html")
+    if home.exists():
+        ht = home.read_text(encoding="utf-8")
+        plain = re.sub(r"<style.*?</style>|<script.*?</script>", "", ht, flags=re.S)
+        # for sale = rows that are not pending; the fixture has 6 for sale + 1 under contract among the in-scope homes
+        check(re.search(r"<b>6</b><span>homes for sale \(1 more under contract\)", plain) is not None, "B: homepage for-sale/pending counts differ from the projected rows")
+        sold_year = [x for x in sdata["rows"] if (x.get("sold_date") or "") >= "2025-10-12"]
+        check(f"<b>{len(sold_year)}</b><span>sold in the last 12 months" in plain, f"B: homepage sold-in-12-months count is not {len(sold_year)}")
+        check("Source: NLAR MLS" in plain and "as of Oct 12, 2026" in plain, "B: homepage must show its source and the feed date")
+        check("Listed at $" in plain and "see what it sold for when you register" in plain, "B: sold cards must show the asking price and the register prompt")
+        check("McGregor" not in ht, "B: the lease row appears on the homepage")
+        for needle in ("Dynamic Duo", "goosebay", "Goose Bay", "896-5001", "Hamilton", "204 Airport"):
+            check(needle.lower() not in ht.lower(), f"B: homepage contains {needle!r}")
+        for sr in sold_rows:
+            check(str(int(float(sr["ClosePrice"]))) not in ht.replace(",", "") or str(int(float(sr["ClosePrice"]))) in {str(int(float(x["ListPrice"]))) for x in sold_rows}, "B: a sold price is on the homepage")
+        allhtml[home] = ht
+    r = subprocess.run([sys.executable, "tools/build-labwest-home.py", "--out", "index.html"], cwd=work, env=env, capture_output=True, text=True)
+    check(r.returncode == 0 and (work / "index.html").read_bytes() != idx_before, "B: --out index.html must write the new homepage")
+    (work / "index.html").write_bytes(idx_before)  # restore the recruiting page for the rest of the checks
+
     # every local href/src resolves
     miss = set()
     for p, t in allhtml.items():
@@ -157,6 +185,7 @@ try:
     check(r0.returncode == 0 and (work / "sitemap-index.xml").read_text() == idx0, "C: off must change nothing")
     subprocess.run(st + ["preview", "--root", str(work)], check=True, capture_output=True)
     gen = [p for p in work.glob("listings/**/*.html")]
+    check('content="noindex,nofollow"' in (work / "home-preview.html").read_text(), "C: preview must noindex home-preview.html")
     check(all('<meta name="robots" content="noindex,nofollow">' in p.read_text() for p in gen), "C: preview must noindex every generated page")
     check((work / "sitemap-index.xml").read_text() == idx0, "C: preview must not register sitemaps")
     red1 = (work / "_redirects").read_text()
@@ -167,6 +196,7 @@ try:
     check(all(p.read_text() == snap[p] for p in gen), "C: preview is not idempotent")
     subprocess.run(st + ["on", "--root", str(work)], check=True, capture_output=True)
     check(all("noindex" not in p.read_text() for p in gen), "C: on must remove the noindex tag")
+    check(not (work / "home-preview.html").exists(), "C: on must remove the preview homepage (index.html is the homepage then)")
     on_idx = (work / "sitemap-index.xml").read_text()
     check("https://labwestrealty.com/sitemap-listings.xml" in on_idx and "https://labwestrealty.com/sitemap.xml" in on_idx, "C: on must register the listings sitemap and keep the recruiting one")
     subprocess.run(st + ["on", "--root", str(work)], check=True, capture_output=True)

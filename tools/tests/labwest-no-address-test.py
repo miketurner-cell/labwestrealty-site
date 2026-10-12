@@ -35,7 +35,12 @@ def generated_page_files():
     cfg = ROOT / "tools" / "community-config"
     if cfg.is_dir():
         names |= {p.stem + ".html" for p in cfg.glob("*.yml")}
-    return {ROOT / "pages" / n for n in names}
+    out = {ROOT / "pages" / n for n in names}
+    out.add(ROOT / "home-preview.html")
+    idx = ROOT / "index.html"
+    if idx.is_file() and "lwh-hero" in idx.read_text(encoding="utf-8", errors="ignore"):
+        out.add(idx)  # after the flip index.html is the generated homepage (it lists real homes, like the listing pages)
+    return out
 
 
 GEN_PAGES = generated_page_files()

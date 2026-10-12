@@ -33,6 +33,22 @@ def generated_pages(root: Path):
         if base.is_dir():
             yield from sorted(base.rglob("*.html"))
     yield from generated_pages_dir_files(root)
+    if state_home_preview(root).is_file():
+        yield state_home_preview(root)
+
+
+def state_home_preview(root: Path) -> Path:
+    """The preview copy of the new homepage (root-level so every relative link works). Removed when the switch is on."""
+    return root / "home-preview.html"
+
+
+def retire_home_preview(root: Path, want: bool) -> bool:
+    """On `on` the new homepage is index.html and the preview copy goes. Returns True if a file was removed."""
+    p = state_home_preview(root)
+    if want and p.exists():
+        p.unlink()
+        return True
+    return False
 
 
 def generated_pages_dir_files(root: Path):
@@ -137,6 +153,7 @@ def main(argv=None) -> int:
     if a.state == "off":
         print("[state] off: nothing generated, nothing changed")
         return 0
+    retire_home_preview(root, a.state == "on")
     pages = list(generated_pages(root))
     n = sum(1 for p in pages if set_noindex(p, a.state == "preview"))
     write_pages_sitemap(root, a.state == "on")
