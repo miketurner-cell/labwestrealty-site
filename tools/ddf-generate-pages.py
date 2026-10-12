@@ -1066,7 +1066,8 @@ _FOOTER_TEMPLATE = """<footer class="site-footer">
     <p>&copy; 1998&ndash;{{YEAR}} Royal LePage Turner Realty (2014) Inc. &middot; Est. 1998. Serving Newfoundland &amp; Labrador.</p>
     <p>Each office independently owned and operated. Not intended to solicit buyers or sellers currently under contract.</p>
   </div>
-</footer>"""
+</footer>
+<script src="{{P}}js/recruit-band.js" defer></script>"""
 
 
 # ═══════════════════════════════════════════════════════════════════
