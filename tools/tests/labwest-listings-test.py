@@ -181,6 +181,41 @@ try:
     check(r.returncode == 0 and (work / "index.html").read_bytes() != idx_before, "B: --out index.html must write the new homepage")
     (work / "index.html").write_bytes(idx_before)  # restore the recruiting page for the rest of the checks
 
+    # SEO and structured data (component 12): no ratings or review counts anywhere, own-domain canonicals, a sound sitemap
+    def walk(o):
+        if isinstance(o, dict):
+            for k, v in o.items():
+                yield k
+                yield from walk(v)
+        elif isinstance(o, list):
+            for v in o:
+                yield from walk(v)
+    BANNED = {"aggregateRating", "review", "reviews", "reviewCount", "ratingValue", "ratingCount", "bestRating"}
+    seo_pages = dict(allhtml)
+    for p, t in seo_pages.items():
+        for m in re.finditer(r'<script type="application/ld\+json">(.*?)</script>', t, re.S):
+            try:
+                node = json.loads(m.group(1))
+            except Exception:
+                check(False, f"B: {p.relative_to(work)} has JSON-LD that does not parse")
+                continue
+            check(not (set(walk(node)) & BANNED), f"B: {p.relative_to(work)} carries a rating or review in structured data (always-on #35)")
+        canon = re.search(r'<link rel="canonical" href="([^"]+)"', t)
+        check(canon is not None and canon.group(1).startswith("https://labwestrealty.com/"), f"B: {p.relative_to(work)} canonical is not on labwestrealty.com: {canon and canon.group(1)}")
+        ogu = re.search(r'<meta property="og:url" content="([^"]+)"', t)
+        check(ogu is None or ogu.group(1).startswith("https://labwestrealty.com/"), f"B: {p.relative_to(work)} og:url is not on labwestrealty.com")
+    detail_ld = [json.loads(m.group(1)) for m in re.finditer(r'<script type="application/ld\+json">(.*?)</script>', ours, re.S)]
+    rel = next((d for d in detail_ld if d.get("@type") == "RealEstateListing"), None)
+    check(rel is not None and rel.get("offers", {}).get("price") and rel.get("listingAgent", {}).get("name") == "Mike Turner", "B: the detail page needs RealEstateListing with an Offer and listingAgent Mike Turner")
+    sm = (work / "sitemap-listings.xml").read_text()
+    locs = re.findall(r"<loc>([^<]+)</loc>", sm)
+    check(locs and all(u.startswith("https://labwestrealty.com/") for u in locs), "B: sitemap-listings.xml has a loc outside labwestrealty.com")
+    check(len(locs) == len(set(locs)), "B: sitemap-listings.xml has duplicate urls")
+    for u in locs:
+        rp = u.replace("https://labwestrealty.com/", "")
+        check((work / rp).exists() or (work / (rp.rstrip("/") + ".html")).exists() or (work / rp / "index.html").exists(), f"B: sitemap url {u} has no generated page")
+    check(not any("mcgregor" in u for u in locs), "B: the lease row is in the sitemap")
+
     # every local href/src resolves
     miss = set()
     for p, t in allhtml.items():
