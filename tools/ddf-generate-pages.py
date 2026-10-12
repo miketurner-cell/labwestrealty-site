@@ -233,9 +233,10 @@ LISTING_AUDIO_MODE = os.environ.get("LISTING_AUDIO", "off").strip().lower()
 # SITE_PERSONAL_REVIEW (site track gate, Mike 2026-09-30 item 6; same semantics on all three sites):
 #   off -> nothing emitted;  preview (default) -> data-review="preview" on the card, the third tab is built by
 #   js/boldtrail-forms.js ONLY when the URL has ?preview=review;  on -> every visitor.
-PERSONAL_REVIEW_MODE = os.environ.get("SITE_PERSONAL_REVIEW", "preview").strip().lower()
+# Lab West: off by default (sites, D-1012-34). There is no agent to review here and no review count may be shown (always-on #35).
+PERSONAL_REVIEW_MODE = os.environ.get("SITE_PERSONAL_REVIEW", "off").strip().lower()
 if PERSONAL_REVIEW_MODE not in ("off", "preview", "on"):
-    PERSONAL_REVIEW_MODE = "preview"
+    PERSONAL_REVIEW_MODE = "off"
 PERSONAL_REVIEW_TEAM_LABEL = 'Ask Mike Turner'
 LISTING_AUDIO_SCOPE = os.environ.get("LISTING_AUDIO_SCOPE", "own").strip().lower()
 LISTING_AUDIO_HMAC = os.environ.get("LISTING_AUDIO_HMAC", "").strip()
