@@ -1,0 +1,1118 @@
+.ms * { box-sizing: border-box; margin: 0; padding: 0; }
+.ms a { text-decoration: none; }
+.ms {
+  --red: #EA002A;
+  --dark: #0a0a0a;
+  --dark2: #111111;
+  --dark3: #1a1a1a;
+  --border: #1e1e1e;
+  --border2: #252525;
+  --muted: #888888;
+  --light: #bbbbbb;
+  --white: #ffffff;
+  --green: #22c55e;
+  --yellow: #facc15;
+  font-family: 'Roboto', sans-serif;
+  color: var(--white);
+  background: var(--dark);
+}
+
+/* ── EYEBROW ── */
+.ms-eyebrow {
+  font-family: 'Raleway', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 20px;
+  display: block; /* inline rule: follows the label (centred or left, any wrap) */
+}
+.ms-eyebrow::before {
+  content: '';
+  display: inline-block; vertical-align: middle; margin-right: 12px;
+  width: 28px;
+  height: 2px;
+  background: var(--red);
+}
+
+/* ── BUTTONS ── */
+.ms-btn {
+  display: inline-block;
+  padding: 14px 28px;
+  background: var(--red);
+  color: var(--white);
+  font-family: 'Raleway', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border: 2px solid var(--red);
+  transition: background .2s, color .2s;
+}
+.ms-btn:hover { background: transparent; color: var(--red); }
+.ms-btn-sec {
+  display: inline-block;
+  padding: 14px 28px;
+  background: transparent;
+  color: var(--white);
+  font-family: 'Raleway', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border: 2px solid var(--border2);
+  transition: border-color .2s;
+}
+.ms-btn-sec:hover { border-color: #555; }
+
+/* ── HERO ── */
+.ms-hero {
+  background: var(--dark);
+  padding: 80px 24px 72px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.ms-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(255,255,255,.018) 59px,rgba(255,255,255,.018) 60px);
+  pointer-events: none;
+}
+.ms-hero-inner { max-width: 860px; margin: 0 auto; position: relative; }
+.ms-update-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--dark3);
+  border: 1px solid var(--border2);
+  border-left: 3px solid var(--red);
+  padding: 8px 16px;
+  margin-bottom: 28px;
+  font-family: 'Raleway', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--light);
+}
+.ms-update-badge span { color: var(--red); }
+.ms-hero h1 {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 900;
+  font-size: clamp(38px, 6vw, 66px);
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  color: var(--white);
+  margin-bottom: 24px;
+}
+.ms-hero h1 em { color: var(--red); font-style: normal; }
+.ms-hero-sub {
+  font-size: 17px;
+  font-weight: 300;
+  color: var(--light);
+  line-height: 1.75;
+  max-width: 640px;
+  margin-bottom: 28px;
+}
+.ms-source-line { font-size: 12px; font-weight: 300; color: var(--muted); letter-spacing: 0.05em; }
+.ms-source-line strong { font-weight: 500; color: #666; }
+
+/* ── STAT STRIPS ── */
+.ms-annual { background: var(--dark2); border-bottom: 1px solid var(--border); padding: 0 24px; }
+.ms-annual-inner { max-width: 1000px; margin: 0 auto; }
+.ms-strip-label {
+  padding: 18px 0 0;
+  font-family: 'Raleway', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.ms-strip-label.red { color: var(--red); }
+.ms-annual-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  border-top: 1px solid var(--border);
+  margin-top: 12px;
+}
+.ms-annual-stat {
+  padding: 26px 16px;
+  text-align: center;
+  border-right: 1px solid var(--border);
+}
+.ms-annual-stat:last-child { border-right: none; }
+.ms-annual-num {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 900;
+  font-size: 28px;
+  color: var(--white);
+  line-height: 1;
+  margin-bottom: 5px;
+}
+.ms-annual-num em { color: var(--red); font-style: normal; }
+.ms-delta {
+  font-family: 'Raleway', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--green);
+  margin-bottom: 5px;
+  letter-spacing: .04em;
+}
+.ms-delta.down { color: #f87171; }
+.ms-stat-lbl {
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+/* ── YTD strip ── */
+.ms-ytd { background: var(--dark); border-bottom: 1px solid var(--border); padding: 0 24px; }
+.ms-ytd-inner { max-width: 1000px; margin: 0 auto; }
+
+/* ── GENERIC SECTION ── */
+.ms-section { padding: 80px 24px; border-bottom: 1px solid var(--border); }
+.ms-section-inner { max-width: 1000px; margin: 0 auto; }
+.ms-section--dark2 { background: var(--dark2); }
+
+/* ── SECTION HEADING ── */
+.ms-section-head { margin-bottom: 48px; }
+.ms-section-head h2 {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 900;
+  font-size: clamp(26px, 4vw, 38px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--white);
+  margin-bottom: 14px;
+}
+.ms-section-head h2 em { color: var(--red); font-style: normal; }
+.ms-section-head p {
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--light);
+  line-height: 1.75;
+  max-width: 680px;
+}
+
+/* ── CHART WRAPPER ── */
+.ms-chart-wrap {
+  background: var(--dark3);
+  border: 1px solid var(--border2);
+  border-top: 3px solid var(--red);
+  padding: 32px 28px 24px;
+  margin-bottom: 20px;
+}
+.ms-chart-title {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--white);
+  margin-bottom: 4px;
+}
+.ms-chart-sub { font-size: 12px; font-weight: 300; color: var(--muted); margin-bottom: 24px; }
+.ms-chart-legend { display: flex; gap: 24px; margin-bottom: 20px; }
+.ms-chart-legend span {
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ms-legend-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+.ms-legend-diamond { width: 10px; height: 10px; transform: rotate(45deg); display: inline-block; flex-shrink: 0; }
+/* Legend click-to-toggle (2026-07-30, Mike: make it interactive) — the
+   "● prior ◆ current" markers are now real controls, not just labels. */
+.ms-legend-toggle { cursor: pointer; transition: opacity .15s ease; user-select: none; }
+.ms-legend-toggle:hover { opacity: 0.75; }
+.ms-legend-toggle--off { opacity: 0.35; text-decoration: line-through; }
+.ms-chart-reset-zoom {
+  margin-left: auto;
+  background: transparent;
+  border: 1px solid var(--border2);
+  color: var(--muted);
+  font-family: 'Roboto', sans-serif;
+  font-size: 11px;
+  font-weight: 300;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.ms-chart-reset-zoom:hover { color: var(--white); border-color: #555; }
+/* Fixed pixel height (width-independent) so every chart fits one viewport on
+   any screen -- critical for the YouTube screen-share scroll. maintainAspectRatio
+   is false on every chart so height does NOT scale with screen width. Found
+   missing 2026-07-30 during accordion verification -- with no
+   explicit height here, this wrap's auto-height depends circularly on its
+   height:100% canvas child, which Chart.js can only resolve to 0. */
+.ms-chart-canvas-wrap { position: relative; height: 300px; }
+@media (max-width: 600px) { .ms-chart-canvas-wrap { height: 240px; } }
+.ms-charts-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+@media (max-width: 820px) { .ms-charts-2col { grid-template-columns: 1fr; } }
+
+/* ── DOM ANALYSIS — 2-col ── */
+.ms-analysis { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+@media (max-width: 820px) { .ms-analysis { grid-template-columns: 1fr; gap: 36px; } }
+.ms-analysis-text h2 {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 900;
+  font-size: clamp(26px, 4vw, 38px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--white);
+  margin-bottom: 18px;
+}
+.ms-analysis-text h2 em { color: var(--red); font-style: normal; }
+.ms-analysis-text p {
+  font-size: 15px;
+  font-weight: 300;
+  color: var(--light);
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+
+/* DOM table */
+.ms-dom-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+.ms-dom-table th {
+  font-family: 'Raleway', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border2);
+  background: var(--dark3);
+}
+.ms-dom-table td {
+  font-size: 13.5px;
+  font-weight: 300;
+  color: var(--light);
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.ms-dom-table tr:last-child td { border-bottom: none; }
+.ms-dom-table td:first-child {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 700;
+  color: var(--white);
+  font-size: 13px;
+}
+.ms-ratio { font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 14px; }
+.ms-ratio-high { color: var(--green); }
+.ms-ratio-mid { color: var(--yellow); }
+.ms-ratio-low { color: #f87171; }
+
+/* insight boxes */
+.ms-insight {
+  background: var(--dark3);
+  border: 1px solid var(--border2);
+  border-left: 4px solid var(--red);
+  padding: 20px 24px;
+  margin-bottom: 14px;
+}
+.ms-insight-label {
+  font-family: 'Raleway', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 8px;
+}
+.ms-insight p { font-size: 13.5px; font-weight: 300; color: var(--light); line-height: 1.7; }
+.ms-insight strong { font-weight: 500; color: var(--white); }
+
+/* ── MONTHLY SPOTLIGHT container ── (2026-07-31, found missing entirely —
+   same class of bug as the Milestone callout below: the markup + Python
+   builder (build_monthly_spotlight_section) existed and rendered, but
+   .ms-spotlight/-inner/-head/-foot/-highest/-note had NO CSS backing at
+   all, so the section had no padding and .ms-spotlight-inner's max-width
+   +margin:auto centering never applied — every OTHER section on the page
+   sits in a centered, padded column; this one rendered flush to the raw
+   viewport edge instead. Mike caught it live: "why is this section not
+   centered like all the others?" */
+.ms-spotlight { background: var(--dark2); border-bottom: 1px solid var(--border); padding: 0 24px 26px; }
+.ms-spotlight-inner { max-width: 1000px; margin: 0 auto; }
+.ms-spotlight-head { padding: 34px 0 0; }
+.ms-spotlight-head h2 {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 900;
+  font-size: clamp(24px, 3.4vw, 34px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--white);
+  margin-top: 10px;
+}
+.ms-spotlight-head h2 em { color: var(--red); font-style: normal; }
+.ms-spotlight-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 28px;
+  align-items: baseline;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+  margin-top: 4px;
+}
+.ms-spotlight-highest {
+  font-family: 'Raleway', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--white);
+}
+.ms-spotlight-highest span { color: var(--red); }
+.ms-spotlight-note { font-size: 13px; font-weight: 400; color: #9a9a9a; line-height: 1.6; }
+
+/* ── RECORD / MILESTONE CALLOUTS ── (2026-07-30, found unstyled — the
+   markup + Python builder existed on all 3 sites but no CSS rule ever
+   backed .ms-record-card/-eyebrow/-text, so a Milestone callout rendered
+   as bare unstyled text instead of a card. Mirrors .ms-insight's existing
+   red-accent-card language above rather than inventing a new pattern. ) */
+.ms-records { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin: 24px 0; }
+.ms-record-card {
+  background: var(--dark3);
+  border: 1px solid var(--border2);
+  border-left: 4px solid var(--red);
+  padding: 20px 24px;
+}
+.ms-record-eyebrow {
+  font-family: 'Raleway', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 8px;
+}
+.ms-record-text { font-size: 13.5px; font-weight: 300; color: var(--light); line-height: 1.7; }
+
+/* ── 2026 SIGNALS GRID ── */
+.ms-signals-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--border); margin-bottom: 40px; }
+@media (max-width: 820px) { .ms-signals-grid { grid-template-columns: 1fr; } }
+.ms-signal-card { background: var(--dark2); padding: 32px 28px; }
+.ms-signal-num {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 900;
+  font-size: 38px;
+  color: var(--white);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.ms-signal-num em { color: var(--red); font-style: normal; }
+.ms-signal-delta {
+  font-family: 'Raleway', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--green);
+  margin-bottom: 12px;
+  letter-spacing: .04em;
+}
+.ms-signal-delta.down { color: #f87171; }
+.ms-signal-card h3 {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--white);
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+.ms-signal-card p { font-size: 13px; font-weight: 300; color: var(--muted); line-height: 1.7; }
+/* Photo variant (2026-07-30, Mike) — the card's padding moves onto an
+   inner .ms-signal-body wrapper so the photo bleeds to the card edges;
+   a card with no synced photo keeps the original flat padding untouched. */
+.ms-signal-photo {
+  display: block;
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  background: var(--dark3);
+}
+.ms-signal-card.has-photo { padding: 0; }
+.ms-signal-card.has-photo .ms-signal-body { padding: 20px 24px 24px; }
+.ms-signals-cta { text-align: center; padding-top: 8px; }
+.ms-signals-cta p {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--light);
+  max-width: 560px;
+  margin: 0 auto 20px;
+  line-height: 1.6;
+}
+.ms-signals-cta strong { color: var(--white); font-weight: 500; }
+
+/* ── PERSONA CARDS ── */
+.ms-personas { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+@media (max-width: 820px) { .ms-personas { grid-template-columns: 1fr; } }
+.ms-persona-card {
+  background: var(--dark2);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--red);
+  padding: 36px 28px;
+  display: flex;
+  flex-direction: column;
+}
+.ms-persona-tag {
+  display: inline-block;
+  font-family: 'Raleway', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 14px;
+}
+.ms-persona-card h3 {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--white);
+  margin-bottom: 14px;
+  line-height: 1.3;
+}
+.ms-persona-card p {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.75;
+  margin-bottom: 14px;
+  flex: 1;
+}
+.ms-persona-card a {
+  display: inline-block;
+  margin-top: auto;
+  font-family: 'Raleway', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+.ms-persona-card a::after { content: ' →'; }
+
+/* ── BUILDER CALLOUT ── */
+.ms-builder-callout {
+  margin-top: 32px;
+  background: var(--dark3);
+  border: 1px solid var(--border2);
+  border-left: 4px solid var(--red);
+  padding: 28px 32px;
+}
+.ms-builder-callout h3 {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--white);
+  margin-bottom: 10px;
+}
+.ms-builder-callout p {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.75;
+}
+.ms-builder-callout a {
+  font-family: 'Raleway', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-top: 12px;
+  display: inline-block;
+}
+.ms-builder-callout a::after { content: ' →'; }
+
+/* ── AGENT RECRUIT STRIP ── */
+.ms-recruit { padding: 80px 24px; background: var(--dark2); border-bottom: 1px solid var(--border); }
+.ms-recruit-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 48px;
+  align-items: center;
+  position: relative;
+  padding-left: 32px;
+}
+.ms-recruit-inner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--red);
+}
+@media (max-width: 820px) { .ms-recruit-inner { grid-template-columns: 1fr; gap: 28px; } }
+.ms-recruit-inner h3 {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 900;
+  font-size: clamp(20px, 2.5vw, 28px);
+  color: var(--white);
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+.ms-recruit-inner p {
+  font-size: 15px;
+  font-weight: 300;
+  color: var(--light);
+  line-height: 1.75;
+  max-width: 620px;
+  margin-bottom: 20px;
+}
+.ms-tag-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.ms-tag {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: var(--dark);
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+}
+
+/* ── CTA ── */
+.ms-cta { background: var(--red); padding: 72px 24px; text-align: center; }
+.ms-cta-inner { max-width: 640px; margin: 0 auto; }
+.ms-cta h2 {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 900;
+  font-size: clamp(26px, 4vw, 38px);
+  color: var(--white);
+  line-height: 1.1;
+  margin-bottom: 14px;
+  letter-spacing: -0.01em;
+}
+.ms-cta p {
+  font-size: 16px;
+  font-weight: 300;
+  color: rgba(255,255,255,.88);
+  line-height: 1.65;
+  margin-bottom: 32px;
+}
+.ms-cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.ms-cta-white {
+  display: inline-block;
+  padding: 14px 28px;
+  background: var(--white);
+  color: var(--red);
+  font-family: 'Raleway', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border: 2px solid var(--white);
+  transition: background .2s, color .2s;
+}
+.ms-cta-white:hover { background: transparent; color: var(--white); }
+.ms-cta-outline {
+  display: inline-block;
+  padding: 14px 28px;
+  background: transparent;
+  color: rgba(255,255,255,.9);
+  font-family: 'Raleway', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border: 2px solid rgba(255,255,255,.4);
+  transition: border-color .2s;
+}
+.ms-cta-outline:hover { border-color: rgba(255,255,255,.9); }
+
+/* ── DISCLAIMER ── */
+.ms-disclaimer { padding: 28px 24px; background: var(--dark); border-top: 1px solid var(--border); }
+.ms-disclaimer-inner { max-width: 1000px; margin: 0 auto; font-size: 12px; font-weight: 300; color: #777; line-height: 1.7; }
+
+/* ── EXPLAINER CARDS ── */
+.ms-explainer {
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.6;
+  padding: 12px 0 12px 16px;
+  border-left: 3px solid rgba(234,0,42,0.3);
+  margin: 8px 0 24px 0;
+  max-width: 700px;
+}
+
+/* ── STAT GLOSSARY (consumer education — "How to Read These Numbers") ── */
+.ms-glossary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 22px 36px;
+  margin-top: 24px;
+}
+.ms-gloss-item {
+  border-left: 3px solid rgba(234,0,42,0.35);
+  padding-left: 16px;
+}
+.ms-gloss-term {
+  font-family: 'Raleway', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--white);
+  margin-bottom: 6px;
+}
+.ms-gloss-def {
+  font-size: 0.9rem;
+  color: var(--light);
+  line-height: 1.6;
+}
+@media (max-width: 600px) {
+  .ms-glossary { grid-template-columns: 1fr; }
+}
+
+/* ── 10-YEAR TABLE ── */
+.ms-10yr-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+.ms-10yr-table th {
+  font-family: 'Raleway', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border2);
+  background: var(--dark3);
+}
+.ms-10yr-table td {
+  font-size: 13.5px;
+  font-weight: 300;
+  color: var(--light);
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.ms-10yr-table tr:last-child td { border-bottom: none; }
+.ms-10yr-table td:first-child {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 700;
+  color: var(--white);
+  font-size: 13px;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1000px) { .ms-annual-grid { grid-template-columns: repeat(3,1fr); } }
+@media (max-width: 600px) {
+  .ms-section { padding: 56px 20px; }
+  .ms-recruit { padding: 56px 20px; }
+  .ms-annual-grid { grid-template-columns: 1fr 1fr; }
+  .ms-annual-stat { border-right: none !important; border-bottom: 1px solid var(--border); }
+  .ms-annual-stat:nth-child(odd) { border-right: 1px solid var(--border) !important; }
+}
+
+
+/* ── MARKET BALANCE (months-of-supply / buyer's-vs-seller's) — Conv #15 from Gander ── */
+.ms-balance { background: var(--dark2); border-bottom: 1px solid var(--border); padding: 0 24px 6px; }
+.ms-balance-inner { max-width: 1000px; margin: 0 auto; }
+.ms-balance-verdict {
+  display: flex; align-items: center; gap: 36px; flex-wrap: wrap;
+  padding: 24px 0 10px; border-top: 1px solid var(--border); margin-top: 12px;
+}
+.ms-balance-type {
+  font-family: 'Raleway', sans-serif; font-weight: 900;
+  font-size: 36px; line-height: 1.02; letter-spacing: -0.01em; white-space: nowrap;
+}
+.ms-balance-type--seller { color: var(--green); }
+.ms-balance-type--balanced { color: #fbbf24; }
+.ms-balance-type--buyer { color: #60a5fa; }
+.ms-balance-gauge { flex: 1 1 320px; min-width: 280px; }
+.ms-gauge-bar {
+  position: relative; display: flex; height: 52px; border-radius: 7px;
+  overflow: hidden; border: 1px solid var(--border);
+}
+.ms-gauge-zone {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 12px;
+  letter-spacing: 0.04em; color: #fff; text-transform: uppercase; text-align: center;
+  padding: 0 4px;
+}
+.ms-gauge-zone small { font-weight: 400; font-size: 10px; opacity: 0.85; text-transform: none; letter-spacing: 0; margin-top: 2px; }
+.ms-gauge-zone--seller   { flex: 5; background: rgba(34,197,94,0.30); }
+.ms-gauge-zone--balanced { flex: 2; background: rgba(251,191,36,0.24); }
+.ms-gauge-zone--buyer    { flex: 3; background: rgba(96,165,250,0.24); }
+.ms-gauge-pin {
+  position: absolute; top: -6px; bottom: -6px; width: 3px; background: #fff;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.55); border-radius: 2px;
+}
+.ms-gauge-pin::after {
+  content: ''; position: absolute; top: -7px; left: 50%; transform: translateX(-50%);
+  border-left: 7px solid transparent; border-right: 7px solid transparent; border-top: 9px solid #fff;
+}
+.ms-balance-grid { grid-template-columns: repeat(4, 1fr) !important; }
+@media (max-width: 600px) {
+  .ms-balance-verdict { gap: 16px; padding-top: 18px; }
+  .ms-balance-type { font-size: 27px; }
+  .ms-gauge-zone { font-size: 10.5px; }
+  .ms-gauge-zone small { font-size: 11px; }
+  .ms-balance-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+/* ── ACCORDION (2026-07-30, Mike: "organized expandable sections stacked
+   vertically... obvious drop-down... a little explainer sentence for each
+   category" — a Wikipedia-mobile screenshot, replacing an earlier tabs cut).
+   Sections toggle INDEPENDENTLY (not mutually exclusive like tabs). All
+   panel content is emitted server-side regardless of open/closed state —
+   display:none, not removed from the DOM — so search engines and no-JS
+   visitors still get every word; the JS only toggles which sections are
+   visually expanded for a human clicking through. */
+.ms-accordion { background: var(--dark); border-top: 1px solid var(--border); }
+.ms-accordion-section { border-bottom: 1px solid var(--border); }
+.ms-accordion-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  background: transparent;
+  border: none;
+  text-align: left;
+  padding: 24px;
+  cursor: pointer;
+}
+.ms-accordion-header:hover .ms-accordion-title { color: var(--red); }
+.ms-accordion-chevron {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  color: var(--red);
+  transition: transform .2s ease;
+}
+.ms-accordion-header[aria-expanded="true"] .ms-accordion-chevron { transform: rotate(180deg); }
+.ms-accordion-heading-group { flex: 1; }
+.ms-accordion-title {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--white);
+  display: block;
+  transition: color .15s ease;
+}
+.ms-accordion-explainer {
+  font-size: 13.5px;
+  font-weight: 300;
+  color: var(--muted);
+  display: block;
+  margin-top: 5px;
+  line-height: 1.5;
+}
+/* Header stat badge (2026-07-30, Mike: give each section a current market
+   stat, not just words). Two variants: a number-stack (big value + small
+   label) for This Month / Around the Region / Pricing & Trends, and a
+   colored pill for Market Conditions that reuses the exact seller/
+   balanced/buyer colors the Market Balance section itself uses. */
+.ms-accordion-badge { flex-shrink: 0; align-self: center; text-align: right; }
+.ms-accordion-badge strong {
+  display: block;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 900;
+  font-size: 20px;
+  color: var(--white);
+  line-height: 1.1;
+  white-space: nowrap;
+}
+.ms-accordion-badge small {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 2px;
+  white-space: nowrap;
+}
+.ms-accordion-badge--pill {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 800;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.ms-accordion-badge--seller { background: rgba(34,197,94,0.15); color: var(--green); }
+.ms-accordion-badge--balanced { background: rgba(251,191,36,0.15); color: #fbbf24; }
+.ms-accordion-badge--buyer { background: rgba(96,165,250,0.15); color: #60a5fa; }
+
+/* ── PRICE BANDS BREAKDOWN ── (found unstyled 2026-07-30 while verifying
+   the new chart above it — the markup + Python builder existed on all 3
+   sites but no CSS rule ever backed .ms-band-row/-label/-track/-bar/-meta,
+   so the count+share rendered as unstyled adjacent text. Same class of gap
+   as the Milestone callout fixed earlier today.) */
+.ms-bands { margin-top: 24px; }
+.ms-band-row {
+  display: grid;
+  grid-template-columns: 130px 1fr 140px;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+.ms-band-row:last-child { border-bottom: none; }
+.ms-band-label {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--white);
+}
+.ms-band-track { height: 10px; background: var(--border); border-radius: 5px; overflow: hidden; }
+.ms-band-bar { height: 100%; background: var(--red); border-radius: 5px; }
+.ms-band-meta { text-align: right; }
+.ms-band-count {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--white);
+}
+.ms-band-share { font-size: 12px; color: var(--muted); margin-left: 6px; }
+.ms-band-prior { font-size: 11px; color: var(--muted); margin-top: 2px; }
+@media (max-width: 600px) {
+  .ms-band-row { grid-template-columns: 1fr; gap: 6px; }
+  .ms-band-meta { text-align: left; }
+}
+
+/* ── COMMUNITY SNAPSHOT + PROPERTY-TYPE/HOME-STYLE/BEDROOM TABLES ── (2026-07-31,
+   found missing entirely — same class of bug as the Monthly Spotlight gap
+   above: .ms-community-table (Around the Region) and .ms-ptype-table (Property
+   Type Mix / Home Style / Bedroom Count — all three share this one class) had
+   NO CSS at all, rendering as bare unstyled <table> markup, while the visually
+   identical .ms-10yr-table/.ms-dom-table right next to them ARE properly
+   styled. Restored from a verified-matching prior copy, matching the existing
+   10yr/dom table's visual language (header row background + tracking, cell
+   padding/borders, bold first column) rather than inventing a new one. Mike
+   caught it live: "it just needs to be rendered to be more visually appealing." */
+.ms-community-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+.ms-community-table th {
+  font-family: 'Raleway', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #a0a0a0;
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border2);
+  background: var(--dark3);
+}
+.ms-community-table td {
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--light);
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.ms-community-table tr:last-child td { border-bottom: none; }
+.ms-community-table td:first-child {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 700;
+  color: var(--white);
+  font-size: 14.5px;
+}
+.ms-community-table td:first-child a { color: var(--white); border-bottom: 1px solid rgba(234,0,42,0.5); }
+.ms-community-table td:first-child a:hover { color: var(--red); }
+.ms-mkt-type { font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 14px; }
+.ms-mkt-type--seller { color: var(--green); }
+.ms-mkt-type--balanced { color: #fbbf24; }
+.ms-mkt-type--buyer { color: #60a5fa; }
+/* Columns dropped on a phone are named, not counted: the $/sq ft column
+   (2026-09-18) moved Avg Days from 4th to 6th, and an nth-child rule would
+   have hidden the new figure instead. */
+@media (max-width: 700px) {
+  .ms-community-table .ms-col-dom, .ms-community-table .ms-col-size,
+  .ms-ptype-table .ms-col-size { display: none; }
+}
+
+/* ── PRICE PER SQUARE FOOT (2026-09-18) ── value + the sales it rests on.
+   Tiers come from the aggregator: ok / limited (5-9 sales, yellow + dashed
+   bar) / withheld (says so in words). */
+.ms-ppsf { white-space: nowrap; }
+.ms-ppsf-val { font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 16px; color: var(--white); display: inline-block; min-width: 52px; }
+.ms-ppsf-n { font-size: 12px; color: #a0a0a0; margin-left: 10px; }
+.ms-ppsf-track { display: inline-block; vertical-align: middle; width: 120px; height: 8px; background: var(--border); margin-left: 10px; }
+.ms-ppsf-bar { display: block; height: 8px; background: var(--red); }
+.ms-ppsf--limited .ms-ppsf-val, .ms-ppsf--limited .ms-ppsf-n { color: var(--yellow); }
+.ms-ppsf--limited .ms-ppsf-bar { background: repeating-linear-gradient(90deg, var(--yellow) 0 6px, transparent 6px 10px); }
+.ms-ppsf--na { font-size: 13px; color: #a0a0a0; white-space: normal; }
+.ms-ppsf-legend { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-top: 12px; font-size: 12px; color: #a0a0a0; }
+.ms-ppsf-legend span { display: inline-flex; align-items: center; gap: 8px; }
+.ms-ppsf-key { display: inline-block; width: 22px; height: 8px; background: var(--red); }
+.ms-ppsf-key--limited { background: repeating-linear-gradient(90deg, var(--yellow) 0 6px, transparent 6px 10px); }
+@media (max-width: 700px) { .ms-ppsf-track { display: none; } }
+
+.ms-ppsf-howto { margin-top: 28px; padding: 24px; border: 1px solid var(--border); }
+.ms-ppsf-howto-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin-top: 14px; }
+.ms-ppsf-howto-grid p { font-size: 14px; line-height: 1.6; font-weight: 300; color: var(--light); }
+.ms-ppsf-howto-grid strong { color: var(--white); font-weight: 500; }
+.ms-ppsf-howto-grid a { color: var(--white); border-bottom: 1px solid rgba(234,0,42,0.5); }
+@media (max-width: 800px) { .ms-ppsf-howto-grid { grid-template-columns: 1fr; gap: 14px; } }
+
+/* Middle-half range chart, plain CSS (prints; no chart library). */
+.ms-range-chart { margin-top: 32px; padding: 24px; border: 1px solid var(--border2); background: var(--dark2); }
+.ms-range-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px; margin-bottom: 14px; }
+.ms-range-head span { font-size: 12px; color: #a0a0a0; }
+.ms-range-row { display: grid; grid-template-columns: 120px 1fr 64px 170px; column-gap: 16px; align-items: center; min-height: 40px; }
+.ms-range-label { font-size: 15px; font-weight: 500; color: var(--white); }
+.ms-range-track { position: relative; display: block; height: 12px; background: var(--dark3); }
+.ms-range-bar { position: absolute; top: 0; height: 12px; background: var(--red); }
+.ms-range-tick { position: absolute; top: -5px; width: 3px; height: 22px; margin-left: -1px; background: var(--white); }
+.ms-range-val { font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 17px; color: var(--white); }
+.ms-range-n { font-size: 12px; color: #a0a0a0; }
+.ms-range-foot { margin-top: 14px; font-size: 13px; line-height: 1.6; font-weight: 300; color: var(--light); }
+@media (max-width: 700px) {
+  .ms-range-row { grid-template-columns: 96px 1fr 56px; }
+  .ms-range-n { display: none; }
+}
+
+/* ── SALE OUTCOMES: speed shares + asking-price shares ── */
+.ms-outcome-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+@media (max-width: 800px) { .ms-outcome-grid { grid-template-columns: 1fr; } }
+.ms-outcome-card { padding: 24px; border: 1px solid var(--border2); background: var(--dark); }
+.ms-speed-bar { display: flex; height: 44px; margin-top: 16px; }
+.ms-speed-seg { display: flex; align-items: center; justify-content: center; font-size: 14px; color: var(--dark); min-width: 0; }
+.ms-speed-seg b { font-weight: 500; }
+.ms-speed-seg--fast { background: var(--green); }
+.ms-speed-seg--quick { background: #86d9a3; }
+.ms-speed-seg--slow { background: var(--yellow); }
+.ms-speed-seg--stale { background: #555555; color: var(--white); }
+.ms-speed-keys { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 10px; font-size: 12px; color: #a0a0a0; }
+.ms-speed-keys span { display: inline-flex; align-items: center; gap: 6px; }
+.ms-speed-key { display: inline-block; width: 12px; height: 12px; }
+.ms-ask-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
+.ms-ask-tiles div { padding: 16px; border: 1px solid var(--border2); }
+.ms-ask-tiles b { display: block; font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 26px; color: var(--white); }
+.ms-ask-tiles span { display: block; margin-top: 4px; font-size: 12px; color: #a0a0a0; }
+.ms-ask--over { color: var(--green) !important; }
+.ms-ask--under { color: var(--yellow) !important; }
+.ms-outcome-line { margin-top: 16px; font-size: 14px; line-height: 1.6; color: var(--light); }
+.ms-outcome-line strong { color: var(--white); font-weight: 500; }
+
+/* ── $/SQ FT TREND: current-value callout above the rolling-12mo chart ── */
+.ms-ppsf-trend-now { display: flex; flex-wrap: wrap; align-items: baseline; gap: 14px; margin: 0 0 22px; }
+.ms-ppsf-trend-val { font-family: 'Raleway', sans-serif; font-weight: 900; font-size: 44px; color: var(--white); }
+.ms-ppsf-trend-lbl { font-size: 14px; color: #a0a0a0; }
+.ms-ppsf-trend-up { font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 14px; color: var(--green); }
+.ms-ppsf-trend-down { font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 14px; color: var(--yellow); }
+
+/* Wide data tables scroll inside their own container. Without this the table
+   sets the document width on a phone and the WHOLE page scrolls sideways —
+   found 2026-07-28 at a 444px viewport, where this table forced 444px of
+   horizontal body scroll. */
+.ms-table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.ms-ptype-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+@media (max-width: 700px) {
+  .ms-ptype-table, .ms-community-table, .ms-10yr-table, .ms-dom-table { min-width: 460px; }
+}
+.ms-ptype-table th {
+  font-family: 'Raleway', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #a0a0a0;
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border2);
+  background: var(--dark3);
+}
+.ms-ptype-table td {
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--light);
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.ms-ptype-table tr:last-child td { border-bottom: none; }
+.ms-ptype-table td:first-child {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 700;
+  color: var(--white);
+  font-size: 14.5px;
+}
+
+.ms-accordion-panel { display: none; }
+.ms-accordion-panel.is-open { display: block; }
+@media print {
+  .ms-accordion-header { display: none; }
+  .ms-accordion-panel { display: block !important; }
+}
+@media (max-width: 600px) {
+  .ms-accordion-header { padding: 20px; gap: 14px; }
+  .ms-accordion-title { font-size: 16px; }
+  .ms-accordion-explainer { font-size: 13px; }
+  .ms-accordion-badge strong { font-size: 17px; }
+  .ms-accordion-badge--pill { font-size: 11px; padding: 5px 11px; }
+}
+
+/* ── DIRECTION D HERO (2026-09-07): verdict headline + lede, read + agent card
+   + actions on the left, the report cover on the right (below the lede on a
+   phone). Same tokens as the rest of the page. ── */
+.ms-hero-inner--wide { max-width: 1080px; }
+.ms-hero-lede { font-size: 17px; font-weight: 300; color: var(--light); line-height: 1.75; max-width: 760px; margin: 0 0 28px; }
+.ms-hero-grid2 { display: grid; grid-template-columns: minmax(0, 1fr) 440px; gap: 44px; align-items: start; }
+.ms-hero-left { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.ms-hero-read { font-size: 16px; font-weight: 300; color: #dddddd; line-height: 1.7; margin: 0; }
+.ms-hero-say { font-size: 15px; font-weight: 300; color: #dddddd; line-height: 1.6; margin: 0; }
+.ms-hero-say strong { font-weight: 500; color: var(--white); }
+.ms-hero-caption { font-size: 12px; font-weight: 300; color: var(--muted); letter-spacing: 0.02em; margin: 0; }
+.ms-hero-ctas { display: flex; flex-wrap: wrap; gap: 12px; }
+.ms-hero-ctas .ms-btn, .ms-hero-ctas .ms-btn-sec { padding: 12px 20px; font-size: 11px; }
+.ms-agent { display: flex; align-items: center; gap: 18px; background: var(--dark2); border: 1px solid var(--border); padding: 16px 18px; }
+.ms-agent-photos { display: flex; flex: 0 0 auto; }
+.ms-agent-photos img + img { margin-left: -18px; }
+.ms-agent img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 3px solid var(--red); flex: 0 0 auto; }
+.ms-agent-body { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.ms-agent h3 { margin: 0; font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 15px; color: var(--white); }
+.ms-agent p { margin: 0; font-size: 13px; color: var(--light); line-height: 1.5; }
+.ms-agent-tel { font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 14px; color: var(--red); }
+.ms-agent-dot { color: var(--muted); }
+.ms-agent a { color: var(--red); }
+.ms-share { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; font-size: 12px; color: var(--muted); }
+.ms-share a { display: inline-flex; align-items: center; gap: 6px; color: var(--light); }
+.ms-share svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.ms-cover { background: #121214; border: 1px solid var(--border); padding: 28px; display: flex; flex-direction: column; gap: 14px; }
+.ms-cover-badge { align-self: flex-start; background: var(--red); color: var(--white); font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 13px; padding: 8px 18px; border-radius: 999px; }
+.ms-cover-title { font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 32px; margin: 0; color: var(--white); line-height: 1.05; }
+.ms-cover-period { font-family: 'Raleway', sans-serif; font-weight: 600; font-size: 15px; color: #cdcdd4; margin: 0; }
+.ms-cover-bar { display: inline-block; font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 14px; padding: 8px 14px; border-radius: 8px; color: #0b1a10; background: var(--green); }
+.ms-cover-bar--buyer { background: #60a5fa; color: #0b1526; }
+.ms-cover-bar--balanced { background: #f59e0b; color: #1f1400; }
+.ms-cover-bar--small { background: #cdcdd4; color: #1a1a1e; }
+.ms-cover-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.ms-cover-tile { background: #1e1e22; border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; }
+.ms-cover-lbl { font-size: 11px; font-weight: 400; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.ms-cover-num { font-family: 'Raleway', sans-serif; font-weight: 900; font-size: 26px; color: var(--white); line-height: 1; }
+.ms-cover-tile .ms-delta { margin: 0; }
+.ms-delta.flat { color: var(--muted); }
+.ms-cover-latest { font-size: 13px; color: #cdcdd4; margin: 0; line-height: 1.5; }
+.ms-cover-src { font-size: 12px; color: var(--muted); margin: 0; }
+.ms-open-group { max-width: 1000px; margin: 0 auto; padding: 8px 24px 0; }
+.ms-open-head { display: flex; align-items: flex-start; gap: 20px; padding: 28px 0 8px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+.ms-open-head .ms-accordion-title { flex: 1; }
+.ms-open-head .ms-accordion-explainer { flex: 2; margin-top: 3px; }
+@media (max-width: 900px) {
+  .ms-hero-grid2 { grid-template-columns: 1fr; gap: 22px; }
+  .ms-hero-cover { order: -1; }
+  .ms-open-head { flex-direction: column; gap: 6px; }
+}
+@media (max-width: 600px) {
+  .ms-hero-lede { font-size: 16px; }
+  .ms-cover { padding: 20px; }
+  .ms-cover-title { font-size: 26px; }
+  .ms-cover-num { font-size: 22px; }
+}

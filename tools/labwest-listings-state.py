@@ -20,7 +20,10 @@ from pathlib import Path
 
 NOINDEX = '<meta name="robots" content="noindex,nofollow">'
 GENERATED_DIRS = ("listings", "property")
-GENERATED_SITEMAPS = ("sitemap-listings.xml", "sitemap-property.xml")
+GENERATED_SITEMAPS = ("sitemap-listings.xml", "sitemap-property.xml", "sitemap-pages.xml")
+# pages/ holds only what the nightly generates (the market-statistics page and one page per tools/community-config/*.yml);
+# a hand-written page is never listed here, so it is never noindexed or put in the generated sitemap.
+GENERATED_PAGE_FILES = ("market-stats.html",)
 ORIGIN = "https://labwestrealty.com"
 
 
@@ -29,6 +32,35 @@ def generated_pages(root: Path):
         base = root / d
         if base.is_dir():
             yield from sorted(base.rglob("*.html"))
+    yield from generated_pages_dir_files(root)
+
+
+def generated_pages_dir_files(root: Path):
+    names = list(GENERATED_PAGE_FILES)
+    cfg = root / "tools" / "community-config"
+    if cfg.is_dir():
+        names += [p.stem + ".html" for p in sorted(cfg.glob("*.yml"))]
+    for n in names:
+        p = root / "pages" / n
+        if p.is_file():
+            yield p
+
+
+def write_pages_sitemap(root: Path, want: bool) -> bool:
+    """sitemap-pages.xml lists the generated pages/ files. Written on `on`, removed on `preview`. Returns True if it changed."""
+    path = root / "sitemap-pages.xml"
+    pages = list(generated_pages_dir_files(root))
+    if not want or not pages:
+        if path.exists():
+            path.unlink()
+            return True
+        return False
+    body = "".join(f"  <url>\n    <loc>{ORIGIN}/pages/{p.name}</loc>\n  </url>\n" for p in pages)
+    text = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + body + "</urlset>\n"
+    if path.exists() and path.read_text(encoding="utf-8") == text:
+        return False
+    path.write_text(text, encoding="utf-8")
+    return True
 
 
 def set_noindex(path: Path, want: bool) -> bool:
@@ -107,6 +139,7 @@ def main(argv=None) -> int:
         return 0
     pages = list(generated_pages(root))
     n = sum(1 for p in pages if set_noindex(p, a.state == "preview"))
+    write_pages_sitemap(root, a.state == "on")
     s = set_sitemaps(root, a.state == "on")
     r = set_sold_redirects(root, True)
     print(f"[state] {a.state}: {len(pages)} generated page(s), {n} changed; sitemap-index entries changed: {s}; sold redirects added: {r}")

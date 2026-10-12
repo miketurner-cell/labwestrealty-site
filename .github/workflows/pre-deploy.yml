@@ -85,7 +85,7 @@ jobs:
         run: python3 tools/tests/labwest-switch-test.py
 
       - name: Install feed-tool imports (the scope test imports the ingest and photo-sync tools)
-        run: python3 -m pip install --quiet requests Pillow
+        run: python3 -m pip install --quiet requests Pillow pyyaml
 
       - name: Lab West feed scope, lease drop and site config (STRICT — Labrador City + Wabush only, no leases, R2 prefix labwest/)
         run: python3 tools/tests/labwest-scope-test.py
@@ -108,3 +108,6 @@ jobs:
 
       - name: Sold data behind sign-in - dark guard, 401 when signed out, no price in the single row (STRICT)
         run: node tools/tests/labwest-sold-data-test.mjs
+
+      - name: Nightly pieces - aggregates match the rows, market page says what it runs through, no Goose Bay or Gander (STRICT)
+        run: python3 tools/tests/labwest-nightly-test.py

@@ -1,0 +1,41 @@
+# ── Identity ──
+slug: labrador-city
+region_key: "Labrador City"
+label: Labrador City
+site_key: labwest
+domain: labwestrealty.com
+baseline_year: 2025
+title: "Labrador City, NL Real Estate — Homes for Sale | Royal LePage Turner Realty"
+meta_description: "Labrador City homes for sale and sold-price market statistics from NLAR MLS® data, with Mike Turner, Broker of Record at Royal LePage Turner Realty."
+og_image: "/images/og/labrador-west-og.jpg"
+value_prop: "Labrador City is one of the two communities of Labrador West, with Wabush. Live MLS® listings and market statistics, with Mike Turner, Broker of Record, as your contact."
+
+market_stats_url: "market-stats.html"
+stats_scope: residential
+
+ddf_fragment: community-labrador-city
+listings_view_all: "/listings/labrador-city/"
+
+property_lookup: false
+hubs: []
+
+# Only facts already on labrador-west.html (the site's own published copy). Nothing here is typed in from memory.
+about:
+  - heading: "About Labrador City"
+    body:
+      - "Labrador West, made up of Labrador City and Wabush, is a community of approximately 10,000 residents with a stable, diversified economy. Iron ore mining remains the backbone, and the region also benefits from healthcare, education and government employment."
+      - "Labrador City's homes for sale are listed on this site from the NLAR MLS® feed, and recent sales are summarised on the market statistics page. Sold prices are shown to registered members only."
+    points:
+      - "Approximately 10,000 residents across Labrador City and Wabush"
+      - "Iron ore mining is the backbone of the local economy"
+      - "Healthcare, education and government employment are growing"
+
+faq:
+  - q: "Who do I contact about homes in Labrador City?"
+    a: "Mike Turner, Broker of Record at Royal LePage Turner Realty, handles inquiries for Labrador West. Call 709-256-7999 or email miketurner@royallepage.ca."
+  - q: "Where do the numbers on this page come from?"
+    a: "Listings and sales come from the Newfoundland and Labrador Association of REALTORS (NLAR) MLS® system. The market statistics page shows the date the data runs through."
+  - q: "Can I see what a home sold for?"
+    a: "Sold prices are shown to registered members. Registration is free and takes one email link; the other facts about a sale are public."
+
+related: [wabush]
