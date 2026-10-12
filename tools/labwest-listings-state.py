@@ -125,6 +125,9 @@ REDIRECT_RULES = """/listings/sold/data.json            /.netlify/functions/sold
 ALERTS_BEGIN = "# BEGIN lab-west-alerts (tools/labwest-listings-state.py; do not edit by hand)"
 ALERTS_END = "# END lab-west-alerts"
 ALERTS_RULES = "/text-alerts   /pages/text-alerts.html   200"
+CHAT_BEGIN = "# BEGIN lab-west-chat (tools/labwest-listings-state.py; do not edit by hand)"
+CHAT_END = "# END lab-west-chat"
+CHAT_RULES = "/api/chat   /.netlify/functions/chat   200"
 
 
 def set_alerts_redirect(root: Path) -> int:
@@ -140,6 +143,23 @@ def set_alerts_redirect(root: Path) -> int:
     if not want and has:
         a = text.index(ALERTS_BEGIN)
         b = text.index(ALERTS_END) + len(ALERTS_END)
+        path.write_text((text[:a] + text[b:].lstrip("\n")).lstrip("\n"), encoding="utf-8")
+        return 1
+    return 0
+
+
+def set_chat_redirect(root: Path, want: bool) -> int:
+    """/api/chat -> the chat function, present on preview/on (the function itself answers 404 until the generated data exists)."""
+    path = root / "_redirects"
+    text = path.read_text(encoding="utf-8") if path.exists() else ""
+    has = CHAT_BEGIN in text
+    block = f"{CHAT_BEGIN}\n{CHAT_RULES}\n{CHAT_END}\n"
+    if want and not has:
+        path.write_text(block + "\n" + text, encoding="utf-8")
+        return 1
+    if not want and has:
+        a = text.index(CHAT_BEGIN)
+        b = text.index(CHAT_END) + len(CHAT_END)
         path.write_text((text[:a] + text[b:].lstrip("\n")).lstrip("\n"), encoding="utf-8")
         return 1
     return 0
@@ -181,7 +201,7 @@ def main(argv=None) -> int:
     n = sum(1 for p in pages if set_noindex(p, a.state == "preview"))
     write_pages_sitemap(root, a.state == "on")
     s = set_sitemaps(root, a.state == "on")
-    r = set_sold_redirects(root, True) + set_alerts_redirect(root)
+    r = set_sold_redirects(root, True) + set_alerts_redirect(root) + set_chat_redirect(root, True)
     print(f"[state] {a.state}: {len(pages)} generated page(s), {n} changed; sitemap-index entries changed: {s}; sold redirects added: {r}")
     return 0
 

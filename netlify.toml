@@ -46,3 +46,9 @@ exit 0
 # send those URLs to this function are added by tools/labwest-listings-state.py at the same time. While off the function answers 404.
 [functions."sold-data"]
   included_files = ["listings/sold/data.json", "listings/sold/*/data.json", "listings/sold/detail/*.json"]
+
+# ═══ Chat (sites, D-1012-34; ported from Goose Bay) ═══
+# The assistant reads the generated listings and sold files, bundled into the function. While those files do not exist
+# (switch off) the function answers 404 to everyone. /api/chat is routed to it by tools/labwest-listings-state.py on preview/on.
+[functions.chat]
+  included_files = ["listings/sold/data.json", "tools/idx-cache/listings-projected.json"]

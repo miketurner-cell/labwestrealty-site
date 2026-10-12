@@ -1,4 +1,4 @@
-/* chat-widget.js — "Turner Assistant" AI chat widget (Goosebay port, 2026-06-12).
+/* chat-widget.js — "Turner Assistant" AI chat widget (Lab West port, sites D-1012-34).
  *
  * Convention #15 port from Gander. Goosebay never had Tawk. Self-
  * contained: injects its own styles + DOM, talks to /api/chat (Netlify fn
@@ -118,7 +118,7 @@
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>' +
     '</button>' +
     '<button id="tc-send" type="submit">Send</button></form>' +
-    '<div id="tc-foot">AI assistant — answers come from live Turner Realty data. Royal LePage Turner Realty · Happy Valley-Goose Bay · 709-896-5001</div>';
+    '<div id="tc-foot">AI assistant — answers come from live Turner Realty data. Royal LePage Turner Realty · Mike Turner, Broker of Record · 709-256-7999</div>';
   document.body.appendChild(bubble);
   document.body.appendChild(panel);
 
@@ -277,7 +277,7 @@
     ? "Hi! I'm Turner Assistant 👋 Ask me anything about " + LISTING.street + " — taxes, heating, lot size, schools — or about the local market."
     : (MARKET
       ? "Hi! I'm Turner Assistant 👋 Ask me anything about the " + MARKET.region + " market — prices, days on market, what's selling — or about specific listings."
-      : "Hi! I'm Turner Assistant 👋 I can search our live Labrador listings, share market stats, or connect you with the right local agent. What can I help with?");
+      : "Hi! I'm Turner Assistant 👋 I can search our live Labrador West listings, share market stats, or connect you with Mike Turner, Broker of Record. What can I help with?");
 
   function renderHistory() {
     log.innerHTML = "";
@@ -441,7 +441,7 @@
   }
 
   var FALLBACK =
-    "I'm having trouble connecting right now. You can reach the team directly at 709-896-5001 or goosebay@royallepage.ca — or just leave your name, email, and what you're looking for here and I'll pass it along as soon as I'm back.";
+    "I'm having trouble connecting right now. You can reach Mike Turner directly at 709-256-7999 or miketurner@royallepage.ca — or just leave your name, email, and what you're looking for here and I'll pass it along as soon as I'm back.";
 
   form.addEventListener("submit", function (e) {
     e.preventDefault();
