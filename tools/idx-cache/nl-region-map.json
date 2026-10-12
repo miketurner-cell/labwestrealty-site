@@ -1,0 +1,140 @@
+{
+  "_doc": "Geographic region taxonomy for the /listings/sold/ dropdown. Cities with 50+ sales in the 2-year sold cache get their own dropdown entry (major centres). Everything else rolls up into one of these regions for browsable filtering. Built 2026-05-11 from the live sold-cache inventory. Mike: review the region definitions + the `members` lists. Catch-all for small communities not explicitly listed = postal-prefix fallback at the bottom.",
+  "_threshold": 50,
+  "_authoring_principles": [
+    "Regions follow standard NL geographic conventions (Avalon Peninsula, Burin Peninsula, Bonavista Peninsula, etc.) rather than NLAR sub-districts (which Mike noted are 'a mess' in the Angie thread).",
+    "Major centres at threshold 50+ sales get their own dropdown entry — appears in 'Major centres' section of dropdown.",
+    "All other communities roll up into their region — appears in 'Regions' section of dropdown.",
+    "Region membership is INCLUSIVE of the major centres geographically located there (so 'Avalon Peninsula' includes St. John's, but St. John's also appears as its own dropdown entry above). When a consumer selects 'Avalon Peninsula' they get ALL Avalon sales including St. John's; when they select 'St. John's' they get just St. John's. This is consumer-natural — selecting a broader bucket shouldn't exclude bigger places inside it.",
+    "Postal-prefix fallback at bottom of file catches any community not explicitly named in `members` lists. Defensive against new cities appearing in the feed."
+  ],
+  "regions": {
+    "Avalon Peninsula": {
+      "description": "St. John's metro + Conception Bay + Trinity Bay east + Southern Shore (everything on the easternmost peninsula of NL).",
+      "fsa_prefixes": ["A1A", "A1B", "A1C", "A1E", "A1G", "A1H", "A1K", "A1L", "A1M", "A1N", "A1S", "A1W", "A1X", "A1Y", "A0A"],
+      "major_centres_in_region": ["St. John's", "Paradise", "Conception Bay South", "Mount Pearl", "Torbay", "Bay Roberts", "Carbonear", "Pouch Cove", "Holyrood", "Spaniard's Bay", "Flatrock", "Harbour Grace", "Bay Bulls", "Portugal Cove-St. Philip's"],
+      "members": ["Logy Bay", "Middle Cove", "Outer Cove", "Petty Harbour", "Maddox Cove", "Goulds", "Kilbride", "Mount Scio", "St. Phillips", "Bauline", "Pouch Cove", "Cape Broyle", "Calvert", "Ferryland", "Aquaforte", "Witless Bay", "Tors Cove", "Bauline East", "St. Vincents-St. Stephens-Peter's River", "Brigus", "Cupids", "Salmonier", "Holyrood", "Avondale", "Conception Harbour", "Marysvale", "Tilton", "Bareneed", "Bay de Verde", "Old Perlican", "Lower Island Cove", "Upper Island Cove", "Salmon Cove", "Western Bay", "Ochre Pit Cove", "Burnt Point", "Northern Bay", "Clarkes Beach", "Makinsons", "South River", "Whitbourne", "Whiteway", "Cavendish", "Heart's Content", "Heart's Delight", "Heart's Desire", "Winterton", "New Harbour", "Dildo", "South Dildo", "Long Cove", "Hopeall", "Norman's Cove-Long Cove", "Chapel Arm", "Tilton", "Spaniard's Cove", "Adam's Cove", "Bishop's Cove", "Blackhead", "Hibbs Cove", "Port de Grave", "Coley's Point", "Shearstown", "Roaches Line", "Marysvale", "Goulds Cove", "Witless Bay Line", "Bell Island", "Lance Cove", "Trepassey", "St. Shotts", "Renews", "Cappahayden", "Fermeuse", "Riverhead", "Branch", "St. Bride's", "Point Lance", "Mount Carmel", "Colinet", "Salmonier Line", "Sound Island", "Long Pond", "Foxtrap", "Topsail"]
+    },
+    "Burin Peninsula": {
+      "description": "South-coast peninsula extending southwest from the mainland of insular NL — Marystown, Burin, Grand Bank, Fortune, St. Lawrence area.",
+      "fsa_prefixes": ["A0E"],
+      "major_centres_in_region": ["Marystown", "Grand Bank"],
+      "members": ["Marystown", "Burin", "Burin Bay Arm", "Creston", "Garnish", "Grand Bank", "Fortune", "Lamaline", "Lawn", "Lord's Cove", "Lord`s Cove", "Point May", "St. Lawrence", "Allan's Island", "Frenchmans Cove", "Frenchman's Cove", "Little Bay", "Parker's Cove", "Rushoon", "Spanish Room", "Boat Harbour West", "Petite Forte", "Baine Harbour"]
+    },
+    "Bonavista Peninsula": {
+      "description": "East-coast peninsula northeast of Trinity Bay — Bonavista, Trinity, Port Rexton, Catalina, Elliston, English Harbour.",
+      "fsa_prefixes": ["A0C"],
+      "major_centres_in_region": ["Bonavista"],
+      "members": ["Bonavista", "Trinity", "Trinity East", "Trinity Bight", "Port Rexton", "Catalina", "Little Catalina", "Elliston", "Maberly", "English Harbour", "Champney's West", "Champney's East", "Champney's Arm", "Lethbridge", "Plate Cove West", "Plate Cove East", "Open Hall", "Red Cliff", "Sandringham", "Eastport", "Sandy Cove", "Salvage", "Happy Adventure", "Newman's Cove", "Spillars Cove", "Tickle Cove", "Knight's Cove", "Princeton", "Indian Bay", "Greenspond", "Newtown", "Pool's Island", "Wesleyville", "Templeman", "Lumsden", "Cape Freels", "Deadman's Bay"]
+    },
+    "Central NL — Gander Area": {
+      "description": "Turner Realty's primary service territory. Gander + the Gander Loop + the Road to the Isles + the Eastport Peninsula + the Notre Dame Bay east outports.",
+      "fsa_prefixes": ["A1V", "A0J", "A0G"],
+      "major_centres_in_region": ["Gander", "Lewisporte", "Glovertown"],
+      "members": ["Gander", "Appleton", "Glenwood", "Glovertown", "Lewisporte", "Twillingate", "Gambo", "Hare Bay", "Dover", "Aspen Cove", "Carmanville", "Musgrave Harbour", "Lumsden", "Crow Head", "Durrell", "Loon Bay", "Brown's Arm", "Little Burnt Bay", "Birchy Bay", "Cottlesville", "Moreton's Harbour", "Pike's Arm", "Herring Neck", "Boyd's Cove", "Summerford", "Cobb's Arm", "Indian Cove", "Stoneville", "Centreville", "Wareham", "Trinity", "Frederickton", "Davidsville", "Clarke's Head", "Gander Bay", "Noggin Cove", "New-Wes-Valley", "Wesleyville", "Newtown", "Greenspond", "Hare Bay", "Templeman", "Pools Island", "Porterville", "Victoria Cove", "Sandringham", "Eastport", "Salvage", "Happy Adventure", "Sandy Cove", "Aspen Cove", "Benton", "Norman's Cove", "Fogo", "Fogo Island", "Joe Batt's Arm", "Tilting", "Seldom", "Stag Harbour", "Island Harbour", "Deep Bay", "Barr'd Islands", "Shoal Bay", "Change Islands", "Greenwood Cottage"]
+    },
+    "Central NL — Exploits Valley": {
+      "description": "Grand Falls-Windsor area + the Exploits River valley + Notre Dame Bay west outports.",
+      "fsa_prefixes": ["A2A", "A0H"],
+      "major_centres_in_region": ["Grand Falls-Windsor", "Bishop's Falls", "Botwood"],
+      "members": ["Grand Falls-Windsor", "Bishop's Falls", "Botwood", "Northern Arm", "Phillip's Head", "Norris Arm", "Norris Arm North", "Norris Arm South", "Peter's Arm", "Lewisporte", "Embree", "Little Burnt Bay", "Brown's Arm", "Pleasantview", "Birchy Bay", "Comfort Cove", "Newstead", "Cottle's Island", "Stanhope", "Charles Brook", "Bishop's Falls"]
+    },
+    "Notre Dame Bay — West": {
+      "description": "North-coast outports west of Twillingate — Springdale + Triton + La Scie + Baie Verte Peninsula.",
+      "fsa_prefixes": ["A0K"],
+      "major_centres_in_region": ["Springdale"],
+      "members": ["Springdale", "Triton", "Brighton", "Pilley's Island", "Roberts Arm", "South Brook", "King's Point", "Nipper's Harbour", "Burlington", "Coachman's Cove", "Snook's Arm", "Tilt Cove", "La Scie", "Round Harbour", "Shoe Cove", "Wild Cove", "Westport", "Pacquet", "Fleur de Lys", "Baie Verte", "Ming's Bight", "Seal Cove", "Woodstock", "Middle Arm", "Smith Sound"]
+    },
+    "Connaigre Peninsula / South Coast Central": {
+      "description": "South-coast communities accessible by road or coastal ferry — Hermitage, Harbour Breton, Belleoram, Pool's Cove + Bay D'Espoir corridor + Connaigre Bay.",
+      "fsa_prefixes": ["A0H"],
+      "major_centres_in_region": [],
+      "members": ["Hermitage", "Sandyville", "Seal Cove", "Harbour Breton", "St. Jacques-Coomb's Cove", "Belleoram", "Pool's Cove", "English Harbour West", "Rencontre East", "Gaultois", "McCallum", "Francois", "Grey River", "Burgeo", "Ramea", "Grand Bruit", "Conne River", "St. Alban's", "Milltown", "Morrisville", "Head of Bay D'Espoir"]
+    },
+    "Western NL — Humber Valley & Bay of Islands": {
+      "description": "Corner Brook + Deer Lake + Pasadena + the Humber River valley + Bay of Islands communities.",
+      "fsa_prefixes": ["A2H", "A8A", "A0L"],
+      "major_centres_in_region": ["Corner Brook", "Deer Lake", "Pasadena", "Massey Drive"],
+      "members": ["Corner Brook", "Deer Lake", "Pasadena", "Massey Drive", "Steady Brook", "Humber Village", "Reidville", "Cormack", "Howley", "Hampden", "Sop's Arm", "Pollards Point", "Jackson's Arm", "Wiltondale", "Mount Moriah", "Curling", "Benoit's Cove", "Halfway Point", "Frenchman's Cove", "Lark Harbour", "Little Port", "York Harbour", "Meadows", "Summerside", "McIvers", "Cox's Cove", "Gillams", "Hughes Brook", "Irishtown-Summerside", "Lower Cove", "Wild Cove", "Brakes Cove"]
+    },
+    "Western NL — Bay St. George & South Coast": {
+      "description": "Stephenville + Stephenville Crossing + the Codroy Valley + Channel-Port aux Basques + south coast communities.",
+      "fsa_prefixes": ["A2N", "A0N", "A0R", "A5A"],
+      "major_centres_in_region": ["Stephenville", "Kippens", "Channel-Port aux Basques"],
+      "members": ["Stephenville", "Stephenville Crossing", "Kippens", "St. George's", "Heatherton", "Robinsons", "Highlands", "Cartyville", "St. David's", "Loch Lomond", "Mainland", "Cape St. George", "Lourdes", "Black Duck Cove", "Piccadilly", "Sheaves Cove", "Lower Cove", "Boswarlos", "Aguathuna", "Port au Port", "Port au Port East", "Port au Port West", "West Bay Centre", "Doyles", "Codroy", "South Branch", "Tompkins", "Searston", "Upper Ferry", "Margaree", "Fox Roost", "Isle aux Morts", "Burnt Islands", "Rose Blanche", "Channel-Port aux Basques", "Channel Port aux Basques", "Port aux Basques", "Diamond Cove"]
+    },
+    "Northern Peninsula": {
+      "description": "Long north-pointing peninsula from Deer Lake up to St. Anthony + the Strait of Belle Isle coast.",
+      "fsa_prefixes": ["A0K", "A0L", "A0M"],
+      "major_centres_in_region": [],
+      "members": ["Rocky Harbour", "Norris Point", "Cow Head", "Sally's Cove", "Trout River", "Woody Point", "Glenburnie", "Birchy Head", "Bonne Bay", "Wiltondale", "Bellburns", "River of Ponds", "Hawke's Bay", "Port Saunders", "Port au Choix", "Anchor Point", "Reefs Harbour", "Black Duck Cove", "Plum Point", "Pines Cove", "Eddies Cove", "Eddies Cove West", "Sandy Cove", "Flower's Cove", "Forrester's Point", "Castors River", "Bear Cove", "Roddickton", "Bide Arm", "Englee", "Conche", "Croque", "Croque Harbour", "Goose Cove", "St. Anthony", "St. Anthony East", "St. Lunaire-Griquet", "Quirpon", "Raleigh", "Cape Onion", "Wild Bight", "Main Brook", "Eastport"]
+    },
+    "Labrador — Central (HVGB)": {
+      "description": "Happy Valley-Goose Bay + North West River + Sheshatshiu + Mud Lake + Lake Melville communities.",
+      "fsa_prefixes": ["A0P"],
+      "major_centres_in_region": ["Happy Valley-Goose Bay"],
+      "members": ["Happy Valley-Goose Bay", "North West River", "Sheshatshiu", "Mud Lake", "Goose Bay", "Happy Valley", "Northwest River", "5 Wing Goose Bay", "5 Wing"]
+    },
+    "Labrador — West": {
+      "description": "Labrador City + Wabush + Churchill Falls (iron-ore mining communities + hydro company town).",
+      "fsa_prefixes": ["A2V"],
+      "major_centres_in_region": ["Labrador City", "Wabush"],
+      "members": ["Labrador City", "Wabush", "Churchill Falls", "Lab City"]
+    },
+    "Labrador — Coastal": {
+      "description": "Coastal Labrador — South Coast (Forteau / L'Anse au Loup / Mary's Harbour) + North Coast (Nain / Hopedale / Makkovik / Postville / Rigolet).",
+      "fsa_prefixes": ["A0K", "A0P"],
+      "major_centres_in_region": [],
+      "members": ["Forteau", "L'Anse-au-Loup", "L'Anse-au-Clair", "West St. Modeste", "Pinware", "Red Bay", "Mary's Harbour", "Mary`s Harbour", "Cartwright", "Charlottetown", "Port Hope Simpson", "Black Tickle", "Norman Bay", "Williams Harbour", "Nain", "Hopedale", "Makkovik", "Postville", "Rigolet", "Natuashish"]
+    }
+  },
+  "fsa_prefix_fallback": {
+    "_doc": "Defensive: if a city in the cache is not explicitly listed in any region's `members`, derive its region from this postal-prefix-to-region map. Catches new cities the feed picks up.",
+    "A0A": "Avalon Peninsula",
+    "A0B": "Avalon Peninsula",
+    "A0C": "Bonavista Peninsula",
+    "A0E": "Burin Peninsula",
+    "A0G": "Central NL — Gander Area",
+    "A0H": "Central NL — Exploits Valley",
+    "A0J": "Central NL — Gander Area",
+    "A0K": "Notre Dame Bay — West",
+    "A0L": "Western NL — Humber Valley & Bay of Islands",
+    "A0M": "Northern Peninsula",
+    "A0N": "Western NL — Bay St. George & South Coast",
+    "A0P": "Labrador — Central (HVGB)",
+    "A0R": "Western NL — Bay St. George & South Coast",
+    "A1A": "Avalon Peninsula",
+    "A1B": "Avalon Peninsula",
+    "A1C": "Avalon Peninsula",
+    "A1E": "Avalon Peninsula",
+    "A1G": "Avalon Peninsula",
+    "A1H": "Avalon Peninsula",
+    "A1K": "Avalon Peninsula",
+    "A1L": "Avalon Peninsula",
+    "A1M": "Avalon Peninsula",
+    "A1N": "Avalon Peninsula",
+    "A1S": "Avalon Peninsula",
+    "A1V": "Central NL — Gander Area",
+    "A1W": "Avalon Peninsula",
+    "A1X": "Avalon Peninsula",
+    "A1Y": "Avalon Peninsula",
+    "A2A": "Central NL — Exploits Valley",
+    "A2B": "Western NL — Humber Valley & Bay of Islands",
+    "A2H": "Western NL — Humber Valley & Bay of Islands",
+    "A2N": "Western NL — Bay St. George & South Coast",
+    "A2V": "Labrador — West",
+    "A5A": "Western NL — Bay St. George & South Coast",
+    "A8A": "Western NL — Humber Valley & Bay of Islands"
+  },
+  "_review_notes": [
+    "Top region misclassifications I want Mike's eyes on:",
+    "1. A0H is split between Exploits Valley (Bishop's Falls/Botwood) and Connaigre Peninsula (Hermitage/Harbour Breton) — same postal prefix covers both, so the postal-fallback alone can't distinguish them. The `members` lists in each region are the disambiguator. Worth Mike's review.",
+    "2. A0L is split between Humber Valley/Bay of Islands AND Northern Peninsula (Rocky Harbour, Bonne Bay) — same problem. Members lists disambiguate.",
+    "3. A0K covers both Notre Dame Bay West AND Northern Peninsula (some) AND Coastal Labrador — three regions on one prefix. Members lists are critical here.",
+    "4. 'Massey Drive' I put in Humber Valley as a major centre (40 sales in cache). It's a subdivision of Corner Brook technically. Mike: keep as own entry or fold into Corner Brook?",
+    "5. 'Brigus Junction' — I canonicalized it to 'Brigus' in nl-city-canonical.json. Mike: confirm or split.",
+    "6. The 'Pouch Cove' (103 sales) being above the 50-threshold means it gets its own dropdown entry, even though it's geographically part of Avalon. That's intentional — major centres appear in BOTH the 'Major centres' section (by name) and via 'Avalon Peninsula' selection (by region).",
+    "7. Connaigre Peninsula has zero major centres at the 50+ threshold. Whole region is small-community territory.",
+    "8. Northern Peninsula also has zero major centres at 50+ — St. Anthony only hits ~20-30 sales/2yr typically."
+  ]
+}

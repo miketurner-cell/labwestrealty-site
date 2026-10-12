@@ -1,0 +1,242 @@
+{
+  "_doc": "City-name canonicalization for sold-listings dropdown. Maps every observed variant in the NLAR cache to a single canonical form. Built from the 2026-05-11 sold-cache inventory of 870 distinct city values. The generator's _normalize_city() function applies this map before grouping/dropdown logic, collapsing punctuation/spacing variants into one display name. Mike: review the 'canonical' values + add any small-town variants I missed.",
+  "_threshold": "50+ sales over 2-year rolling window → major-centre dropdown entry (per Mike's 2026-05-11 decision via AskUserQuestion).",
+  "canonical": {
+    "St. John's": [
+      "St. John's",
+      "St John's",
+      "St.John's",
+      "St. John’s",
+      "St. Johns",
+      "St. John`s",
+      "Saint John's",
+      "Saint Johns",
+      "St-John's",
+      "St. John;s",
+      "St John`s",
+      "St. John s",
+      "St. John 's"
+    ],
+    "Mount Pearl": [
+      "Mount Pearl",
+      "Mt. Pearl",
+      "Mt Pearl",
+      "Mt-Pearl",
+      "Mt.Pearl"
+    ],
+    "Conception Bay South": [
+      "Conception Bay South",
+      "CBS",
+      "Cbs",
+      "C.B.S.",
+      "C.B.S",
+      "Conception Bay S.",
+      "Conception Bay S"
+    ],
+    "Grand Falls-Windsor": [
+      "Grand Falls-Windsor",
+      "Grand Falls Windsor",
+      "Grand Falls - Windsor",
+      "Grand-Falls-Windsor",
+      "Grand Falls",
+      "Windsor"
+    ],
+    "Happy Valley-Goose Bay": [
+      "Happy Valley-Goose Bay",
+      "Happy Valley Goose Bay",
+      "Happy Valley - Goose Bay",
+      "HVGB",
+      "Goose Bay",
+      "Happy Valley"
+    ],
+    "Portugal Cove-St. Philip's": [
+      "Portugal Cove-St. Philip's",
+      "Portugal Cove - St. Philips",
+      "Portugal Cove-St. Philips",
+      "Portugal Cove St. Philips",
+      "Portugal Cove",
+      "Portugal Cove-St Philips",
+      "St. Philip's",
+      "St Philips",
+      "Portugal Cove-St.Phillips",
+      "Portugal Cove - St. Phillip's",
+      "Portugal Cove - St. Phillips",
+      "Portugal Cove - St.Phillips",
+      "Portugal Cove- St. Phillips",
+      "Portugal Cove St Phillips",
+      "Portugal cove/St. Phillips",
+      "Portugal cove-St Phillips",
+      "Portugal Cove - St Phillip's",
+      "Portugal Cove - St Phillips",
+      "Portugal Cove St. Phillip's",
+      "Portugal Cove-St. Phillips",
+      "Portugal Cove St Phillip's",
+      "St Phillips",
+      "St. Phillips",
+      "St. Philips",
+      "St, Philips",
+      "St.Philips",
+      "Pcsp",
+      "PCSP"
+    ],
+    "Bishop's Falls": [
+      "Bishop's Falls",
+      "Bishop`s Falls",
+      "Bishop’s Falls",
+      "Bishops Falls"
+    ],
+    "Spaniard's Bay": [
+      "Spaniards Bay",
+      "Spaniard's Bay",
+      "Spaniard`s Bay",
+      "Spaniards"
+    ],
+    "Arnold's Cove": [
+      "Arnold's Cove",
+      "Arnold`s Cove",
+      "Arnold’s Cove",
+      "Arnolds Cove"
+    ],
+    "Adam's Cove": [
+      "Adam's Cove",
+      "Adam`s Cove",
+      "Adam’s Cove",
+      "Adams Cove"
+    ],
+    "Bishop's Cove": [
+      "Bishop's Cove",
+      "Bishop`s Cove",
+      "Bishop’s Cove",
+      "Bishops Cove"
+    ],
+    "Brigus": [
+      "Brigus"
+    ],
+    "Conception Harbour": [
+      "Conception Harbour",
+      "Conception Harbor",
+      "Conception Hr",
+      "Conception Hr."
+    ],
+    "L'Anse-au-Loup": [
+      "L'Anse-au-Loup",
+      "L'Anse au Loup",
+      "Lanse au Loup"
+    ],
+    "L'Anse-au-Clair": [
+      "L'Anse-au-Clair",
+      "L'Anse au Clair",
+      "Lanse au Clair"
+    ],
+    "Forteau": [
+      "Forteau",
+      "Forteau Bay"
+    ],
+    "Heart's Content": [
+      "Heart's Content",
+      "Heart`s Content",
+      "Heart’s Content",
+      "Hearts Content"
+    ],
+    "Heart's Desire": [
+      "Heart's Desire",
+      "Heart`s Desire",
+      "Heart’s Desire",
+      "Hearts Desire"
+    ],
+    "Clarenville": [
+      "Clarenville",
+      "Clarenvile"
+    ],
+    "Fermeuse": [
+      "Fermeuse",
+      "Fermuse"
+    ],
+    "Port au Bras": [
+      "Port au Bras",
+      "Port Au Bras",
+      "Port Aux Bras"
+    ],
+    "Heart's Delight-Islington": [
+      "Heart's Delight",
+      "Heart`s Delight",
+      "Heart’s Delight",
+      "Hearts Delight",
+      "Heart's Delight-Islington",
+      "Heart's Delight - Islington",
+      "Hearts Delight-Islington",
+      "Hearts Delight Islington"
+    ],
+    "St. Bernard's-Jacques Fontaine": [
+      "St. Bernard's-Jacques Fontaine",
+      "St. Bernard's - Jacques Fontaine",
+      "Saint Bernards-Jacques Fontaine",
+      "Saint Bernards - Jacques Fontaine",
+      "Saint Bernard's-Jacques Fontaine"
+    ],
+    "Placentia Junction": [
+      "Placentia Junction",
+      "Placentia Jct.",
+      "Placentia Jct"
+    ],
+    "Dunville": [
+      "Dunville",
+      "Dunville - Placentia",
+      "Dunville Placentia",
+      "Dunville, Placentia"
+    ],
+    "Irishtown-Summerside": [
+      "Irishtown-Summerside",
+      "Irishtown - Summerside",
+      "Irishtown and Summerside",
+      "Irishtown",
+      "Irishtown Summerside"
+    ],
+    "Normans Cove-Long Cove": [
+      "Normans Cove-Long Cove",
+      "Norman's Cove-Long Cove",
+      "Norman's Cove - Long Cove",
+      "Normans Cove - Long Cove",
+      "Normans Cove",
+      "Norman's Cove",
+      "Norman’s Cove"
+    ],
+    "Comfort Cove": [
+      "Comfort Cove",
+      "Comfort Cove - Newstead",
+      "Comfort Cove-Newstead",
+      "Newstead"
+    ],
+    "Logy Bay-Middle Cove-Outer Cove": [
+      "Logy Bay-Middle Cove-Outer Cove",
+      "Logy Bay - Middle Cove - Outer Cove",
+      "Logy Bay - Middle Cove- Outer Cove",
+      "Logy Bay -Middle Cove - Outer Cove",
+      "Logy Bay Middle Cove Outer Cove",
+      "Logy Bay, Middle Cove, Outer Cove",
+      "Logy Bay- Middle Cove- Outer Cove",
+      "Logy-Bay Middle Cove Outer Cove",
+      "logy Bay-Middle Cove-Outer Cove",
+      "Logy Bay"
+    ],
+    "Petty Harbour-Maddox Cove": [
+      "Petty Harbour-Maddox Cove",
+      "Petty Harbour - Maddox Cove",
+      "Petty Harbour Maddox Cove",
+      "Petty Harbour, Maddox Cove",
+      "Petty Harbour/ Maddox Cove",
+      "Petty Harbour/Maddox Cove",
+      "Maddox Cove Petty Harbour",
+      "Petty Harbour",
+      "Maddox Cove"
+    ]
+  },
+  "_review_notes": [
+    "Mike review: I biased toward common-sense canonicalization. The St. John's variants pattern (period vs no-period, curly apostrophe vs straight, hyphen) applies broadly. If I missed a variant, add it under the canonical entry.",
+    "Bishop's Falls + Spaniard's Bay + the Heart's-* family: backtick (`) variants exist because some agents typed on systems that converted apostrophes oddly. Catch-all in the generator could also strip-and-rebuild on apostrophe class.",
+    "Conception Bay South vs CBS: the 'Cbs' (50 sales) variant in the cache today is interesting - might be agent shorthand. Worth verifying.",
+    "Brigus + Brigus Junction: kept SEPARATE — un-merged 2026-06-07 for active-listing accuracy (Brigus is the main community; Brigus Junction is a distinct settlement with its own listings). Was previously merged for the sold dropdown only.",
+    "Goose Bay vs Happy Valley vs Happy Valley-Goose Bay: officially the amalgamated name is 'Happy Valley-Goose Bay' but locals say either. I've folded both partial names into the canonical.",
+    "2026-08-13 sold-tree slug-duplicate cleanup — 10 new/renamed canonical entries, geo-verified (lat/lng centroid distance) against the live sold feed before merging. Deliberately NOT merged: 'freshwater' vs 'freshwater-placentia' (freshwater itself is ambiguous — 5 of 8 rows cluster with freshwater-placentia near Placentia, 4 cluster ~55km north near Carbonear/Harbour Grace; these are two genuinely distinct real NL communities sharing one raw CityText value, not a spelling variant — needs geography-aware per-row disambiguation, not a name-based canonical merge, to fix correctly). 'bonne-bay-big-pond' vs 'bonne-bay-pond' also deliberately left alone — only 0.6km apart and low volume (2 vs 18), but both appear as separately-named Expedia destinations near Gros Morne and I could not independently confirm they're the same locality rather than two adjacent named places; flagging rather than guessing (Conv #175)."
+  ]
+}
