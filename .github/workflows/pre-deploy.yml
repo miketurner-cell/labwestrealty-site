@@ -73,6 +73,11 @@ jobs:
       - name: Full-site pre-deploy check (STRICT — errors block, warnings allowed)
         run: python3 tools/pre-deploy-check.py
 
+      - name: Recruiting pages carry the shared technology block unchanged, confirmed claims only (STRICT, D-1012-35)
+        run: |
+          python3 tools/sync-recruiting-tech.py --check
+          python3 tools/tests/recruiting-block-test.py
+
       - name: SEO safety check (STRICT — a live page may not lose title, canonical, index status or sitemap entry)
         run: python3 tools/seo-safety-check.py
 
