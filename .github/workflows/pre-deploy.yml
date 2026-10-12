@@ -83,3 +83,6 @@ jobs:
 
       - name: Lab West switch is wired dark (STRICT — every workflow gates on LABWEST_LISTINGS before any pull)
         run: python3 tools/tests/labwest-switch-test.py
+
+      - name: Lab West feed scope, lease drop and site config (STRICT — Labrador City + Wabush only, no leases, R2 prefix labwest/)
+        run: python3 tools/tests/labwest-scope-test.py
