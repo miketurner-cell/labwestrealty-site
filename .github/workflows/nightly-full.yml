@@ -1,0 +1,250 @@
+name: Nightly listings rebuild
+
+# Lab West (labwestrealty.com) nightly full pull -> sold history and aggregates -> market-stats and community pages ->
+# regen -> sweep -> diff-gated commit (sites, D-1012-34, component 6). Ported from goosebayrealestate-site's nightly-full.yml.
+#
+# DARK BY DESIGN (same as hourly-rebuild.yml)
+#   - No native `schedule:`. The cadence lives in realestategander-site tools/runner/schedules.json (box dispatch) and nothing
+#     there names this repo until Mike flips LABWEST_LISTINGS. When it does, run it at 20:30Z, off Gander/Avalon/Goose Bay's 20:00Z.
+#   - The `switch` job reads vars.LABWEST_LISTINGS (unset = off); the `rebuild` job needs it and runs only when the value is
+#     `on` (or `preview` on a deliberate workflow_dispatch). Off = no step runs: no RETS login, no secret read, no commit.
+#   - NLAR allows ONE login per account. Every RETS step below runs inside the gated job, one after another.
+#   - Not ported on purpose: push-viewpoint-prices.py (Gander's nightly already fills the Supabase sold-price table for the whole
+#     board, Lab West rows included, and a second writer would need the service key), build-home-value-index, market audio
+#     (MARKET_AUDIO stays unset = off), pending-from-deals (no Lab West deals feed).
+
+on:
+  workflow_dispatch: {}
+
+concurrency:
+  group: ddf-rebuild
+  cancel-in-progress: false
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+permissions:
+  contents: write
+
+jobs:
+  switch:
+    name: Lab West switch
+    runs-on: ubuntu-latest
+    outputs:
+      state: ${{ steps.read.outputs.state }}
+    steps:
+      - name: Read LABWEST_LISTINGS
+        id: read
+        env:
+          RAW: ${{ vars.LABWEST_LISTINGS }}
+        run: |
+          s="${RAW:-off}"
+          case "$s" in on|preview|off) ;; *) s=off ;; esac
+          echo "state=$s" >> "$GITHUB_OUTPUT"
+          if [ "$s" = on ] || { [ "$s" = preview ] && [ "$GITHUB_EVENT_NAME" = workflow_dispatch ]; }; then
+            echo "LABWEST_LISTINGS=$s: the rebuild job will run."
+          else
+            echo "LABWEST_LISTINGS=$s: switch off, nothing pulled (no RETS login, no commit)."
+          fi
+
+  rebuild:
+    name: Pull -> aggregate -> pages -> commit
+    needs: switch
+    if: needs.switch.outputs.state == 'on' || (github.event_name == 'workflow_dispatch' && needs.switch.outputs.state == 'preview')
+    runs-on: ${{ vars.CI_RUNS_ON || 'ubuntu-latest' }}
+    timeout-minutes: 90
+    steps:
+      - name: Checkout (current tip of the branch)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.ref }}
+          filter: blob:none
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Free disk space on runner
+        if: runner.environment == 'github-hosted'
+        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be  # v1.3.1
+        with:
+          tool-cache: true
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Restore IDX/VOW active cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            tools/idx-cache/listings.json
+            tools/idx-cache/listings-projected.json
+            tools/idx-cache/pending-listings.json
+          key: idx-active-cache-${{ github.run_id }}
+          restore-keys: |
+            idx-active-cache-
+
+      - name: Pull IDX/VOW feed (NLAR direct, full)
+        env:
+          NLAR_RETS_USER: ${{ secrets.NLAR_RETS_USER }}
+          NLAR_RETS_PASS: ${{ secrets.NLAR_RETS_PASS }}
+        working-directory: tools
+        continue-on-error: true
+        run: |
+          python3 -m pip install --quiet requests
+          python3 idx-ingest.py --pull active
+
+      - name: Pull IDX/VOW sold history and regenerate the Lab West aggregates
+        # The sold backfill is the whole board (about 12,800 rows from 2024-01: that is all the feed returns). The aggregator keeps
+        # only the Labrador City / Wabush subdistrict. Tolerated failure: the pages then render from the last good aggregates.
+        env:
+          NLAR_RETS_USER: ${{ secrets.NLAR_RETS_USER }}
+          NLAR_RETS_PASS: ${{ secrets.NLAR_RETS_PASS }}
+        working-directory: tools
+        continue-on-error: true
+        run: |
+          python3 -m pip install --quiet requests
+          python3 idx-ingest.py --pull sold --backfill
+          python3 idx-stats-aggregator.py
+
+      - name: Generate the market-statistics page (numbers from the aggregates, source and date on the page)
+        working-directory: tools
+        continue-on-error: true
+        run: |
+          python3 -m pip install --quiet pyyaml
+          python3 build-market-stats-page.py --all --verbose
+
+      - name: Build the Labrador City and Wabush community pages
+        working-directory: tools
+        continue-on-error: true
+        run: |
+          python3 -m pip install --quiet pyyaml
+          python3 build-community-pages.py --all --verbose
+
+      - name: Pull IDX rooms (PropertySubTable:Room)
+        env:
+          NLAR_RETS_USER: ${{ secrets.NLAR_RETS_USER }}
+          NLAR_RETS_PASS: ${{ secrets.NLAR_RETS_PASS }}
+        working-directory: tools
+        continue-on-error: true
+        run: python3 idx-ingest.py --pull rooms
+
+      - name: Pull OpenHouse (upcoming public open houses)
+        env:
+          NLAR_RETS_USER: ${{ secrets.NLAR_RETS_USER }}
+          NLAR_RETS_PASS: ${{ secrets.NLAR_RETS_PASS }}
+        working-directory: tools
+        continue-on-error: true
+        run: python3 idx-openhouse-sync.py
+
+      - name: Sync IDX/VOW photos to R2 (authoritative nightly pass)
+        env:
+          NLAR_RETS_USER: ${{ secrets.NLAR_RETS_USER }}
+          NLAR_RETS_PASS: ${{ secrets.NLAR_RETS_PASS }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET_NAME: ${{ secrets.R2_BUCKET_NAME }}
+          R2_BASE_URL: ${{ secrets.R2_BASE_URL }}
+        working-directory: tools
+        continue-on-error: true
+        run: |
+          python3 -m pip install --quiet Pillow
+          if [ -n "${R2_BUCKET_NAME:-}" ]; then
+            python3 -m pip install --quiet boto3
+          fi
+          python3 idx-photo-sync.py --all
+
+      - name: Soft-mark photo folders for removed listings
+        working-directory: tools
+        continue-on-error: true
+        run: python3 idx-photo-cleanup.py soft-mark
+
+      - name: Project IDX -> DDF shape (Lab West scope, no leases)
+        working-directory: tools
+        continue-on-error: true
+        env:
+          R2_BASE_URL: ${{ secrets.R2_BASE_URL }}
+        run: |
+          if [ -f idx-cache/listings.json ]; then
+            python3 idx-project-to-ddf-shape.py
+          else
+            echo "[PROJECT] skipped - idx-cache/listings.json absent"
+          fi
+
+      - name: Install the sold-listings shell (template -> listings/sold/index.html)
+        run: python3 tools/labwest-sold-shell.py
+
+      - name: Regenerate listing pages (homes for sale, sold pages, property records, sweep)
+        working-directory: tools
+        env:
+          R2_BASE_URL: ${{ secrets.R2_BASE_URL }}
+          GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+        run: python3 ddf-generate-pages.py --site-root ..
+
+      - name: Apply the switch state (preview = noindex and no sitemap; on = indexed and in the sitemap index)
+        run: python3 tools/labwest-listings-state.py "${{ needs.switch.outputs.state }}"
+
+      # NEXT COMPONENTS ADD THEIR STEPS ABOVE THIS LINE: fragments and homepage (7), asset stamps and the rebuild gates.
+
+      - name: Diff-gated commit and push
+        run: |
+          git config user.name  "Turner DDF Bot"
+          git config user.email "ddf-bot@royallepageturner.com"
+          # Stage exactly what the rebuild can change; a missing optional path is a no-op for that path only.
+          git add -A -- images/listings 2>/dev/null || true
+          for _p in \
+            listings/ \
+            property/ \
+            pages/ \
+            sitemap-listings.xml \
+            sitemap-property.xml \
+            sitemap-index.xml \
+            _redirects \
+            tools/idx-cache/listings-projected.json \
+            tools/idx-cache/pending-listings.json \
+            tools/idx-cache/last-pull-stats.json \
+            tools/idx-cache/new-listings-ledger.json \
+            tools/idx-cache/live-aggregates.json \
+            tools/ddf-cache/deploy-manifest.json \
+            tools/ddf-cache/swept-listings.json \
+            tools/ddf-fragments/; do
+            git add -- "$_p" 2>/dev/null || true
+          done
+          if git diff --cached --quiet; then
+            echo "No changes - feed unchanged overnight."
+            exit 0
+          fi
+          [ -d listings ] || { echo "::error::REBUILD GATE FAILED (no listings/ directory after the rebuild)"; exit 1; }
+          python3 tools/pre-deploy-check.py --scope listings/ || { echo "::error::REBUILD GATE FAILED (pre-deploy-check --scope listings/): commit blocked, nothing pushed"; exit 1; }
+          COUNT=$(python3 -c "import json; print(json.load(open('tools/ddf-cache/deploy-manifest.json'))['listing_count'])" 2>/dev/null || echo "?")
+          git commit -m "Nightly listings rebuild: ${COUNT} active [skip actions]"
+          _ok=0
+          _br="${GITHUB_REF#refs/heads/}"
+          for _attempt in 1 2 3 4 5; do
+            if git pull --rebase --autostash origin "$_br" && git push origin "HEAD:$_br"; then
+              _ok=1; echo "pushed (attempt $_attempt)"; break
+            fi
+            git rebase --abort 2>/dev/null || true
+            echo "push race or conflict, retry $_attempt"; sleep $((RANDOM % 8 + 4))
+          done
+          if [ "$_ok" != 1 ]; then
+            echo "::error::push failed after 5 attempts"
+            exit 1
+          fi
+
+      - name: Save IDX/VOW active cache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            tools/idx-cache/listings.json
+            tools/idx-cache/listings-projected.json
+            tools/idx-cache/pending-listings.json
+          key: idx-active-cache-${{ github.run_id }}

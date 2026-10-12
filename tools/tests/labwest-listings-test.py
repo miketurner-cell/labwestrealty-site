@@ -37,6 +37,7 @@ if (ROOT / "listings").is_dir():
 else:
     check(not (ROOT / "property").exists(), "A: property/ exists while the switch has never been on")
     check("sold-data" not in (ROOT / "_redirects").read_text(), "A: _redirects routes sold data while off")
+    check(not (ROOT / "pages").exists() and not (ROOT / "sitemap-pages.xml").exists(), "A: pages/ or sitemap-pages.xml exists while off")
     for sm in ("sitemap-listings.xml", "sitemap-property.xml"):
         check(not (ROOT / sm).exists(), f"A: {sm} exists while off")
     idx = (ROOT / "sitemap-index.xml").read_text()

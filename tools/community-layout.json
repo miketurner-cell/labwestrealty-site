@@ -1,0 +1,4 @@
+{
+  "communityLayout": "v1",
+  "_note": "COMMUNITY_LAYOUT (D-1008-86): v1 = today (default); v2 = homes first, the agent form last. See tools/_community_v2.py."
+}
