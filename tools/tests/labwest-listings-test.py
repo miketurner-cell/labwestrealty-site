@@ -20,6 +20,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -167,9 +168,12 @@ try:
         plain = re.sub(r"<style.*?</style>|<script.*?</script>", "", ht, flags=re.S)
         # for sale = rows that are not pending; the fixture has 6 for sale + 1 under contract among the in-scope homes
         check(re.search(r"<b>6</b><span>homes for sale \(1 more under contract\)", plain) is not None, "B: homepage for-sale/pending counts differ from the projected rows")
-        sold_year = [x for x in sdata["rows"] if (x.get("sold_date") or "") >= "2025-10-12"]
+        # the builder dates the page from the projected cache's generated_at (the run time), so expect that date, not a fixed one
+        as_of = datetime.fromisoformat(str(json.loads((work / "tools/idx-cache/listings-projected.json").read_text())["generated_at"]).replace("Z", "+00:00"))
+        check(abs((datetime.now(timezone.utc).date() - as_of.date()).days) <= 1, f"B: projected cache generated_at {as_of.isoformat()} is not from this run")
+        sold_year = [x for x in sdata["rows"] if (x.get("sold_date") or "") >= as_of.date().replace(year=as_of.year - 1).isoformat()]
         check(f"<b>{len(sold_year)}</b><span>sold in the last 12 months" in plain, f"B: homepage sold-in-12-months count is not {len(sold_year)}")
-        check("Source: NLAR MLS" in plain and "as of Oct 12, 2026" in plain, "B: homepage must show its source and the feed date")
+        check("Source: NLAR MLS" in plain and f"as of {as_of.strftime('%b')} {as_of.day}, {as_of.year}" in plain, "B: homepage must show its source and the feed date")
         check("Listed at $" in plain and "see what it sold for when you register" in plain, "B: sold cards must show the asking price and the register prompt")
         check("McGregor" not in ht, "B: the lease row appears on the homepage")
         for needle in ("Dynamic Duo", "goosebay", "Goose Bay", "896-5001", "Hamilton", "204 Airport"):
