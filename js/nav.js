@@ -600,16 +600,49 @@
       '<a class="nav2-signin" href="/pages/account.html">Sign in</a></div>';
   }
   var menuSVG = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h16M4 12h16M4 17h16"/></svg>';
+  // SAVED_ENTRY (listings plan item 7, Mike D-1012-45). OFF unless the site's nav-config says savedEntry: 'on' (?saved_entry=on previews,
+  // ?saved_entry=off forces it off): then the first thing in More (desktop dropdown and the phone menu's More block) is "Saved · N", N = the
+  // visitor's saved homes on this site (js/favorites.js's store, localStorage lst-favorites-v1, rows {mls, site, ts}), linking to the Saved
+  // screen; under it "Compare homes · M" (M = the compare tray's count, localStorage lst-compare-cart-v1) while the tray has a home, and
+  // "Shared shortlist" when the site's shortlistV2 is 'on'. Off = no markup, no listener: the panel is exactly as before.
+  function savedEntryOn() {
+    var q = ''; try { q = window.location.search || ''; } catch (e) { q = ''; }
+    if (/[?&]saved_entry=off(&|$)/.test(q)) return false;
+    return SITE.savedEntry === 'on' || /[?&]saved_entry=on(&|$)/.test(q);
+  }
+  function savedSiteKey() {
+    if (window.TURNER_SITE) return window.TURNER_SITE;
+    var h = ''; try { h = (window.location.hostname || '').toLowerCase(); } catch (e) { h = ''; }
+    return h.indexOf('avalon') !== -1 ? 'avalon' : h.indexOf('goosebay') !== -1 ? 'goosebay' : 'gander';   // same rule as js/favorites.js
+  }
+  function savedHomesCount() {
+    try {
+      var a = JSON.parse(localStorage.getItem('lst-favorites-v1')), site = savedSiteKey(), seen = {}, n = 0;
+      if (!Array.isArray(a)) return 0;
+      a.forEach(function (f) { if (f && f.site === site && f.mls != null && !seen[String(f.mls)]) { seen[String(f.mls)] = 1; n++; } });
+      return n;
+    } catch (e) { return 0; }
+  }
+  function compareCount() {
+    try { var a = JSON.parse(localStorage.getItem('lst-compare-cart-v1')); return Array.isArray(a) ? a.length : 0; } catch (e) { return 0; }
+  }
+  function savedEntryInner() {
+    var n = savedHomesCount(), m = compareCount();
+    return '<a class="nav2-saved-link" href="' + r + 'pages/saved.html">Saved' + (n ? ' &middot; ' + n : '') + '</a>' +
+      (m ? '<a class="nav2-saved-compare" href="' + r + 'listings/compare/">Compare homes &middot; ' + m + '</a>' : '') +
+      (SITE.shortlistV2 === 'on' ? '<a class="nav2-saved-shortlist" href="' + r + 'pages/saved.html">Shared shortlist</a>' : '');
+  }
   function more2HTML() {
     var items = (Array.isArray(H2.more) ? H2.more.slice() : []);
     var cur = window.TURNER_SITE;
     liveRegions().forEach(function (rg) { if (!(rg.site_key && rg.site_key === cur)) items.push([regionLinkText(rg), rg.url]); });
-    if (!items.length) return '';
+    var saved = savedEntryOn() ? '<div class="nav2-saved">' + savedEntryInner() + '</div>' : '';
+    if (!items.length && !saved) return '';
     // One set of links. Desktop: the "More" button opens them as a dropdown (wired in injectNav). Phone: the button is hidden by CSS and
     // the heading plus the links show as a block at the foot of the sheet, as before.
     return '<li class="nav2-more"><span class="nav2-more-h">More</span>' +
       '<button class="nav2-more-btn" type="button" aria-expanded="false" aria-controls="nav2-more-panel">More</button>' +
-      '<div class="nav2-more-panel" id="nav2-more-panel">' + items.map(function (it) { return '<a href="' + it[1] + '">' + it[0] + '</a>'; }).join('') + '</div></li>';
+      '<div class="nav2-more-panel" id="nav2-more-panel">' + saved + items.map(function (it) { return '<a href="' + it[1] + '">' + it[0] + '</a>'; }).join('') + '</div></li>';
   }
   function navMain2HTML(sCfg) {
     var action = (sCfg && sCfg.action) || H2.barAction || '/listings/';
@@ -806,6 +839,15 @@
       document.addEventListener('click', function (e) { if (isOpen() && !(e.target.closest && e.target.closest('.nav2-more'))) setOpen(false); });
       window.addEventListener('resize', function () { if (window.innerWidth <= NAV_BP && isOpen()) setOpen(false); });
     })(moreLi, moreBtn, morePanel);
+    // SAVED_ENTRY: keep the count current (the tray changes on the page without a reload; another tab fires 'storage').
+    var savedBox = mainBar.querySelector('.nav2-saved');
+    if (savedBox) (function (box) {
+      function refresh() { var h = savedEntryInner(); if (box.innerHTML !== h) box.innerHTML = h; }
+      window.addEventListener('storage', refresh);
+      document.addEventListener('click', refresh, true);
+      mainBar.addEventListener('mouseenter', refresh, true);
+      mainBar.addEventListener('focusin', refresh);
+    })(savedBox);
     // Highlight current page (Avalon)
     var here = window.location.pathname.split('/').pop() || 'index.html';
     var allLinks = mainBar.querySelectorAll('a[href]');
