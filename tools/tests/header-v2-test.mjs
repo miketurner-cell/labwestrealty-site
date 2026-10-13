@@ -87,9 +87,16 @@ ok(!SITE.header2 || moreCfg.length >= 2, `header2.more holds the links the deskt
 // D-1009-65: "Our team" is in More on every site that has a team page (Lab West has none: its pages are recruiting pages, never linked as a team)
 const moreLabels = moreCfg.map((m) => m[0]), isLabWest = !!(SITE.header2 && (SITE.header2.menu || []).some((m) => m.label === 'Why join'));
 ok(!SITE.header2 || isLabWest ? !moreLabels.includes('Our team') : moreLabels.includes('Our team'), isLabWest ? 'Lab West: no "Our team" (no team page exists)' : 'More has "Our team" (D-1009-65)');
-// logo: the official lockup, whole, alt "Royal LePage", 44px tall in the header; the file is the one Mike added 2026-06-24 (sha256 below)
-ok(/class="nav2-logo" src="' \+ escAttrNav\(logoSrc\) \+ '" alt="Royal LePage" width="87" height="44"/.test(nav) && /r \+ 'images\/rlp-turner-lockup\.png'/.test(nav), 'the header carries the official lockup image, alt "Royal LePage", 87x44');
+// logo (D-1013-27): the plain Royal LePage mark (lockup minus its Turner Realty line, resized 2x: 239x88), alt "Royal LePage", 44px tall in the header; the full lockup file stays for the presentations
+ok(/class="nav2-logo" src="' \+ escAttrNav\(logoSrc\) \+ '" alt="Royal LePage" width="119" height="44"/.test(nav) && /r \+ 'images\/rlp-mark-plain\.png'/.test(nav), 'the header carries the plain mark image, alt "Royal LePage", 119x44');
 ok(/\.nav2-logo \{[^}]*height: 44px;/.test(css), 'the logo is 44px tall (its mark is 25px: not under 24px)');
+const mark = join(ROOT, 'images', 'rlp-mark-plain.png');
+if (existsSync(mark)) {
+  const mb = readFileSync(mark), mw = mb.readUInt32BE(16), mh = mb.readUInt32BE(20);
+  ok(mb.slice(0, 8).toString('hex') === '89504e470d0a1a0a' && mw === 239 && mh === 88 && mw >= 2 * 119 - 1 && mh >= 2 * 44, `the header mark is a ${mw}x${mh} PNG, 2x its 119x44 box`);
+  ok(mb.length < 20000, `the header mark is small (${mb.length} bytes)`);
+  ok(createHash('sha256').update(mb).digest('hex') === '005f76a3b576e0858df912545416347e0acafb5b1edd9f0e467308231b5611d0', 'the header mark is the approved file, byte for byte');
+} else ok(false, 'images/rlp-rlp-mark-plain.png exists'.replace('rlp-rlp', 'rlp'));
 const lock = join(ROOT, 'images', 'rlp-turner-lockup.png');
 if (existsSync(lock)) {
   const buf = readFileSync(lock);

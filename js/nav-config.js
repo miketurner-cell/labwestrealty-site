@@ -29,7 +29,7 @@
 
   var SITE = {
     brandSub: 'Royal LePage',
-    logo: r + 'images/rlp-logo.png',
+    logo: r + 'images/rlp-mark-plain.png', logoW: 119, logoH: 44,   // the plain Royal LePage mark (D-1013-27); nav.js falls back to 40x40 when these are absent
     address: '204 Airport Blvd, Gander',
     email: 'miketurner@royallepage.ca',
     phone: '709-256-7999', phoneTel: '7092567999',
