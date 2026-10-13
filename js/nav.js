@@ -618,10 +618,10 @@
         '<span class="nav-search-icon">' + searchSVG + '</span>' +
         '<input class="nav-search-input" type="search" name="q" placeholder="' + escAttrNav(H2.placeholder || 'Search an address, a town, an MLS#') + '" aria-label="Search" autocomplete="off" inputmode="search" enterkeyhint="search" spellcheck="false"></form>';
     var findBtn = (H2.bar === false || sCfg) ? '' : '<a class="nav2-ico nav2-find" href="' + escAttrNav(action) + '" aria-label="Search">' + searchSVG + '</a>';
-    // The official Royal LePage Turner Realty lockup, whole and unaltered (D-1009-56), beside the Turner Realty name; one link home.
-    // SITE.header2.logo overrides the file, false leaves it out. 87x44 is the file's 1280x647 ratio at the header's height.
-    var logoSrc = H2.logo === false ? '' : (H2.logo || r + 'images/rlp-turner-lockup.png');
-    var logo = logoSrc ? '<img class="nav2-logo" src="' + escAttrNav(logoSrc) + '" alt="Royal LePage" width="87" height="44" decoding="async">' : '';
+    // The plain Royal LePage mark (D-1013-27; the official lockup with only its "Turner Realty" line cropped off, pixels unchanged, resized for the web), with the Turner Realty name in text beside it; one link home.
+    // SITE.header2.logo overrides the file, false leaves it out. 119x44 is the file's 239x88 (2x) ratio at the header's height.
+    var logoSrc = H2.logo === false ? '' : (H2.logo || r + 'images/rlp-mark-plain.png');
+    var logo = logoSrc ? '<img class="nav2-logo" src="' + escAttrNav(logoSrc) + '" alt="Royal LePage" width="119" height="44" decoding="async">' : '';
     return '<a href="' + r + 'index.html" class="nav2-brand">' + logo + '<span class="nav2-brand-name">Turner <span>Realty</span></span></a>' +
       '<ul class="nav-main-links nav2-links">' + H2.menu.map(menuItem).join('') + more2HTML() + '</ul>' +
       '<div class="nav-main-right nav2-right">' + bar +
