@@ -10,7 +10,7 @@
   if (!window.SITE || typeof window.SITE !== 'object') return;
   var SITE = window.SITE, A = '/';
   SITE.address = 'Mike Turner, Broker of Record';
-  SITE.logo = '/images/rlp-logo.png';
+  SITE.logo = '/images/rlp-mark-plain.png'; SITE.logoW = 119; SITE.logoH = 44;
   SITE.ctaLabel = 'Call Mike';
   SITE.ctaHref = 'tel:7092567999';
   window.MENU = [

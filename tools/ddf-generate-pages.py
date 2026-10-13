@@ -4342,7 +4342,7 @@ def build_listing_page(listing: dict, all_listings: list | None = None) -> str:
 <script src="../../js/nav-config.js" defer></script>
 <script src="../../js/nav-config-listings.js" defer></script>
 <script>window.TURNER_SITE='{_SITE_CFG["site_key"]}';window.TURNER_API_ORIGIN='{_SITE_CFG["api_url"]}';</script>
-<script src="../../js/nav.js?v=20260913-mobile-nav-fix" defer></script>
+<script src="../../js/nav.js?v=0d175e40" defer></script>
 <script src="../../js/mobile-action-bar.js?v=20260917-mobile-action-bar" defer></script>
 {_nav_auth_script("../../")}
 <script src="../../js/app-shell.js?v=20260920-app8" defer></script>
@@ -5021,7 +5021,7 @@ def build_city_page(city_slug: str, listings: list[dict]) -> str:
 <script src="{prefix}js/nav-config.js" defer></script>
 <script src="{prefix}js/nav-config-listings.js" defer></script>
 <script>window.TURNER_SITE='{_SITE_CFG["site_key"]}';window.TURNER_API_ORIGIN='{_SITE_CFG["api_url"]}';</script>
-<script src="{prefix}js/nav.js?v=20260913-mobile-nav-fix" defer></script>
+<script src="{prefix}js/nav.js?v=0d175e40" defer></script>
 <script src="{prefix}js/mobile-action-bar.js?v=20260917-mobile-action-bar" defer></script>
 {_nav_auth_script(prefix)}
 <script src="{prefix}js/app-shell.js?v=20260920-app8" defer></script>
@@ -5234,7 +5234,7 @@ def build_rollup_page(cfg: dict, matching: list[dict]) -> str:
 <script src="{prefix}js/nav-config.js" defer></script>
 <script src="{prefix}js/nav-config-listings.js" defer></script>
 <script>window.TURNER_SITE='{_SITE_CFG["site_key"]}';window.TURNER_API_ORIGIN='{_SITE_CFG["api_url"]}';</script>
-<script src="{prefix}js/nav.js?v=20260913-mobile-nav-fix" defer></script>
+<script src="{prefix}js/nav.js?v=0d175e40" defer></script>
 <script src="{prefix}js/mobile-action-bar.js?v=20260917-mobile-action-bar" defer></script>
 {_nav_auth_script(prefix)}
 <script src="{prefix}js/app-shell.js?v=20260920-app8" defer></script>
@@ -5429,7 +5429,7 @@ def build_index_page(
 <script src="{prefix}js/nav-config.js" defer></script>
 <script src="{prefix}js/nav-config-listings.js" defer></script>
 <script>window.TURNER_SITE='{_SITE_CFG["site_key"]}';window.TURNER_API_ORIGIN='{_SITE_CFG["api_url"]}';</script>
-<script src="{prefix}js/nav.js?v=20260913-mobile-nav-fix" defer></script>
+<script src="{prefix}js/nav.js?v=0d175e40" defer></script>
 <script src="{prefix}js/mobile-action-bar.js?v=20260917-mobile-action-bar" defer></script>
 {_nav_auth_script(prefix)}
 <script src="{prefix}js/app-shell.js?v=20260920-app8" defer></script>
@@ -6320,7 +6320,7 @@ def build_viewpoint_page(rec: dict, site_root: Path,
 <script src="../../js/nav-config.js" defer></script>
 <script src="../../js/nav-config-listings.js" defer></script>
 <script>window.TURNER_SITE='{_SITE_CFG["site_key"]}';window.TURNER_API_ORIGIN='{_SITE_CFG["api_url"]}';</script>
-<script src="../../js/nav.js?v=20260913-mobile-nav-fix" defer></script>
+<script src="../../js/nav.js?v=0d175e40" defer></script>
 <script src="../../js/mobile-action-bar.js?v=20260917-mobile-action-bar" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
 <script src="../../js/auth.js?v=20260929-sold-auth" defer></script>
@@ -6361,7 +6361,7 @@ def build_viewpoint_index(prefix: str, title: str, desc: str, canonical: str,
 <script src="{prefix}js/nav-config.js" defer></script>
 <script src="{prefix}js/nav-config-listings.js" defer></script>
 <script>window.TURNER_SITE='{_SITE_CFG["site_key"]}';window.TURNER_API_ORIGIN='{_SITE_CFG["api_url"]}';</script>
-<script src="{prefix}js/nav.js?v=20260913-mobile-nav-fix" defer></script>
+<script src="{prefix}js/nav.js?v=0d175e40" defer></script>
 <script src="{prefix}js/mobile-action-bar.js?v=20260917-mobile-action-bar" defer></script>
 </body>
 </html>"""
@@ -6525,7 +6525,7 @@ def _build_viewpoint_root(title: str, desc: str, canonical: str, list_html: str)
 <script src="../js/nav-config.js" defer></script>
 <script src="../js/nav-config-listings.js" defer></script>
 <script>window.TURNER_SITE='{_SITE_CFG["site_key"]}';window.TURNER_API_ORIGIN='{_SITE_CFG["api_url"]}';</script>
-<script src="../js/nav.js?v=20260913-mobile-nav-fix" defer></script>
+<script src="../js/nav.js?v=0d175e40" defer></script>
 <script src="../js/mobile-action-bar.js?v=20260917-mobile-action-bar" defer></script>
 </body>
 </html>"""

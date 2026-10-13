@@ -118,7 +118,7 @@
   function topBarHTML() {
     return '<div style="display:flex;align-items:center">' +
       '<a href="' + r + 'index.html" class="nav-brand">' +
-        (SITE.logo ? '<img src="' + SITE.logo + '" alt="Royal LePage" width="40" height="40" style="margin-right:10px;vertical-align:middle;">' : '') +
+        (SITE.logo ? '<img src="' + SITE.logo + '" alt="Royal LePage" width="' + (SITE.logoW || 40) + '" height="' + (SITE.logoH || 40) + '" style="margin-right:10px;vertical-align:middle;">' : '') +
         '<span class="nav-brand-name">Turner <span>Realty</span></span></a>' +
       '<span class="nav-brand-rlp">' + SITE.brandSub + '</span>' + regionTagHTML() + '</div>' +
     '<div class="nav-top-right">' +
