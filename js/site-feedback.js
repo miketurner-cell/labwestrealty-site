@@ -158,6 +158,7 @@
           if (res.j.looks_like_lead === true) {
             follow.hidden = false; follow.setAttribute('data-looks-like-lead', '1'); // shown only from the server's flag; the lead session's card renders into it
             try { document.dispatchEvent(new CustomEvent('turner:feedback-sent', { detail: { looks_like_lead: true, slot: follow } })); } catch (e2) { /* old browser */ }
+            if (!document.querySelector('script[src*="feedback-followup.js"]')) document.head.appendChild(el('script', { src: '/js/feedback-followup.js?v=06d6fbfc', defer: '' })); // lead's card (D-1015-21)
           }
           card.querySelector('#tsf-thanks-h').focus();
           note.value = ''; email.value = '';

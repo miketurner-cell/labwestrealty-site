@@ -110,6 +110,7 @@ jobs:
           node tools/tests/header-nosearch-test.mjs
           node tools/tests/nav-partner-label-test.mjs
           node tools/tests/site-feedback-test.mjs
+          node tools/tests/feedback-followup-test.mjs
 
       - name: Sold data behind sign-in - dark guard, 401 when signed out, no price in the single row (STRICT)
         run: node tools/tests/labwest-sold-data-test.mjs
