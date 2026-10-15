@@ -14,7 +14,7 @@ import { fileURLToPath } from 'url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const js = fs.readFileSync(path.join(root, 'js', 'site-feedback.js'), 'utf8');
 const nav = fs.readFileSync(path.join(root, 'js', 'nav.js'), 'utf8');
-const SHA = '677a36643b6c047d4eb3922ec7f29426569d59617df8559fb19ae769c1c98f7d';
+const SHA = '0134bd214a5b17784f9093c4b3f6d3bfd2ab86133b9331e1a85c5c0aaa35dc34';
 let fails = 0;
 const check = (c, m) => { if (c) console.log('ok   ' + m); else { fails++; console.error('FAIL ' + m); } };
 
