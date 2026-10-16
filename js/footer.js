@@ -74,6 +74,36 @@
   };
   var FALLBACK_FOOTER = { copyright: '&copy; 1998&ndash;{year} Royal LePage Turner Realty (2014) Inc.', columns: [] };
 
+  // Optional per-site membership badge (2026-10-09, D-1009-42): rendered
+  // only when window.FOOTER.badge = {img, alt, text, href} is set in that
+  // site's own nav-config.js; nothing is emitted when the field is absent,
+  // so sites without it are unchanged. One link wraps image + text.
+  function badgeHTML(b) {
+    if (!b || !b.img || !b.href) return '';
+    // Inline styles + a data attribute, no class: pre-deploy Check #32 requires every class this file emits to be defined in a
+    // linked stylesheet, and the fleet's main.css copies are not identical, so the badge carries its own styling.
+    return '<a data-footer-badge href="' + b.href + '" target="_blank" rel="noopener" style="display:flex;flex-direction:column;align-items:center;gap:8px;margin:0 auto 16px;font-size:12px;line-height:1.5;color:inherit;text-decoration:none">' +
+      '<img src="' + b.img + '" alt="' + esc(b.alt) + '" height="48" loading="lazy" style="height:clamp(40px,8vw,48px);width:auto;max-width:100%;display:block">' +
+      (b.text ? '<span style="text-decoration:underline;text-underline-offset:2px">' + esc(b.text) + '</span>' : '') +
+      '</a>';
+  }
+
+  // Proudly Canadian + Shelter Foundation band (2026-10-16, D-1016-07, card A-1016-11). One centred flex column; the class
+  // stays footer-proudly-canadian (pre-deploy Check #32 allow-list), everything else is inline styles. The "Proudly" script in
+  // images/proudly-canadian.png is near-black, so the footer uses the white-script copy (-light, 240w + @2x). The Shelter
+  // Foundation logo is the official colour JPG on its own white tile; source and wording are in the build commit message.
+  var SHELTER_URL = 'https://www.royallepage.ca/en/realestate/about-us/shelter-foundation/';
+  function shelterBandHTML() {
+    return '<div class="footer-proudly-canadian" style="display:flex;flex-direction:column;align-items:center;gap:22px;text-align:center;padding:36px 24px 8px;border-top:1px solid #222;">' +
+      '<div style="display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:16px 20px;max-width:760px">' +
+      '<a href="' + SHELTER_URL + '" style="display:inline-block;background:#fff;border-radius:8px;padding:10px 14px;line-height:0">' +
+      '<img src="/images/shelter-foundation-official.jpg" alt="Royal LePage Shelter Foundation" width="150" height="56" loading="lazy" style="width:150px;height:auto"></a>' +
+      '<p style="margin:0;max-width:420px;text-align:center;font-size:13px;line-height:1.6;color:rgba(255,255,255,0.75)">Proud supporter of the <a href="' + SHELTER_URL + '" style="color:#fff;text-decoration:underline">Royal LePage<sup>&reg;</sup> Shelter Foundation&trade;</a>, making home a safe place for everyone.</p>' +
+      '</div>' +
+      '<div style="line-height:0"><img src="/images/proudly-canadian-light.png" srcset="/images/proudly-canadian-light.png 1x, /images/proudly-canadian-light@2x.png 2x" alt="Proudly Canadian" width="240" height="75" loading="lazy" style="width:240px;height:auto;opacity:1"></div>' +
+      '</div>';
+  }
+
   function footerHTML() {
     var site = window.SITE || FALLBACK_SITE;
     var f = window.FOOTER || FALLBACK_FOOTER;
@@ -98,10 +128,9 @@
       '</div>' +
       cols +
       '</div>' +
-      '<div class="footer-proudly-canadian" style="text-align:center;padding:32px 24px 0;border-top:1px solid #222;">' +
-      '<img src="/images/proudly-canadian.png" alt="Proudly Canadian" width="220" height="auto" loading="lazy" style="max-width:220px;height:auto;opacity:0.85;">' +
-      '</div>' +
+      shelterBandHTML() +
       '<div class="footer-bottom">' +
+      badgeHTML(f.badge) +
       '<p>' + esc(f.copyright).replace('{year}', new Date().getFullYear()) + '</p>' +
       '<p>Each office independently owned and operated. Not intended to solicit buyers or sellers currently under contract.</p>' +
       networkLineHTML() +
