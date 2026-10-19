@@ -4,6 +4,7 @@
 2026-10-11 (sites, D-1011-21 item 1). Offline: builds a throwaway git repo, commits a base site, then
 commits a head with one mutation per case and runs the checker between the two commits. Guards the
 guard: a checker that cannot see a lost title would pass every PR (always-on #10).
+2026-10-19 (D-1019-01): also proves the top-GSC list (tools/seo-cache/gsc-pages.json) widens the check.
 """
 import json
 import os
@@ -100,6 +101,31 @@ def main():
         r = run(sys.executable, "tools/seo-safety-check.py", "--base", "HEAD~1", "--head", "HEAD", "--mode", "warn", cwd=repo)
         if r.returncode != 0 or "LOSS title" not in r.stdout:
             bad.append("warn mode: must exit 0 and still print the LOSS line")
+        # top-GSC list (D-1019-01): a page only in tools/seo-cache/gsc-pages.json is checked and its loss is
+        # tagged [top-gsc]; a listing-detail page in that file is ignored; --gsc none turns the list off.
+        repo = os.path.join(tmp, "gsc-top")
+        os.makedirs(os.path.join(repo, "tools"))
+        shutil.copy(CHECK, os.path.join(repo, "tools", "seo-safety-check.py"))
+        run("git", "init", "-q", cwd=repo)
+        gsc = json.dumps({"site": HOST, "window": {"start": "2026-09-20", "end": "2026-10-17"}, "pages": [
+            {"page": HOST + "/pages/c.html", "clicks": 9, "impressions": 90},
+            {"page": "https://www.example.test/pages/d.html", "clicks": 1, "impressions": 10},
+            {"page": HOST + "/listings/gander/1-elm.html", "clicks": 50, "impressions": 500},
+            {"page": "https://elsewhere.test/pages/e.html", "clicks": 5, "impressions": 50}]})
+        b0 = commit(repo, {**BASE, "pages/c.html": page(t="Page C"), "pages/d.html": page(t="Page D"),
+                           "listings/gander/1-elm.html": page(t="Elm"), "pages/e.html": page(t="E"),
+                           "tools/seo-cache/gsc-pages.json": gsc}, "base")
+        h0 = commit(repo, {"pages/c.html": page(t="Page C", d=""), "pages/d.html": None,
+                           "listings/gander/1-elm.html": None, "pages/e.html": None}, "head")
+        r = run(sys.executable, "tools/seo-safety-check.py", "--base", b0, "--head", h0, "--mode", "fail", cwd=repo)
+        got = sorted(" ".join(l.split()[2:4]) for l in r.stdout.splitlines() if "LOSS" in l)
+        want = ["description /pages/c.html", "gone /pages/d.html"]
+        if got != want or r.returncode != 1 or r.stdout.count("[top-gsc]") != 2 or "top-GSC list: 2 pages" not in r.stdout:
+            bad.append(f"gsc-top: wanted {want} tagged [top-gsc] + exit 1, got {got} exit {r.returncode}\n{r.stdout}{r.stderr}")
+        r = run(sys.executable, "tools/seo-safety-check.py", "--base", b0, "--head", h0, "--mode", "fail", "--gsc", "none", cwd=repo)
+        if r.returncode != 0 or "LOSS" in r.stdout or "top-GSC list: absent" not in r.stdout:
+            bad.append(f"gsc-top --gsc none: expected a clean pass\n{r.stdout}{r.stderr}")
+        print(f"{'ok  ' if not any(x.startswith('gsc-top') for x in bad) else 'FAIL'} gsc-top-list")
         # no base commit: loud exit 2, never a silent pass.
         solo = os.path.join(tmp, "solo")
         os.makedirs(os.path.join(solo, "tools"))

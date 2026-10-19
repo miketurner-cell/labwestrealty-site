@@ -20,13 +20,20 @@ page it reports a LOSS when HEAD no longer has what BASE had:
 A changed title / description is reported as a NOTE (a rewrite is not a loss).
 A page absent at BASE has no baseline and is skipped (counted).
 
+Top search pages (2026-10-19, D-1019-01): when tools/seo-cache/gsc-pages.json is present
+(the site's top pages by GSC clicks + impressions over 28 days, written weekly by
+realestategander-site's gsc-top-pages.yml), every page in it is checked too, even if
+tools/seo-pages.json does not list it, and its LOSS lines carry "[top-gsc]".
+Listing-detail pages that churn hourly (CHURN) are never taken from that file.
+
 Offline, stdlib only, Python 3.10+. No browser: the sites are static HTML.
-No GSC call: the page list is a committed file (see tools/seo-pages-refresh.py).
+No GSC call: the page lists are committed files (tools/seo-pages-refresh.py, gsc-pages.json).
 
 Usage:
   python3 tools/seo-safety-check.py                   # CI/auto: base = PR base or HEAD~1, head = working tree
   python3 tools/seo-safety-check.py --base origin/main --head WORKTREE
   python3 tools/seo-safety-check.py --base abc123 --head def456 --mode fail
+  python3 tools/seo-safety-check.py --gsc none        # ignore tools/seo-cache/gsc-pages.json
   SEO_SAFETY_MODE=fail ...                            # mode: warn (default, exit 0) | fail (exit 1 on a loss);
                                                       # also settable as "mode" in tools/seo-pages.json
 
@@ -43,6 +50,9 @@ from urllib.parse import unquote, urlparse
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LIST_PATH = "tools/seo-pages.json"
+GSC_PATH = "tools/seo-cache/gsc-pages.json"
+# listing detail pages churn hourly (sold, expired): never checked from the GSC list. Same rule as seo-pages-refresh.py.
+CHURN = re.compile(r"^/(property|agent|agent-sales|search|app)(/|$)|/detail(\.html)?$|^/listings/[^/]+/[^/]+\.html$")
 
 
 # ---------------------------------------------------------------- sources
@@ -272,8 +282,49 @@ def snapshot(src, pages):
     return snap
 
 
-def compare(base_src, head_src, cfg):
+def load_gsc(path, site):
+    """Paths from a gsc-pages.json on this site's host (www. ignored), CHURN removed, best first. ([], why) when absent."""
+    if not path or path == "none" or not os.path.isfile(path):
+        return [], "absent"
+    try:
+        d = json.load(open(path, encoding="utf-8"))
+    except ValueError as e:
+        return [], f"unreadable ({e})"
+    host = urlparse(site or d.get("site") or "").netloc.lower().removeprefix("www.")
+    out = []
+    for r in d.get("pages", []):
+        u = urlparse(r.get("page", "") if isinstance(r, dict) else str(r))
+        if host and u.netloc and u.netloc.lower().removeprefix("www.") != host:
+            continue
+        p = u.path or "/"
+        if not CHURN.search(p) and p not in out:
+            out.append(p)
+    w = d.get("window") or {}
+    why = f"{len(out)} pages, window {w.get('start', '?')}..{w.get('end', '?')}, generated {d.get('generated', '?')}"
+    try:
+        import datetime as _dt
+        age = (_dt.datetime.now(_dt.timezone.utc) - _dt.datetime.strptime(d["generated"], "%Y-%m-%dT%H:%M:%SZ")
+               .replace(tzinfo=_dt.timezone.utc)).days
+        if age > 21:
+            why += f" -- STALE ({age} days; the Sunday digest refreshes it)"
+    except (KeyError, ValueError, TypeError):
+        pass
+    return out, why
+
+
+def merge_pages(cfg, gsc_paths):
+    """The checked list: tools/seo-pages.json plus any GSC top page it lacks. Returns (pages, top-set by norm)."""
     pages = [e["path"] if isinstance(e, dict) else e for e in cfg["pages"]]
+    have = {norm(p) for p in pages}
+    for p in gsc_paths:
+        if norm(p) not in have:
+            pages.append(p)
+            have.add(norm(p))
+    return pages, {norm(p) for p in gsc_paths}
+
+
+def compare(base_src, head_src, cfg, gsc_paths=()):
+    pages, top = merge_pages(cfg, gsc_paths)
     b, h = snapshot(base_src, pages), snapshot(head_src, pages)
     losses, notes, skipped = [], [], 0
     for pg in pages:
@@ -309,8 +360,8 @@ def compare(base_src, head_src, cfg):
             losses.append((pg, "sitemap", "URL dropped from the sitemap"))
         if norm(pg) != "/" and norm(pg) in b["home_links"] and norm(pg) not in h["home_links"]:
             losses.append((pg, "home-link", "homepage/nav no longer links to it"))
-    return {"checked": len(pages) - skipped, "skipped_no_baseline": skipped,
-            "losses": losses, "notes": notes}
+    return {"checked": len(pages) - skipped, "skipped_no_baseline": skipped, "pages": len(pages),
+            "top": sorted(top), "losses": losses, "notes": notes}
 
 
 # ---------------------------------------------------------------- CLI
@@ -341,6 +392,7 @@ def main():
     ap.add_argument("--base", help="git ref to compare against (default: auto)")
     ap.add_argument("--head", default="WORKTREE", help="git ref, or WORKTREE (default)")
     ap.add_argument("--pages", default=LIST_PATH)
+    ap.add_argument("--gsc", default=GSC_PATH, help="top-GSC-pages file (default %(default)s, read from this checkout); 'none' to skip")
     ap.add_argument("--mode", choices=["warn", "fail"], help="default: $SEO_SAFETY_MODE, else \"mode\" in the page list, else warn")
     ap.add_argument("--json", action="store_true")
     a = ap.parse_args()
@@ -363,17 +415,22 @@ def main():
     if a.mode not in ("warn", "fail"):
         print(f"[seo-safety] CANNOT RUN: mode {a.mode!r} is not warn|fail", file=sys.stderr)
         return 2
-    res = compare(base_src, head_src, cfg)
+    gp = a.gsc if a.gsc == "none" or os.path.isabs(a.gsc) else os.path.join(ROOT, a.gsc)
+    gsc_paths, gsc_why = load_gsc(gp, cfg.get("site"))
+    res = compare(base_src, head_src, cfg, gsc_paths)
+    top = set(res["top"])
     if a.json:
         print(json.dumps(res, indent=1))
     else:
         print(f"[seo-safety] mode={a.mode} base={base} head={head_src.label} "
-              f"pages={len(cfg['pages'])} checked={res['checked']} no-baseline={res['skipped_no_baseline']} "
+              f"pages={res['pages']} checked={res['checked']} no-baseline={res['skipped_no_baseline']} "
               f"losses={len(res['losses'])} notes={len(res['notes'])}")
+        print(f"[seo-safety] top-GSC list: {gsc_why}")
         gha = os.environ.get("GITHUB_ACTIONS")
         for pg, kind, msg in res["losses"]:
             tag = ("::error::" if a.mode == "fail" else "::warning::") if gha else ""
-            print(f"{tag}[seo-safety] LOSS {kind:<11} {pg}  {msg}")
+            star = "  [top-gsc]" if norm(pg) in top else ""
+            print(f"{tag}[seo-safety] LOSS {kind:<11} {pg}  {msg}{star}")
         for pg, msg in res["notes"][:25]:
             print(f"[seo-safety] note {pg}  {msg}")
         if len(res["notes"]) > 25:
