@@ -970,15 +970,18 @@
   ];
   function alertPrefsHtml(r) {
     var types = Array.isArray(r.alert_types) && r.alert_types.length ? r.alert_types : ["new"];
-    var html = '<div class="acc-ss-prefs" style="grid-column:1/-1;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;padding-top:10px;margin-top:10px;border-top:1px solid rgba(255,255,255,0.08);font-size:0.82rem;">';
-    html += '<span style="opacity:0.55;">Tell me about:</span>';
+    // 2026-10-19 (Mike: "fix the layout first"): two labelled rows. "Via:" used to sit at the
+    // far right of the first row with its Email/Text boxes wrapped onto the next line.
+    var html = '<div class="acc-ss-prefs" style="grid-column:1/-1;">';
+    html += '<div class="acc-ss-prefs-row"><span class="acc-ss-prefs-label">Tell me about</span>';
     ALERT_TYPE_OPTIONS.forEach(function (o) {
-      html += '<label style="display:inline-flex;align-items:center;gap:5px;cursor:pointer;">' +
+      html += '<label class="acc-ss-opt">' +
         '<input type="checkbox" data-act="alert-type" value="' + o.value + '"' +
         (types.indexOf(o.value) >= 0 ? ' checked' : '') + '> ' + o.label + '</label>';
     });
-    html += '<span style="opacity:0.55;margin-left:auto;">Via:</span>';
-    html += '<label style="display:inline-flex;align-items:center;gap:5px;cursor:pointer;">' +
+    html += '</div>';
+    html += '<div class="acc-ss-prefs-row"><span class="acc-ss-prefs-label">Send it by</span>';
+    html += '<label class="acc-ss-opt">' +
       '<input type="checkbox" data-act="channel-email"' + (r.channel_email !== false ? ' checked' : '') + '> Email</label>';
     // SMS: toggling OFF is always allowed (withdrawing consent). Toggling ON
     // is only offered when the row already carries a confirmed phone — CASL
@@ -986,21 +989,22 @@
     // routes to the Listing Text Alerts signup flow instead (its own consent
     // capture); a bare checkbox cannot mint consent.
     if (r.phone) {
-      html += '<label style="display:inline-flex;align-items:center;gap:5px;cursor:pointer;">' +
+      html += '<label class="acc-ss-opt">' +
         '<input type="checkbox" data-act="channel-sms"' + (r.channel_sms ? ' checked' : '') + '> Text</label>';
     } else {
-      html += '<button type="button" class="acc-ss-action" data-act="sms-signup" style="font-size:0.78rem;">Add Listing Text Alerts</button>';
+      html += '<button type="button" class="acc-ss-action" data-act="sms-signup">Add Listing Text Alerts</button>';
     }
     // Listing Push Alerts (client app Ship 3, 2026-09-13): a plain toggle
     // when THIS device is subscribed (js/push-alerts.js); otherwise a
     // button that starts the opt-in (permission ask is the consent). The
     // toggle is per row like Email/Text; the subscription is per device.
     if (pushEnabledOnDevice === true) {
-      html += '<label style="display:inline-flex;align-items:center;gap:5px;cursor:pointer;">' +
+      html += '<label class="acc-ss-opt">' +
         '<input type="checkbox" data-act="channel-push"' + (r.channel_push ? ' checked' : '') + '> Push</label>';
     } else if (pushEnabledOnDevice === false) {
-      html += '<button type="button" class="acc-ss-action" data-act="push-signup" style="font-size:0.78rem;">Add Listing Push Alerts</button>';
+      html += '<button type="button" class="acc-ss-action" data-act="push-signup">Add Listing Push Alerts</button>';
     }
+    html += '</div>';
     return html + '</div>';
   }
   // null = unknown/unsupported (render nothing), true/false once PushAlerts.status() resolves.
