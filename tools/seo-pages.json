@@ -1,7 +1,7 @@
 {
  "_doc": "Pages that matter in search, checked by tools/seo-safety-check.py. Rebuild: python3 tools/seo-pages-refresh.py. Add a page by hand with \"pinned\": true. Sources: sitemap, digest, gsc, pinned.",
  "site": "https://labwestrealty.com",
- "mode": "warn",
+ "mode": "fail",
  "pages": [
   {"path": "/", "source": "sitemap"},
   {"path": "/about-turner.html", "source": "sitemap"},
