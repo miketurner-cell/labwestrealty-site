@@ -299,12 +299,15 @@
   border-radius: 6px;
   padding: 18px 20px;
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 12px 24px;
+  /* 2026-10-19 (Mike: "fix the layout first"): one column. The old 1fr|auto
+     split let six unwrapped buttons take the width and squeezed the name,
+     chips and date into a sliver (4-line name, round chips). */
+  grid-template-columns: 1fr;
+  gap: 14px;
   align-items: start;
 }
 .acc-ss-card-name {
-  font: 700 16px/1.3 Raleway, sans-serif;
+  font: 700 18px/1.3 Raleway, sans-serif;
   color: #fff;
   margin: 0 0 4px;
 }
@@ -323,6 +326,7 @@
 }
 .acc-ss-card-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   align-items: center;
 }
@@ -348,8 +352,38 @@
 .acc-ss-action--danger { color: #ff6679; border-color: #4a1a22; }
 .acc-ss-action--danger:hover { background: #2a0d12; border-color: #ff6679; }
 @media (max-width: 600px) {
-  .acc-ss-card { grid-template-columns: 1fr; }
-  .acc-ss-card-actions { flex-wrap: wrap; }
+  .acc-ss-card { padding: 16px; }
+  .acc-ss-action, .acc-ss-cadence { padding: 10px 12px; }
+}
+/* Alert preferences: two labelled rows (what to send / how to send it). */
+.acc-ss-prefs {
+  display: grid;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  font-size: 0.9rem;
+}
+.acc-ss-prefs-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 18px;
+}
+.acc-ss-prefs-label {
+  flex: 0 0 auto;
+  min-width: 112px;
+  color: #8a8a8a;
+}
+.acc-ss-opt {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  color: #e6e6e6;
+}
+.acc-ss-opt input { width: 16px; height: 16px; accent-color: #EA002A; }
+@media (max-width: 600px) {
+  .acc-ss-prefs-label { flex-basis: 100%; }
 }
 
 /* Footer actions: sign out + delete account */
@@ -549,9 +583,10 @@
 }
 .acc-ss-cadence:hover { border-color: #EA002A; }
 .acc-ss-cadence--instant {
-  background: #EA002A;
+  /* Outlined, so "Run" stays the one solid-red button on the card. */
+  background: transparent;
   border-color: #EA002A;
-  color: #fff;
+  color: #ff5470;
 }
 .acc-ss-cadence--daily { color: #fff; border-color: #555; }
 .acc-ss-cadence--off   { color: #777; border-color: #2a2a2a; }
