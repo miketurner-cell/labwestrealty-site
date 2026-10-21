@@ -30,6 +30,8 @@ def jobs_of(text):
     return {parts[i]: parts[i + 1] for i in range(1, len(parts) - 1, 2)}
 
 
+# Workflows that never touch NLAR and are exempt from the listings switch (rule 1), each with its own checks below.
+NO_RETS_WORKFLOWS = {"market-stats-refresh.yml"}
 files = sorted(WF.glob("*.yml")) if WF.is_dir() else []
 if not files:
     errors.append(".github/workflows has no workflow files")
@@ -43,6 +45,16 @@ for f in files:
     if f.name == "pre-deploy.yml":
         if re.search(r"NLAR_RETS|R2_[A-Z_]+|secrets\.", text):
             errors.append("pre-deploy.yml references secrets; it runs while the switch is off")
+        continue
+    if f.name in NO_RETS_WORKFLOWS:
+        # Rule 1 exemption (sites, D-1021-31): reads a sibling's committed aggregates, never logs in to NLAR, so the listings
+        # switch has nothing to guard. It must stay dispatch-only, RETS-free, and commit nothing unless asked.
+        if re.search(r"NLAR_RETS|R2_[A-Z_]+", text):
+            errors.append(f"{f.name}: an exempt workflow must not reference RETS or R2 secrets")
+        if re.search(r"^\s+(schedule|push|pull_request):", text, re.M) or "workflow_dispatch" not in text:
+            errors.append(f"{f.name}: an exempt workflow must be workflow_dispatch only")
+        if not re.search(r"commit:\s*\n(?:\s+[a-z]+:.*\n)*?\s+default:\s*false", text):
+            errors.append(f"{f.name}: the commit input must default to false")
         continue
     sw = jobs.get("switch")
     if sw is None:

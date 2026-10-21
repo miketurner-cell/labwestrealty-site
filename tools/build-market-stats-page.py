@@ -38,6 +38,7 @@ DEFAULT_AGG = SITE_ROOT / "tools" / "idx-cache" / "live-aggregates.json"
 CONFIG_DIR = SCRIPT_DIR / "market-stats-config"
 CSS_BASE = CONFIG_DIR / "_base.css"
 PAGES_DIR = SITE_ROOT / "pages"
+OUTPUT_ROOT = [False]   # set by --output-root
 
 # R2 vs disk photo-URL resolution for Notable Sales cards (2026-07-30,
 # Mike). Mirrors ddf-generate-pages.py's sold-detail photo resolution
@@ -434,7 +435,7 @@ def build_head(cfg, css_text, current_year):
     title = cfg.get("title", f"{cfg['label']} Market Statistics")
     meta_desc = cfg.get("meta_description", "")
     og_image = _resolve_og_image(cfg.get("og_image", ""), slug)
-    canonical = f"https://{domain}/pages/{slug}.html"
+    canonical = (f"https://{domain}/{slug}.html" if OUTPUT_ROOT[0] else f"https://{domain}/pages/{slug}.html")
     og_img_full = f"https://{domain}{og_image}"
 
     # Determine gtag ID from domain
@@ -770,7 +771,8 @@ def _hero_agent(cfg):
 
 
 def _hero_share(cfg):
-    url = f"https://{cfg.get('domain', 'realestategander.com')}/pages/{cfg.get('slug', '')}.html"
+    url = (f"https://{cfg.get('domain', 'realestategander.com')}/{cfg.get('slug', '')}.html" if OUTPUT_ROOT[0]
+           else f"https://{cfg.get('domain', 'realestategander.com')}/pages/{cfg.get('slug', '')}.html")
     u = html.escape(url, quote=True)
     return (f'<div class="ms-share"><span>Share this report</span>'
             f'<a href="https://www.facebook.com/sharer/sharer.php?u={u}" target="_blank" rel="noopener">'
@@ -4192,18 +4194,26 @@ def generate_counts_page(cfg, agg, css_text, region, now, output_path, verbose=F
         return f"{float(v):.0f} days" if v else "n/a"
 
     base = by_year.get(str(baseline_year)) or {}
+    # Complete months only (always-on #40): the current year's row and the month table stop at the last complete month, so
+    # a half-recorded month is never a row or a point. The aggregates' by_year[current_year] still holds the partial month.
+    complete_ym = str(thru_iso or "")[:7]
+    first_year = cfg.get("first_complete_year")
     rows = []
     for yr in sorted(by_year, key=int):
         y = by_year[yr]
+        if first_year and int(yr) < int(first_year):
+            continue
+        if int(yr) == current_year:
+            y = ytd
         if not y.get("count"):
             continue
-        part = " (so far)" if int(yr) == current_year else ""
+        part = f" (January 1 to {html.escape(through)})" if int(yr) == current_year else ""
         rows.append(f"            <tr><td>{yr}{part}</td><td>{fmt_int(y.get('count'))}</td><td>{_dom(y.get('avg_dom'))}</td></tr>")
     table = "\n".join(rows)
 
     months = region.get("by_year_month") or {}
     mrows = []
-    for key in sorted(months, reverse=True)[:12]:
+    for key in sorted((k for k in months if not complete_ym or k <= complete_ym), reverse=True)[:12]:
         m = months[key]
         if not m.get("count"):
             continue
@@ -4228,7 +4238,7 @@ def generate_counts_page(cfg, agg, css_text, region, now, output_path, verbose=F
     strips.append(f"""
   <div class="ms-ytd">
     <div class="ms-ytd-inner">
-      <div class="ms-strip-label red">{current_year} So Far (January 1 to {html.escape(through)})</div>
+      <div class="ms-strip-label red">{current_year}: January 1 to {html.escape(through)}</div>
       <div class="ms-annual-grid">
 {build_stat_cell(fmt_int(ytd_n), "Homes Sold", fmt_delta(yoy.get("count_pct"), suffix))}
 {build_stat_cell(_dom(ytd.get("avg_dom")), "Average Days on Market", fmt_delta(yoy.get("avg_dom_pct"), suffix, lower_is_better=True))}
@@ -4236,13 +4246,18 @@ def generate_counts_page(cfg, agg, css_text, region, now, output_path, verbose=F
     </div>
   </div>""")
 
+    first_note = ""
+    if first_year:
+        first_note = (f" The NLAR feed this page counts from starts part-way through {int(first_year) - 1}, "
+                      f"so {first_year} is the first full year shown.")
+
     body = f"""
   <div class="ms-hero">
     <div class="ms-hero-inner">
       <div class="ms-eyebrow">{html.escape(cfg.get("eyebrow", label + " Market Statistics"))}</div>
       <h1>{html.escape(cfg.get("headline", label))} <em>{html.escape(cfg.get("headline_em", ""))}</em></h1>
       <p class="ms-hero-lede">{html.escape(cfg.get("hero_sub", ""))}</p>
-      <p class="ms-hero-caption">Data through {html.escape(through)}, sourced from NLAR MLS&reg;. Sold prices are not shown on this page.</p>
+      <p class="ms-hero-caption">Data through {html.escape(through)} (complete months only), sourced from NLAR MLS&reg;. Sold prices are not shown on this page.</p>
     </div>
   </div>
 {"".join(strips)}
@@ -4250,7 +4265,7 @@ def generate_counts_page(cfg, agg, css_text, region, now, output_path, verbose=F
     <div class="ms-section-inner">
       <div class="ms-section-head">
         <h2>Homes sold <em>by year.</em></h2>
-        <p>How many homes sold in {lab} each year and how long they took to sell. {current_year} runs through {html.escape(through)}.</p>
+        <p>How many homes sold in {lab} each year and how long they took to sell. {current_year} runs through {html.escape(through)}.{first_note}</p>
       </div>
       <div class="ms-table-scroll">
         <table class="ms-10yr-table">
@@ -4326,7 +4341,8 @@ def generate_page(cfg, agg, css_text, verbose=False, dry_run=False):
         return None, None
 
     now = datetime.now(timezone.utc)
-    output_path = PAGES_DIR / f"{slug}.html"
+    # output_root: the page lives at the site root (Lab West: the public URL has always been /market-stats.html)
+    output_path = (SITE_ROOT if OUTPUT_ROOT[0] else PAGES_DIR) / f"{slug}.html"
 
     # `sold_prices: false` (Lab West, D-1021-12): counts and days on market only, no sold-price figure of any kind.
     if cfg.get("sold_prices", True) is False:
@@ -4540,12 +4556,17 @@ def main():
                         help="Generate all pages from all YAMLs in config dir")
     parser.add_argument("--source", default=str(DEFAULT_AGG),
                         help="Path to live-aggregates.json")
+    parser.add_argument("--output-root", action="store_true",
+                        help="Write each page to the site root (/<slug>.html) with that canonical, not pages/ "
+                             "(Lab West's refresh: the public URL has always been /market-stats.html)")
     parser.add_argument("--dry-run", action="store_true",
                         help="Compute but don't write files")
     parser.add_argument("--verbose", action="store_true",
                         help="Progress logging")
 
     args = parser.parse_args()
+    if args.output_root:
+        OUTPUT_ROOT[0] = True
 
     if not args.config and not args.all:
         print("ERROR: specify --config <path.yml> or --all", file=sys.stderr)

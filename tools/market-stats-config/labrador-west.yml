@@ -8,7 +8,7 @@ page_type: master
 
 # SEO
 title: "Labrador West Real Estate Market Statistics 2026"
-meta_description: "How many homes sold in Labrador City and Wabush, and how long they took to sell, from NLAR MLS® records. Updated when new sales are recorded."
+meta_description: "How many homes sold in Labrador City and Wabush, and how long they took to sell, from NLAR MLS® records. The page says the date it runs through."
 og_image: "/images/og/market-stats-og.jpg"
 
 # Hero
@@ -22,10 +22,12 @@ source_line: "NLAR MLS® System · Coverage: Labrador City and Wabush residentia
 # aggrecarry no sold-price figure. The builder switches on this key.
 sold_prices: false
 
-# Data boundaries. The sold feed holds 2024-01 onward only, so there is no ten-year table and no historical
+# Data boundaries. The sold feed holds 2024-05-30 onward only (read from the whole-board sold cache, 2026-10-21), so 2024 is a
+# part-year and is not shown: 2025 is the first full year. There is no ten-year table and no historical
 # arrays: nothing here is typed in by hand (always-on #35).
 baseline_year: 2025
-ten_year_start: 2024
+ten_year_start: 2025
+first_complete_year: 2025
 
 
 show_pricing_strategy: false
