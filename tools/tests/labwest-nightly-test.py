@@ -67,9 +67,10 @@ try:
     check(regs["Labrador City / Wabush"]["ytd_complete"]["count"] == len(ytd_rows), f"1: YTD count {regs['Labrador City / Wabush']['ytd_complete']['count']} != fixture {len(ytd_rows)}")
     y25 = [x for x in lw if x["CloseDate"].startswith("2025")]
     check(regs["Labrador City / Wabush"]["by_year"]["2025"]["count"] == len(y25), "1: 2025 count differs from the fixture")
-    avg25 = statistics.mean(float(x["ClosePrice"]) for x in y25)
-    got = regs["Labrador City / Wabush"]["by_year"]["2025"].get("avg_price")
-    check(got is not None and abs(got - avg25) < 1.0, f"1: 2025 average price {got} != recomputed {avg25:.0f}")
+    dom25 = statistics.mean(float(x["DaysOnMarket"]) for x in y25 if float(x["DaysOnMarket"]) > 0)
+    got = regs["Labrador City / Wabush"]["by_year"]["2025"].get("avg_dom")
+    check(got is not None and abs(got - dom25) < 0.1, f"1: 2025 average days on market {got} != recomputed {dom25:.1f}")
+    check("avg_price" not in json.dumps(agg) and "total_volume" not in json.dumps(agg), "1: a sold-price figure reached the aggregates (D-1021-12)")
     check(regs["Labrador City"]["ytd_complete"]["count"] + regs["Wabush"]["ytd_complete"]["count"] == len(ytd_rows), "1: town counts do not add up to Labrador West")
     check("999000" not in json.dumps(agg), "1: a Goose Bay close price reached the aggregates")
 

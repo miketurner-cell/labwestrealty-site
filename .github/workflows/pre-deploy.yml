@@ -118,6 +118,9 @@ jobs:
       - name: Nightly pieces - aggregates match the rows, market page says what it runs through, no Goose Bay or Gander (STRICT)
         run: python3 tools/tests/labwest-nightly-test.py
 
+      - name: No sold-derived dollar figure on a page, in committed data or in generator output (STRICT)
+        run: python3 tools/tests/sold-figures-guard.py
+
       - name: Chat - dark guard (404 with no data), Lab West origin allow-list, Mike as the one contact, nothing called out (STRICT)
         run: node tools/tests/labwest-chat-test.mjs
 

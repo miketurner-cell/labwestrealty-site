@@ -185,8 +185,8 @@ def build_hero(cfg):
 def _trailing_12mo(region):
     """Rolling last-12-months window from by_year_month — always CURRENT (rolls
     forward every month) + a full 12-month sample (so the 'homes sold' count never
-    looks like a weak partial-year figure). Volume-weighted avg price, count-
-    weighted sale-to-list. Anchored on the newest month present (which may be the
+    looks like a weak partial-year figure). Count and count-weighted days on market
+    only: no sold-price figure (sites, D-1021-12). Anchored on the newest month present (which may be the
     current partial month — standard for a trailing-twelve window). Returns {} if
     fewer than 6 months of data are present, so the caller falls back to a full
     year (thin/new markets)."""
@@ -208,12 +208,10 @@ def _trailing_12mo(region):
     count = sum(m.get("count", 0) or 0 for m in months)
     if count <= 0:
         return {}
-    vol = sum(m.get("total_volume", 0) or 0 for m in months)
-    sa_den = sum((m.get("count", 0) or 0) for m in months if m.get("avg_sa"))
-    sa_num = sum((m.get("count", 0) or 0) * (m.get("avg_sa") or 0) for m in months if m.get("avg_sa"))
+    dom_den = sum((m.get("count", 0) or 0) for m in months if m.get("avg_dom"))
+    dom_num = sum((m.get("count", 0) or 0) * (m.get("avg_dom") or 0) for m in months if m.get("avg_dom"))
     return {"count": count,
-            "avg_price": (vol / count) if vol and count else None,
-            "avg_sa": (sa_num / sa_den) if sa_den else None}
+            "avg_dom": (dom_num / dom_den) if dom_den else None}
 
 
 # Community → sold-rollup link (2026-09-08, Conv #15 port of the Gander block
@@ -264,9 +262,8 @@ def build_snapshot(cfg, region):
         window_label = str(by)
     if not yr:
         return ""
-    cells = [(fmt_price_k(yr.get("avg_price")), "Avg Sale Price"),
-             (fmt_int(yr.get("count")), "Homes Sold"),
-             (fmt_pct(yr.get("avg_sa")), "Sale-to-List")]
+    cells = [(fmt_int(yr.get("count")), "Homes Sold"),
+             (f'{float(yr["avg_dom"]):.0f} days' if yr.get("avg_dom") else "n/a", "Avg Days on Market")]
     # Small-sample label (D-1008-38, 2026-10-08): a snapshot built on one or a
     # handful of recorded sales must say so. One sale is that sale, not an
     # "average"; below SMALL_SNAPSHOT_N the figures are a rough guide, not a trend.
@@ -275,10 +272,8 @@ def build_snapshot(cfg, region):
     _cnt = int(yr.get("count") or 0)
     _when = "in the last 12 months" if window_label == "Last 12 months" else f"in {window_label}"
     if _cnt == 1:
-        cells[0] = (cells[0][0], "Sale Price")
         small_note = (f'\n    <p class="cmx-small-n" style="margin:12px 0 0;font-size:.95rem;">'
-                      f'<strong>Based on one recorded sale</strong> {esc(_when)}. These figures describe that '
-                      f'one sale, not a market average or a trend.</p>')
+                      f'<strong>Based on one recorded sale</strong> {esc(_when)}. That is one home, not a market average or a trend.</p>')
     elif 1 < _cnt < SMALL_SNAPSHOT_N:
         small_note = (f'\n    <p class="cmx-small-n" style="margin:12px 0 0;font-size:.95rem;">'
                       f'<strong>Based on only {_cnt} recorded sales</strong> {esc(_when)}. That is too few to '
@@ -296,14 +291,14 @@ def build_snapshot(cfg, region):
     _yy = region.get("yoy_complete") or {}
     _mb = region.get("market_balance") or {}
     _n = int(_yc.get("count") or 0)
-    if _n >= 5 and _yc.get("median_price"):
+    if _n >= 5:
         _MONTHS = ["January", "February", "March", "April", "May", "June", "July",
                    "August", "September", "October", "November", "December"]
         _thru = region.get("ytd_complete_through_month")
         _yr = region.get("ytd_complete_through_year") or ""
         _win = f"{_yr} through {_MONTHS[int(_thru) - 1]}" if _thru else f"{_yr} year to date"
         _stable = _n >= 15 and not _yy.get("small_sample")
-        _pct = _yy.get("median_price_pct")
+        _pct = _yy.get("count_pct")
         _d = ""
         if _stable and _pct is not None:
             _d = (f' <span style="color:{"#22c55e" if _pct >= 0 else "#ff5e6b"};font-weight:700;">'
@@ -316,16 +311,15 @@ def build_snapshot(cfg, region):
                      f'background:rgba(255,255,255,.08);color:{_col};font-weight:800;font-size:.78rem;">{esc(_mb["market_type_label"])}</span>')
         else:
             _pill = ""
-        ytd_line = (f'\n    <p style="margin:12px 0 0;font-size:.95rem;">{esc(_win)}: median sale price '
-                    f'<strong>{fmt_price_k(_yc["median_price"])}</strong>{_d} &middot; {_n} homes sold{_pill}</p>')
+        ytd_line = (f'\n    <p style="margin:12px 0 0;font-size:.95rem;">{esc(_win)}: '
+                    f'<strong>{_n} homes sold</strong>{_d}{_pill}</p>')
     return f'''
 <section class="cmx-section cmx-section-alt">
   <div class="cmx-section-inner">
     <div class="cmx-head-row"><h2>{esc(cfg["label"])} Market Snapshot</h2>
       <span class="cmx-sub">{window_label} · based on MLS® System data owned by the Newfoundland and Labrador Association of REALTORS®</span></div>
     <div class="cmx-snapshot">{inner}</div>{small_note}{ytd_line}
-    <p style="margin:10px 0 0;font-size:.85rem;opacity:.75;">New to these numbers? Average sale price, sale-to-list and the rest are explained in plain English in our <a href="/pages/real-estate-glossary-nl.html#sale-to-list-ratio">real estate glossary</a>.</p>
-    <a class="cmx-link" href="{ms_url}">Full market data &amp; 10-year trends &rarr;</a>{sold_link}
+    <a class="cmx-link" href="{ms_url}">Full market data &rarr;</a>{sold_link}
   </div>
 </section>'''
 

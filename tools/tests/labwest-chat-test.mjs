@@ -72,7 +72,7 @@ const prompt = src.slice(src.indexOf('const SYSTEM_PROMPT'), src.indexOf('// ─
 check('prompt: no street address, no Hamilton River, no Goose Bay office', !/hamilton|loring|airport b|suite 102|371 /i.test(prompt));
 check('prompt: no Listing Email Alerts promise while the alerts backend is not ready', !/listing email alerts/i.test(prompt));
 check('prompt: Mike Turner, 709-256-7999, consent question names Mike', /Mike Turner/.test(prompt) && /709-256-7999/.test(prompt) && /Is it OK to have Mike Turner contact you/.test(prompt));
-check('prompt: individual sold prices stay private', /NEVER an individual property's sold price/.test(prompt));
+check('prompt: individual sold prices stay private', /NEVER a sold price of any kind/.test(prompt));
 check('widget: Lab West contact only', /709-256-7999/.test(widget) && !/709-896|goosebay@|Goose Bay/i.test(widget));
 check('origin allow-list is Lab West only', /ALLOWED_ORIGIN_HOSTS = \["labwestrealty\.com", "www\.labwestrealty\.com", "labwestrealty\.netlify\.app"\]/.test(src) && !/goosebay-turner-realty/.test(src));
 const hIdx = src.indexOf('export const handler = async (event: any) => {');

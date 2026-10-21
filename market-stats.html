@@ -15,12 +15,12 @@
   </script>
 
   <!-- Meta Tags -->
-  <meta name="description" content="Comprehensive Lab West real estate market statistics. Track monthly MLS data, pricing trends, and sales velocity for Labrador City and Wabush.">
-  <meta name="keywords" content="Lab West real estate, market statistics, MLS data, Labrador City, Wabush, property prices, NLAR">
+  <meta name="description" content="How many homes sold in Labrador City and Wabush, and how long they took to sell. Monthly counts from NLAR MLS data.">
+  <meta name="keywords" content="Lab West real estate, market statistics, MLS data, Labrador City, Wabush, homes sold, days on market, NLAR">
 
   <!-- Open Graph -->
   <meta property="og:title" content="Labrador West Real Estate Market Statistics — NLAR MLS Data">
-  <meta property="og:description" content="Comprehensive Lab West real estate market data and trends.">
+  <meta property="og:description" content="How many homes sold in Labrador City and Wabush, and how long they took to sell.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://labwestrealty.com/market-stats.html">
   <meta property="og:image" content="https://labwestrealty.com/images/og/market-stats-og.jpg">
@@ -71,6 +71,8 @@
     .ms-stat-strip { background: linear-gradient(90deg, rgba(234, 0, 42, 0.05) 0%, transparent 100%); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 2.5rem 2rem; }
     .ms-stat-strip-label { max-width: 1400px; margin: 0 auto; color: #999; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1.5rem; }
     .ms-stat-grid { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(5, 1fr); gap: 2rem; }
+    .ms-stat-grid.ms-stat-grid-2 { grid-template-columns: repeat(2, 1fr); max-width: 760px; }
+    @media (max-width: 600px) { .ms-stat-grid.ms-stat-grid-2 { grid-template-columns: 1fr; } .ms-two-up { grid-template-columns: 1fr !important; } }
     .ms-stat-card { text-align: center; padding: 1.5rem; border-radius: 2px; border-top: 3px solid var(--red); }
     .ms-stat-value { font-family: 'Raleway', sans-serif; font-size: 2.2rem; font-weight: 900; color: #1a1a1a; margin-bottom: 0.5rem; }
     .ms-stat-label { color: #999; font-size: 0.85rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
@@ -92,6 +94,9 @@
     .ms-chart-wrapper h3 { font-family: 'Raleway', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: #1a1a1a; }
     .ms-chart-wrapper h4 { font-family: 'Raleway', sans-serif; font-size: 1rem; font-weight: 600; margin: 1.5rem 0 1rem 0; color: #1a1a1a; }
     .ms-chart-wrapper p { color: #666; font-size: 0.9rem; line-height: 1.6; margin-bottom: 1rem; }
+    .ms-trend-container > *, .ms-two-up > * { min-width: 0; }
+    .ms-chart-wrapper canvas { max-width: 100%; }
+    .ms-chart-wrapper { overflow-x: auto; }
     .ms-trend-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
     .ms-trend-table th { background: #f5f5f5; color: #1a1a1a; padding: 0.75rem; text-align: left; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
     .ms-trend-table td { padding: 0.75rem; border-bottom: 1px solid #e8e8e8; color: #555; }
@@ -154,7 +159,7 @@
     "@context": "https://schema.org",
     "@type": "Dataset",
     "name": "Labrador West MLS Real Estate Market Statistics",
-    "description": "Monthly and annual MLS market statistics for Labrador City and Wabush, Newfoundland & Labrador. Average sale price, days on market, monthly sales volume, and five-year trends.",
+    "description": "Homes sold and days on market for Labrador City and Wabush, Newfoundland & Labrador, by month and by year.",
     "url": "https://labwestrealty.com/market-stats.html",
     "keywords": ["Labrador City real estate", "Wabush real estate", "Labrador West MLS", "NL market statistics", "real estate trends Labrador"],
     "spatialCoverage": {
@@ -196,441 +201,117 @@
   <!-- HERO SECTION -->
   <section class="ms-hero">
     <div class="ms-hero-content">
-      <div class="ms-hero-badge">2026 MARKET INTELLIGENCE</div>
-      <div class="ms-hero-eyebrow">Proven Opportunity</div>
+      <div class="ms-hero-badge">2026 MARKET SNAPSHOT</div>
+      <div class="ms-hero-eyebrow">Labrador City &amp; Wabush</div>
       <h1 class="ms-hero-title">Labrador West Real Estate Market Snapshot</h1>
-      <p class="ms-hero-subtitle">Comprehensive real estate data for Labrador City & Wabush. Active market dynamics with strong fundamentals and growing demand signals.</p>
-      <p class="ms-hero-source">Data sourced from NLAR MLS through April 2026 | Updated Monthly</p>
+      <p class="ms-hero-subtitle">How many homes sold in Labrador City and Wabush, and how long they took to sell.</p>
+      <p class="ms-hero-source">Data sourced from NLAR MLS&reg; through April 5, 2026 | Updated Monthly | Sold prices are not shown on this page</p>
     </div>
   </section>
 
   <!-- 2025 ANNUAL STATISTICS -->
   <section class="ms-stat-strip">
-    <div class="ms-stat-strip-label">2025 Annual Performance</div>
-    <div class="ms-stat-grid">
+    <div class="ms-stat-strip-label">2025 Full Year</div>
+    <div class="ms-stat-grid ms-stat-grid-2">
       <div class="ms-stat-card">
         <div class="ms-stat-value">96</div>
-        <div class="ms-stat-label">Units Sold</div>
+        <div class="ms-stat-label">Homes Sold</div>
         <div class="ms-stat-delta">+17.1% vs 2024</div>
       </div>
       <div class="ms-stat-card">
-        <div class="ms-stat-value">$337K</div>
-        <div class="ms-stat-label">Avg Price</div>
-        <div class="ms-stat-delta">+7.3% vs 2024</div>
-      </div>
-      <div class="ms-stat-card">
-        <div class="ms-stat-value">$32.4M</div>
-        <div class="ms-stat-label">Total Volume</div>
-        <div class="ms-stat-delta">+24.5% vs 2024</div>
-      </div>
-      <div class="ms-stat-card">
         <div class="ms-stat-value">53</div>
-        <div class="ms-stat-label">Avg DOM</div>
-        <div class="ms-stat-delta negative">+19.4% vs 2024</div>
-      </div>
-      <div class="ms-stat-card">
-        <div class="ms-stat-value">$372K</div>
-        <div class="ms-stat-label">Median Price</div>
-        <div class="ms-stat-delta">+11.0% vs 2024</div>
+        <div class="ms-stat-label">Average Days on Market</div>
+        <div class="ms-stat-delta negative">+19.4% vs 2024 (slower)</div>
       </div>
     </div>
   </section>
 
   <!-- 2026 YTD STATISTICS -->
   <section class="ms-stat-strip">
-    <div class="ms-stat-strip-label">2026 Year-to-Date (Q1 through April 5)</div>
-    <div class="ms-stat-grid">
+    <div class="ms-stat-strip-label">2026 So Far (January 1 to April 5)</div>
+    <div class="ms-stat-grid ms-stat-grid-2">
       <div class="ms-stat-card">
         <div class="ms-stat-value">19</div>
-        <div class="ms-stat-label">Units Sold</div>
-        <div class="ms-stat-delta">+26.7% vs 2025 YTD</div>
-      </div>
-      <div class="ms-stat-card">
-        <div class="ms-stat-value">$387K</div>
-        <div class="ms-stat-label">Avg Price</div>
-        <div class="ms-stat-delta">+14.9% vs 2025 YTD</div>
-      </div>
-      <div class="ms-stat-card">
-        <div class="ms-stat-value">$7.35M</div>
-        <div class="ms-stat-label">Total Volume</div>
-        <div class="ms-stat-delta">+43.6% vs 2025 YTD</div>
+        <div class="ms-stat-label">Homes Sold</div>
+        <div class="ms-stat-delta">+26.7% vs the same weeks of 2025</div>
       </div>
       <div class="ms-stat-card">
         <div class="ms-stat-value">54</div>
-        <div class="ms-stat-label">Avg DOM</div>
-        <div class="ms-stat-delta">+27.1% vs 2025 YTD</div>
-      </div>
-      <div class="ms-stat-card">
-        <div class="ms-stat-value">$351K</div>
-        <div class="ms-stat-label">Median Price</div>
-        <div class="ms-stat-delta">+3.5% vs 2025 YTD</div>
+        <div class="ms-stat-label">Average Days on Market</div>
+        <div class="ms-stat-delta negative">+27.1% vs the same weeks of 2025 (slower)</div>
       </div>
     </div>
   </section>
 
   <!-- MAIN CONTENT -->
   <section class="ms-section">
-    <h2 class="ms-section-title">Five-Year Market Trend Analysis</h2>
-    <p class="ms-section-subtitle">Understanding the trajectory of Lab West real estate from 2021 through 2026. Strong appreciation and volume growth demonstrate market health and opportunity.</p>
+    <h2 class="ms-section-title">Homes Sold Each Year, 2021 to 2026</h2>
+    <p class="ms-section-subtitle">How many homes sold in Labrador City and Wabush each year, and how long they took.</p>
 
     <div class="ms-trend-container">
       <div class="ms-chart-wrapper">
-        <h3>Annual Performance & Price Appreciation</h3>
+        <h3>Homes Sold and Days on Market, by Year</h3>
         <canvas id="trendChart" width="400" height="200"></canvas>
-        <p style="margin-top: 1rem; font-size: 0.85rem;">The chart displays annual units sold (red bars, left axis) and average sales price in thousands (green line, right axis). Notice the inverse relationship between market volume and prices—as transaction volume has stabilized post-2022, average prices have steadily climbed, reflecting both property appreciation and a shift in the quality of active inventory.</p>
+        <p style="margin-top: 1rem; font-size: 0.85rem;">Red bars show homes sold (left axis). The green line shows the average number of days a home was on the market before it sold (right axis). 2026 covers January 1 to April 5 only.</p>
       </div>
 
       <div class="ms-chart-wrapper">
-        <h4>Historical Summary Table</h4>
+        <h4>Year by Year</h4>
         <table class="ms-trend-table">
           <thead>
             <tr>
               <th>Year</th>
-              <th>Units</th>
-              <th>Avg Price</th>
-              <th>Volume</th>
-              <th>ADOM</th>
+              <th>Homes Sold</th>
+              <th>Avg Days on Market</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td class="ms-year">2021</td>
-              <td>137</td>
-              <td>$273K</td>
-              <td>$37.4M</td>
-              <td>51</td>
-            </tr>
-            <tr>
-              <td class="ms-year">2022</td>
-              <td>94</td>
-              <td>$296K</td>
-              <td>$27.8M</td>
-              <td>62</td>
-            </tr>
-            <tr>
-              <td class="ms-year">2023</td>
-              <td>71</td>
-              <td>$305K</td>
-              <td>$21.6M</td>
-              <td>72</td>
-            </tr>
-            <tr>
-              <td class="ms-year">2024</td>
-              <td>82</td>
-              <td>$314K</td>
-              <td>$25.7M</td>
-              <td>45</td>
-            </tr>
-            <tr>
-              <td class="ms-year">2025</td>
-              <td>96</td>
-              <td>$337K</td>
-              <td>$32.4M</td>
-              <td>53</td>
-            </tr>
-            <tr>
-              <td class="ms-year">2026 (YTD)</td>
-              <td>19</td>
-              <td>$387K</td>
-              <td>$7.35M</td>
-              <td>54</td>
-            </tr>
+            <tr><td class="ms-year">2021</td><td>137</td><td>51</td></tr>
+            <tr><td class="ms-year">2022</td><td>94</td><td>62</td></tr>
+            <tr><td class="ms-year">2023</td><td>71</td><td>72</td></tr>
+            <tr><td class="ms-year">2024</td><td>82</td><td>45</td></tr>
+            <tr><td class="ms-year">2025</td><td>96</td><td>53</td></tr>
+            <tr><td class="ms-year">2026 (to April 5)</td><td>19</td><td>54</td></tr>
           </tbody>
         </table>
       </div>
     </div>
 
     <div class="ms-insight">
-      <div class="ms-insight-title">Key Insight: Price Acceleration in Recovery Market</div>
-      <div class="ms-insight-text">Lab West has experienced consistent price appreciation over the past 5 years, with the strongest gains occurring in 2025–2026. The 23% price increase from 2021 to 2026 YTD reflects stable market conditions and renewed buyer confidence. Transaction volume recovery in 2024–2025 demonstrates renewed market engagement after the pandemic-era contraction. This dual recovery—both in volume and price—is characteristic of healthy, demand-driven markets rather than distressed sales.</div>
+      <div class="ms-insight-title">What the Numbers Show</div>
+      <div class="ms-insight-text">Sales in Labrador West fell from 137 homes in 2021 to 71 in 2023, then climbed back to 82 in 2024 and 96 in 2025. The first weeks of 2026 are ahead of the same weeks of 2025, with 19 homes sold. Labrador West is a small market, so a handful of sales can move a year&rsquo;s total.</div>
     </div>
 
     <div class="ms-content-block">
-      <h4>Market Context: Why These Numbers Matter for Recruitment</h4>
-      <p>The transition from 2023's low volume (71 units) to 2025's recovery (96 units) represents a fundamental shift in market dynamics. This recovery came without a corresponding price decline, which is the hallmark of genuine demand recovery rather than forced liquidation. In contracting markets, prices often fall to clear inventory. In Lab West, prices actually rose as volume recovered—this is the gold standard of market health.</p>
-      <p>The 2026 YTD numbers show this momentum is not a flash in the pan but a continuing trend. Nineteen sales in just over 3 months represents an annualized rate of approximately 72–80 units, suggesting momentum is accelerating rather than plateauing. This acceleration pattern—low volume transitioning to recovery to acceleration—is the classic arc of an emerging opportunity market.</p>
-      <p>For agents evaluating Lab West as a growth opportunity, this historical pattern communicates several important messages:</p>
-      <ul>
-        <li>Strong buyer demand is returning and accelerating—not a one-time bounce</li>
-        <li>Price appreciation provides inventory value growth and client satisfaction</li>
-        <li>Lower transaction volumes compared to saturated markets mean less competition for market share</li>
-        <li>Timing advantage—early entrants establish relationships before the market becomes crowded</li>
-        <li>Market fundamentals support sustainable long-term growth, not speculative bubbles</li>
-        <li>Growing market creates positive psychology that attracts more buyers and sellers</li>
-      </ul>
-    </div>
-
-    <div class="ms-content-block">
-      <h4>The Five-Year Trend Explained</h4>
-      <p>Understanding the story behind these numbers helps agents position Lab West accurately:</p>
-      <p><strong>2021–2022 Transition (High Volume, Price Rise)</strong>: Post-pandemic buyer rush with prices rising and volume still high. This was a seller's market driven by demand shock. The decline from 137 to 94 units shows normalization of the emergency-driven demand.</p>
-      <p><strong>2022–2023 Contraction (Lower Volume, Stabilizing Prices)</strong>: The market normalized after the pandemic boom, but price decline was minimal. A true market correction would have shown prices falling with volume. Instead, prices held steady at $305K while volume adjusted. This signals strong underlying demand.</p>
-      <p><strong>2023–2024 Bottom Formation (Volume Inflection)</strong>: After hitting 71 units in 2023, the market began recovering. The 15% volume growth with modest price appreciation suggests underlying demand returning. This is where sophisticated investors often enter—recognizing the inflection point.</p>
-      <p><strong>2024–2025 Recovery Confirmation (Strong Growth)</strong>: With 96 units and $337K average prices, the recovery was confirmed. This is no longer a potential opportunity—it's proven demand growth. Volume growth of 17.1% with price growth of 7.3% demonstrates sustainable recovery mechanics.</p>
-      <p><strong>2026 Acceleration (Strong Growth Continuing)</strong>: The 26.7% volume growth and 14.9% price appreciation in just three months suggests the recovery is accelerating, not moderating. This pattern—accelerating growth post-recovery—is typical of markets entering genuine growth phases.</p>
+      <h4>What This Means If You Are Selling</h4>
+      <p>A home sold in Labrador West in 2025 spent 53 days on the market on average. In 2024 it was 45 days, and in 2023 it was 72. Pricing a home to match what buyers are paying now is the biggest factor in how quickly it sells.</p>
+      <h4>What This Means If You Are Buying</h4>
+      <p>With 96 homes sold in 2025 and 19 already by early April 2026, buyers in Labrador City and Wabush have a steady choice of homes through the year, but good ones can go quickly. Having your financing ready before you start looking helps.</p>
     </div>
   </section>
 
   <!-- MONTHLY BREAKDOWN SECTION -->
   <section class="ms-section">
-    <h2 class="ms-section-title">Monthly Performance Breakdown</h2>
-    <p class="ms-section-subtitle">2025 vs 2026 comparison showing seasonal patterns and year-over-year growth across key metrics. This granular view helps identify market windows and demand cycles for strategic agent planning.</p>
+    <h2 class="ms-section-title">Month by Month</h2>
+    <p class="ms-section-subtitle">2025 compared with 2026 so far, to show when homes sell and how long they take.</p>
 
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;" class="ms-two-up">
       <div class="ms-chart-wrapper">
-        <h3>Average Sale Price by Month</h3>
-        <canvas id="priceChart" width="400" height="250"></canvas>
-        <p>2025 showed diverse pricing across months with peaks in February ($375K), August ($381K), and November ($412K). 2026 started stronger, with March 2026 averaging $508,891—the highest single-month average in our multi-year dataset. This suggests premium properties are active in spring months.</p>
-      </div>
-
-      <div class="ms-chart-wrapper">
-        <h3>Units Sold by Month</h3>
+        <h3>Homes Sold by Month</h3>
         <canvas id="unitsChart" width="400" height="250"></canvas>
-        <p>Transaction velocity increased significantly in 2025, with October reaching 18 sales (near-peak monthly activity). 2026 YTD shows stable volume with 6, 5, and 8 sales in January, February, and March respectively. March strength (8 units) suggests spring selling season is gaining momentum entering the rest of 2026.</p>
+        <p>October 2025 was the busiest month, with 18 homes sold. February 2025 was the quietest, with 3. So far in 2026, 6 homes sold in January, 5 in February and 8 in March.</p>
       </div>
-    </div>
 
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
       <div class="ms-chart-wrapper">
-        <h3>Average Days on Market</h3>
+        <h3>Average Days on Market by Month</h3>
         <canvas id="adomChart" width="400" height="250"></canvas>
-        <p>Days on market improved significantly in 2026 YTD (averaging 54 days) compared to 2025's volatility (ranging from 32 to 183 days). The stability of DOM in 2026 reflects tighter inventory and faster buyer response to available properties. Consistent 54-day DOM is a competitive advantage—properties are selling efficiently without desperate price reductions.</p>
-      </div>
-
-      <div class="ms-chart-wrapper">
-        <h3>Median Price Progression</h3>
-        <canvas id="medianChart" width="400" height="250"></canvas>
-        <p>Median prices have held strong, with 2026 Q1 averaging $352,667. The stability of median prices despite year-over-year volume growth suggests healthy market structure. A true bubble would show median prices diverging from average prices. The correlation suggests properties across all price segments are appreciating.</p>
-      </div>
-    </div>
-
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
-      <div class="ms-chart-wrapper">
-        <h3>Average Sold-to-Ask Ratio (%)</h3>
-        <canvas id="chartSA" width="400" height="250"></canvas>
-        <p>Sale-to-ask ratio measures the percentage of asking price achieved at sale. Lab West's 2025 data provides baseline patterns showing market pricing efficiency. Values approaching 100% indicate well-priced properties selling close to asking; ratios below 95% suggest pricing challenges or extended marketing. 2026 data will reveal whether pricing discipline is improving.</p>
-      </div>
-
-      <div class="ms-chart-wrapper">
-        <h3>Units Sold at 100% or More of Asking</h3>
-        <canvas id="chartAt100" width="400" height="250"></canvas>
-        <p>This metric counts the number of properties selling at or above their final asking price each month. Properties achieving 100%+ indicate strong buyer demand relative to asking price. This is a direct measure of pricing power—months with higher counts suggest more competitively-priced or higher-demand properties. Lab West's 2026 data will show whether spring strengthens this metric.</p>
+        <p>In 2025 the monthly average ranged from 32 days (November) to 183 days (March). In 2026 so far it has been 55 days in January, 41 in February and 66 in March. A month with only a few sales can swing a lot.</p>
       </div>
     </div>
 
     <div class="ms-insight">
-      <div class="ms-insight-title">Seasonal Pattern Recognition for Agent Planning</div>
-      <div class="ms-insight-text">Lab West shows classic seasonal patterns with stronger sales velocity in spring (April–May) and fall (September–October). Summer months (June–August) show lower transaction counts but maintain strong average prices. Winter has been strengthening in 2026, suggesting year-round market engagement is improving. For recruiting, this seasonal pattern means agents have predictable busy periods for planning client acquisition strategies.</div>
-    </div>
-
-    <div class="ms-content-block">
-      <h4>What Monthly Trends Reveal About Market Maturity</h4>
-      <p>Monthly volatility is actually a sign of market immaturity—markets with limited inventory and few agents often show wild swings in monthly activity. Lab West's monthly patterns show increasing consistency, which indicates the market is maturing. As markets mature, they develop more predictable demand cycles and less dramatic monthly swings.</p>
-      <p>The 2025 data showed a range from 3 units (February) to 18 units (October)—a 6x variation. The 2026 YTD data shows 5–8 units, a much tighter range. This stabilization suggests:</p>
-      <ul>
-        <li>More consistent buyer flow throughout the year</li>
-        <li>Better inventory management reducing feast-or-famine cycles</li>
-        <li>Developing market professionalism and stability</li>
-        <li>More predictable revenue for agents (less dependent on luck)</li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- SALES VOLUME SECTION -->
-  <section class="ms-section">
-    <h2 class="ms-section-title">Monthly Sales Volume Analysis</h2>
-    <p class="ms-section-subtitle">Gross transaction volume by month, measuring total dollar value of sales. This metric reflects both transaction count and price movement and indicates market economic activity.</p>
-
-    <div style="margin: 2rem 0;">
-      <div class="ms-chart-wrapper">
-        <h3>Monthly Transaction Volume ($M)</h3>
-        <canvas id="volumeChart" width="400" height="250"></canvas>
-        <p style="margin-top: 1rem;">2025's total volume of $32.4M represents a 24.5% increase over 2024's $25.7M. Peak months (October at $5.94M, November at $3.64M) demonstrate strong consumer engagement. 2026 YTD volume of $7.35M in three months projects to an annualized run rate of approximately $29.4M—slightly below 2025 but on pace given the typically slower Q1 season.</p>
-      </div>
-    </div>
-
-    <div class="ms-content-block">
-      <h4>Understanding Volume Trends and Economic Impact</h4>
-      <p>Sales volume grew by 24.5% year-over-year from 2024 to 2025, driven by both increased transaction counts and higher average prices. This dual driver indicates genuine market strength rather than price inflation alone. When volume grows because of price alone (with fewer units), it can mask weakness. When volume grows due to both more units AND higher prices, it signals true market health.</p>
-      <p>The economic impact of $32.4M in annual sales volume on a region the size of Labrador City is significant. This translates to:</p>
-      <ul>
-        <li>Approximately $1.3M per month in real estate economic activity</li>
-        <li>Supporting real estate services (legal, inspection, appraisal, moving) worth millions more</li>
-        <li>Mortgage financing of approximately $25–26M annually</li>
-        <li>Property tax revenue supporting municipal services</li>
-        <li>Transaction-based income for agents and brokerages</li>
-      </ul>
-
-      <h4>For Recruitment: Revenue Opportunity</h4>
-      <p>For agents evaluating Lab West, volume growth creates tangible earning opportunities:</p>
-      <ul>
-        <li>$32.4M annual volume at ~4.5% average brokerage commission = $1.458M total commission</li>
-        <li>With standard agent splits (50–70% to agent), an individual agent handling 10% of market share captures ~$73K–$100K annually</li>
-        <li>Volume growth of 24.5% means agent income opportunity is growing 24.5% annually</li>
-        <li>Newer markets with lower agent saturation mean higher individual agent market share potential</li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- DAYS ON MARKET ANALYSIS -->
-  <section class="ms-section">
-    <h2 class="ms-section-title">Days on Market Analysis: Pricing Efficiency</h2>
-    <p class="ms-section-subtitle">Understanding how property exposure time correlates with sale price. Faster sales (shorter DOM) indicate strong buyer demand and less price negotiation; longer DOM suggests pricing challenges.</p>
-
-    <div style="margin: 2rem 0;">
-      <div class="ms-chart-wrapper" style="margin-bottom: 2rem;">
-        <h3>Average Sale Price by Days on Market Bracket</h3>
-        <canvas id="domChart" width="400" height="250"></canvas>
-        <p style="margin-top: 1rem;">Properties selling in 50–100 days command the highest average price ($346K), followed by 0–50 days ($329K). Properties exceeding 100 days drop to $318K–$300K. This pattern suggests that smart pricing and effective marketing are critical to maximizing value.</p>
-      </div>
-
-      <table class="ms-trend-table">
-        <thead>
-          <tr>
-            <th>DOM Range</th>
-            <th>Avg Sale Price</th>
-            <th>Median Price</th>
-            <th>Count</th>
-            <th>% of Market</th>
-            <th>Price vs Fastest</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="ms-year">0–50 days</td>
-            <td>$329,000</td>
-            <td>$315,000</td>
-            <td>68</td>
-            <td>28.3%</td>
-            <td>-5.1%</td>
-          </tr>
-          <tr>
-            <td class="ms-year">51–100 days</td>
-            <td>$346,000</td>
-            <td>$348,500</td>
-            <td>104</td>
-            <td>43.2%</td>
-            <td>Baseline</td>
-          </tr>
-          <tr>
-            <td class="ms-year">101–150 days</td>
-            <td>$318,000</td>
-            <td>$312,000</td>
-            <td>54</td>
-            <td>22.4%</td>
-            <td>-8.1%</td>
-          </tr>
-          <tr>
-            <td class="ms-year">151+ days</td>
-            <td>$300,000</td>
-            <td>$295,000</td>
-            <td>15</td>
-            <td>6.2%</td>
-            <td>-13.3%</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="ms-insight">
-      <div class="ms-insight-title">DOM Strategy Insight: The 50–100 Day Sweet Spot</div>
-      <div class="ms-insight-text">Properties selling within 50–100 days command the strongest average prices ($346K), representing a 5% premium over properties selling in 0–50 days and a 13% premium over properties exceeding 150 days. This pattern isn't coincidental—it reflects the economics of real estate marketing. Properties that sit less than 50 days often sell quickly due to being underpriced (buyer grabbing a deal) or being in highly desirable condition (limited time on market). Properties in the 50–100 day range have found the optimal pricing and exposure window—they've been shown to enough qualified buyers that serious buyers compete, but haven't sat so long that price pressure mounts.</p>
-    </div>
-
-    <div class="ms-content-block">
-      <h4>What This Means for Agents: DOM as Competitive Advantage</h4>
-      <p>DOM performance is a key metric demonstrating agent effectiveness to both potential clients and the broader market. Agents with lower-than-market DOM build reputation and attract more listing opportunities. In Lab West's market with 54 average DOM, agents consistently achieving 45-day DOM stand out.</p>
-      <p>Key performance targets for Lab West agents:</p>
-      <ul>
-        <li>Target 50–65 day DOM for optimal pricing and client satisfaction</li>
-        <li>Properties exceeding 100 days require strategic review and potential repricing</li>
-        <li>Market absorption rate of roughly 2% per month means 50 days represents efficient velocity</li>
-        <li>Consistent sub-100-day performance is a powerful marketing point to potential sellers</li>
-        <li>DOM becomes a key selling point: "Our listings sell in X days vs market average of Y days"</li>
-      </ul>
-
-      <h4>DOM as Market Signal</h4>
-      <p>From a macro perspective, Lab West's 54-day ADOM (with 2026 showing 54 days even) is healthy. Markets with DOM under 30 days are typically in shortage/seller's market extremes. Markets with DOM over 90 days show inventory stress. The 50–65 day range is the Goldilocks zone—efficient enough to prevent buyer perception of stale inventory, but long enough for proper market exposure.</p>
-    </div>
-  </section>
-
-  <!-- EARLY SIGNALS SECTION -->
-  <section class="ms-section">
-    <h2 class="ms-section-title">Early Signals: 2026 Momentum Indicators</h2>
-    <p class="ms-section-subtitle">Key indicators pointing to continued market strength through 2026 and beyond. These signals suggest growing buyer confidence, market resilience, and favorable conditions for agents building practices.</p>
-
-    <div class="ms-signal-grid">
-      <div class="ms-signal-card">
-        <div class="ms-signal-card-number">↑ 27%</div>
-        <div class="ms-signal-card-title">Q1 2026 Volume Growth</div>
-        <div class="ms-signal-card-text">Year-over-year transaction growth of 26.7% in Q1 2026 compared to Q1 2025 indicates sustained buyer demand and market momentum entering spring season. This is acceleration, not deceleration—the market is speeding up, not slowing down.</div>
-      </div>
-
-      <div class="ms-signal-card">
-        <div class="ms-signal-card-number">↑ 15%</div>
-        <div class="ms-signal-card-title">Price Appreciation</div>
-        <div class="ms-signal-card-text">2026 YTD average prices of $387K represent 14.9% appreciation versus 2025 YTD. This sustained appreciation across market cycles reflects genuine property value growth, not speculative excess. Appreciation without bubble characteristics is the ideal market dynamic.</div>
-      </div>
-
-      <div class="ms-signal-card">
-        <div class="ms-signal-card-number">↓ 54</div>
-        <div class="ms-signal-card-title">Stable DOM</div>
-        <div class="ms-signal-card-text">Average days on market remain at 54 days in 2026 YTD, maintaining the efficient sales velocity established in 2025. Stable DOM despite volume growth signals consistent buyer engagement—more buyers competing for properties, not more inventory sitting unsold.</div>
-      </div>
-    </div>
-
-    <div class="ms-content-block">
-      <h4>What These Signals Tell Us About Market Direction</h4>
-      <p>The combination of strong Q1 transaction growth, sustained price appreciation, and stable days on market paints a clear picture: Lab West's real estate market is not just recovering, it's accelerating. These are the hallmarks of a healthy, growing market with genuine demand drivers rather than speculative activity or artificial stimuli.</p>
-      <p>This is in contrast to bubble markets, which typically show:</p>
-      <ul>
-        <li>Price appreciation without volume growth (fewer people buying, higher prices = speculation)</li>
-        <li>Rapid DOM compression (desperate buying frenzy)</li>
-        <li>Inventory depletion without corresponding quality appreciation</li>
-      </ul>
-      <p>Lab West shows the opposite pattern—balanced growth across both price and volume with stable market mechanics. This is sustainable.</p>
-
-      <h4>What These Signals Communicate to Potential Agents</h4>
-      <p>For recruitment purposes, these signals communicate several key messages about opportunity:</p>
-      <ul>
-        <li>Growing transaction opportunities create income potential without market saturation</li>
-        <li>Consistent price appreciation benefits agent credibility and client satisfaction</li>
-        <li>Market fundamentals are sound, reducing risk of sudden downturns affecting earning potential</li>
-        <li>Early stage of growth cycle offers opportunity to build market position and reputation</li>
-        <li>Volume acceleration suggests the best opportunity window is now, before competition increases</li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- BUYER PERSONAS SECTION -->
-  <section class="ms-section">
-    <h2 class="ms-section-title">What This Market Means for Different Stakeholders</h2>
-    <p class="ms-section-subtitle">How Lab West market dynamics impact different buyer groups, sellers, investors, and agents. Understanding these implications helps frame recruitment value propositions and market positioning.</p>
-
-    <div class="ms-persona-grid">
-      <div class="ms-persona-card">
-        <div class="ms-persona-icon">💼</div>
-        <div class="ms-persona-title">Relocating Professionals</div>
-        <div class="ms-persona-text">Growing price appreciation creates a compelling case for moving to Lab West. Current $387K average prices remain accessible relative to comparable Atlantic Canada markets. Market growth trajectory suggests property appreciation potential for long-term holders. Employment stability in mining and related sectors provides income security.</div>
-      </div>
-
-      <div class="ms-persona-card">
-        <div class="ms-persona-icon">🏠</div>
-        <div class="ms-persona-title">First-Time Buyers</div>
-        <div class="ms-persona-text">Lab West offers entry-level opportunities with median prices at $351K and consistent inventory. Growing market fundamentals reduce risk of immediate price decline. Strong transaction volume indicates competitive market requiring professional guidance. Appreciation potential means first investment grows in value over time.</div>
-      </div>
-
-      <div class="ms-persona-card">
-        <div class="ms-persona-icon">📈</div>
-        <div class="ms-persona-title">Investors & Developers</div>
-        <div class="ms-persona-text">Consistent price appreciation (23% over 5 years) with growing transaction volume creates favorable conditions. Volume growth from 71 to 96 units annually shows expanding demand. Low DOM indicates strong buyer base for investment property liquidation. Market is in growth phase—ideal entry point for patient capital.</div>
-      </div>
-
-      <div class="ms-persona-card">
-        <div class="ms-persona-icon">👨‍👩‍👧‍👦</div>
-        <div class="ms-persona-title">Growing Families</div>
-        <div class="ms-persona-text">Lab West offers an ideal environment for families seeking room to grow. Balanced market conditions provide fair pricing and stable home values for long-term investment. Strong community, schools, and employment stability create ideal conditions for raising families. Growing property values mean your family investment appreciates over time.</div>
-      </div>
+      <div class="ms-insight-title">Timing a Sale or a Purchase</div>
+      <div class="ms-insight-text">In 2025 most months saw between 3 and 10 sales, with a busy fall (18 in October). If you are thinking of selling, talk to us early so your home is ready when buyers are active.</div>
     </div>
   </section>
 
@@ -646,7 +327,7 @@
   <!-- DISCLAIMER -->
   <section class="ms-section">
     <div class="ms-disclaimer">
-      <strong>Data Disclaimer:</strong> All statistics and market data presented are derived from NLAR (Newfoundland and Labrador Association of Realtors) MLS records current through April 5, 2026. Historical data (2021–2025) represents complete annual records. 2026 YTD data represents transactions from January 1 through April 5, 2026. While we endeavor to ensure accuracy, real estate market data is subject to change and delays in reporting. These statistics are provided for informational purposes and should not be considered investment advice. Past performance does not guarantee future results. For specific market analysis or transaction guidance, contact a local licensed real estate professional. This page is updated monthly with current market data. All projections and forward-looking statements are subject to risk factors including economic conditions, employment changes, and market dynamics. The opinions and analyses presented are intended to provide context for market understanding and should not be considered as definitive forecasts.
+      <strong>About this data:</strong> Counts and days on market come from NLAR (Newfoundland and Labrador Association of REALTORS&reg;) MLS&reg; records current through April 5, 2026. 2021 to 2025 are full years. 2026 covers January 1 through April 5. This page shows how many homes sold and how long they took to sell. It does not show sold prices. Real estate data is subject to change and to delays in reporting, and is provided for general information only. For advice on a specific home, contact a local licensed REALTOR&reg;.
     </div>
   </section>
 
@@ -671,32 +352,19 @@
           y: { grid: { color: '#e8e8e8', drawBorder: false }, ticks: { color: '#888', font: { size: 11 } } }
         }
       };
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
       if (document.getElementById('trendChart')) {
         new Chart(document.getElementById('trendChart'), {
           type: 'bar',
           data: {
-            labels: ['2021', '2022', '2023', '2024', '2025', '2026 YTD'],
+            labels: ['2021', '2022', '2023', '2024', '2025', '2026 (to Apr 5)'],
             datasets: [
-              { label: 'Units Sold', type: 'bar', data: [137, 94, 71, 82, 96, 19], backgroundColor: '#EA002A', borderRadius: 2, borderSkipped: false, yAxisID: 'y' },
-              { label: 'Avg Price ($K)', type: 'line', data: [273, 296, 305, 314, 337, 387], borderColor: '#22c55e', backgroundColor: 'rgba(34, 197, 94, 0.1)', borderWidth: 2, pointBackgroundColor: '#22c55e', pointBorderColor: '#22c55e', pointRadius: 5, tension: 0.4, yAxisID: 'y1' }
+              { label: 'Homes Sold', type: 'bar', data: [137, 94, 71, 82, 96, 19], backgroundColor: '#EA002A', borderRadius: 2, borderSkipped: false, yAxisID: 'y' },
+              { label: 'Avg Days on Market', type: 'line', data: [51, 62, 72, 45, 53, 54], borderColor: '#22c55e', backgroundColor: 'rgba(34, 197, 94, 0.1)', borderWidth: 2, pointBackgroundColor: '#22c55e', pointBorderColor: '#22c55e', pointRadius: 5, tension: 0.3, yAxisID: 'y1' }
             ]
           },
           options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, beginAtZero: true, position: 'left' }, y1: { type: 'linear', position: 'right', beginAtZero: true, grid: { drawOnChartArea: false } } } }
-        });
-      }
-
-      if (document.getElementById('priceChart')) {
-        new Chart(document.getElementById('priceChart'), {
-          type: 'line',
-          data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            datasets: [
-              { label: '2025 Avg Price', data: [212960, 375000, 334471, 335000, 313000, 310556, 381250, 294222, 350700, 325194, 412056, 398625], borderColor: '#22c55e', backgroundColor: 'rgba(34, 197, 94, 0.1)', borderWidth: 3, pointBackgroundColor: '#22c55e', pointRadius: 5, tension: 0.4 },
-              { label: '2026 Avg Price (YTD)', data: [350000, 303200, 508891, null, null, null, null, null, null, null, null, null], borderColor: '#2c5aa0', backgroundColor: 'rgba(44, 90, 160, 0.1)', borderWidth: 3, pointBackgroundColor: '#2c5aa0', pointRadius: 5, tension: 0.4 }
-            ]
-          },
-          options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, beginAtZero: true, ticks: { callback: (v) => '$' + (v / 1000).toFixed(0) + 'K' } } } }
         });
       }
 
@@ -704,10 +372,10 @@
         new Chart(document.getElementById('unitsChart'), {
           type: 'bar',
           data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            labels: months,
             datasets: [
-              { label: '2025 Units Sold', data: [5, 3, 7, 6, 4, 9, 8, 9, 10, 18, 9, 8], backgroundColor: '#22c55e', borderRadius: 2 },
-              { label: '2026 Units Sold (YTD)', data: [6, 5, 8, null, null, null, null, null, null, null, null, null], backgroundColor: '#2c5aa0', borderRadius: 2 }
+              { label: '2025 Homes Sold', data: [5, 3, 7, 6, 4, 9, 8, 9, 10, 18, 9, 8], backgroundColor: '#22c55e', borderRadius: 2 },
+              { label: '2026 Homes Sold (so far)', data: [6, 5, 8, null, null, null, null, null, null, null, null, null], backgroundColor: '#2c5aa0', borderRadius: 2 }
             ]
           },
           options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, beginAtZero: true } } }
@@ -718,80 +386,13 @@
         new Chart(document.getElementById('adomChart'), {
           type: 'line',
           data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            labels: months,
             datasets: [
-              { label: '2025 ADOM', data: [72, 82, 183, 63, 99, 40, 90, 50, 47, 46, 32, 34], borderColor: '#22c55e', backgroundColor: 'rgba(34, 197, 94, 0.1)', borderWidth: 3, pointBackgroundColor: '#22c55e', pointRadius: 5, tension: 0.4 },
-              { label: '2026 ADOM (YTD)', data: [55, 41, 66, null, null, null, null, null, null, null, null, null], borderColor: '#2c5aa0', backgroundColor: 'rgba(44, 90, 160, 0.1)', borderWidth: 3, pointBackgroundColor: '#2c5aa0', pointRadius: 5, tension: 0.4 }
+              { label: '2025 Avg Days on Market', data: [72, 82, 183, 63, 99, 40, 90, 50, 47, 46, 32, 34], borderColor: '#22c55e', backgroundColor: 'rgba(34, 197, 94, 0.1)', borderWidth: 3, pointBackgroundColor: '#22c55e', pointRadius: 5, tension: 0.4 },
+              { label: '2026 Avg Days on Market (so far)', data: [55, 41, 66, null, null, null, null, null, null, null, null, null], borderColor: '#2c5aa0', backgroundColor: 'rgba(44, 90, 160, 0.1)', borderWidth: 3, pointBackgroundColor: '#2c5aa0', pointRadius: 5, tension: 0.4 }
             ]
           },
           options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, beginAtZero: true, ticks: { callback: (v) => v + ' days' } } } }
-        });
-      }
-
-      if (document.getElementById('medianChart')) {
-        new Chart(document.getElementById('medianChart'), {
-          type: 'line',
-          data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            datasets: [
-              { label: '2025 Median Price', data: [220000, 360000, 375000, 320000, 323500, 287000, 400000, 287000, 337500, 330000, 405000, 414000], borderColor: '#22c55e', backgroundColor: 'rgba(34, 197, 94, 0.1)', borderWidth: 3, pointBackgroundColor: '#22c55e', pointRadius: 5, tension: 0.4 },
-              { label: '2026 Median Price (YTD)', data: [299000, 312000, 352000, null, null, null, null, null, null, null, null, null], borderColor: '#2c5aa0', backgroundColor: 'rgba(44, 90, 160, 0.1)', borderWidth: 3, pointBackgroundColor: '#2c5aa0', pointRadius: 5, tension: 0.4 }
-            ]
-          },
-          options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, beginAtZero: true, ticks: { callback: (v) => '$' + (v / 1000).toFixed(0) + 'K' } } } }
-        });
-      }
-
-      if (document.getElementById('volumeChart')) {
-        new Chart(document.getElementById('volumeChart'), {
-          type: 'bar',
-          data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            datasets: [
-              { label: '2025 Volume ($M)', data: [1.06, 1.13, 2.34, 2.01, 1.29, 2.79, 3.04, 2.65, 3.38, 5.94, 3.64, 3.31], backgroundColor: '#22c55e', borderRadius: 2 },
-              { label: '2026 Volume ($M) (YTD)', data: [2.10, 1.52, 4.07, null, null, null, null, null, null, null, null, null], backgroundColor: '#2c5aa0', borderRadius: 2 }
-            ]
-          },
-          options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, beginAtZero: true, ticks: { callback: (v) => '$' + v.toFixed(1) + 'M' } } } }
-        });
-      }
-
-      if (document.getElementById('domChart')) {
-        new Chart(document.getElementById('domChart'), {
-          type: 'bar',
-          data: {
-            labels: ['0–50 days', '51–100 days', '101–150 days', '151+ days'],
-            datasets: [{ label: 'Avg Sale Price ($K)', data: [329, 346, 318, 300], backgroundColor: '#EA002A', borderRadius: 2 }]
-          },
-          options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, beginAtZero: true, ticks: { callback: (v) => '$' + v + 'K' } } } }
-        });
-      }
-
-      if (document.getElementById('chartSA')) {
-        new Chart(document.getElementById('chartSA'), {
-          type: 'line',
-          data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            datasets: [
-              { label: '2025 S/A Ratio', data: [null,null,null,null,null,null,null,null,null,null,null,null], borderColor: '#22c55e', backgroundColor: 'rgba(34, 197, 94, 0.1)', borderWidth: 3, pointBackgroundColor: '#22c55e', pointRadius: 5, tension: 0.4 },
-              { label: '2026 S/A Ratio (YTD)', data: [null,null,null,null,null,null,null,null,null,null,null,null], borderColor: '#2c5aa0', backgroundColor: 'rgba(44, 90, 160, 0.1)', borderWidth: 3, pointBackgroundColor: '#2c5aa0', pointRadius: 5, tension: 0.4 }
-            ]
-          },
-          options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, beginAtZero: true, min: 90, max: 105, ticks: { callback: (v) => v + '%' } } } }
-        });
-      }
-
-      if (document.getElementById('chartAt100')) {
-        new Chart(document.getElementById('chartAt100'), {
-          type: 'bar',
-          data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            datasets: [
-              { label: '2025 Sold at 100%+', data: [null,null,null,null,null,null,null,null,null,null,null,null], backgroundColor: '#22c55e', borderRadius: 2 },
-              { label: '2026 Sold at 100%+ (YTD)', data: [null,null,null,null,null,null,null,null,null,null,null,null], backgroundColor: '#2c5aa0', borderRadius: 2 }
-            ]
-          },
-          options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, beginAtZero: true } } }
         });
       }
     })();
