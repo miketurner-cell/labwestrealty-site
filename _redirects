@@ -1,5 +1,7 @@
 # Block /tools/* — internal build tooling must not be publicly served. (security audit 2026-08-21 P3)
 /tools/*  /404.html  404!
+# D-1021-29 (M1, security report 2026-10-21): the publish dir is the repo root, so function source (netlify/functions/*.ts) was served 200. Never.
+/netlify/*  /404.html  404!
 
 /agent                       https://realestategander.com/agent/  301!
 
