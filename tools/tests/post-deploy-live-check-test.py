@@ -23,6 +23,16 @@ def check(name, ok, detail=""):
 script = ROOT / "tools" / "post-deploy-live-check.py"
 wf = ROOT / ".github" / "workflows" / "post-deploy-live-check.yml"
 check("script exists", script.exists())
+# Byte-identity across the five repos (D-1021-07 "byte-identical in the five repos"): the script's sha256 must equal the one recorded in
+# tools/post-deploy-live-check.sha256, and that file is the same in all five repos. Editing the script in one repo without the hash (or in only
+# one repo, since the other four keep the old hash) is caught here. To change the script: edit it, regenerate the hash with
+#   shasum -a 256 tools/post-deploy-live-check.py | cut -d' ' -f1 > tools/post-deploy-live-check.sha256
+# and land the same two files in gander, avalon, goosebay, labwest and hub.
+import hashlib
+_hf = ROOT / "tools" / "post-deploy-live-check.sha256"
+check("script sha256 matches tools/post-deploy-live-check.sha256 (fleet byte-identical copy)",
+      script.exists() and _hf.exists() and hashlib.sha256(script.read_bytes()).hexdigest() == _hf.read_text().split()[0],
+      "re-sync all five repos if you changed the script")
 if script.exists():
     r = subprocess.run([sys.executable, str(script), "--self-test"], capture_output=True, text=True)
     bad = [ln for ln in r.stdout.splitlines() if ln.startswith("FAIL  ")]
