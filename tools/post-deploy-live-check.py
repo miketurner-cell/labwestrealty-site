@@ -76,14 +76,26 @@ SITES = {
             "agent_pages": [], "gates": [], "agent_redirect": True},
 }
 
-# Source files that are served today (hand-run 2026-10-21). A ratchet: these are reported on every run (NOTE = harmless, WARN = Mike should
-# decide to remove them from the publish dir) but do not turn the run red; ANY OTHER served source/data path is a FAIL.
+# Source files that are served today. A ratchet: these are reported on every run (NOTE = harmless, WARN = decide to remove them from the
+# publish dir) but do not turn the run red; ANY OTHER served source/data path is a FAIL. D-1021-29 (L2) emptied the per-site lists: the stray
+# files moved out of the publish dir, so a re-appearance is a FAIL here and in GONE_PATHS below.
+_AGENT_MAP = ("NOTE", "served ON PURPOSE: js/agent-card.js:25 loads ../tools/community-agent-map.json; public agent card data, with an explicit _redirects 200 allow rule")
 KNOWN_PUBLIC = {
     "*": {"package.json": ("NOTE", "dependency names only, no secrets"), "package-lock.json": ("NOTE", "dependency lock, no secrets")},
-    "labwest": {"README.md": ("WARN", "source file served; harmless text but not meant to be a page")},
-    "goosebay": {"PHOTO-NEEDS.md": ("WARN", "internal working note served"), "SITE_PLAN.md": ("WARN", "internal working note served"),
-                 "update_site.py": ("WARN", "a site-build script is served")},
-    "hub": {"ACTIVE-LISTINGS-WORKFLOW.md": ("WARN", "internal workflow note served")},
+    # Intended public path, per site, only where the site carries js/agent-card.js and a _redirects allow rule. Labwest and the hub do not
+    # serve it and are not listed, so a 200 there is still a FAIL.
+    "gander": {"tools/community-agent-map.json": _AGENT_MAP},
+    "avalon": {"tools/community-agent-map.json": _AGENT_MAP},
+    "goosebay": {"tools/community-agent-map.json": _AGENT_MAP},
+}
+
+# Paths that were served and must now answer anything but 200 (D-1021-29: L2 stray files, L4 agent-accountability.html, M1 function source).
+# A 301 for agent-accountability.html is the intended answer, so these are fetched without following redirects.
+GONE_PATHS = {
+    "goosebay": ["PHOTO-NEEDS.md", "SITE_PLAN.md", "update_site.py", "server.log", "test-write.txt",
+                 "IMAGE_AUDIT_2026-04-06.txt", "PAGE_IMAGE_INVENTORY.txt"],
+    "labwest": ["README.md", "netlify/functions/chat.ts", "netlify/functions/sold-data.ts"],
+    "hub": ["ACTIVE-LISTINGS-WORKFLOW.md", "agent-accountability.html"],
 }
 
 # --- patterns ---------------------------------------------------------------------------------------------------
@@ -346,6 +358,21 @@ def check_source_paths(rep, cfg, base, repo, get):  # cfg["key"] is the site key
         rep.passed("served source paths", f"{len(probes)} source/data paths probed, none served (known-public ones are NOTEd)")
 
 
+def check_gone_paths(rep, cfg, base, repo, get):
+    """D-1021-29: every path in GONE_PATHS, and every tracked netlify/ file (function source), must not be served (HTTP 200)."""
+    paths = list(GONE_PATHS.get(cfg["key"], []))
+    tracked = [f for f in git(repo, "ls-files", "netlify/").splitlines() if f.lower().endswith((".ts", ".js", ".mjs", ".json"))]
+    paths += [f for f in sample(tracked, 40) if f not in paths]
+    bad = 0
+    for rel in paths:
+        st, ct, body, final = get(base + "/" + rel, follow=False)
+        if st == 200:
+            bad += 1
+            rep.fail(f"removed path /{rel} is served again", f"HTTP 200 {ct.split(';')[0]}, {len(body)} bytes (D-1021-29: stray/source files must 404)")
+    if not bad:
+        rep.passed("removed paths stay removed", f"{len(paths)} stray/function-source paths, none answers 200")
+
+
 def _older(ts, cutoff):
     try:
         return cutoff is not None and dt.datetime.fromisoformat(ts.replace("Z", "+00:00")) < cutoff
@@ -577,6 +604,27 @@ def self_test():
         check_agent_gates(rep6, {"agent_pages": ["/agent/"], "gates": ["/g", "/g2"]}, "https://x.test", gt)
         chk("gate endpoint returning data is a FAIL; 401 and the gate marker pass",
             rep6.fails == 1 and any(l.startswith("PASS gate /g2") for l in rep6.lines) and any(l.startswith("PASS agent page /agent/") for l in rep6.lines))
+        rep7 = Report()
+        gone = {"/PHOTO-NEEDS.md": (200, "text/markdown", b"# notes", "u"), "/agent-accountability.html": (301, "text/html", b"", "u")}
+        check_gone_paths(rep7, {"key": "goosebay"}, "https://x.test", d, lambda url, follow=True: gone.get(urllib.parse.urlparse(url).path, (404, "text/html", b"nf", url)))
+        chk("a removed path answering 200 is a FAIL; 404 and 301 pass", rep7.fails == 1 and "PHOTO-NEEDS.md" in " ".join(rep7.lines))
+        rep8 = Report()
+        check_gone_paths(rep8, {"key": "hub"}, "https://x.test", d, lambda url, follow=True: gone.get(urllib.parse.urlparse(url).path, (404, "text/html", b"nf", url)))
+        chk("hub agent-accountability.html 301 is not a FAIL", rep8.fails == 0)
+        chk("no per-site KNOWN_PUBLIC entry is left for a path that GONE_PATHS lists", not any(p in KNOWN_PUBLIC.get(k, {}) for k, v in GONE_PATHS.items() for p in v))
+        _sc = globals()["source_candidates"]
+        globals()["source_candidates"] = lambda repo: ([], ["tools/community-agent-map.json"])
+        try:
+            amap = lambda url, follow=True: (200, "application/json", b'{"agents": []}', url) if url.endswith("tools/community-agent-map.json") else (404, "text/html", b"nf", url)
+            ok_sites = []
+            for k in ("gander", "avalon", "goosebay", "labwest", "hub"):
+                rep9 = Report()
+                check_source_paths(rep9, {"key": k}, "https://x.test", d, amap)
+                ok_sites.append((k, rep9.fails))
+        finally:
+            globals()["source_candidates"] = _sc
+        chk("community-agent-map.json (js/agent-card.js) is a NOTE on gander/avalon/goosebay and still a FAIL on labwest/hub",
+            ok_sites == [("gander", 0), ("avalon", 0), ("goosebay", 0), ("labwest", 1), ("hub", 1)])
         chk("every site config has a domain and pages", all(c["domain"] and c["pages"] for c in SITES.values()))
     finally:
         shutil.rmtree(d, ignore_errors=True)
@@ -604,6 +652,7 @@ def main(argv=None):
         check_listing(rep, cfg, base, fetched, http_get)
         check_agent_gates(rep, cfg, base, http_get)
         check_source_paths(rep, cfg, base, repo, http_get)
+        check_gone_paths(rep, cfg, base, repo, http_get)
         check_deploy(rep, cfg, base, repo, http_get, a.wait, a.since_hours, a.head)
     except Exception as e:  # noqa: BLE001 -- fail loud, never a silent green (always-on #7)
         rep.fail("check crashed", f"{type(e).__name__}: {str(e)[:200]}")
