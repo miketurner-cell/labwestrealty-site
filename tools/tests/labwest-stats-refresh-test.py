@@ -113,7 +113,17 @@ try:
 
     bad("stale source", lambda s: s.update(fetched_at="2026-01-01T00:00:00Z"))
     bad("missing region", lambda s: s["regions"].pop("Wabush"))
-    bad("towns do not add up", lambda s: s["regions"]["Wabush"]["by_year"]["2025"].update(count=999))
+    bad("towns over the region", lambda s: s["regions"]["Wabush"]["by_year"]["2025"].update(count=999))
+    bad("a town lost its rows", lambda s: s["regions"]["Wabush"]["by_year"]["2025"].update(count=0))
+    # a sale in the region but in neither town (city spelled another way) is tolerated and said plainly
+    s1 = copy.deepcopy(sib)
+    s1["regions"]["Labrador City"]["by_year"]["2025"]["count"] -= 1
+    p1 = tmp / "gap1.json"
+    p1.write_text(json.dumps(s1))
+    out.unlink(missing_ok=True)
+    r = refresh(p1)
+    check(r.returncode == 0 and "including 1 sale(s) outside the two towns" in r.stdout, f"3: a one-sale spelling gap must pass with a plain note (rc {r.returncode}): {r.stdout[-300:]} {r.stderr[-200:]}")
+    check(json.loads(out.read_text())["regions"]["Labrador City / Wabush"]["by_year"]["2025"]["count"] == lw["by_year"]["2025"]["count"], "3: the region total changed because of the gap")
     bad("no fetched_at", lambda s: s.pop("fetched_at"))
     out.unlink(missing_ok=True)
     r = refresh(tmp / "nope.json")
