@@ -135,6 +135,51 @@ def main():
         r = run(sys.executable, "tools/seo-safety-check.py", cwd=solo)
         if r.returncode != 2:
             bad.append(f"no base: expected exit 2, got {r.returncode}")
+        # shallow checkout whose deepen fetch fails (2026-10-21: runner connect timeouts to github.com): the fetch is retried up to 3 times,
+        # each attempt is printed, success on the 2nd or 3rd try passes, three failures are a loud exit 2 "CANNOT RUN", never a pass.
+        origin = os.path.join(tmp, "origin")
+        os.makedirs(os.path.join(origin, "tools"))
+        shutil.copy(CHECK, os.path.join(origin, "tools", "seo-safety-check.py"))
+        run("git", "init", "-q", cwd=origin)
+        commit(origin, BASE, "base")
+        commit(origin, {"pages/a.html": page().replace("home", "home page")}, "head")
+        real_git = shutil.which("git")
+        for name, fails, want_rc in (("fetch-ok-first-try", 0, 0), ("fetch-fails-twice-then-ok", 2, 0), ("fetch-fails-three-times", 3, 2)):
+            clone = os.path.join(tmp, name)
+            r = run("git", "clone", "-q", "--depth", "1", "file://" + origin, clone, cwd=tmp)
+            assert r.returncode == 0, r.stderr
+            fakebin = os.path.join(tmp, name + "-bin")
+            os.makedirs(fakebin)
+            counter = os.path.join(tmp, name + "-count")
+            open(counter, "w").write("0")
+            wrapper = os.path.join(fakebin, "git")
+            open(wrapper, "w").write(
+                "#!/bin/sh\n"
+                'case " $* " in *" fetch "*)\n'
+                f'  n=$(cat "{counter}"); echo $((n+1)) > "{counter}"\n'
+                f'  if [ "$n" -lt {fails} ]; then echo "fatal: unable to access github.com: Connection timed out" >&2; exit 128; fi;;\n'
+                f'esac\nexec "{real_git}" "$@"\n')
+            os.chmod(wrapper, 0o755)
+            env = dict(os.environ, PATH=fakebin + os.pathsep + os.environ["PATH"], SEO_SAFETY_FETCH_BACKOFF="0,0")
+            env.pop("GITHUB_EVENT_NAME", None)
+            r = subprocess.run([sys.executable, "tools/seo-safety-check.py", "--mode", "fail"], cwd=clone, env=env,
+                               capture_output=True, text=True)
+            tried = int(open(counter).read())
+            want_tries = min(fails + 1, 3)
+            problems = []
+            if r.returncode != want_rc:
+                problems.append(f"exit {r.returncode}, wanted {want_rc}")
+            if tried != want_tries:
+                problems.append(f"{tried} fetch attempts, wanted {want_tries}")
+            if want_rc == 2 and "CANNOT RUN" not in r.stderr:
+                problems.append("no CANNOT RUN message")
+            if want_rc == 0 and "base=HEAD~1" not in r.stdout:
+                problems.append("did not compare against HEAD~1")
+            if fails and f"deepen fetch attempt {want_tries}/3" not in r.stderr:
+                problems.append("attempts not printed")
+            if problems:
+                bad.append(f"{name}: " + "; ".join(problems) + f"\n{r.stdout}{r.stderr}")
+            print(f"{'ok  ' if not problems else 'FAIL'} {name}")
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
     if bad:
