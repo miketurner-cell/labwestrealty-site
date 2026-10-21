@@ -2342,6 +2342,30 @@ def build_per_agent_widget_stats(records, *, window_months=24,
     }
 
 
+# ── Sold prices never leave this script (sites, D-1021-12) ────────────────────────────────────────────────────────
+# The aggregates are committed to a PUBLIC repo and feed public pages, and the sold price is VOW data: Lab West shows
+# counts and days on market only. Everything computed from ClosePrice (averages, medians, volume, sale-to-list, price
+# bands, price per square foot, notable sales) is dropped from the output; the totals are still computed upstream, so a
+# future signed-in surface can add them back here, deliberately.
+_SOLD_SECTIONS = {"dom_sa", "price_bands", "property_type_mix", "home_style_mix", "bedroom_mix", "ppsf", "ppsf_trend",
+                  "sale_outcomes", "notable_sales", "snlr"}
+_SOLD_KEY_RE = re.compile(r"price|volume|ppsf|(^|_)sa($|_)|at_100|dollar|sale_to|ratio", re.I)
+
+
+def strip_sold_prices(node):
+    """Return a copy of the aggregates with every sold-price-derived key removed (counts and days on market stay)."""
+    if isinstance(node, dict):
+        out = {}
+        for k, v in node.items():
+            if k in _SOLD_SECTIONS or _SOLD_KEY_RE.search(str(k)):
+                continue
+            out[k] = strip_sold_prices(v)
+        return out
+    if isinstance(node, list):
+        return [strip_sold_prices(v) for v in node]
+    return node
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[1] if __doc__ else "")
     ap.add_argument("--source", default=str(CACHE_DIR / "sold-listings-full.json"),
@@ -2444,6 +2468,7 @@ def main(argv=None):
 
     dump = build_full_dump(records, source_path=source, listings=listings_records,
                            ledger=ledger, listings_fetched_at=listings_fetched_at)
+    dump = strip_sold_prices(dump)
 
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(dump, indent=2, default=str), encoding="utf-8")
@@ -2478,12 +2503,12 @@ def main(argv=None):
     for region_name, block in dump["regions"].items():
         ytd = block.get("ytd", {})
         ytd_count = ytd.get("count", 0)
-        ytd_avg = ytd.get("avg_price")
-        ytd_avg_str = f"${ytd_avg/1000:.0f}K" if ytd_avg else "—"
+        ytd_dom = ytd.get("avg_dom")
+        ytd_avg_str = f"{ytd_dom:.0f} days" if ytd_dom else "—"
         muni_count = len(block.get("by_municipality", {}))
         muni_str = f", {muni_count} muni breakouts" if muni_count else ""
         print(f"  {block.get('label', region_name):25s} "
-              f"YTD: {ytd_count:4d} sales / {ytd_avg_str:>8s} avg{muni_str}")
+              f"YTD: {ytd_count:4d} sales / {ytd_avg_str:>9s} avg on market{muni_str}")
 
     if args.json:
         print(f"")

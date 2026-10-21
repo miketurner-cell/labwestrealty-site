@@ -4163,6 +4163,139 @@ def build_accordion_bundle(section_defs):
 # Page assembly
 # ═══════════════════════════════════════════════════════════════════════════
 
+def generate_counts_page(cfg, agg, css_text, region, now, output_path, verbose=False):
+    """Counts-and-days-on-market page (sites, D-1021-12). Lab West shows how many homes sold and how long they took, and
+    NO sold-price figure: no averages, medians, volumes, sale-to-list or price per square foot. The aggregates this reads
+    carry none either (idx-stats-aggregator.strip_sold_prices), so nothing here can reach for one. Selected by
+    `sold_prices: false` in the page's YAML."""
+    label = cfg.get("label", cfg.get("slug"))
+    lab = html.escape(label)
+    baseline_year = cfg.get("baseline_year", 2025)
+    current_year = baseline_year + 1
+    by_year = region.get("by_year") or {}
+    ytd = region.get("ytd_complete") or region.get("ytd") or {}
+    yoy = (region.get("yoy_complete") if region.get("ytd_complete") else region.get("yoy")) or {}
+    thru_iso = region.get("ytd_complete_through_date_iso") if region.get("ytd_complete") else region.get("ytd_through_date_iso")
+    thru_month = int(region.get("ytd_complete_through_month") or region.get("ytd_through_month") or 0)
+    latest = str(thru_iso or agg.get("latest_close_date") or "")[:10]
+    try:
+        d = datetime.strptime(latest, "%Y-%m-%d")
+        through = f"{_HERO_MONTHS[d.month][:3]} {d.day}, {d.year}"
+    except (ValueError, TypeError):
+        through = ""
+    if not through:
+        print("ERROR: no latest close date in the aggregates; refusing to write a page that cannot say what it runs through",
+              file=sys.stderr)
+        return None
+
+    def _dom(v):
+        return f"{float(v):.0f} days" if v else "n/a"
+
+    base = by_year.get(str(baseline_year)) or {}
+    rows = []
+    for yr in sorted(by_year, key=int):
+        y = by_year[yr]
+        if not y.get("count"):
+            continue
+        part = " (so far)" if int(yr) == current_year else ""
+        rows.append(f"            <tr><td>{yr}{part}</td><td>{fmt_int(y.get('count'))}</td><td>{_dom(y.get('avg_dom'))}</td></tr>")
+    table = "\n".join(rows)
+
+    months = region.get("by_year_month") or {}
+    mrows = []
+    for key in sorted(months, reverse=True)[:12]:
+        m = months[key]
+        if not m.get("count"):
+            continue
+        yy, mm = key.split("-")
+        mrows.append(f"            <tr><td>{_HERO_MONTHS[int(mm)]} {yy}</td><td>{fmt_int(m.get('count'))}</td><td>{_dom(m.get('avg_dom'))}</td></tr>")
+    mtable = "\n".join(mrows)
+    ytd_n = int(ytd.get("count") or 0)
+
+    strips = []
+    if base.get("count"):
+        strips.append(f"""
+  <div class="ms-annual">
+    <div class="ms-annual-inner">
+      <div class="ms-strip-label">{baseline_year} Full Year</div>
+      <div class="ms-annual-grid">
+{build_stat_cell(fmt_int(base.get("count")), "Homes Sold")}
+{build_stat_cell(_dom(base.get("avg_dom")), "Average Days on Market")}
+      </div>
+    </div>
+  </div>""")
+    suffix = f"vs the same months of {baseline_year}"
+    strips.append(f"""
+  <div class="ms-ytd">
+    <div class="ms-ytd-inner">
+      <div class="ms-strip-label red">{current_year} So Far (January 1 to {html.escape(through)})</div>
+      <div class="ms-annual-grid">
+{build_stat_cell(fmt_int(ytd_n), "Homes Sold", fmt_delta(yoy.get("count_pct"), suffix))}
+{build_stat_cell(_dom(ytd.get("avg_dom")), "Average Days on Market", fmt_delta(yoy.get("avg_dom_pct"), suffix, lower_is_better=True))}
+      </div>
+    </div>
+  </div>""")
+
+    body = f"""
+  <div class="ms-hero">
+    <div class="ms-hero-inner">
+      <div class="ms-eyebrow">{html.escape(cfg.get("eyebrow", label + " Market Statistics"))}</div>
+      <h1>{html.escape(cfg.get("headline", label))} <em>{html.escape(cfg.get("headline_em", ""))}</em></h1>
+      <p class="ms-hero-lede">{html.escape(cfg.get("hero_sub", ""))}</p>
+      <p class="ms-hero-caption">Data through {html.escape(through)}, sourced from NLAR MLS&reg;. Sold prices are not shown on this page.</p>
+    </div>
+  </div>
+{"".join(strips)}
+  <div class="ms-section">
+    <div class="ms-section-inner">
+      <div class="ms-section-head">
+        <h2>Homes sold <em>by year.</em></h2>
+        <p>How many homes sold in {lab} each year and how long they took to sell. {current_year} runs through {html.escape(through)}.</p>
+      </div>
+      <div class="ms-table-scroll">
+        <table class="ms-10yr-table">
+          <thead><tr><th>Year</th><th>Homes Sold</th><th>Average Days on Market</th></tr></thead>
+          <tbody>
+{table}
+          </tbody>
+        </table>
+      </div>
+      <p class="ms-explainer" style="margin-top:20px;">{cfg.get("explainers", {}).get("units_sold", "")} {cfg.get("explainers", {}).get("days_on_market", "")}</p>
+    </div>
+  </div>
+  <div class="ms-section">
+    <div class="ms-section-inner">
+      <div class="ms-section-head">
+        <h2>The last twelve months, <em>month by month.</em></h2>
+        <p>{cfg.get("explainers", {}).get("monthly_spotlight", "")}</p>
+      </div>
+      <div class="ms-table-scroll">
+        <table class="ms-10yr-table">
+          <thead><tr><th>Month</th><th>Homes Sold</th><th>Average Days on Market</th></tr></thead>
+          <tbody>
+{mtable}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="ms-cta" id="ms-cta">
+    <div class="ms-cta-inner">
+      <h2>{cfg.get("cta_heading", "")}</h2>
+      <p>{cfg.get("cta_sub", "")}</p>
+      <div class="ms-cta-btns">
+        <a href="contact.html" class="ms-cta-white">Contact Mike Turner</a>
+        <a href="tel:{cfg.get("cta_phone", "").replace("-", "")}" class="ms-cta-outline">{cfg.get("cta_phone_display", "")}</a>
+      </div>
+    </div>
+  </div>"""
+    parts = [build_head(cfg, css_text, current_year), build_nav(cfg), body, build_disclaimer(), build_footer()]
+    if SCRIPTS_PARTIAL.exists():
+        parts.append(SCRIPTS_PARTIAL.read_text())
+    parts.append("\n</body>\n</html>")
+    return "\n".join(p for p in parts if p)
+
+
 def generate_page(cfg, agg, css_text, verbose=False, dry_run=False):
     """
     Generate a complete HTML page from config + aggregator data.
@@ -4194,6 +4327,13 @@ def generate_page(cfg, agg, css_text, verbose=False, dry_run=False):
 
     now = datetime.now(timezone.utc)
     output_path = PAGES_DIR / f"{slug}.html"
+
+    # `sold_prices: false` (Lab West, D-1021-12): counts and days on market only, no sold-price figure of any kind.
+    if cfg.get("sold_prices", True) is False:
+        counts_html = generate_counts_page(cfg, agg, css_text, region, now, output_path, verbose=verbose)
+        if counts_html is None:
+            return None, None
+        return counts_html, output_path
 
     # Per-region gates: Market Balance + Pricing Strategy default ON for the
     # master (Gander) page, OFF for community pages until Mike vets the rural

@@ -184,7 +184,7 @@ Your job: help home buyers and sellers in Labrador City and Wabush (Labrador Wes
 
 HARD RULES — never break these:
 1. NEVER invent listings, prices, addresses, statistics, or names. Only present what your tools return. If a tool returns nothing, say so honestly.
-2. Sold prices are PRIVATE in Newfoundland & Labrador (VOW rules). You may share aggregate market stats (sales counts, days on market) from your market_stats tool, but NEVER an individual property's sold price. When asked what a specific property sold for, explain that sold prices are free to view with a registered account and link to ${SITE}/listings/sold/.
+2. Sold prices are PRIVATE in Newfoundland & Labrador (VOW rules). You may share aggregate market stats (sales counts, days on market) from your market_stats tool, but NEVER a sold price of any kind: not an individual property's, not an average, not a median. When asked what a specific property sold for, explain that sold prices are free to view with a registered account and link to ${SITE}/listings/sold/.
 3. When a visitor shows buying/selling intent or asks to talk to someone, offer to take their name + email (and phone if offered) via capture_lead — but FIRST ask "Is it OK to have Mike Turner contact you about this?" (consent is required).
 3a. If a visitor asks about joining Royal LePage Turner Realty as a REALTOR® (careers, recruiting, switching brokerages, getting licensed), say we'd be glad to talk and offer to pass their name + email (and phone if offered) to our broker, Mike Turner, in confidence. FIRST ask "Is it OK for our broker, Mike Turner, to contact you about this?", then call capture_lead with recruiting: true. Never ask for licence numbers or other personal details.
 4. Stay on real estate and this brokerage. Politely decline anything else (no poems, code, politics, other businesses).
@@ -221,7 +221,7 @@ const TOOLS = [
   {
     name: "market_stats",
     description:
-      "Aggregate sold-market statistics for a Labrador West community over ~the last 2 years: sales count, median sold price, median days on market. AGGREGATES ONLY — never returns individual sold prices.",
+      "Aggregate sold-market statistics for a Labrador West community over ~the last 2 years: sales count and median days on market. Never returns any sold price, individual or average.",
     input_schema: {
       type: "object",
       properties: { city: { type: "string", description: "Community name, e.g. 'Labrador City' or 'Wabush'." } },
@@ -355,16 +355,14 @@ async function marketStats(input: any): Promise<any> {
     return cityN && (c.includes(cityN) || cityN.includes(c) || (cityN === "labwest" || cityN === "labradorwest") && (c.includes("labradorcity") || c.includes("wabush")));
   });
   if (!subset.length) return { city: input.city, sales_last_2yr: 0, note: "No recorded sales for that community in the last ~2 years." };
-  const prices = subset.map((r) => Number(r.close_price || 0)).filter((p) => p > 0).sort((a, b) => a - b);
   const doms = subset.map((r) => Number(r.dom || 0)).filter((d) => d > 0).sort((a, b) => a - b);
   const med = (arr: number[]) => (arr.length ? arr[Math.floor(arr.length / 2)] : null);
   return {
     city: subset[0].city,
     window: "~last 2 years",
     sales_last_2yr: subset.length,
-    ...(prices.length ? { median_sold_price: med(prices) } : {}),
     median_days_on_market: med(doms),
-    note: "Aggregates only. Individual sold prices are viewable free with a registered account at " + SITE + "/listings/sold/",
+    note: "Counts and days on market only; no sold price is shared here. Sold prices are viewable free with a registered account at " + SITE + "/listings/sold/",
   };
 }
 

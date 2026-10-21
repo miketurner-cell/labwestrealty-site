@@ -8,31 +8,32 @@ page_type: master
 
 # SEO
 title: "Labrador West Real Estate Market Statistics 2026"
-meta_description: "Sale prices, units sold and days on market for Labrador City and Wabush, from NLAR MLS® sold data. Updated when new sales are recorded."
+meta_description: "How many homes sold in Labrador City and Wabush, and how long they took to sell, from NLAR MLS® records. Updated when new sales are recorded."
 og_image: "/images/og/market-stats-og.jpg"
 
 # Hero
 eyebrow: "Labrador West Real Estate · Market Statistics"
 headline: "Labrador West MLS"
 headline_em: "Market Data."
-hero_sub: "Sale prices, units sold, days on market and sale-to-ask ratios for Labrador City and Wabush. Every figure is computed from NLAR MLS® sold records, with the date the data runs through shown on the page."
-source_line: "NLAR MLS® System · Coverage: Labrador City and Wabush residential resale, MLS® transactions only"
+hero_sub: "How many homes sold in Labrador City and Wabush, and how long they took to sell. Every figure is counted from NLAR MLS® records, with the date the data runs through shown on the page."
+source_line: "NLAR MLS® System · Coverage: Labrador City and Wabush residential resale, MLS® transactions only. Sold prices are not shown."
+
+# Counts and days on market only (sites, D-1021-12): this repo is public and sold prices are VOW data, so the page and the
+# aggrecarry no sold-price figure. The builder switches on this key.
+sold_prices: false
 
 # Data boundaries. The sold feed holds 2024-01 onward only, so there is no ten-year table and no historical
 # arrays: nothing here is typed in by hand (always-on #35).
 baseline_year: 2025
 ten_year_start: 2024
 
-# Chart axis caps (set above the observed range once real data is in; the builder clamps if a value exceeds them)
-chart_price_max: 500000
-chart_units_max: 60
 
-show_pricing_strategy: true
+show_pricing_strategy: false
 show_market_balance: false
-show_monthly_spotlight: true
-show_market_summary: true
-show_price_bands: true
-show_property_type_mix: true
+show_monthly_spotlight: false
+show_market_summary: false
+show_price_bands: false
+show_property_type_mix: false
 
 hpi_embed: false
 has_editorial: false
@@ -50,13 +51,7 @@ cta_phone: "709-256-7999"
 cta_phone_display: "Call 709-256-7999"
 
 explainers:
-  units_sold: "The total number of homes that closed during this period. Labrador West is a small market, so individual sales move the averages."
-  avg_sale_price: "The average price buyers paid for homes. This includes all residential property types in Labrador City and Wabush."
-  sale_to_list: "Measures how close homes sell to their asking price. 100% means sellers get exactly what they ask. Below 95% means buyers have negotiating room."
-  days_on_market: "How long the typical home sits before selling."
-  sold_at_100: "Homes that sold at or above the listed price."
-  yoy_comparison: "These arrows compare this year to the same period last year using the same calendar window, so the comparison is fair and not affected by seasonal timing."
-  monthly_spotlight: "A single month in a market this size can turn on a few sales, so treat this as a snapshot rather than a trend."
-  price_bands: "Where the activity sits by price point, over the trailing twelve months. Bands with too few sales are left out."
-  property_type_mix: "Median price is used here rather than average so one unusually expensive sale does not distort a small category. Categories with fewer than five sales in the past year are left out."
-  community_snapshot: "Year-to-date results for Labrador City and Wabush."
+  units_sold: "The total number of homes that closed during this period. Labrador West is a small market, so one or two sales can move the numbers."
+  days_on_market: "How long the typical home sits on the market before it sells."
+  yoy_comparison: "These arrows compare this year to the same months last year, so the comparison is fair and not affected by the time of year."
+  monthly_spotlight: "A single month in a market this size can turn on a few sales, so treat each month as a snapshot rather than a trend."
