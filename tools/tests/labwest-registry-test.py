@@ -2,7 +2,7 @@
 """STRICT: the Lab West test set is complete and the raw feed stays private (sites, D-1012-34, component 13).
 
   1. Every test file under tools/tests/ is a step in .github/workflows/pre-deploy.yml (a test nobody runs protects nothing).
-  2. _redirects forces /tools/* to 404, so the projected cache and every other tools file stay private; no browser JS requests
+  2. _redirects forces /tools/* and /netlify/* to 404 and no stray README.md sits in the publish dir (D-1021-29), so the projected cache and every other tools file stay private; no browser JS requests
      the projected cache URL (the chat function reads a bundled copy).
   3. Every workflow other than pre-deploy.yml is dispatch-only: no `schedule:` and no push trigger (the cadence is the box's,
      added only after Mike's flip).
@@ -25,6 +25,10 @@ for t in sorted((ROOT / "tools" / "tests").iterdir()):
 red = (ROOT / "_redirects").read_text()
 if not re.search(r"^/tools/\*\s+/404\.html\s+404!", red, re.M):
     errors.append("2: _redirects does not force /tools/* to 404")
+if not re.search(r"^/netlify/\*\s+/404\.html\s+404!", red, re.M):
+    errors.append("2: _redirects does not force /netlify/* to 404 (function source would be served; D-1021-29 M1)")
+if (ROOT / "README.md").exists():
+    errors.append("2: README.md is at the repo root, which is the publish dir, so it is served (D-1021-29 L2); keep it under tools/")
 for p in (ROOT / "js").glob("*.js"):
     if re.search(r"""['"]/tools/idx-cache/listings-projected\.json['"]""", p.read_text(encoding="utf-8", errors="ignore")):
         errors.append(f"2: js/{p.name} requests the projected cache URL")
