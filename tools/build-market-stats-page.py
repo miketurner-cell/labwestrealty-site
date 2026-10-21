@@ -4268,8 +4268,8 @@ def generate_counts_page(cfg, agg, css_text, region, now, output_path, verbose=F
         <p>How many homes sold in {lab} each year and how long they took to sell. {current_year} runs through {html.escape(through)}.{first_note}</p>
       </div>
       <div class="ms-table-scroll">
-        <table class="ms-10yr-table">
-          <thead><tr><th>Year</th><th>Homes Sold</th><th>Average Days on Market</th></tr></thead>
+        <table class="ms-10yr-table ms-counts-table">
+          <thead><tr><th>Year</th><th>Homes Sold</th><th><span class="ms-h-long">Average Days on Market</span><span class="ms-h-short">Days on market</span></th></tr></thead>
           <tbody>
 {table}
           </tbody>
@@ -4285,8 +4285,8 @@ def generate_counts_page(cfg, agg, css_text, region, now, output_path, verbose=F
         <p>{cfg.get("explainers", {}).get("monthly_spotlight", "")}</p>
       </div>
       <div class="ms-table-scroll">
-        <table class="ms-10yr-table">
-          <thead><tr><th>Month</th><th>Homes Sold</th><th>Average Days on Market</th></tr></thead>
+        <table class="ms-10yr-table ms-counts-table">
+          <thead><tr><th>Month</th><th>Homes Sold</th><th><span class="ms-h-long">Average Days on Market</span><span class="ms-h-short">Days on market</span></th></tr></thead>
           <tbody>
 {mtable}
           </tbody>

@@ -121,6 +121,9 @@ jobs:
       - name: Lab West stats refresh - no price, part-year dropped, complete months only, dates named, fails loud (STRICT)
         run: python3 tools/tests/labwest-stats-refresh-test.py
 
+      - name: Lab West counts tables fit a phone, no clipped column (STRICT)
+        run: python3 tools/tests/labwest-stats-phone-test.py
+
       - name: No sold-derived dollar figure on a page, in committed data or in generator output (STRICT)
         run: python3 tools/tests/sold-figures-guard.py
 
