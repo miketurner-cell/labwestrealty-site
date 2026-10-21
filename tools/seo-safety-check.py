@@ -45,6 +45,7 @@ import os
 import re
 import subprocess
 import sys
+import time
 from html.parser import HTMLParser
 from urllib.parse import unquote, urlparse
 
@@ -376,13 +377,36 @@ def _auto_base_once():
     return "HEAD~1" if git_ok("rev-parse", "-q", "--verify", "HEAD~1").returncode == 0 else None
 
 
+def _deepen_fetch():
+    """One bounded `git fetch --deepen=2`: True on success. Each attempt is capped (a runner whose github.com connect hangs ~133 s must not
+    hang the job) and low-speed transfers are aborted. 2026-10-21 (sites): three box runners hit connect timeouts 10:24-10:42 UTC."""
+    cap = float(os.environ.get("SEO_SAFETY_FETCH_TIMEOUT", "60"))
+    try:
+        r = subprocess.run(["git", "-C", ROOT, "-c", "http.lowSpeedLimit=1000", "-c", "http.lowSpeedTime=20",
+                            "fetch", "--no-tags", "--quiet", "--deepen=2", "origin"],
+                           capture_output=True, text=True, timeout=cap)
+    except subprocess.TimeoutExpired:
+        print(f"[seo-safety] deepen fetch timed out after {cap:g}s", file=sys.stderr)
+        return False
+    if r.returncode != 0:
+        print(f"[seo-safety] deepen failed: {r.stderr.strip()[:200]}", file=sys.stderr)
+    return r.returncode == 0
+
+
 def auto_base():
     b = _auto_base_once()
     if b is None and git_ok("rev-parse", "--is-shallow-repository").stdout.strip() == "true":
-        # CI checks out one commit; fetch the parent(s) so the comparison has a base. Failure falls through to exit 2.
-        r = git_ok("fetch", "--no-tags", "--quiet", "--deepen=2", "origin")
-        if r.returncode != 0:
-            print(f"[seo-safety] deepen failed: {r.stderr.strip()[:200]}", file=sys.stderr)
+        # CI checks out one commit (pre-deploy.yml now uses fetch-depth 2, so this is the fallback); fetch the parent(s) so the comparison
+        # has a base. Up to 3 attempts with backoff (SEO_SAFETY_FETCH_BACKOFF, seconds, default "5,15"); every attempt is printed. If all
+        # fail, b stays None and main() exits 2 "CANNOT RUN" -- never a silent pass.
+        waits = [float(x) for x in os.environ.get("SEO_SAFETY_FETCH_BACKOFF", "5,15").split(",") if x.strip()]
+        for attempt in range(1, len(waits) + 2):
+            print(f"[seo-safety] deepen fetch attempt {attempt}/{len(waits) + 1}", file=sys.stderr)
+            if _deepen_fetch():
+                break
+            if attempt <= len(waits):
+                print(f"[seo-safety] retrying in {waits[attempt - 1]:g}s", file=sys.stderr)
+                time.sleep(waits[attempt - 1])
         b = _auto_base_once()
     return b
 
