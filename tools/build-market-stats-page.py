@@ -4268,8 +4268,8 @@ def generate_counts_page(cfg, agg, css_text, region, now, output_path, verbose=F
         <p>How many homes sold in {lab} each year and how long they took to sell. {current_year} runs through {html.escape(through)}.{first_note}</p>
       </div>
       <div class="ms-table-scroll">
-        <table class="ms-10yr-table">
-          <thead><tr><th>Year</th><th>Homes Sold</th><th>Average Days on Market</th></tr></thead>
+        <table class="ms-10yr-table ms-counts-table">
+          <thead><tr><th>Year</th><th>Homes Sold</th><th><span class="ms-h-long">Average Days on Market</span><span class="ms-h-short">Days on market</span></th></tr></thead>
           <tbody>
 {table}
           </tbody>
@@ -4285,8 +4285,8 @@ def generate_counts_page(cfg, agg, css_text, region, now, output_path, verbose=F
         <p>{cfg.get("explainers", {}).get("monthly_spotlight", "")}</p>
       </div>
       <div class="ms-table-scroll">
-        <table class="ms-10yr-table">
-          <thead><tr><th>Month</th><th>Homes Sold</th><th>Average Days on Market</th></tr></thead>
+        <table class="ms-10yr-table ms-counts-table">
+          <thead><tr><th>Month</th><th>Homes Sold</th><th><span class="ms-h-long">Average Days on Market</span><span class="ms-h-short">Days on market</span></th></tr></thead>
           <tbody>
 {mtable}
           </tbody>
@@ -4308,7 +4308,15 @@ def generate_counts_page(cfg, agg, css_text, region, now, output_path, verbose=F
     if SCRIPTS_PARTIAL.exists():
         parts.append(SCRIPTS_PARTIAL.read_text())
     parts.append("\n</body>\n</html>")
-    return "\n".join(p for p in parts if p)
+    out = "\n".join(p for p in parts if p)
+    if OUTPUT_ROOT[0]:
+        # The page sits at the site root, not in pages/: "../x" is "/x", and Lab West's hand-written pages carry no manifest link, no
+        # listings link, no recruiting band and no listings nav config while the listings switch is off (labwest-listings-test A).
+        out = out.replace('"../', '"/')
+        out = re.sub(r'[ \t]*<link rel="manifest"[^>]*>\n', "", out)
+        out = re.sub(r'[ \t]*<li><a href="/listings/">[^<]*</a></li>\n', "", out)
+        out = re.sub(r'<script src="/js/(?:recruit-band|nav-config-listings)\.js[^>]*></script>\n?', "", out)
+    return out
 
 
 def generate_page(cfg, agg, css_text, verbose=False, dry_run=False):

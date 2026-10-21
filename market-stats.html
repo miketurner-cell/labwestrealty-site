@@ -34,10 +34,9 @@
   <meta name="twitter:image" content="https://labwestrealty.com/images/og/market-stats-og.jpg">
   <title>Labrador West Real Estate Market Statistics 2026</title>
   <link rel="canonical" href="https://labwestrealty.com/market-stats.html">
-  <link rel="icon" type="image/x-icon" href="../favicon.ico">
-  <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
-  <link rel="manifest" href="/app.webmanifest" data-baked>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <meta name="theme-color" content="#EA002A">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
@@ -46,9 +45,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@800;900&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/main.css?v=20260916-mobile-a">
-  <link rel="stylesheet" href="../css/mobile-fixes.css?v=20260916-mobile-a">
-  <script src="../js/boldtrail-forms.js"></script>
+  <link rel="stylesheet" href="/css/main.css?v=20260916-mobile-a">
+  <link rel="stylesheet" href="/css/mobile-fixes.css?v=20260916-mobile-a">
+  <script src="/js/boldtrail-forms.js"></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -90,8 +89,8 @@
   "isAccessibleForFree": true
 }
 </script>
-  <script src="../js/analytics-events.js" defer></script>
-  <link rel="stylesheet" href="../css/turner-network.css">
+  <script src="/js/analytics-events.js" defer></script>
+  <link rel="stylesheet" href="/css/turner-network.css">
 <style>
 .ms * { box-sizing: border-box; margin: 0; padding: 0; }
 .ms a { text-decoration: none; }
@@ -1212,6 +1211,18 @@
   .ms-cover-num { font-size: 22px; }
 }
 
+/* Counts-only tables (Lab West, three narrow columns): fit a phone without sideways scrolling, so the last column is never
+   cut off (Mike, 2026-10-21). Overrides the 460px min-width the wide tables keep; header shortens, cells tighten. */
+.ms-counts-table .ms-h-short { display: none; }
+@media (max-width: 700px) {
+  .ms-counts-table { min-width: 0; table-layout: auto; }
+  .ms-counts-table .ms-h-long { display: none; }
+  .ms-counts-table .ms-h-short { display: inline; }
+  .ms-counts-table th { padding: 10px 8px; letter-spacing: 0.08em; }
+  .ms-counts-table td { padding: 11px 8px; }
+  .ms-counts-table th:nth-child(n+2), .ms-counts-table td:nth-child(n+2) { text-align: right; }
+}
+
 </style>
 </head>
 <body>
@@ -1267,8 +1278,8 @@
         <p>How many homes sold in Labrador West each year and how long they took to sell. 2026 runs through Sep 30, 2026. The NLAR feed this page counts from starts part-way through 2024, so 2025 is the first full year shown.</p>
       </div>
       <div class="ms-table-scroll">
-        <table class="ms-10yr-table">
-          <thead><tr><th>Year</th><th>Homes Sold</th><th>Average Days on Market</th></tr></thead>
+        <table class="ms-10yr-table ms-counts-table">
+          <thead><tr><th>Year</th><th>Homes Sold</th><th><span class="ms-h-long">Average Days on Market</span><span class="ms-h-short">Days on market</span></th></tr></thead>
           <tbody>
             <tr><td>2025</td><td>93</td><td>62 days</td></tr>
             <tr><td>2026 (January 1 to Sep 30, 2026)</td><td>77</td><td>46 days</td></tr>
@@ -1285,8 +1296,8 @@
         <p>A single month in a market this size can turn on a few sales, so treat each month as a snapshot rather than a trend.</p>
       </div>
       <div class="ms-table-scroll">
-        <table class="ms-10yr-table">
-          <thead><tr><th>Month</th><th>Homes Sold</th><th>Average Days on Market</th></tr></thead>
+        <table class="ms-10yr-table ms-counts-table">
+          <thead><tr><th>Month</th><th>Homes Sold</th><th><span class="ms-h-long">Average Days on Market</span><span class="ms-h-short">Days on market</span></th></tr></thead>
           <tbody>
             <tr><td>September 2026</td><td>7</td><td>42 days</td></tr>
             <tr><td>August 2026</td><td>20</td><td>50 days</td></tr>
@@ -1327,16 +1338,15 @@
 <footer class="site-footer">
   <div class="footer-inner">
     <div class="footer-brand">
-      <img loading="lazy" src="../images/rlp-logo.png" alt="Royal LePage Turner Realty" width="80">
+      <img loading="lazy" src="/images/rlp-logo.png" alt="Royal LePage Turner Realty" width="80">
       <p>Mike Turner, Broker of Record<br>Royal LePage Turner Realty<br><a href="tel:7092567999">709-256-7999</a> &middot; <a href="mailto:miketurner@royallepage.ca">miketurner@royallepage.ca</a></p>
     </div>
     <div>
       <div class="footer-heading">Quick Links</div>
       <ul class="footer-links">
-        <li><a href="../index.html">Home</a></li>
-        <li><a href="/listings/">Homes for Sale</a></li>
-        <li><a href="../labrador-west.html">Labrador West Market</a></li>
-        <li><a href="../contact.html">Contact</a></li>
+        <li><a href="/index.html">Home</a></li>
+        <li><a href="/labrador-west.html">Labrador West Market</a></li>
+        <li><a href="/contact.html">Contact</a></li>
       </ul>
     </div>
   </div>
@@ -1351,14 +1361,12 @@
 </aside>
 <!-- /crea-compliance:v1 -->
 </footer>
-<script src="../js/recruit-band.js" defer></script>
-<script src="../js/footer.js?v=deb93fcc"></script>
-<script src="../js/regions-data.js" defer></script>
-<script src="../js/nav-config.js" defer></script>
-<script src="../js/nav-config-listings.js" defer></script>
-<script src="../js/nav.js" defer></script>
+<script src="/js/footer.js?v=deb93fcc"></script>
+<script src="/js/regions-data.js" defer></script>
+<script src="/js/nav-config.js" defer></script>
+<script src="/js/nav.js" defer></script>
 <script>window.TURNER_SITE='labwest';window.TURNER_API_ORIGIN='https://realestategander.com';</script>
-<script src="../js/turner-network.js" defer></script>
+<script src="/js/turner-network.js" defer></script>
 
 
 </body>

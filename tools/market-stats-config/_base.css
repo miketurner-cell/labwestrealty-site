@@ -1116,3 +1116,15 @@
   .ms-cover-title { font-size: 26px; }
   .ms-cover-num { font-size: 22px; }
 }
+
+/* Counts-only tables (Lab West, three narrow columns): fit a phone without sideways scrolling, so the last column is never
+   cut off (Mike, 2026-10-21). Overrides the 460px min-width the wide tables keep; header shortens, cells tighten. */
+.ms-counts-table .ms-h-short { display: none; }
+@media (max-width: 700px) {
+  .ms-counts-table { min-width: 0; table-layout: auto; }
+  .ms-counts-table .ms-h-long { display: none; }
+  .ms-counts-table .ms-h-short { display: inline; }
+  .ms-counts-table th { padding: 10px 8px; letter-spacing: 0.08em; }
+  .ms-counts-table td { padding: 11px 8px; }
+  .ms-counts-table th:nth-child(n+2), .ms-counts-table td:nth-child(n+2) { text-align: right; }
+}
