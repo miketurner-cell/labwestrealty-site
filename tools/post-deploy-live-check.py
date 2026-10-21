@@ -214,8 +214,9 @@ def changed(repo, base, commit):
 
 
 def is_served(path):
+    # Netlify does not serve dotfiles/dot-directories (e.g. images/listings/<id>/.meta.json answers 404 by design): never a deploy probe.
     return (not path.startswith(NOT_SERVED_PREFIX) and path.lower().endswith(SERVED_EXT)
-            and path not in ("package.json", "package-lock.json"))
+            and path not in ("package.json", "package-lock.json") and not any(seg.startswith(".") for seg in path.split("/")))
 
 
 # --- HTML text segments ----------------------------------------------------------------------------------------
@@ -625,6 +626,8 @@ def self_test():
             globals()["source_candidates"] = _sc
         chk("community-agent-map.json (js/agent-card.js) is a NOTE on gander/avalon/goosebay and still a FAIL on labwest/hub",
             ok_sites == [("gander", 0), ("avalon", 0), ("goosebay", 0), ("labwest", 1), ("hub", 1)])
+        chk("a dotfile path (images/listings/1/.meta.json) is never a served-file probe; a normal asset still is",
+            not is_served("images/listings/1/.meta.json") and not is_served(".well-known/x.json") and is_served("images/listings/1/a.json"))
         chk("every site config has a domain and pages", all(c["domain"] and c["pages"] for c in SITES.values()))
     finally:
         shutil.rmtree(d, ignore_errors=True)
