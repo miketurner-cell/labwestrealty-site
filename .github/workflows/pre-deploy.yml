@@ -132,3 +132,23 @@ jobs:
 
       - name: Test set complete, raw feed private, workflows dispatch-only, switch never set (STRICT)
         run: python3 tools/tests/labwest-registry-test.py
+
+      - name: Post-deploy live check works offline, read-only, no alert channel (STRICT, D-1021-07)
+        run: python3 tools/tests/post-deploy-live-check-test.py
+
+  # D-1021-07 (Mike, 2026-10-21, "Post-deploy live check (Recommended)"): after a push to main, wait for Netlify and check what a signed-out
+  # visitor gets. A job here, not a new workflow, because labwest-registry-test.py (3) keeps every other workflow dispatch-only. Read-only
+  # (plain GETs; no secret, because labwest-switch-test keeps pre-deploy.yml secret-free); the alert is this run going red. No hourly schedule: Lab West has no scheduled deploy.
+  live-check:
+    name: Post-deploy live check (signed out)
+    if: github.event_name == 'push'
+    runs-on: ${{ vars.CI_RUNS_ON || 'ubuntu-latest' }}
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 60
+      - name: Live check (signed out, read-only)
+        env:
+          NETLIFY_SITE_ID: baec4161-22ca-483e-afcc-65f15fbfc696   # LabWest (not a secret)
+        run: python3 tools/post-deploy-live-check.py --site labwest --wait 1200
