@@ -31,7 +31,9 @@ def jobs_of(text):
 
 
 # Workflows that never touch NLAR and are exempt from the listings switch (rule 1), each with its own checks below.
-NO_RETS_WORKFLOWS = {"market-stats-refresh.yml"}
+# Empty since 2026-10-22: market-stats-refresh.yml was removed (it needed a SIBLING_REPO_PAT this repo never gets); the
+# Lab West stats refresh runs from realestategander-site's labwest-stats-refresh.yml instead (D-1021-46, D-1022-08).
+NO_RETS_WORKFLOWS = set()
 files = sorted(WF.glob("*.yml")) if WF.is_dir() else []
 if not files:
     errors.append(".github/workflows has no workflow files")
