@@ -2,10 +2,10 @@
  "_doc": "Top search pages for this site from Google Search Console (clicks, then impressions), listing-detail churn removed. Written by realestategander-site tools/gsc-top-pages.py (workflow gsc-top-pages.yml); read by tools/seo-safety-check.py (these pages must keep title, description, canonical, index status, sitemap entry and homepage link) and tools/seo-pages-refresh.py. Do not hand-edit: pin pages in tools/seo-pages.json.",
  "site": "https://labwestrealty.com",
  "slug": "labwest",
- "generated": "2026-10-19T10:18:55Z",
+ "generated": "2026-10-25T22:24:20Z",
  "window": {
-  "start": "2026-09-20",
-  "end": "2026-10-17",
+  "start": "2026-09-26",
+  "end": "2026-10-23",
   "days": 28
  },
  "top": 50,
@@ -13,14 +13,14 @@
   {
    "page": "https://labwestrealty.com/",
    "clicks": 1,
-   "impressions": 30,
-   "position": 6.7
+   "impressions": 27,
+   "position": 8.9
   },
   {
    "page": "https://labwestrealty.com/contact",
    "clicks": 0,
-   "impressions": 32,
-   "position": 41.7
+   "impressions": 44,
+   "position": 33.0
   }
  ]
 }
