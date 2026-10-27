@@ -103,6 +103,21 @@ var BoldTrailForms = (function() {
     })();
 
 
+    // CONSENT_FORMS_LOADER_BEGIN
+    // (D-1027-02 / D-1027-03): js/consent-forms.js adds the consent line, the optional "Also email me updates"
+    // box, 16px inputs and autocomplete to every lead form on the page, and records the consent type for lead-receive. Loaded from
+    // here because this file is on every page that carries a lead form. Fails open: without it the forms behave as before.
+    (function loadConsentForms() {
+        try {
+            if (window.TurnerConsent || document.getElementById('tc-consent-js') || !AC_SELF_SRC) return;
+            var s = document.createElement('script');
+            s.id = 'tc-consent-js';
+            s.src = AC_SELF_SRC.split('?')[0].replace(/boldtrail-forms\.js$/, 'consent-forms.js') + '?v=8762e7d1';
+            document.head.appendChild(s);
+        } catch (e) { /* the forms stay as they were */ }
+    })();
+    // CONSENT_FORMS_LOADER_END
+
     // FORMS_V2_LOADER_BEGIN
     // ─── The form pattern (redesign, Mike's D-1008-86) ───────────────────────
     // js/forms-v2.js + css/forms-v2.css are loaded ONLY when the site's nav-config says formsV2: 'v2' or the URL carries
@@ -146,7 +161,7 @@ var BoldTrailForms = (function() {
         .rf-form-wrap h3 { font-family: "Raleway", sans-serif; font-weight: 900; font-size: 1.5rem; color: #fff; margin: 0 0 10px 0; line-height: 1.3; }\
         .rf-form-wrap .rf-subhead { font-size: 0.9rem; color: rgba(255,255,255,0.6); line-height: 1.6; margin: 0 0 28px 0; }\
         .rf-form-wrap label { display: block; font-size: 0.8rem; font-weight: 400; color: rgba(255,255,255,0.5); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }\
-        .rf-form-wrap input, .rf-form-wrap select, .rf-form-wrap textarea { width: 100%; padding: 13px 14px; background: #111; border: 1px solid #2a2a2a; border-radius: 4px; color: #fff; font-family: "Roboto", sans-serif; font-size: 0.95rem; box-sizing: border-box; transition: border-color 0.2s; -webkit-appearance: none; appearance: none; }\
+        .rf-form-wrap input, .rf-form-wrap select, .rf-form-wrap textarea { width: 100%; padding: 13px 14px; background: #111; border: 1px solid #2a2a2a; border-radius: 4px; color: #fff; font-family: "Roboto", sans-serif; font-size: 16px; box-sizing: border-box; transition: border-color 0.2s; -webkit-appearance: none; appearance: none; }\
         .rf-form-wrap input:focus, .rf-form-wrap select:focus, .rf-form-wrap textarea:focus { outline: none; border-color: #EA002A; box-shadow: 0 0 0 2px rgba(234,0,42,0.15); }\
         .rf-form-wrap input::placeholder, .rf-form-wrap textarea::placeholder { color: rgba(255,255,255,0.25); }\
         .rf-form-wrap select { background-image: url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'8\' viewBox=\'0 0 12 8\'%3E%3Cpath d=\'M1 1l5 5 5-5\' stroke=\'%23888\' stroke-width=\'1.5\' fill=\'none\'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; cursor: pointer; }\
@@ -165,6 +180,11 @@ var BoldTrailForms = (function() {
         .rf-form-wrap .rf-success p { font-size: 0.95rem; color: rgba(255,255,255,0.7); line-height: 1.6; margin: 0; }\
         .rf-form-wrap .rf-success .rf-check { width: 48px; height: 48px; background: #EA002A; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }\
         .rf-form-wrap .rf-success .rf-check svg { width: 24px; height: 24px; }\
+        .rf-form-wrap label.tc-optin, .rf-form-wrap label.tc-alerts { display: flex; gap: 12px; align-items: flex-start; min-height: 44px; padding: 10px 0; margin: 0 0 6px; text-transform: none; letter-spacing: normal; font-size: 14px; line-height: 1.45; color: rgba(255,255,255,0.75); cursor: pointer; }\
+        .rf-form-wrap .tc-optin input[type=checkbox], .rf-form-wrap .tc-alerts input[type=checkbox] { width: 22px; height: 22px; min-width: 22px; flex: none; padding: 0; margin: 1px 0 0; accent-color: #EA002A; }\
+        .rf-form-wrap .tc-optin .tc-sub { display: block; margin-top: 2px; font-size: 12px; opacity: 0.8; }\
+        .rf-form-wrap .tc-line { margin: 10px 0 0; font-size: 13px; line-height: 1.45; color: rgba(255,255,255,0.65); text-align: left; }\
+        .rf-form-wrap .tc-line a { color: #fff; text-decoration: underline; }\
         @media (max-width: 600px) { .rf-form-wrap .rf-row { grid-template-columns: 1fr; } .rf-form-wrap { padding: 28px 20px; } }\
     ';
 
@@ -621,10 +641,10 @@ function marketReport(selector) {
         <div class="rf-form-wrap" id="' + id + '">\
             <h3>Be the First to Know When New Homes Hit the Market</h3>\
             <p class="rf-subhead">In a market that moves fast, being first matters. Tell us what you\'re looking for and we\'ll send you matching listings the moment they\'re listed.</p>\
-            <form>\
-                <div class="rf-field"><label>First Name</label><input type="text" name="fname" required placeholder="First name"></div>\
-                <div class="rf-field"><label>Email</label><input type="email" name="email" required placeholder="your@email.com"></div>\
-                <div class="rf-field"><label>Phone <span class="rf-optional">(optional)</span></label><input type="tel" name="phone" placeholder="709-xxx-xxxx"></div>\
+            <form data-consent="alerts">\
+                <div class="rf-field"><label>First Name</label><input type="text" name="fname" required placeholder="First name" autocomplete="given-name"></div>\
+                <div class="rf-field"><label>Email</label><input type="email" name="email" required placeholder="your@email.com" autocomplete="email"></div>\
+                <div class="rf-field"><label>Phone <span class="rf-optional">(optional)</span></label><input type="tel" name="phone" placeholder="709-xxx-xxxx" autocomplete="tel"></div>\
                 <div class="rf-row">\
                     <div class="rf-field"><label>Price Range</label>\
                         <select name="price">\
@@ -655,7 +675,9 @@ function marketReport(selector) {
                         <option value="All of Central NL">All of Central NL</option>\
                     </select>\
                 </div>\
+                <label class="tc-alerts" for="' + id + '-lea"><input type="checkbox" id="' + id + '-lea" name="marketing_optin" value="1" data-tc="alerts" required aria-required="true"><span>I agree to receive Listing Email Alerts from Royal LePage Turner Realty, 204 Airport Blvd, Gander NL A1V 1L6. Unsubscribe any time from the link in every email.</span></label>\
                 <button type="submit" class="rf-submit">SEND ME LISTINGS</button>\
+                <p class="tc-line">Your details are used only to send these alerts and answer you. <a href="/pages/privacy-policy.html">Privacy policy</a>.</p>\
                 <p class="rf-error"></p>\
             </form>\
         </div>';
