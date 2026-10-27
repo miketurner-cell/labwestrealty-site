@@ -21,19 +21,49 @@
   },
   "offices": {
     "count": 2,
-    "list": ["Gander (204 Airport Boulevard)", "Happy Valley-Goose Bay (371 Hamilton River Road, Suite 102)"],
+    "list": [
+      "Gander (204 Airport Boulevard)",
+      "Happy Valley-Goose Bay (371 Hamilton River Road, Suite 102)"
+    ],
     "note": "Labrador West is recruiting-only with no office; the Avalon site has no office address.",
-    "source": "Workspace CLAUDE.md, Office / NAP facts. Mike to confirm \"two offices\" (the RLT /team page says 3)."
+    "source": "Workspace CLAUDE.md, Office / NAP facts; confirmed by Mike D-1027-32 (2026-10-27): 2 offices (Gander, Happy Valley-Goose Bay)."
   },
   "reviews": {
     "count": null,
-    "note": "No fixed review count on any careers page. The live TestimonialTree count is injected elsewhere by tools/sync-review-stats.py; careers pages state none until Mike picks one number and source."
+    "source": "No hand-typed review number on any page (D-1027-32). The only live Google review count is tools/gbp-fragments/google-review-count.html (Gander and Goose Bay repos), written by the GBP rating sync (pulled 2026-10-27T17:02:01Z showed '11 Reviews' for Goose Bay) and injected into testimonials pages; the TestimonialTree count on homepages is kept by tools/sync-review-stats.py from tools/tt-cache/testimonials.json. Careers and About pages state no count; a page that cannot read a feed at build time states none.",
+    "note": "Lab West, Avalon and the hub have no review feed, so they state no number."
   },
   "official_sources": {
-    "nlar_orientation_days": {"value": 60, "text": "New members are required to complete the four orientation courses within the first two months (60 days) of joining NLAR.", "url": "https://nlar.ca/become-a-realtor-info/new-realtor-orientation/", "read": "2026-10-27"},
-    "nlar_dues_per_month": {"value": 253, "text": "approximately $253 per month, varying with the number of new listings", "url": "https://nlar.ca/become-a-realtor-info/what-to-expect/", "read": "2026-10-27", "fees_updated": "November 2025"},
-    "nlar_startup_total": {"value": 1918, "text": "Total (start-up) $1918; all fees subject to 15% HST", "url": "https://nlar.ca/become-a-realtor-info/what-to-expect/", "read": "2026-10-27"},
-    "nlar_ce_credits": {"value": "12 credits per two-year cycle", "text": "All REALTOR members are required to complete a minimum of 12 credits in each RPDP cycle; the cycle is two years starting April 1.", "url": "https://nlar.ca/wp-content/uploads/2023/04/Education-Book-2023-25.pdf", "read": "2026-10-27"},
-    "regulator": {"value": "Government Services", "text": "Salesperson Licensing - Government Services", "url": "https://www.gov.nl.ca/gs/real-estate/licensing-salesperson/", "read": "2026-10-27"}
+    "nlar_orientation_days": {
+      "value": 60,
+      "text": "New members are required to complete the four orientation courses within the first two months (60 days) of joining NLAR.",
+      "url": "https://nlar.ca/become-a-realtor-info/new-realtor-orientation/",
+      "read": "2026-10-27"
+    },
+    "nlar_dues_per_month": {
+      "value": 253,
+      "text": "approximately $253 per month, varying with the number of new listings",
+      "url": "https://nlar.ca/become-a-realtor-info/what-to-expect/",
+      "read": "2026-10-27",
+      "fees_updated": "November 2025"
+    },
+    "nlar_startup_total": {
+      "value": 1918,
+      "text": "Total (start-up) $1918; all fees subject to 15% HST",
+      "url": "https://nlar.ca/become-a-realtor-info/what-to-expect/",
+      "read": "2026-10-27"
+    },
+    "nlar_ce_credits": {
+      "value": "12 credits per two-year cycle",
+      "text": "All REALTOR members are required to complete a minimum of 12 credits in each RPDP cycle; the cycle is two years starting April 1.",
+      "url": "https://nlar.ca/wp-content/uploads/2023/04/Education-Book-2023-25.pdf",
+      "read": "2026-10-27"
+    },
+    "regulator": {
+      "value": "Government Services",
+      "text": "Salesperson Licensing - Government Services",
+      "url": "https://www.gov.nl.ca/gs/real-estate/licensing-salesperson/",
+      "read": "2026-10-27"
+    }
   }
 }

@@ -19,11 +19,10 @@
 
   // ONE place for the recruit contact details on this site's careers pages.
   var BOOKING_URL = 'https://calendar.app.google/3S7FJsvtkxxZf9Ja6';
-  // NEEDS MIKE (D-1027-17): which number should recruits see - the office 709-256-7999 or Mike's cell 709-424-6517?
-  // Set to the office line for now. Change this one constant (and TEXT_ENABLED if the number can take texts) and nothing else.
-  var RECRUIT_PHONE = '709-256-7999';
-  // 709-256-7999 is the Rogers office line answered by the AI receptionist; text messages to it are not handled, so no Text button.
-  var TEXT_ENABLED = false;
+  // Mike chose his cell for every recruit contact (D-1027-32, 2026-10-27). Change only these two lines.
+  var RECRUIT_PHONE = '709-424-6517';
+  // The cell takes texts, so the bar reads Book / Call / Text.
+  var TEXT_ENABLED = true;
   var ENDPOINT = 'https://realestategander.com/.netlify/functions/lead-receive';
   var LEAD_SOURCE = 'Source: Join Our Team — Agent Recruiting';
   var MIKE_EMAIL = 'miketurner@royallepage.ca';

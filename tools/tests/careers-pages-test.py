@@ -23,7 +23,7 @@ BANNED = [r"competitive (commission )?split", r"competitive commission", r"highe
           r"top 1\s?%", r"earn like", r"33M", r"27M", r"198K", r"200,000", r"Transfer of Registration", r"three to five business days",
           r"wash out", r"one of the first agents", r"more buyer and seller leads", r"business day", r"24 hours", r"Service NL",
           r"\$150", r"first 90 days", r"90 days", r"Broker\s*(&amp;|&|/)\s*(Founder|Owner)", r"Book a Confidential Call", r"Apply Confidentially",
-          r"mailto:miketurner@royallepage\.ca\?subject=Confidential", r"data-recruit-cta", r"recruit-form\.js", r"424-6517", r"7094246517",
+          r"mailto:miketurner@royallepage\.ca\?subject=Confidential", r"data-recruit-cta", r"recruit-form\.js",
           r"Broker of Record since 1998", r"28 years", r"15\+ years", r"Financial Services Regulation Division", r"\$2,750"]
 for rel in PAGES:
     t = (R / rel).read_text(encoding="utf-8")
@@ -55,10 +55,16 @@ for rel in PAGES:
                 need(k in d, f"{rel}: JobPosting lacks {k}")
             need("baseSalary" not in d, f"{rel}: JobPosting must not carry baseSalary (commission-based; value 0 is invalid)")
             need(d.get("hiringOrganization", {}).get("name") == "Royal LePage Turner Realty", f"{rel}: JobPosting hiringOrganization")
+for p in list(R.glob("*.html")) + list(R.glob("pages/*.html")):
+    _t = p.read_text(encoding="utf-8", errors="replace")
+    need("340 verified five-star reviews" not in _t, f"{p.name}: hand-typed review count (D-1027-32: no typed review numbers)")
+    need("three-office" not in _t and "four-office" not in _t, f"{p.name}: wrong office count (facts file says 2)")
+    need(not re.search(r"<h4>[34]</h4>\s*<p>Offices Active</p>", _t), f"{p.name}: office count tile is not 2")
+need(facts["offices"]["count"] == 2 and "gbp-fragments" in facts["reviews"]["source"], "facts: offices.count 2 and the reviews source (tools/gbp-fragments)")
 kit = (R / "js/careers-kit.js").read_text(encoding="utf-8")
 need(f"var BOOKING_URL = '{BOOK}'" in kit, "careers-kit.js: BOOKING_URL differs from the facts file")
-need("var RECRUIT_PHONE = '709-256-7999'" in kit, "careers-kit.js: RECRUIT_PHONE is not the office line (change only with Mike's word)")
-need("var TEXT_ENABLED = false" in kit, "careers-kit.js: Text button on while 709-256-7999 cannot take texts")
+need("var RECRUIT_PHONE = '709-424-6517'" in kit, "careers-kit.js: RECRUIT_PHONE is not Mike's cell (D-1027-32; change only with Mike's word)")
+need("var TEXT_ENABLED = true" in kit, "careers-kit.js: the bar must read Book / Call / Text (D-1027-32)")
 need("Source: Join Our Team" in kit and "miketurner@royallepage.ca" in kit, "careers-kit.js: recruit lead source / assignee changed")
 need("By sending, you agree we may contact you about this request." in kit and "Also email me updates" in kit, "careers-kit.js: consent wording missing")
 need(len(re.findall(r"autocomplete=\"(given-name|family-name|email|tel|address-level2)\"", kit)) >= 5, "careers-kit.js: autocomplete attributes missing")
