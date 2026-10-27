@@ -51,6 +51,7 @@ OLD = [
     (re.compile(r"licensed agents? (?:is|are) always available|licensed agents? available 24 hours|Agent by Phone\s*(?:—|&mdash;|-)\s*24 Hours", re.I), "old 24-hour agent line", True),
     (re.compile(r"we typically respond to inquiries within 24 hours|(?<![\w'])(?:we|we'll|we’ll) reply within one business hour|Same-day reply\.", re.I), "old reply promise", True),
     (re.compile(r"realestategander\.royallepage\.ca", re.I), "link to the retired realestategander.royallepage.ca site", True),
+    (re.compile(r"href=.https?://(?:www\.)?homebasenl\.com|building-more-housing-that-is-affordable"), "dead partner link (homebasenl.com site 404s; NLHC building-more-housing page 404s)", False),
     (re.compile(r"Royal LePage Central\b"), "'Royal LePage Central' (the brokerage is Royal LePage Turner Realty, Gander)", True),
     (re.compile(r"No Turner office or agent is in Labrador West yet|no Turner agent in Labrador West yet"), "Lab West 'no office yet' line", True),
 ]
