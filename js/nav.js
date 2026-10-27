@@ -731,6 +731,25 @@
       document.body.insertBefore(skip, document.body.firstChild);
     }
 
+    // Run 6 (D-1027-47, 2026-10-27): a skip link must land somewhere. Pages with a
+    // <main> that carries no id, or no <main> at all (axe "skip-link" / "region"),
+    // left "#main-content" pointing at nothing. Repair every skip link whose target
+    // is missing: tag the page's <main> (else [role=main], else its first <h1>) and
+    // aim the link at that id. A <main> that already has its own id is left alone and
+    // the link is pointed at it instead.
+    try {
+      var skips = document.querySelectorAll('a.skip-nav[href^="#"]');
+      for (var si = 0; si < skips.length; si++) {
+        var sh = skips[si].getAttribute('href');
+        if (sh.length < 2 || document.getElementById(sh.slice(1))) continue;
+        var tgt = document.querySelector('main') || document.querySelector('[role="main"]') || document.querySelector('h1');
+        if (!tgt) continue;
+        if (!tgt.id) tgt.id = sh.slice(1);
+        if (tgt.tabIndex < 0 && !tgt.hasAttribute('tabindex')) tgt.setAttribute('tabindex', '-1');
+        skips[si].setAttribute('href', '#' + tgt.id);
+      }
+    } catch (e) {}
+
     var toggle = mainBar.querySelector('.nav-toggle'), links = mainBar.querySelector('.nav-main-links');
 
     // Hamburger — verbatim from mobile-nav.js incl. the scroll-lock sync (2026-05-29 page-freeze fix)
