@@ -73,15 +73,16 @@ var BoldTrailForms = (function() {
     })();
 
     // ─── The one reply promise (Mike, D-1008-30, 2026-10-08) ─────────────
-    // Every contact and showing form promises a reply "within one business hour".
+    // Every contact and showing form carries the one reply promise (D-1027-01).
     // The wording lives in ONE fleet-canonical file, js/reply-promise.js, which sets
     // window.TURNER_REPLY_WINDOW / TURNER_REPLY_PROMISE. It is loaded from here (same
     // pattern as the typo guard: this file is on every form-bearing page) and read at
     // render time. The fallbacks below are IDENTICAL to the canonical text, so a form
     // that renders before the file arrives, or if it fails to load, still says the
     // same thing; tools/tests/reply-promise-test.py fails CI if they ever differ.
+    // careers-only (the confidential broker inquiry form is owned by the careers builder, D-1026-31): remove with that form's rewrite
     var REPLY_WINDOW_FALLBACK = 'within one business hour';
-    var REPLY_PROMISE_FALLBACK = 'We\'ll reply within one business hour.';
+    var REPLY_PROMISE_FALLBACK = 'Our receptionist answers 24/7, and an agent calls you back the same day.';
     function replyWindow() { return window.TURNER_REPLY_WINDOW || REPLY_WINDOW_FALLBACK; }
     function replyPromise() { return window.TURNER_REPLY_PROMISE || REPLY_PROMISE_FALLBACK; }
     (function loadReplyPromise() {
@@ -983,7 +984,7 @@ function marketReport(selector) {
                     err.style.display = 'block';
                     btn.disabled = false; btn.textContent = 'SEND MESSAGE';
                 } else {
-                    showSuccess(wrap, '<h4>Message Sent</h4><p>Thanks ' + fname + ' — ' + askNames(agentName) + ' will be in touch ' + replyWindow() + '.</p>');
+                    showSuccess(wrap, '<h4>Message Sent</h4><p>Thanks ' + fname + '. ' + replyPromise() + '</p>');
                 }
             });
         });
@@ -1185,7 +1186,7 @@ function marketReport(selector) {
                     err.style.display = 'block';
                     btn.disabled = false; btn.textContent = 'TALK TO AN AGENT';
                 } else {
-                    showSuccess(wrap, '<h4>Message Sent</h4><p>Thanks ' + fname + ' \u2014 a Turner Realty agent will be in touch ' + replyWindow() + '.</p>');
+                    showSuccess(wrap, '<h4>Message Sent</h4><p>Thanks ' + fname + '. ' + replyPromise() + '</p>');
                 }
             });
         });
@@ -1390,7 +1391,7 @@ function marketReport(selector) {
         el.innerHTML = '\
         <div class="rf-form-wrap rf-form-flush" id="' + id + '">\
             <h3>Book a Showing</h3>\
-            <p class="rf-subhead">Pick a date and time — we\'ll confirm with you ' + replyWindow() + '.</p>\
+            <p class="rf-subhead">Pick a date and time. ' + replyPromise() + '</p>\
             <form>\
                 <div class="rf-row">\
                     <div class="rf-field"><label>First Name</label><input type="text" name="fname" required placeholder="First name" autocomplete="given-name"></div>\
@@ -1486,7 +1487,7 @@ function marketReport(selector) {
                 } else {
                     showSuccess(wrap,
                         '<h4>Showing Request Sent</h4>' +
-                        '<p>We\'ll confirm with you ' + replyWindow() + '. ' +
+                        '<p>' + replyPromise() + ' ' +
                         'For urgent same-day showings, please call us at ' +
                         '<a href="tel:7098965001" style="color:#EA002A;">709-896-5001</a>.</p>'
                     );
@@ -1565,7 +1566,7 @@ function marketReport(selector) {
                     err.style.display = 'block';
                     btn.disabled = false; btn.textContent = 'SEND MESSAGE';
                 } else {
-                    showSuccess(wrap, '<h4>Message Sent</h4><p>Thanks ' + fname + ' — ' + first + ' will be in touch ' + replyWindow() + '.</p>');
+                    showSuccess(wrap, '<h4>Message Sent</h4><p>Thanks ' + fname + '. ' + replyPromise() + '</p>');
                 }
             });
         });
@@ -1698,7 +1699,7 @@ function marketReport(selector) {
                     err.style.display = 'block';
                     btn.disabled = false; btn.textContent = 'SEND INQUIRY';
                 } else {
-                    showSuccess(wrap, '<h4>Inquiry Sent</h4><p>Thanks ' + fname + ' &mdash; ' + first + ' will be in touch ' + replyWindow() + '. For anything urgent, call ' + agentPhone + '.</p>');
+                    showSuccess(wrap, '<h4>Inquiry Sent</h4><p>Thanks ' + fname + '. ' + replyPromise() + ' For anything urgent, call ' + agentPhone + '.</p>');
                 }
             });
         });

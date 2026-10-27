@@ -78,6 +78,12 @@ jobs:
           python3 tools/sync-recruiting-tech.py --check
           python3 tools/tests/recruiting-block-test.py
 
+      - name: Site copy fixes - no dead Avalon address, no retired reply promises, per-site wording (STRICT 2243, sites 2026-10-27)
+        # D-1027-01 (Mike): office@avalonrealestate.ca (no MX) is gone; every form and page promises only "Our receptionist answers 24/7,
+        # and an agent calls you back the same day."; no link to realestategander.royallepage.ca; Goose Bay terms/accessibility name
+        # Follow Up Boss, Avalon never says "Royal LePage Central", Lab West never says "no office yet". Careers pages skipped (other builder). Offline.
+        run: python3 tools/tests/site-copy-fixes-test.py
+
       - name: SEO safety check (STRICT — a live page may not lose title, canonical, index status or sitemap entry)
         run: python3 tools/seo-safety-check.py
 

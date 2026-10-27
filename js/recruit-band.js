@@ -31,7 +31,7 @@
       '<div class="lw-recruit-band-in"><div>' +
       '<p class="eb">Now recruiting in Labrador West</p>' +
       '<h2 id="lw-recruit-h">This could be your territory.</h2>' +
-      '<p>No Turner office or agent is in Labrador West yet. Be the first Royal LePage agent in Labrador City and Wabush, with the same tools our agents use every day.</p>' +
+      '<p>Labrador West is served from our Gander and Goose Bay offices, and we\'re open to a home-based agent here. Be the first Royal LePage agent in Labrador City and Wabush, with the same tools our agents use every day.</p>' +
       '</div><div class="bt"><a class="b" href="/why-join.html">See what agents get</a><a class="l" href="/contact.html">Talk to Mike Turner</a></div></div>';
     footer.parentNode.insertBefore(s, footer);
   }

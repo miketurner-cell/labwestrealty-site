@@ -88,7 +88,7 @@
   // FOOTER (the Turner Network column was missing Avalon on every
   // page).
   var FOOTER = {
-    copyright: '&copy; 1998&ndash;{year} Royal LePage Turner Realty (2014) Inc. Recruiting licensed REALTORS&reg; for Labrador West; no office in Labrador West.',
+    copyright: '&copy; 1998&ndash;{year} Royal LePage Turner Realty (2014) Inc. Recruiting licensed REALTORS&reg; for Labrador West; served from our Gander and Goose Bay offices.',
     columns: [
       { heading: 'Recruiting', links: [
         ['Why Join', p + 'why-join.html'],
