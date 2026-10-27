@@ -13,6 +13,8 @@ B. GENERATED TREE. Copies the repo to a temp dir, runs the real projector and ge
 C. STATE SCRIPT. preview adds noindex to every generated page and registers no sitemap; on registers the generated
    sitemaps and removes the noindex; off touches nothing; a second run changes nothing.
 """
+# D-1027-01 (Mike): the one sentence that may name Goose Bay on a Lab West page; everything else about Goose Bay stays pinned out.
+SERVED_FROM = "labrador west is served from our gander and goose bay offices"
 import json
 import os
 import re
@@ -122,7 +124,7 @@ try:
     check("aggregateRating" not in band_js and "reviewCount" not in band_js and "ratingValue" not in band_js, "B: the recruiting band carries a rating or review count")
     check("Century 21" in other, "B: the listing brokerage must still be shown (CREA)")
     for needle in ("Dynamic Duo", "goosebay", "Goose Bay", "896-5001", "A0P 1", "karen", "roberta", "goosebay@royallepage.ca"):
-        check(needle.lower() not in joined.lower(), f"B: generated pages contain {needle!r}")
+        check(needle.lower() not in joined.lower().replace(SERVED_FROM, ""), f"B: generated pages contain {needle!r}")
     check("miketurner@royallepage.ca" in joined and "709-256-7999" in joined, "B: Mike's contact is missing")
     emails = set(re.findall(r"[\w.+-]+@[\w-]+\.[a-z]{2,}", joined))
     check(emails <= {"miketurner@royallepage.ca"}, f"B: unexpected email addresses in generated pages: {sorted(emails - {'miketurner@royallepage.ca'})}")
@@ -177,7 +179,7 @@ try:
         check("Listed at $" in plain and "see what it sold for when you register" in plain, "B: sold cards must show the asking price and the register prompt")
         check("McGregor" not in ht, "B: the lease row appears on the homepage")
         for needle in ("Dynamic Duo", "goosebay", "Goose Bay", "896-5001", "Hamilton", "204 Airport"):
-            check(needle.lower() not in ht.lower(), f"B: homepage contains {needle!r}")
+            check(needle.lower() not in ht.lower().replace(SERVED_FROM, ""), f"B: homepage contains {needle!r}")
         for sr in sold_rows:
             check(str(int(float(sr["ClosePrice"]))) not in ht.replace(",", "") or str(int(float(sr["ClosePrice"]))) in {str(int(float(x["ListPrice"]))) for x in sold_rows}, "B: a sold price is on the homepage")
         allhtml[home] = ht
@@ -256,7 +258,7 @@ try:
     ta = (work / "pages" / "text-alerts.html").read_text(encoding="utf-8")
     check("Listing Text Alerts" in ta and "data-lta-inline" in ta and "TURNER_SITE='labwest'" in ta, "B: text-alerts page lacks the widget or the site id")
     for needle in ("Goose Bay", "goosebay", "Hamilton", "896-5001", "Dynamic Duo"):
-        check(needle.lower() not in ta.lower(), f"B: text-alerts page contains {needle!r}")
+        check(needle.lower() not in ta.lower().replace(SERVED_FROM, ""), f"B: text-alerts page contains {needle!r}")
     import re as _re
     for txt in (ta, ready_html):
         plain_t = _re.sub(r"<style.*?</style>|<script.*?</script>", "", txt, flags=_re.S)

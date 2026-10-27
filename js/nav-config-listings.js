@@ -21,7 +21,7 @@
     { label: 'Join Our Team', href: A + 'become-a-realtor.html' }
   ];
   window.FOOTER = {
-    copyright: '&copy; 1998&ndash;{year} Royal LePage Turner Realty (2014) Inc. Mike Turner, Broker of Record. No office in Labrador West.',
+    copyright: '&copy; 1998&ndash;{year} Royal LePage Turner Realty (2014) Inc. Mike Turner, Broker of Record. Labrador West is served from our Gander and Goose Bay offices.',
     columns: [
       { heading: 'Homes', links: [
         ['Homes for Sale', A + 'listings/'],
