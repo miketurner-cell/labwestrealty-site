@@ -134,7 +134,7 @@
       '<p>' + esc(f.copyright).replace('{year}', new Date().getFullYear()) + '</p>' +
       '<p>Each office independently owned and operated. Not intended to solicit buyers or sellers currently under contract.</p>' +
       networkLineHTML() +
-      '<p class="footer-legal-links"><a href="/pages/privacy-policy.html">Privacy Policy</a> &middot; <a href="/pages/terms-of-use.html">Terms of Use</a> &middot; <a href="/pages/accessibility.html">Accessibility</a> &middot; <a href="/agent" rel="nofollow">Agent Login</a></p>' +
+      '<p class="footer-legal-links"><a href="/pages/privacy-policy.html">Privacy Policy</a> &middot; <a href="/pages/terms-of-use.html">Terms of Use</a> &middot; <a href="/pages/accessibility.html">Accessibility</a> &middot; <a href="/agent" rel="nofollow">Agent Login</a><span data-consent-settings hidden> &middot; <a href="#cookie-settings">Cookie settings</a></span></p>' +
       '</div>' +
       '<aside class="crea-compliance" style="text-align:center;padding:16px 24px 32px;">' +
       '<p style="font-size:12px;color:var(--text-secondary,#999);max-width:800px;margin:0 auto;line-height:1.6;">' +

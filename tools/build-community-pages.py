@@ -80,7 +80,7 @@ HUBS = {
 FUB_PIXEL_HEAD = (
     '<!-- fub-pixel:v1 -->\n'
     '<!-- begin Widget Tracker Code -->\n'
-    '<script>\n'
+    '<script type="text/plain" data-consent="marketing">\n'
     '(function(w,i,d,g,e,t){w["WidgetTrackerObject"]=g;(w[g]=w[g]||function() '
     '{(w[g].q=w[g].q||[]).push(arguments);}),(w[g].ds=1*new Date());(e="script"), '
     '(t=d.createElement(e)),(e=d.getElementsByTagName(e)[0]);t.async=1;t.src=i; '
@@ -117,7 +117,7 @@ def build_head(cfg, css_text):
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
-<script async src="https://www.googletagmanager.com/gtag/js?id={gtag_src}"></script>
+<script src="/data/consent-switch.js" defer></script><script src="/js/consent.js" defer></script><script async type="text/plain" data-consent="analytics" data-src="https://www.googletagmanager.com/gtag/js?id={gtag_src}"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){{dataLayer.push(arguments);}}

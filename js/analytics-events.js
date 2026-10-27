@@ -52,9 +52,17 @@
   // ~383-page per-record sold archive) DOES load it -- an explicit path
   // check is the only thing standing between this Pixel and third-party
   // tracking on price-gated pages, so it can't be left to coincidence.
+
+  // Consent (D-1027-13 item 8): the Meta pixel starts only after the visitor accepts; with the CONSENT_BANNER
+  // switch off, js/consent.js runs it at once, exactly as before. See js/consent.js.
+  function consentWhen(cat, fn) {
+    if (window.TurnerConsent) window.TurnerConsent.when(cat, fn);
+    else (window.__tcq = window.__tcq || []).push([cat, fn]);
+  }
   var GATED_PATH_RE = /^\/(?:listings\/sold\/|property\/)/i;
   var isGatedPricePage = GATED_PATH_RE.test(location.pathname || '');
   if (!isPreview && !isGatedPricePage) {
+    consentWhen('marketing', function () {
     (function (f, b, e, v, n, t, s) {
       if (f.fbq) return;
       n = f.fbq = function () {
@@ -67,6 +75,7 @@
     })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
     window.fbq('init', '1505026148048549');
     window.fbq('track', 'PageView');
+    });
   }
 
   // ── 2. Helper: safe gtag call + ad-platform mirror ─────────────
