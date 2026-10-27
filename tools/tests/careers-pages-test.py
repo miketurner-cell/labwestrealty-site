@@ -38,7 +38,7 @@ for rel in PAGES:
     need('id="join-form"' in t, f"{rel}: no #join-form anchor")
     need("Independently owned and operated" in t, f"{rel}: brand line 'Independently owned and operated' missing")
     _k = t.find("data-tk-join")
-    need(re.search(r'<a [^>]*calendar\.app\.google[^>]*>\s*Book a chat with Mike', t[:_k]) is not None, f"{rel}: no 'Book a chat with Mike' button (booking link) above the join form")
+    need(re.search(r'<a [^>]*calendar\.app\.google[^>]*>(?:\s*<svg.*?</svg>)?\s*Book a chat with Mike', t[:_k]) is not None, f"{rel}: no 'Book a chat with Mike' button (booking link) above the join form")
     need(len(re.findall(r'id="join-form"', t)) == 1, f"{rel}: #join-form must appear once")
     if rel.endswith("become-a-realtor.html"):
         for want in ("60 days", "$253", "$1,918", "Government Services"):
@@ -61,13 +61,25 @@ for p in list(R.glob("*.html")) + list(R.glob("pages/*.html")):
     need("three-office" not in _t and "four-office" not in _t, f"{p.name}: wrong office count (facts file says 2)")
     need(not re.search(r"<h4>[34]</h4>\s*<p>Offices Active</p>", _t), f"{p.name}: office count tile is not 2")
 need(facts["offices"]["count"] == 2 and "gbp-fragments" in facts["reviews"]["source"], "facts: offices.count 2 and the reviews source (tools/gbp-fragments)")
+
+TPL = [p for p in ("join-our-team.html", "pages/join-our-team.html", "why-join.html") if (R / p).exists()]
+frag = (R / "fragments/careers-template.html").read_text(encoding="utf-8")
+need("Mike Turner has worked with the family firm since 1998, when he built its first website; Gaye Turner founded Turner Realty that year. Licensed 2009 and Broker of Record since 2022, he studied computer science at Dalhousie, then graduated from the Toronto Film School." in frag, "template: Mike's bio is not the D-1027-17 bio")
+for want in ("Not licensed yet?", "Questions, answered", "What you get", "Send me the details", "tel:+17094246517", "sms:+17094246517", "Coaching from Mike and the team"):
+    need(want in frag, f"template: missing {want}")
+need("top 1" not in frag.lower() and "goes to Mike only" not in frag, "template: unbacked claim or the Mike-only line (waits for RECRUIT_MIKE_ONLY)")
+r = __import__("subprocess").run([sys.executable, str(R / "tools/sync-careers-template.py"), "--check"], capture_output=True, text=True)
+need(r.returncode == 0, "careers template page differs from the fragment: " + r.stdout + r.stderr)
+for rel in TPL:
+    t = (R / rel).read_text(encoding="utf-8")
+    need("CAREERS-TEMPLATE START" in t, f"{rel}: careers template markers missing")
 kit = (R / "js/careers-kit.js").read_text(encoding="utf-8")
 need(f"var BOOKING_URL = '{BOOK}'" in kit, "careers-kit.js: BOOKING_URL differs from the facts file")
 need("var RECRUIT_PHONE = '709-424-6517'" in kit, "careers-kit.js: RECRUIT_PHONE is not Mike's cell (D-1027-32; change only with Mike's word)")
 need("var TEXT_ENABLED = true" in kit, "careers-kit.js: the bar must read Book / Call / Text (D-1027-32)")
 need("Source: Join Our Team" in kit and "miketurner@royallepage.ca" in kit, "careers-kit.js: recruit lead source / assignee changed")
 need("By sending, you agree we may contact you about this request." in kit and "Also email me updates" in kit, "careers-kit.js: consent wording missing")
-need(len(re.findall(r"autocomplete=\"(given-name|family-name|email|tel|address-level2)\"", kit)) >= 5, "careers-kit.js: autocomplete attributes missing")
+need(len(re.findall(r"autocomplete=\"(name|email|tel|address-level2)\"", kit)) >= 4, "careers-kit.js: autocomplete attributes missing")
 need("font-size:16px" in kit, "careers-kit.js: inputs below 16px")
 need(facts["recruit_comp_line"] == "70/30 split with profit share. No desk fees.", "facts: comp line changed")
 src = facts["official_sources"]

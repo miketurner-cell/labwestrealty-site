@@ -25,7 +25,8 @@ for rel in PAGES:
         continue
     body = re.sub(r"<!--[\s\S]*?-->", "", re.sub(r"<(script|style)\b[\s\S]*?</\1>", "", page))
     text = re.sub(r"<[^>]+>", " ", body)
-    need("$" not in text, rel + ": dollar sign in visible text")
+    # D-1027-43 (design 2, "Not licensed yet?"): the NLAR join and dues figures are the only dollar amounts allowed (D-1026-31, sources in tools/brokerage-facts.json)
+    need("$" not in text.replace("about $1,918 + HST", "").replace("about $253 a month", ""), rel + ": dollar sign in visible text")
     for bad in ("★", "BoldTrail", "SkySlope", "rlpSPHERE", "kvCORE", "Deal Desk", "Smart Leads"):
         need(bad not in text, rel + ": removed copy back: " + bad)
     need(not re.search(r"\d+K\+|\d{2},\d{3}\+", text), rel + ": a corporate statistic (20K+ / 20,000+) is back")
