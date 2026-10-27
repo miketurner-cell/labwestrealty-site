@@ -145,6 +145,10 @@ jobs:
       - name: Sold sign-in card has a way out and the sold price stays gated (STRICT)
         run: python3 tools/tests/sold-gate-way-out-test.py
 
+      - name: Consumer forms carry the CASL consent line, the Alerts box is required, inputs are 16px (STRICT 2246, sites 2026-10-27, D-1027-02 / D-1027-03)
+        # Same number and the same test file as Gander's STRICT 2246 (byte-identical in all five repos). Chromium at phone width, nothing really sent.
+        run: python3 tools/tests/consent-forms-test.py
+
       - name: Test set complete, raw feed private, workflows dispatch-only, switch never set (STRICT)
         run: python3 tools/tests/labwest-registry-test.py
 
