@@ -149,6 +149,10 @@ jobs:
         # Same number and the same test file as Gander's STRICT 2246 (byte-identical in all five repos). Chromium at phone width, nothing really sent.
         run: python3 tools/tests/consent-forms-test.py
 
+      - name: Privacy policy tools table names exactly the tools this site loads; no unlisted tracker (STRICT 2275, sites 2026-10-27, D-1027-47 f)
+        # Same number and the same test file as Gander's STRICT 2275 (byte-identical in all five repos). Offline: reads the committed pages and js.
+        run: python3 tools/tests/privacy-processors-test.py
+
       - name: Test set complete, raw feed private, workflows dispatch-only, switch never set (STRICT)
         run: python3 tools/tests/labwest-registry-test.py
 
