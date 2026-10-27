@@ -37,7 +37,7 @@ for rel in PAGES:
     need("data-tk-join" in t, f"{rel}: the short join form container is missing")
     need('id="join-form"' in t, f"{rel}: no #join-form anchor")
     need("Independently owned and operated" in t, f"{rel}: brand line 'Independently owned and operated' missing")
-    _k = t.find("data-tk-join")
+    _k = t.find("<div data-tk-join")
     need(re.search(r'<a [^>]*calendar\.app\.google[^>]*>(?:\s*<svg.*?</svg>)?\s*Book a chat with Mike', t[:_k]) is not None, f"{rel}: no 'Book a chat with Mike' button (booking link) above the join form")
     need(len(re.findall(r'id="join-form"', t)) == 1, f"{rel}: #join-form must appear once")
     if rel.endswith("become-a-realtor.html"):

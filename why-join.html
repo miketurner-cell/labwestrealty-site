@@ -379,6 +379,9 @@
 .c2 .c2-faq details[open] summary::after{content:"\2212"}
 .c2 .c2-faq p{margin:0 0 16px;color:var(--ink-2)}
 .c2 .c2-two>div+div{margin-top:24px}
+/* reserve the join form's height before js/careers-kit.js mounts it, so nothing below it jumps (CLS, D-1027-03) */
+.c2 [data-tk-join]{min-height:833px}
+@media(min-width:521px){.c2 [data-tk-join]{min-height:768px}}
 @media(min-width:861px){
  .c2 .c2-hero .c2-wrap{padding-top:48px;padding-bottom:48px}.c2 .c2-hero h1{font-size:40px}.c2 .c2-comp{font-size:24px}
  .c2 .c2-btns{flex-direction:row;max-width:none}.c2 .c2-btns .c2-btn{padding:0 24px}
