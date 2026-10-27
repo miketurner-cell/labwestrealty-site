@@ -215,6 +215,18 @@
 .legal-wrap a:hover { color: #a00029; }
 .legal-wrap strong { color: #1a1a1a; }
 
+
+.pp-table-wrap { overflow-x: auto; margin: 16px 0 24px; }
+.pp-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; line-height: 1.5; }
+.pp-table th, .pp-table td { border: 1px solid rgba(128,128,128,0.4); padding: 8px 10px; text-align: left; vertical-align: top; }
+.pp-table th { font-weight: 700; }
+@media (max-width: 700px) {
+  .pp-table thead { display: none; }
+  .pp-table, .pp-table tbody, .pp-table tr, .pp-table td { display: block; width: 100%; box-sizing: border-box; }
+  .pp-table tr { margin: 0 0 14px; border: 1px solid rgba(128,128,128,0.4); }
+  .pp-table td { border: 0; padding: 4px 10px; }
+  .pp-table td::before { content: attr(data-l) ": "; font-weight: 700; display: block; font-size: 0.8rem; opacity: 0.75; }
+}
 </style>
   <script src="js/analytics-events.js" defer></script>
   <link rel="stylesheet" href="css/main.css?v=20260916-mobile-chrome">
@@ -274,68 +286,94 @@
 <p class="legal-meta">Last updated: October 27, 2026</p>
 
 <h2>Who We Are</h2>
-<p>Royal LePage Turner Realty (2014) Inc. ("Turner Realty," "we," "our") is a real estate brokerage located at 204 Airport Boulevard, Gander, Newfoundland and Labrador, A1V 1L6. We are committed to protecting the privacy of visitors to our website, labwestrealty.com, and of our clients.</p>
+<p>Royal LePage Turner Realty (2014) Inc. (“Turner Realty,” “we,” “our”) is a real estate brokerage in Newfoundland and Labrador, with its head office at 204 Airport Blvd, Gander, NL A1V 1L6. This one policy covers our five websites: realestategander.com, avalonrealestate.ca, goosebayrealestate.ca, labwestrealty.com and royallepageturner.com, and the services on them. It was last updated on October 27, 2026.</p>
+
+<h2>Our Privacy Officer</h2>
+<p>Mike Turner, Broker of Record, is responsible for how we handle personal information. Reach him at <a href="mailto:miketurner@royallepage.ca">miketurner@royallepage.ca</a> with any privacy question, to see or correct your information, to withdraw consent, or to make a complaint.</p>
 
 <h2>Information We Collect</h2>
-<p>We collect personal information that you voluntarily provide when you use our website, including:</p>
+<p>Information you give us:</p>
 <ul>
-  <li>Name, email address, and phone number submitted through contact forms or inquiry forms</li>
-  <li>Messages and notes included in any form submission</li>
+<li>Your name, email address and phone number when you send a contact, showing, home-value or sign-up form, or ask us something in the chat</li>
+<li>Property details you give us in a valuation or listing inquiry, and any message you write</li>
+<li>If you create an account: your email address, your sign-in details, and your saved searches, favourites and alert settings</li>
+<li>If you turn on Listing Text Alerts: your mobile number, and a record of when and where you agreed</li>
+<li>What you say or type in the chat, and the audio you record if you use a voice feature</li>
+<li>What you say on a call to 709-256-7999, which is answered by an automated receptionist</li>
 </ul>
-<p>We also automatically collect certain technical information when you visit our website:</p>
-<ul>
-  <li>IP address, browser type, and operating system</li>
-  <li>Pages visited, time spent on site, and referring URLs</li>
-  <li>Device type and screen resolution</li>
-</ul>
+<p>Information collected automatically: your IP address, browser and device type, the pages you view, how you arrived, and the choices you make on a page. The tools in the table below collect most of it.</p>
 
 <h2>How We Use Your Information</h2>
-<p>We use the information we collect to:</p>
 <ul>
-  <li>Respond to your inquiries and provide the services you request</li>
-  <li>Improve our website and user experience through analytics</li>
-  <li>Comply with legal and regulatory obligations</li>
+<li>To answer your inquiry and give you the real estate service you asked for</li>
+<li>To book and coordinate showings with the listing agent</li>
+<li>To send the alerts, market reports and updates you asked for</li>
+<li>To measure and improve our websites and our advertising</li>
+<li>To follow the law and the rules of our profession</li>
 </ul>
+<p>We do not sell, rent or trade your personal information.</p>
 
-<h2>Third-Party Services</h2>
-<p>Our website uses the following third-party services that may collect or process your data:</p>
-<ul>
-  <li><strong>Google Analytics (GA4)</strong> — for website traffic analysis. Google's privacy policy applies to data collected through this service.</li>
-  <li><strong>Netlify</strong> — hosts our website and may collect server access logs.</li>
-</ul>
-<p>We do not sell, rent, or trade your personal information to third parties for marketing purposes.</p>
+<h2>The Tools and Companies We Use</h2>
+<p>These are the companies and tools our websites actually load or use. Each handles your information only to do its job for us and has its own privacy policy. Some of them process information outside Canada. The “Where it is loaded” column names the sites; if a site is not named, it does not use that tool.</p>
+<div class="pp-table-wrap"><table class="pp-table"><thead><tr><th>Company or tool</th><th>What it does and what it receives</th><th>Where it is loaded</th><th>Your choice</th></tr></thead><tbody>
+<tr><td data-l="Company or tool"><strong>Google Analytics 4 (Google)</strong></td><td data-l="What it does and what it receives">Counts visits and shows us which pages are used. Receives your IP address, device and browser type, the pages you view, and how you arrived. Sets cookies.</td><td data-l="Where it is loaded">All five sites: the gtag.js script in the head of the pages, including listing pages.</td><td data-l="Your choice">Decline the cookie notice where it is shown, use your browser controls, or use Google’s opt-out add-on.</td></tr>
+<tr><td data-l="Company or tool"><strong>Meta pixel (Meta Platforms, Facebook and Instagram)</strong></td><td data-l="What it does and what it receives">Measures how our Facebook and Instagram advertising performs and which actions follow. Receives page views and form-submission events with your browser identifiers. Sets cookies.</td><td data-l="Where it is loaded">All five sites, through js/analytics-events.js. Not loaded on the sold-price pages (/listings/sold/ and /property/).</td><td data-l="Your choice">Decline the cookie notice where it is shown, or use your Facebook ad settings and browser controls.</td></tr>
+<tr><td data-l="Company or tool"><strong>Follow Up Boss website tracker (Follow Up Boss)</strong></td><td data-l="What it does and what it receives">Ties a website visit to your record in our customer system after you send us a form, so an agent can see what you looked at. Receives your page views and, once you identify yourself on a form, your name and contact details.</td><td data-l="Where it is loaded">All five sites: a script in the head of the pages. Not on the property-registry page.</td><td data-l="Your choice">Decline the cookie notice where it is shown, or use your browser controls.</td></tr>
+<tr><td data-l="Company or tool"><strong>Follow Up Boss (customer relationship manager)</strong></td><td data-l="What it does and what it receives">Holds your form submissions and our notes so an agent can follow up. Not a script on the page: the forms send it your details.</td><td data-l="Where it is loaded">Behind every contact, showing, valuation and sign-up form on all five sites.</td><td data-l="Your choice">Ask us to correct or delete your record.</td></tr>
+<tr><td data-l="Company or tool"><strong>Supabase</strong></td><td data-l="What it does and what it receives">Hosts our database: your account and sign-in (email link, code or password), saved searches, favourites, alert settings and the sold-price sign-in. Receives what you type into those forms.</td><td data-l="Where it is loaded">Gander, Avalon and Goose Bay (account, saved searches, alerts); Lab West (the sold-price sign-in, when that section is open). Not on the Royal LePage Turner hub site.</td><td data-l="Your choice">Do not create an account. You can delete saved searches yourself or ask us to delete the account.</td></tr>
+<tr><td data-l="Company or tool"><strong>jsDelivr (content delivery network)</strong></td><td data-l="What it does and what it receives">Delivers the Supabase sign-in code to your browser. Receives your IP address and browser details, as any web server does.</td><td data-l="Where it is loaded">Gander, Avalon, Goose Bay and Lab West pages that carry sign-in or saved searches, including listing pages.</td><td data-l="Your choice">Browser controls.</td></tr>
+<tr><td data-l="Company or tool"><strong>Anthropic (Claude), the website chat</strong></td><td data-l="What it does and what it receives">Writes the answers in our chat. Receives what you type or say in the chat. Our server does not save the conversation; it stays in your browser tab until you close it, and our host keeps usage counts, not message text. If you give your name and contact details in the chat, they are recorded like a form submission.</td><td data-l="Where it is loaded">Gander, Avalon and Goose Bay: the chat bubble on most pages. Not on Lab West or the hub site.</td><td data-l="Your choice">Do not use the chat. Call 709-256-7999 instead.</td></tr>
+<tr><td data-l="Company or tool"><strong>ElevenLabs</strong></td><td data-l="What it does and what it receives">Turns speech into text and text into speech for the voice features in the chat and the “Hear about this home” audio on listings. Receives the audio you record, or the text to be spoken.</td><td data-l="Where it is loaded">Gander, Avalon and Goose Bay, only when you use a voice feature.</td><td data-l="Your choice">Type instead of speaking.</td></tr>
+<tr><td data-l="Company or tool"><strong>Twilio</strong></td><td data-l="What it does and what it receives">Sends and receives text messages, including Listing Text Alerts. Receives your mobile number and the message.</td><td data-l="Where it is loaded">Gander, Avalon and Goose Bay, only if you turn on Listing Text Alerts.</td><td data-l="Your choice">Reply STOP to any text.</td></tr>
+<tr><td data-l="Company or tool"><strong>Postmark</strong></td><td data-l="What it does and what it receives">Sends the emails we send you, including Listing Email Alerts and replies, and the notices that tell an agent you contacted us. Receives your email address and the message.</td><td data-l="Where it is loaded">Behind the forms and alerts on all sites that send email.</td><td data-l="Your choice">Use the unsubscribe link in any marketing email.</td></tr>
+<tr><td data-l="Company or tool"><strong>Retell</strong></td><td data-l="What it does and what it receives">Runs the automated receptionist that answers calls to 709-256-7999. Receives what you say on the call.</td><td data-l="Where it is loaded">Telephone line, not a website script.</td><td data-l="Your choice">Ask for an agent on the call, or leave a message.</td></tr>
+<tr><td data-l="Company or tool"><strong>Google Places and Address Validation (Google)</strong></td><td data-l="What it does and what it receives">Suggests and checks street addresses as you type them in a form. Receives the characters you type in the address box.</td><td data-l="Where it is loaded">Gander, Avalon and Goose Bay: forms with an address box (home value, showing and valuation requests).</td><td data-l="Your choice">Type the address in full; the suggestions are optional.</td></tr>
+<tr><td data-l="Company or tool"><strong>Google Maps embed (Google)</strong></td><td data-l="What it does and what it receives">Shows our office on a map. Receives your IP address and browser details when the map loads.</td><td data-l="Where it is loaded">The contact pages of Gander, Goose Bay and the Royal LePage Turner hub site.</td><td data-l="Your choice">Browser controls.</td></tr>
+<tr><td data-l="Company or tool"><strong>OpenStreetMap</strong></td><td data-l="What it does and what it receives">Supplies the map tiles on listing and sold maps. Receives your IP address and the map area you view.</td><td data-l="Where it is loaded">Gander, Avalon, Goose Bay and Lab West map pages.</td><td data-l="Your choice">Browser controls.</td></tr>
+<tr><td data-l="Company or tool"><strong>YouTube (Google)</strong></td><td data-l="What it does and what it receives">Plays listing and site videos. Receives your IP address and viewing details when a video loads.</td><td data-l="Where it is loaded">Gander, Avalon and Goose Bay pages with an embedded video.</td><td data-l="Your choice">Do not play the video.</td></tr>
+<tr><td data-l="Company or tool"><strong>TestimonialTree</strong></td><td data-l="What it does and what it receives">Shows client reviews. Receives your IP address and browser details when the reviews load.</td><td data-l="Where it is loaded">Pages that show client reviews on Gander, Avalon, Goose Bay and the Royal LePage Turner hub site.</td><td data-l="Your choice">Browser controls.</td></tr>
+<tr><td data-l="Company or tool"><strong>Google Fonts (Google)</strong></td><td data-l="What it does and what it receives">Delivers the fonts. Receives your IP address and browser details.</td><td data-l="Where it is loaded">All five sites.</td><td data-l="Your choice">Browser controls.</td></tr>
+<tr><td data-l="Company or tool"><strong>Browser notifications (your browser’s own service)</strong></td><td data-l="What it does and what it receives">Delivers a notification if you turn them on. Receives a token that identifies your browser.</td><td data-l="Where it is loaded">Gander, Avalon and Goose Bay, only if you allow notifications.</td><td data-l="Your choice">Turn notifications off in your browser at any time.</td></tr>
+<tr><td data-l="Company or tool"><strong>Netlify and Cloudflare</strong></td><td data-l="What it does and what it receives">Netlify hosts the websites and keeps server access logs; Cloudflare delivers listing photos. Both receive your IP address and browser details.</td><td data-l="Where it is loaded">All five sites (Netlify); Gander, Avalon and Goose Bay listing photos (Cloudflare).</td><td data-l="Your choice">Not optional: they are how a web page reaches you.</td></tr>
+</tbody></table></div>
 
-<h2>Cookies</h2>
-<p>Our website uses cookies and similar technologies for analytics and basic site functionality. These include cookies set by Google Analytics to understand how visitors interact with our site. You can control cookie settings through your browser preferences.</p>
+<h2>Cookies and Your Choices</h2>
+<p>Our own pages keep a few settings in your browser (for example your sign-in, favourites, filters, and the chat conversation for the tab you have open). Google Analytics, the Meta pixel and the Follow Up Boss tracker set their own cookies or identifiers.</p>
+<p>Where our cookie notice is shown, those three tools load only after you choose Accept. If you choose Decline, or do not answer, they are not loaded. Your choice is kept in your browser for 12 months, after which we ask again, and you can change it at any time from the “Cookie settings” link in the page footer. If your browser sends a Global Privacy Control signal, we treat it as Decline. Until the notice is switched on for a site, those three tools load when a page opens; you can still block them with your browser settings or an extension.</p>
 
-<h2>Data Retention</h2>
-<p>We retain personal information for as long as necessary to provide our services and fulfill the purposes described in this policy, or as required by law. Inquiry data is retained for the duration of our business relationship plus any applicable legal retention period.</p>
-
-<h2>Your Rights</h2>
-<p>Under the Personal Information Protection and Electronic Documents Act (PIPEDA), you have the right to:</p>
-<ul>
-  <li>Request access to the personal information we hold about you</li>
-  <li>Request correction of inaccurate information</li>
-  <li>Request deletion of your personal information, subject to legal retention requirements</li>
-  <li>Opt out of marketing communications at any time</li>
-</ul>
-<p>To exercise any of these rights, please contact us using the information below.</p>
+<h2>Listing Text Alerts and Listing Email Alerts</h2>
+<p><strong>Listing Email Alerts</strong> are emails from Royal LePage Turner Realty, 204 Airport Blvd, Gander NL A1V 1L6, about new listings that match what you asked for. <strong>Listing Text Alerts</strong> are text messages about the same. We send them only if you agree: you tick the consent box on the sign-up (email) or on the text-alert sign-up (text), and we record the type of consent, the time and the page. Message and data rates may apply to texts.</p>
+<p>If you only send us an inquiry and do not tick the optional “Also email me updates” box, we rely on the limited consent an inquiry gives, which under Canada’s anti-spam law lasts six months, to contact you about it.</p>
+<p>To stop: reply STOP to any text, or click the unsubscribe link at the bottom of every email. You can also switch alerts off, or unsubscribe from all of them, on your account page, or write to our Privacy Officer.</p>
 
 <h2>How to Unsubscribe</h2>
 <p>You may withdraw consent to receive marketing communications at any time by clicking "unsubscribe" in our emails or by contacting us directly. For text messages, reply STOP.</p>
 
-<h2>Data Security</h2>
-<p>We implement reasonable technical and organizational measures to protect your personal information against unauthorized access, loss, or misuse. However, no method of transmission over the Internet or electronic storage is completely secure.</p>
+<h2>Sharing</h2>
+<p>We share your information with the companies above so they can do their job for us, with the agent who is handling your request, with the Royal LePage network where you ask us to, and where the law requires it. We do not sell it.</p>
 
-<h2>Children's Privacy</h2>
-<p>Our website is not directed to individuals under the age of 18. We do not knowingly collect personal information from children.</p>
+<h2>Retention</h2>
+<p>We keep personal information as long as we need it to serve you and meet our legal obligations. Form submissions are kept in our customer system for the length of our business relationship and any legal retention period. You can ask us to delete your information, subject to those legal requirements.</p>
+
+<h2>Your Rights</h2>
+<p>You may:</p>
+<ul>
+<li>ask to see the personal information we hold about you</li>
+<li>ask us to correct inaccurate information</li>
+<li>withdraw your consent, including to marketing, at any time</li>
+<li>ask us to delete your information, subject to legal retention requirements</li>
+<li>complain to our Privacy Officer, or to the Office of the Privacy Commissioner of Canada at <a href="https://www.priv.gc.ca/" target="_blank" rel="noopener">www.priv.gc.ca</a></li>
+</ul>
+
+<h2>Security and Children</h2>
+<p>We use reasonable technical and organizational safeguards, but no method of sending or storing information is completely secure. Our websites are not directed to anyone under 18 and we do not knowingly collect their information.</p>
 
 <h2>Changes to This Policy</h2>
-<p>We may update this Privacy Policy from time to time. Changes will be posted on this page with an updated revision date. We encourage you to review this policy periodically.</p>
+<p>We will post any change on this page with a new date. Last updated: October 27, 2026.</p>
 
 <h2>Contact Us</h2>
-<p>If you have questions about this Privacy Policy or how we handle your personal information, please contact us:</p>
-<p><strong>Privacy Officer:</strong> Mike Turner, Broker of Record<br>Royal LePage Turner Realty<br>204 Airport Boulevard, Gander, NL A1V 1L6<br>Phone: <a href="tel:7092567999">709-256-7999</a><br>Email: <a href="mailto:miketurner@royallepage.ca">miketurner@royallepage.ca</a></p>
+<p><strong>Privacy Officer:</strong> Mike Turner, Broker of Record, <a href="mailto:miketurner@royallepage.ca">miketurner@royallepage.ca</a><br>Royal LePage Turner Realty<br>204 Airport Blvd, Gander, NL A1V 1L6<br>Phone: <a href="tel:7092567999">709-256-7999</a></p>
+
 </main>
 
 
