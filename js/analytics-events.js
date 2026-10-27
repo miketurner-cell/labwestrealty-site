@@ -56,7 +56,7 @@
   // Consent (D-1027-13 item 8): the Meta pixel starts only after the visitor accepts; with the CONSENT_BANNER
   // switch off, js/consent.js runs it at once, exactly as before. See js/consent.js.
   function consentWhen(cat, fn) {
-    if (window.TurnerConsent) window.TurnerConsent.when(cat, fn);
+    if (window.TurnerCookieConsent) window.TurnerCookieConsent.when(cat, fn);
     else (window.__tcq = window.__tcq || []).push([cat, fn]);
   }
   var GATED_PATH_RE = /^\/(?:listings\/sold\/|property\/)/i;

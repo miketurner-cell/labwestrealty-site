@@ -80,8 +80,8 @@ if os.path.exists(os.path.join(ROOT, "js/tawk.js")):
     tw = rd("js/tawk.js")
     if not (0 <= tw.find("'marketing'") < tw.find("embed.tawk.to") or "when('marketing'" in tw):
         fails.append("C5 tawk.js starts outside the consent gate")
-    elif "TurnerConsent" not in tw:
-        fails.append("C5 tawk.js does not use TurnerConsent")
+    elif "TurnerCookieConsent" not in tw:
+        fails.append("C5 tawk.js does not use TurnerCookieConsent")
 
 # C6
 if "data-consent-settings" not in rd("js/footer.js"):

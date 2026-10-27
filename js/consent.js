@@ -14,7 +14,7 @@
  * How the trackers are held back (pages are static, so the hold is in the HTML):
  *   <script type="text/plain" data-consent="analytics|marketing" [data-src=URL]>...</script>
  * is inert. When the visitor has accepted (or the switch is off for them) this file re-creates each one as a real
- * script. js/analytics-events.js (Meta pixel) and js/tawk.js use TurnerConsent.when() the same way.
+ * script. js/analytics-events.js (Meta pixel) and js/tawk.js use TurnerCookieConsent.when() the same way.
  * Google Consent Mode v2 "basic": the four consent types are pushed as denied FIRST; gtag.js is not even
  * requested until Accept, then the four are updated to granted. Decline / no answer = gtag.js never loads.
  *
@@ -24,7 +24,7 @@
  */
 (function () {
   'use strict';
-  if (window.TurnerConsent) return;
+  if (window.TurnerCookieConsent) return;
 
   var KEY = 'tn_consent';
   var PKEY = 'tn_consent_preview';
@@ -215,7 +215,7 @@
     openBanner();
   });
 
-  window.TurnerConsent = {
+  window.TurnerCookieConsent = {
     when: when,
     state: function () { return state; },
     active: function () { return active; },
