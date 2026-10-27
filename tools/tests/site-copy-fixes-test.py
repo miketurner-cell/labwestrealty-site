@@ -23,7 +23,7 @@ def check(ok, msg):
         fails.append(msg)
 
 SKIP_DIRS = {"listings", "tests", "_research", "_archive", "node_modules", ".git", "seo-cache", "feed-cache", "idx-cache",
-             "ddf-cache", ".github", "build-status", "runbooks", "retell", "fixtures"}
+             ".github", "build-status", "runbooks", "retell", "fixtures"}
 EXTS = (".html", ".js", ".py", ".ts", ".tmpl", ".yml", ".yaml")
 SKIP_CAREERS = re.compile(r"(^|/)(join-our-team|become-a-realtor|first-year[^/]*|why-join|agent-training|labrador-west)\.html$|(^|/)recruit[^/]*$")
 SKIP_FILES = {
