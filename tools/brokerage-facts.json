@@ -1,0 +1,69 @@
+{
+  "_comment": "Brokerage facts that more than one public page states. Byte-identical on all five site repos (always-on #27); the Gander copy is canonical. Added 2026-10-27 (sites, B-1027-07, D-1027-17, D-1026-31). tools/tests/careers-pages-test.py checks the careers pages against it. Never add a number here without a source.",
+  "brand": {
+    "name": "Royal LePage® Turner Realty",
+    "tagline": "Independently owned and operated"
+  },
+  "recruit_comp_line": "70/30 split with profit share. No desk fees.",
+  "recruit_comp_line_source": "Mike Turner, D-1026-31 (2026-10-26): \"70/30 split with profit share (Rec.)\". The fuller pitch (expenses covered except NLAR fees; 10% / 90% profit split) is for 1:1 conversations only (D-1027-16) and never goes on a public page.",
+  "booking_url": "https://calendar.app.google/3S7FJsvtkxxZf9Ja6",
+  "mike_turner": {
+    "firm_founded": 1998,
+    "firm_founder": "Gaye Turner",
+    "with_family_firm_since": 1998,
+    "built_first_website_year": 1998,
+    "licensed": 2009,
+    "broker_of_record_since": 2022,
+    "education": "Studied computer science at Dalhousie, then graduated from the Toronto Film School",
+    "bio": "Mike Turner has worked with the family firm, Turner Realty, since 1998, when he built its first website. Gaye Turner founded the firm that year. Mike was licensed in 2009 and has been Broker of Record since 2022. He studied computer science at Dalhousie, then graduated from the Toronto Film School.",
+    "bio_short": "With the family firm since 1998 (he built its first website that year), licensed 2009, Broker of Record since 2022.",
+    "source": "Mike Turner, D-1027-17 (2026-10-27), answers \"2022\", \"Both, in order (Rec.)\" and \"Since 1998 with the family firm\"."
+  },
+  "offices": {
+    "count": 2,
+    "list": [
+      "Gander (204 Airport Boulevard)",
+      "Happy Valley-Goose Bay (371 Hamilton River Road, Suite 102)"
+    ],
+    "note": "Labrador West is recruiting-only with no office; the Avalon site has no office address.",
+    "source": "Workspace CLAUDE.md, Office / NAP facts; confirmed by Mike D-1027-32 (2026-10-27): 2 offices (Gander, Happy Valley-Goose Bay)."
+  },
+  "reviews": {
+    "count": null,
+    "source": "No hand-typed review number on any page (D-1027-32). The only live Google review count is tools/gbp-fragments/google-review-count.html (Gander and Goose Bay repos), written by the GBP rating sync (pulled 2026-10-27T17:02:01Z showed '11 Reviews' for Goose Bay) and injected into testimonials pages; the TestimonialTree count on homepages is kept by tools/sync-review-stats.py from tools/tt-cache/testimonials.json. Careers and About pages state no count; a page that cannot read a feed at build time states none.",
+    "note": "Lab West, Avalon and the hub have no review feed, so they state no number."
+  },
+  "official_sources": {
+    "nlar_orientation_days": {
+      "value": 60,
+      "text": "New members are required to complete the four orientation courses within the first two months (60 days) of joining NLAR.",
+      "url": "https://nlar.ca/become-a-realtor-info/new-realtor-orientation/",
+      "read": "2026-10-27"
+    },
+    "nlar_dues_per_month": {
+      "value": 253,
+      "text": "approximately $253 per month, varying with the number of new listings",
+      "url": "https://nlar.ca/become-a-realtor-info/what-to-expect/",
+      "read": "2026-10-27",
+      "fees_updated": "November 2025"
+    },
+    "nlar_startup_total": {
+      "value": 1918,
+      "text": "Total (start-up) $1918; all fees subject to 15% HST",
+      "url": "https://nlar.ca/become-a-realtor-info/what-to-expect/",
+      "read": "2026-10-27"
+    },
+    "nlar_ce_credits": {
+      "value": "12 credits per two-year cycle",
+      "text": "All REALTOR members are required to complete a minimum of 12 credits in each RPDP cycle; the cycle is two years starting April 1.",
+      "url": "https://nlar.ca/wp-content/uploads/2023/04/Education-Book-2023-25.pdf",
+      "read": "2026-10-27"
+    },
+    "regulator": {
+      "value": "Government Services",
+      "text": "Salesperson Licensing - Government Services",
+      "url": "https://www.gov.nl.ca/gs/real-estate/licensing-salesperson/",
+      "read": "2026-10-27"
+    }
+  }
+}

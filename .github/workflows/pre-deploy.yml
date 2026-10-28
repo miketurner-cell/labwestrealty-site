@@ -84,6 +84,13 @@ jobs:
         # Follow Up Boss, Avalon never says "Royal LePage Central", Lab West never says "no office yet". Careers pages skipped (other builder). Offline.
         run: python3 tools/tests/site-copy-fixes-test.py
 
+      - name: Careers pages - one comp line, booking link, join form, no retired claims; one bio for Mike (STRICT 2244 + 2245, sites 2026-10-27)
+        # B-1027-07 (Mike D-1026-31, D-1027-03, D-1027-16, D-1027-17). Same two tests and the same js/careers-kit.js + tools/brokerage-facts.json on all
+        # five site repos (Gander registers them as strict.d/2244 and 2245). Offline. Exits 1 on drift.
+        run: |
+          python3 tools/tests/careers-pages-test.py
+          python3 tools/tests/careers-bio-test.py
+
       - name: SEO safety check (STRICT — a live page may not lose title, canonical, index status or sitemap entry)
         run: python3 tools/seo-safety-check.py
 
