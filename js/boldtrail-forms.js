@@ -155,7 +155,7 @@ var BoldTrailForms = (function() {
         .rf-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; transition: opacity 0.25s; }\
         .rf-overlay.rf-open { opacity: 1; }\
         .rf-overlay .rf-modal { position: relative; max-height: 90vh; overflow-y: auto; width: 100%; max-width: 540px; }\
-        .rf-overlay .rf-close { position: absolute; top: 12px; right: 16px; background: none; border: none; color: rgba(255,255,255,0.4); font-size: 1.5rem; cursor: pointer; z-index: 1; line-height: 1; padding: 4px 8px; }\
+        .rf-overlay .rf-close { position: absolute; top: 12px; right: 16px; background: none; border: none; color: rgba(255,255,255,.5); font-size: 1.5rem; cursor: pointer; z-index: 1; line-height: 1; padding: 4px 8px; }\
         .rf-overlay .rf-close:hover { color: #fff; }\
         .rf-form-wrap { max-width: 520px; margin: 0 auto; background: #1a1a1a; padding: 40px 32px; border-radius: 8px; border: 1px solid #2a2a2a; font-family: "Roboto", sans-serif; }\
         .rf-form-wrap h3 { font-family: "Raleway", sans-serif; font-weight: 900; font-size: 1.5rem; color: #fff; margin: 0 0 10px 0; line-height: 1.3; }\
