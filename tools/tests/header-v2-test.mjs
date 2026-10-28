@@ -74,7 +74,7 @@ if (h2) {
 // More: one button (aria-expanded, aria-controls -> the panel), the panel's links are the config's header2.more plus the other regions
 ok(/<button class="nav2-more-btn" type="button" aria-expanded="false" aria-controls="nav2-more-panel">More<\/button>/.test(nav)
   && /<div class="nav2-more-panel" id="nav2-more-panel">/.test(nav), 'a "More" button with aria-expanded and aria-controls over its panel of links');
-ok(/Array\.isArray\(H2\.more\) \? H2\.more\.slice\(\)/.test(nav) && /liveRegions\(\)\.forEach/.test(nav), 'the More links are header2.more plus the other regions and partner brokerages, no words added in nav.js');
+ok(/Array\.isArray\(H2\.more\) \? H2\.more\.slice\(\)/.test(nav) && /liveRegions\(\)\.forEach/.test(nav), 'the More links are header2.more plus the other regions and other Royal LePage brokerages, no words added in nav.js');
 ok(/k === 'Escape'/.test(nav) && /setOpen\(false\); btn\.focus\(\);/.test(nav) && /k === 'ArrowDown'/.test(nav) && /k === 'ArrowUp'/.test(nav) && /'focusout'/.test(nav),
   'More: Escape closes and returns focus to the button, arrows move, focus leaving closes it');
 ok(/setAttribute\('aria-expanded', o \? 'true' : 'false'\)/.test(nav), 'More: aria-expanded follows the open state');

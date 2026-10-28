@@ -168,9 +168,7 @@
   // 2026-08-26 (later) precedent this replaces: 2 peer Royal LePage brokerages,
   // NOT Turner-operated (tools/regions.json operator:"peer"); Lewisporte/
   // Twillingate stay Turner's own (Gander/Crystal Hynes) despite Generation
-  // Realty's own site also listing them -- Mike's explicit call, 2026-08-26:
-  // "Gander right now should supersede anything Generation Realty is doing
-  // until we bring them into the fold."
+  // Realty's own site also listing them -- Mike's explicit call, 2026-08-26.
   var FALLBACK_REGIONS = [
     { site: 'gander',   site_key: 'gander',   label: 'Gander and Area', url: 'https://realestategander.com/' },
     { site: 'avalon',   site_key: 'avalon',   label: 'Avalon',     url: 'https://avalonrealestate.ca/' },
@@ -179,19 +177,19 @@
     { site: 'corner-brook-west-coast', site_key: null, label: 'Corner Brook', url: 'https://royallepagenlrealty.ca/', peer: true }
   ];
 
-  // Partner brokerages labelled in every header and phone menu (D-1009-17,
-  // 2026-10-09): Grand Falls and Corner Brook are independent Royal LePage
-  // brokerages (tools/regions.json operator:"peer"), not Turner offices. The
-  // wording is the hub's own region grid badge, verbatim ("Partner
-  // Brokerage", royallepageturner.com index.html), so the strip and the
-  // More menu say what the hub already says.
-  var PEER_BADGE = 'Partner Brokerage';
+  // Other Royal LePage brokerages labelled in every header and phone menu:
+  // Grand Falls and Corner Brook are independent Royal LePage brokerages
+  // (tools/regions.json operator:"peer"), not Turner offices. The wording is
+  // the hub's own region grid badge, verbatim ("Independent Brokerage",
+  // royallepageturner.com index.html), so the strip and the More menu say
+  // what the hub already says.
+  var PEER_BADGE = 'Independent Brokerage';
   function regionLinkText(r) {
     // Plain text, no new class: every class nav.js emits needs CSS on all five sites (pre-deploy Check #32).
     return r.peer ? r.label + ' &middot; ' + PEER_BADGE : r.label;
   }
   function regionLinkTitle(r) {
-    return r.peer ? ' title="' + PEER_BADGE + ': an independent Royal LePage brokerage we partner with"' : '';
+    return r.peer ? ' title="An independent Royal LePage brokerage"' : '';
   }
 
   // ── Header search (2026-09-25) ──────────────────────────────────────
