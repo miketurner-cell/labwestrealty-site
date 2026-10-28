@@ -48,10 +48,18 @@ def html_files():
     tmpl = [p for p in out if re.search(r"/(listings|property|community|sold)/", p)]
     keep = [p for p in out if p not in set(tmpl)]
     step = max(1, len(tmpl) // 150)
-    return keep + tmpl[::step]
+    sample = tmpl[::step]
+    # Tour embeds (iGUIDE, Matterport) depend on each listing's data, not the template: a spread sample flips between
+    # 'loads it' and 'does not' as listings come and go (sites 2026-10-28, Avalon). Add every templated page that embeds one.
+    picked = set(sample)
+    tours = [t for t in tmpl if t not in picked and TOUR_EMBED.search(read(t))]
+    return keep + sample + tours
 
 
 # ----------------------------------------------------------------------------------------------- the policy table
+TOUR_EMBED = re.compile(r'<iframe[^>]+src="https://(?:[a-z.]*youriguide\.com|my\.matterport\.com)')
+
+
 def policy_page():
     for c in ("pages/privacy-policy.html", "privacy-policy.html"):
         if (ROOT / c).is_file():
