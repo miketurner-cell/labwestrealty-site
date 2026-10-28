@@ -7,6 +7,9 @@
  * asks realestategander.com's recruit-inquiry function whether the form is open (gate RECRUIT_FORM). Only on {enabled:true}
  * do the buttons open the form; anything else (off, error, offline) leaves the mailto exactly as it was.
  * The form posts to that function, which emails Mike Turner only: no copy to anyone, no CRM, no database.
+ * Avalon (Mike's D-1009-13, 2026-10-09: "Me, plus Chris on Avalon"): on https://avalonrealestate.ca the form goes to Mike AND
+ * Chris Morrison, the same rule recruit-inquiry.ts uses (site avalon AND that Origin); the copy, the direct-contact link and the
+ * gate-off mailto name both there. Every other site (and any mismatch) stays Mike only.
  */
 (function () {
   'use strict';
@@ -16,6 +19,8 @@
   var BROKER_NAME = 'Mike Turner';
   var BROKER_EMAIL = 'miketurner@royallepage.ca'; // tools/agent_roster.json slug mike-turner (checked by tools/tests/recruit-form-test.py)
   var BROKER_PHONE = '709-424-6517';
+  var AVALON_PARTNER_NAME = 'Chris Morrison';
+  var AVALON_PARTNER_EMAIL = 'cmorrison@royallepage.ca'; // tools/agent_roster.json slug chris-morrison (checked by tools/tests/recruit-form-copy-test.py)
   var host = location.hostname;
   var local = host === 'localhost' || host === '127.0.0.1';
   var ENDPOINT = (local || /(^|\.)realestategander\.com$/.test(host) ? '' : 'https://realestategander.com') + '/.netlify/functions/recruit-inquiry';
@@ -30,6 +35,12 @@
     if (/goosebay/.test(host)) return 'goosebay';
     return 'gander';
   }
+
+  // Mike and Chris only where recruit-inquiry.ts sends to both: site avalon AND the page served from https://avalonrealestate.ca.
+  function both() { return siteId() === 'avalon' && location.origin === 'https://avalonrealestate.ca'; }
+  function toNames() { return both() ? BROKER_NAME + ' and ' + AVALON_PARTNER_NAME : BROKER_NAME; }
+  function toEmails() { return both() ? BROKER_EMAIL + ',' + AVALON_PARTNER_EMAIL : BROKER_EMAIL; }
+  function they() { return both() ? 'They' : 'He'; }
 
   function css() {
     if (document.getElementById('rcf-style')) return;
@@ -88,8 +99,9 @@
   }
 
   function alt() {
-    return 'Prefer to reach Mike directly? <a href="mailto:' + BROKER_EMAIL + '">' + BROKER_EMAIL + '</a> or <a href="tel:+1' +
-      BROKER_PHONE.replace(/\D/g, '') + '">' + BROKER_PHONE + '</a>.';
+    var tel = '<a href="tel:+1' + BROKER_PHONE.replace(/\D/g, '') + '">' + BROKER_PHONE + '</a>';
+    if (both()) return 'Prefer to reach Mike and Chris directly? <a href="mailto:' + toEmails() + '">Email both</a> or call Mike at ' + tel + '.';
+    return 'Prefer to reach Mike directly? <a href="mailto:' + BROKER_EMAIL + '">' + BROKER_EMAIL + '</a> or ' + tel + '.';
   }
 
   function open(evt) {
@@ -102,7 +114,7 @@
       '<button type="button" class="rcf-x" aria-label="Close">&times;</button>' +
       '<p class="rcf-conf">Confidential</p>' +
       '<h2 id="rcf-title">Talk to the broker</h2>' +
-      '<p class="rcf-sub">This goes only to ' + BROKER_NAME + ', Broker/Owner. It is not copied to anyone else at the brokerage and is not added to our client database. He will contact you personally.</p>' +
+      '<p class="rcf-sub">This goes only to ' + (both() ? toNames() : BROKER_NAME + ', Broker/Owner') + '. It is not copied to anyone else at the brokerage and is not added to our client database. ' + they() + ' will contact you personally.</p>' +
       '<form novalidate>' +
       '<div class="rcf-row"><div class="rcf-f"><label for="rcf-name">Name</label><input type="text" id="rcf-name" name="name" autocomplete="name" required></div>' +
       '<div class="rcf-f"><label for="rcf-phone">Phone</label><input type="tel" id="rcf-phone" name="phone" autocomplete="tel" required></div></div>' +
@@ -111,8 +123,8 @@
       '<div class="rcf-f"><label for="rcf-years">Years licensed</label><select id="rcf-years" name="years_licensed" required><option value="">Choose one</option>' + opts + '</select></div></div>' +
       '<div class="rcf-f"><label for="rcf-msg">Message</label><textarea id="rcf-msg" name="message" required placeholder="Where you are now and what you would like to talk about"></textarea></div>' +
       '<div class="rcf-hp" aria-hidden="true"><label for="rcf-hp">Company website</label><input type="text" id="rcf-hp" class="rcf-hp-in" name="company_website" tabindex="-1" autocomplete="off"></div>' +
-      '<label class="rcf-consent"><input type="checkbox" name="consent" required><span>I agree that ' + BROKER_NAME + ' may contact me by email or phone about this inquiry.</span></label>' +
-      '<button type="submit" class="rcf-go">Send to ' + BROKER_NAME + '</button>' +
+      '<label class="rcf-consent"><input type="checkbox" name="consent" required><span>I agree that ' + toNames() + ' may contact me by email or phone about this inquiry.</span></label>' +
+      '<button type="submit" class="rcf-go">Send to ' + toNames() + '</button>' +
       '<p class="rcf-err" role="alert"></p>' +
       '<p class="rcf-alt">' + alt() + '</p>' +
       '</form>');
@@ -149,8 +161,8 @@
       }).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok && j && j.ok, j: j || {} }; }); })
         .then(function (res) {
           if (res.ok) {
-            box.querySelector('form').innerHTML = '<p class="rcf-sub" style="font-size:16px;color:#111;"><strong>Sent.</strong> Only ' + BROKER_NAME +
-              ' receives this. He will contact you personally.</p><button type="button" class="rcf-go">Close</button>';
+            box.querySelector('form').innerHTML = '<p class="rcf-sub" style="font-size:16px;color:#111;"><strong>Sent.</strong> Only ' + toNames() +
+              (both() ? ' receive this. ' : ' receives this. ') + they() + ' will contact you personally.</p><button type="button" class="rcf-go">Close</button>';
             var c = box.querySelector('.rcf-go');
             c.addEventListener('click', function () { close(back); openBack = null; });
             c.focus();
@@ -158,20 +170,27 @@
           } else {
             err.innerHTML = (res.j.message ? res.j.message + ' ' : 'It did not send. ') + alt();
             err.style.display = 'block';
-            btn.disabled = false; btn.textContent = 'Send to ' + BROKER_NAME;
+            btn.disabled = false; btn.textContent = 'Send to ' + toNames();
           }
         })
         .catch(function () {
           err.innerHTML = 'It did not send. ' + alt();
           err.style.display = 'block';
-          btn.disabled = false; btn.textContent = 'Send to ' + BROKER_NAME;
+          btn.disabled = false; btn.textContent = 'Send to ' + toNames();
         });
     });
   }
 
   function wire() {
     var links = document.querySelectorAll('a[data-recruit-cta]');
-    if (!links.length || typeof fetch !== 'function') return;
+    if (!links.length) return;
+    if (both()) { // the gate-off fallback names both on Avalon even if a page still carries the Mike-only mailto
+      for (var k = 0; k < links.length; k++) {
+        var h = links[k].getAttribute('href') || '';
+        if (h.indexOf('mailto:' + BROKER_EMAIL + '?') === 0 || h === 'mailto:' + BROKER_EMAIL) links[k].setAttribute('href', 'mailto:' + toEmails() + h.slice(('mailto:' + BROKER_EMAIL).length));
+      }
+    }
+    if (typeof fetch !== 'function') return;
     fetch(ENDPOINT, { method: 'GET', headers: { Accept: 'application/json' } })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) {
