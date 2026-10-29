@@ -140,7 +140,7 @@ ACCOUNTED_HOSTS = {
     "www.youtube-nocookie.com", "places.googleapis.com", "addressvalidation.googleapis.com", "maps.googleapis.com",
     "unpkg.com", "tile.openstreetmap.org", "www.openstreetmap.org", "photos.realestategander.com",
     "photos.avalonrealestate.ca", "photos.goosebayrealestate.ca", "photos.labwestrealty.com",
-    "youriguide.com", "unbranded.youriguide.com", "my.matterport.com", "cdn.realtyvis.com", "rlpnetwork.com",
+    "youriguide.com", "unbranded.youriguide.com", "manage.youriguide.com", "my.matterport.com", "cdn.realtyvis.com", "rlpnetwork.com",
     "static.cloudflareinsights.com",
     "d3e54v103j8qbb.cloudfront.net",   # Follow Up Boss widget tracker (the WidgetTrackerObject loader)
     "cdn.followupboss.com", "widgetbe.com", "app.followupboss.com",
