@@ -216,18 +216,24 @@ var BoldTrailForms = (function() {
     function recordFormLoad(formId) { formLoadTimes[formId] = Date.now(); }
     function secondsSinceLoad(formId) { return formLoadTimes[formId] ? (Date.now() - formLoadTimes[formId]) / 1000 : 999; }
 
+    // Returns 'bot-honeypot' if the hidden field is filled, or null. D-1104-30: nothing else may block a lead: a person
+    // named Root or J, or a fast autofill, is a real inquiry, so those go through flagged (reviewFlags) for the agent to judge.
     function botCheck(formId, data) {
         if (data._hp_company && data._hp_company.trim() !== '') return 'bot-honeypot';
-        if (secondsSinceLoad(formId) < 3) return 'bot-too-fast';
+        return null;
+    }
+
+    // What looks odd about a submission, for the agent. Never a reason to drop it.
+    function reviewFlags(formId, data) {
+        var flags = [];
+        if (secondsSinceLoad(formId) < 3) flags.push('submitted-fast');
         var fn = (data.first_name || '').trim().toLowerCase();
         var ln = (data.last_name || '').trim().toLowerCase();
         var junkNames = ['xyz', 'xxx', 'aaa', 'bbb', 'test', 'asdf', 'qwerty', 'john doe', 'jane doe', 'n/a', 'na', 'none', 'null', 'undefined', 'admin', 'root'];
-        if (junkNames.indexOf(fn) !== -1 || (ln && junkNames.indexOf(ln) !== -1)) return 'bot-junk-name';
-        if (fn.length < 2) return 'bot-short-name';
-        if (ln && ln.length > 0 && ln.length < 2) return 'bot-short-name';
-        var em = (data.email || '').trim().toLowerCase();
-        if (/^(test|spam|fake|bot|noreply|no-reply)@/i.test(em)) return 'bot-fake-email';
-        return null;
+        if (junkNames.indexOf(fn) !== -1 || (ln && junkNames.indexOf(ln) !== -1)) flags.push('odd-name');
+        if (fn.length < 2 || (ln && ln.length < 2)) flags.push('short-name');
+        if (/^(test|spam|fake|bot|noreply|no-reply)@/i.test((data.email || '').trim())) flags.push('odd-email');
+        return flags;
     }
 
     var honeypotHTML = '<div class="rf-hp-field" aria-hidden="true"><label for="rf_hp_check">Verify</label><input type="text" name="rf_hp_check" id="rf_hp_check" autocomplete="off" tabindex="-1"></div>';
@@ -261,6 +267,8 @@ var BoldTrailForms = (function() {
             referer_url: window.location.href
         };
         if (data.assignees) payload.assignees = data.assignees;
+        if (data.website) payload.website = data.website;
+        if (data.review_flags) payload.review_flags = data.review_flags;
         // Structured enrichment (2026-06-18): forward listing/buyer-criteria so the
         // agent's kvCORE view shows them in native fields, not buried in the note blob.
         // Part 8 §8.3(e), the infinite loop's E8 referral edge: passive "Who referred
@@ -289,9 +297,8 @@ var BoldTrailForms = (function() {
         .then(function(res) {
             if (res.ok || res.status === 200 || res.status === 201 || res.status === 204) {
                 // GA4 + ad-platform mirror via analytics-events.js.
-                // Bot-blocked submits short-circuit in safePostLead,
-                // so only real submits reach here.
-                if (typeof window.trackLead === 'function') {
+                // A filled hidden field (payload.website) isn't a real submit: no conversion.
+                if (!payload.website && typeof window.trackLead === 'function') {
                     try {
                         window.trackLead(payload.lead_source || 'boldtrail-form', {
                             region: SITE_REGION,
@@ -365,12 +372,9 @@ var BoldTrailForms = (function() {
             if (hpInput) hpVal = hpInput.value;
         }
         data._hp_company = hpVal;
-        var botResult = botCheck(formId, data);
-        if (botResult) {
-            console.warn('Bot detected (' + botResult + ') — submission blocked');
-            setTimeout(function() { callback(null); }, 800);
-            return;
-        }
+        // D-1104-30: the hidden field still gets the same thank-you, but the server now keeps a row and a log line.
+        if (botCheck(formId, data)) { data.website = hpVal; }
+        else { var flags = reviewFlags(formId, data); if (flags.length) data.review_flags = flags.join(','); }
         postLead(data, callback);
     }
 

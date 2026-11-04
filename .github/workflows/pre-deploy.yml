@@ -166,6 +166,9 @@ jobs:
       - name: Lab West become-a-realtor title (cloud sun-1)
         run: python3 tools/tests/cloud-labwest-titles-test.py
 
+      - name: Forms never drop a real person (D-1104-30)
+        run: node tools/tests/form-no-drop-client-test.mjs
+
       - name: Post-deploy live check works offline, read-only, no alert channel (STRICT, D-1021-07)
         run: python3 tools/tests/post-deploy-live-check-test.py
 
