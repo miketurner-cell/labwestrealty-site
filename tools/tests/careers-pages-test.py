@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """careers-pages-test.py -- STRICT 2244 (sites, B-1027-07; Mike D-1026-31, D-1027-03, D-1027-16, D-1027-17).
 Every careers / join / become-a-realtor / first-year / why-join page on this site:
-  * states the ONE comp line "70/30 split with profit share. No desk fees." and none of the retired comp wording;
+  * answers pay only with "Every situation is different. We'll talk it through personally once you reach out." and carries none of the retired pay wording (Mike, D-1104-56);
   * carries the booking link as its main button, no confidential mailto, one recruit phone number;
   * loads js/careers-kit.js and holds the short join form (data-tk-join) and the brand line;
   * carries none of the unverified claims D-1026-31 removed, and the NLAR / Government Services facts as read on 2026-10-27.
@@ -13,7 +13,7 @@ R = Path(__file__).resolve().parent.parent.parent
 NAMES = ("become-a-realtor.html", "first-year-realtor-nl.html", "join-our-team.html", "why-join.html")
 PAGES = [p for n in NAMES for p in (n, "pages/" + n) if (R / p).exists()]
 facts = json.loads((R / "tools/brokerage-facts.json").read_text(encoding="utf-8"))
-BOOK, COMP = facts["booking_url"], facts["recruit_comp_line"]
+BOOK, COMP = facts["booking_url"], facts["recruit_pay_answer"]
 fails = []
 def need(c, m):
     if not c: fails.append(m)
@@ -32,7 +32,7 @@ for rel in PAGES:
         m = re.search(b, low, re.I)
         need(not m, f"{rel}: retired/unverified wording back: {m.group(0) if m else ''}")
     need(BOOK in t, f"{rel}: booking link missing")
-    need(COMP in re.sub(r"<[^>]+>", "", t).replace("&amp;", "&"), f"{rel}: the comp line is missing")
+    need(COMP in re.sub(r"<[^>]+>", "", t).replace("&amp;", "&"), f"{rel}: the pay answer is missing")
     need("careers-kit.js" in t, f"{rel}: js/careers-kit.js not loaded")
     need("data-tk-join" in t, f"{rel}: the short join form container is missing")
     need('id="join-form"' in t, f"{rel}: no #join-form anchor")
@@ -55,8 +55,11 @@ for rel in PAGES:
                 need(k in d, f"{rel}: JobPosting lacks {k}")
             need("baseSalary" not in d, f"{rel}: JobPosting must not carry baseSalary (commission-based; value 0 is invalid)")
             need(d.get("hiringOrganization", {}).get("name") == "Royal LePage Turner Realty", f"{rel}: JobPosting hiringOrganization")
-for p in list(R.glob("*.html")) + list(R.glob("pages/*.html")):
+PAY_BANNED = r"70/30|70-30|profit.?shar|desk fees?|commission splits?|competitive splits?|no guaranteed base salary|Splits, profit|brokerage-level MLS fee|how commission works|turn into income"
+for p in list(R.glob("*.html")) + list(R.glob("pages/*.html")) + list(R.glob("fragments/careers*.html")):
     _t = p.read_text(encoding="utf-8", errors="replace")
+    _m = re.search(PAY_BANNED, _t, re.I)
+    need(not _m, f"{p.name}: pay wording on a public page (D-1104-56): {_m.group(0) if _m else str()}")
     need("340 verified five-star reviews" not in _t, f"{p.name}: hand-typed review count (D-1027-32: no typed review numbers)")
     need("three-office" not in _t and "four-office" not in _t, f"{p.name}: wrong office count (facts file says 2)")
     need(not re.search(r"<h4>[34]</h4>\s*<p>Offices Active</p>", _t), f"{p.name}: office count tile is not 2")
@@ -81,7 +84,8 @@ need("Source: Join Our Team" in kit and "miketurner@royallepage.ca" in kit, "car
 need("By sending, you agree we may contact you about this request." in kit and "Also email me updates" in kit, "careers-kit.js: consent wording missing")
 need(len(re.findall(r"autocomplete=\"(name|email|tel|address-level2)\"", kit)) >= 4, "careers-kit.js: autocomplete attributes missing")
 need("font-size:16px" in kit, "careers-kit.js: inputs below 16px")
-need(facts["recruit_comp_line"] == "70/30 split with profit share. No desk fees.", "facts: comp line changed")
+need(facts["recruit_pay_answer"] == "Every situation is different. We'll talk it through personally once you reach out.", "facts: pay answer changed")
+need("recruit_comp_line" not in facts, "facts: the retired pay line is back")
 src = facts["official_sources"]
 need(src["nlar_orientation_days"]["value"] == 60 and src["nlar_dues_per_month"]["value"] == 253 and src["nlar_startup_total"]["value"] == 1918, "facts: NLAR numbers")
 if fails:
