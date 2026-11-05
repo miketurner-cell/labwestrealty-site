@@ -429,7 +429,6 @@
       // Bot protection
       var hp = document.getElementById('rf_hp_check');
       if (hp && hp.value.trim() !== '') { alert('Thank you! Your inquiry has been sent.'); return; }
-      if ((Date.now() - formLoadTime) / 1000 < 3) { alert('Thank you! Your inquiry has been sent.'); return; }
 
       // Gather form data
       var name = document.getElementById('name').value;

@@ -24,5 +24,23 @@ check('safePostLead never fakes success without posting', !/callback\(null\)/.te
 check('postLead forwards website and review_flags', /payload\.website = data\.website/.test(bt) && /payload\.review_flags = data\.review_flags/.test(bt));
 const fp = path.join(root, 'js/forms-v2.js');
 if (existsSync(fp)) check('forms-v2: no path fakes success', !/if \(bot\)/.test(readFileSync(fp, 'utf8')));
+
+// D-1104-30: no public page keeps its own client-side drop. Only the hidden field may block.
+import { readdirSync as __rd } from 'node:fs';
+for (const dir of ['.', 'pages']) {
+  const abs = path.join(root, dir);
+  if (!existsSync(abs)) continue;
+  for (const f of __rd(abs)) {
+    if (!f.endsWith('.html')) continue;
+    const s = readFileSync(path.join(abs, f), 'utf8');
+    check(`${dir}/${f}: no inline drop`, !/submission blocked|bot-too-fast|bot-short-name|bot-junk-name|bot-fake-email|formLoadTime\) \/ 1000 < 3\) \{ (?:alert|window\.location)/.test(s));
+  }
+}
+const shimPath = path.join(root, 'js/lead-shim.js');
+if (existsSync(shimPath)) {
+  const s = readFileSync(shimPath, 'utf8');
+  check('lead-shim forwards website and review_flags', /out\.website = p\.website/.test(s) && /out\.review_flags = p\.review_flags/.test(s));
+}
+
 if (failed) process.exit(1);
 console.log('form-no-drop-client-test: all checks passed');

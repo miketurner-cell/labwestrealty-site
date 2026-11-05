@@ -28,7 +28,7 @@
     if (input && typeof input === 'object') { for (var j in input) if (input.hasOwnProperty(j)) p[j] = input[j]; }
     var tag = p.tag;
     if (!Array.isArray(tag)) tag = tag ? [tag] : [];
-    return {
+    var out = {
       source: 'web',
       first_name: p.first_name || '',
       last_name: p.last_name || '',
@@ -39,6 +39,10 @@
       lead_source: p.source || p.lead_source || 'Website',
       referer_url: (typeof window !== 'undefined' && window.location) ? window.location.href : ''
     };
+    // D-1104-30: lead-receive keeps a filled hidden field as a spam row, and shows the agent what looked odd.
+    if (p.website) out.website = p.website;
+    if (p.review_flags) out.review_flags = p.review_flags;
+    return out;
   }
 
   function capture(channel, input) {
