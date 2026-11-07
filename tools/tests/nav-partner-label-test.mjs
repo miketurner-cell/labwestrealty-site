@@ -2,7 +2,7 @@
 // nav-partner-label-test.mjs (STRICT, D-1009-17, 2026-10-09)
 // Grand Falls and Corner Brook are independent Royal LePage brokerages
 // (tools/regions.json operator:"peer"). Every header region strip and the
-// phone "More" menu label them "Partner Brokerage", the hub region grid's
+// phone "More" menu label them "Independent Brokerage", the hub region grid's
 // own badge wording. Reads js/nav.js (Tier-1, byte-identical on all five
 // sites) and runs its real label helpers. Offline. Exits 1 on failure.
 import fs from 'fs';
@@ -13,21 +13,21 @@ const src = fs.readFileSync(path.join(root, 'js', 'nav.js'), 'utf8');
 let fails = 0;
 const check = (c, m) => { if (c) { console.log('ok   ' + m); } else { fails++; console.error('FAIL ' + m); } };
 
-const a = src.indexOf("  var PEER_BADGE = 'Partner Brokerage';");
+const a = src.indexOf("  var PEER_BADGE = 'Independent Brokerage';");
 const b = src.indexOf('  function regionLinkTitle(r)', a);
 const c = src.indexOf('\n  }\n', b) + 4;
 check(a > 0 && b > a && c > b, 'PEER_BADGE + regionLinkText/regionLinkTitle present in js/nav.js');
 const h = new Function(src.slice(a, c) + '\nreturn { text: regionLinkText, title: regionLinkTitle };')();
-check(h.text({ label: 'Grand Falls', peer: true }) === 'Grand Falls &middot; Partner Brokerage', 'peer link reads "Grand Falls · Partner Brokerage"');
-check(h.text({ label: 'Corner Brook', peer: true }) === 'Corner Brook &middot; Partner Brokerage', 'peer link reads "Corner Brook · Partner Brokerage"');
+check(h.text({ label: 'Grand Falls', peer: true }) === 'Grand Falls &middot; Independent Brokerage', 'peer link reads "Grand Falls · Independent Brokerage"');
+check(h.text({ label: 'Corner Brook', peer: true }) === 'Corner Brook &middot; Independent Brokerage', 'peer link reads "Corner Brook · Independent Brokerage"');
 check(h.text({ label: 'Avalon', peer: false }) === 'Avalon', 'Turner regions are unlabelled');
-check(/independent Royal LePage brokerage/.test(h.title({ peer: true })), 'peer link title says independent Royal LePage brokerage');
+check(/independent Royal LePage brokerage/.test(h.title({ peer: true })) && !/partner/i.test(h.title({ peer: true }) + h.text({ label: 'x', peer: true })), 'peer link title says independent Royal LePage brokerage and no wording implies an agreement');
 
 // Both surfaces use the helper, and both region sources carry the flag.
 check(/'>' \+ regionLinkText\(r\) \+ '<\/a>'/.test(src), 'region strip (header) uses regionLinkText');
 check(/items\.push\(\[regionLinkText\(rg\), rg\.url\]\)/.test(src), 'phone/More menu (header v2) uses regionLinkText');
 check(/peer: reg\[k\]\.operator === 'peer'/.test(src), 'liveRegions() carries operator "peer" from regions-data.js');
-check((src.match(/url: 'https:\/\/(generationrealty|royallepagenlrealty)\.ca\/', peer: true \}/g) || []).length === 2, 'fallback region list marks both partner brokerages');
+check((src.match(/url: 'https:\/\/(generationrealty|royallepagenlrealty)\.ca\/', peer: true \}/g) || []).length === 2, 'fallback region list marks both other-brokerage regions');
 
 // The registry agrees: the two are the only "peer" regions.
 const reg = fs.readFileSync(path.join(root, 'js', 'regions-data.js'), 'utf8');
