@@ -175,6 +175,11 @@ jobs:
       - name: Consent gate -- no tracker starts before Accept when CONSENT_BANNER is on; consent scripts first; generators gated (STRICT 2242, sites D-1027-13 item 8)
         run: python3 tools/tests/consent-gate-test.py
 
+      - name: Market-stats pages never show a single sale's price (STRICT 2956, sites B-1110-03)
+        # Same test file as Gander's STRICT 2956. Feeds build-market-stats-page.py a month with a record median and a record top sale; no
+        # "Highest sale this month" line, no highest_sale_record milestone, median/average still render. Offline. Exits 1 on drift.
+        run: python3 tools/tests/market-no-highest-sale-test.py
+
   # D-1021-07 (Mike, 2026-10-21, "Post-deploy live check (Recommended)"): after a push to main, wait for Netlify and check what a signed-out
   # visitor gets. A job here, not a new workflow, because labwest-registry-test.py (3) keeps every other workflow dispatch-only. Read-only
   # (plain GETs; no secret, because labwest-switch-test keeps pre-deploy.yml secret-free); the alert is this run going red. No hourly schedule: Lab West has no scheduled deploy.

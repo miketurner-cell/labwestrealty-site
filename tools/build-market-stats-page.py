@@ -2092,15 +2092,6 @@ def compute_record_claims(region, cfg, spot):
                          f"highest monthly median in our {n_months}-month record."),
             })
 
-        hi = cur.get("max_price")
-        others = _others("max_price")
-        if hi is not None and others and hi > max(others):
-            claims.append({
-                "kind": "highest_sale_record",
-                "text": (f"The month's top sale of {fmt_price_full(hi)} is the "
-                         f"highest single sale in our {n_months}-month record."),
-            })
-
         cnt = cur.get("count")
         others = _others("count")
         if cnt is not None and others and cnt > max(others):
@@ -2202,13 +2193,6 @@ def build_monthly_spotlight_section(cfg, region, agg, spot):
               is_pts=True),
     ])
 
-    highest = current.get("max_price")
-    highest_html = (
-        f'<div class="ms-spotlight-highest">Highest sale this month: '
-        f'<span>{fmt_price_full(highest)}</span></div>'
-        if highest else ""
-    )
-
     through = (agg or {}).get("latest_close_date")
     through_html = (
         f'<div class="ms-spotlight-note">Based on MLS&reg; closings reported '
@@ -2216,8 +2200,8 @@ def build_monthly_spotlight_section(cfg, region, agg, spot):
         f'the most recent weeks fill in over time.</div>'
         if through else ""
     )
-    foot = (f'\n      <div class="ms-spotlight-foot">{highest_html}{through_html}</div>'
-            if (highest_html or through_html) else "")
+    foot = (f'\n      <div class="ms-spotlight-foot">{through_html}</div>'
+            if through_html else "")
 
     # Only promise the year-ago comparison in the heading when it is actually
     # rendered — an incomplete month shows bare figures and no deltas.
