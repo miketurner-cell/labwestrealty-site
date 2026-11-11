@@ -173,6 +173,10 @@ jobs:
       - name: Post-deploy live check works offline, read-only, no alert channel (STRICT, D-1021-07)
         run: python3 tools/tests/post-deploy-live-check-test.py
 
+      - name: Sales-to-new-listings chart - thin-month note on every market page, rolling 3-month series for small areas (STRICT 2958, sites B-1110-03)
+        # Same test file as Gander's STRICT 2958. Fabricated counts only, offline.
+        run: python3 tools/tests/market-snlr-rolling-test.py
+
       - name: Consent gate -- no tracker starts before Accept when CONSENT_BANNER is on; consent scripts first; generators gated (STRICT 2242, sites D-1027-13 item 8)
         run: python3 tools/tests/consent-gate-test.py
 
