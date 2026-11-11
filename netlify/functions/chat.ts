@@ -387,7 +387,7 @@ function findAgent(input: any): any {
   }
   if (want.includes("goosebay") || want.includes("happyvalley") || want.includes("hvgb") || want.includes("northwestriver")) {
     return {
-      note: `${input.community} is in the Lake Melville area — covered by the Turner Realty Team at the Goose Bay office.`,
+      note: `${input.community} is in the Lake Melville area — covered by the Turner Realty Team in Happy Valley-Goose Bay.`,
       site: "https://goosebayrealestate.ca",
       phone: "709-896-5001",
     };
