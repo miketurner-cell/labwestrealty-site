@@ -651,7 +651,7 @@ _SITE_TEAM_FALLBACK = {
                             "line": "Royal LePage Turner Realty · St. John’s & the Avalon."},
     "goosebayrealestate.ca": {"name": "Karen Pomeroy & Roberta Primmer", "photo": "/images/karen-pomeroy.jpg",
                               "phone": "709-896-5001", "email": "goosebay@royallepage.ca",
-                              "line": "The Dynamic Duo · Royal LePage Turner Realty, Happy Valley-Goose Bay."},
+                              "line": "Turner Realty Team · Royal LePage Turner Realty, Happy Valley-Goose Bay."},
     # Lab West (D-1012-28/33): Mike Turner, Broker of Record, is the contact. No office address.
     "labwestrealty.com": {"name": "Mike Turner", "photo": "/images/mike-turner.jpg",
                           "phone": "709-256-7999", "email": "miketurner@royallepage.ca",

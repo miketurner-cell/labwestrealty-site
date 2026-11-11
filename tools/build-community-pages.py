@@ -639,7 +639,7 @@ def _watch_community_link(city_slug: str, city_label: str) -> str:
 def build_agent_cta(cfg, am):
     """Territory-agent card + 'Ask' lead form on every Goosebay community page.
 
-    Goose Bay is served by The Dynamic Duo (Karen Pomeroy + Roberta Primmer, 50-50
+    Goose Bay is served by Karen Pomeroy + Roberta Primmer (50-50
     partners), so the duo variant renders BOTH agents on one card and deliberately
     emits an EMPTY data-agent-email: js/boldtrail-forms.js communityInquiry falls
     through to data-team-email (goosebay@royallepage.ca), which lets lead-receive
@@ -665,7 +665,7 @@ def build_agent_cta(cfg, am):
 
     if is_duo:
         agents = a.get("agents", []) or []
-        title = esc(a.get("team_name", "The Dynamic Duo"))
+        title = esc(a.get("team_name", "Turner Realty Team"))
         form_name = a.get("form_name", title)
         # overlapping portraits + both names; profile links stay per-agent
         photos = "".join(
