@@ -585,12 +585,24 @@
     // critical: the search sheet stays hidden until header-v2.css arrives (the sheet is built at once; the CSS loads after)
     var crit = document.createElement('style');
     crit.setAttribute('data-header-v2-critical', '1');
-    crit.textContent = '.nav-search-sheet:not(.open){display:none}';
+    // CLS fix (D-1112-08, Fix 1): the header markup is written before header-v2.css arrives, so on a cold load it painted unstyled
+    // (~270px tall) and collapsed when the file landed. Until the file loads (or fails, or 4s pass) the two bars are hidden and held
+    // at their final height (top line 40px on desktop and gone on phone, main bar 60px / 57px), so nothing below them moves.
+    var pre = 'html.header-v2:not(.h2-css) ';
+    crit.textContent = '.nav-search-sheet:not(.open){display:none}' +
+      pre + '.region-strip{display:none}' +
+      pre + '.nav-top-bar,' + pre + '.nav-main-bar{visibility:hidden;overflow:hidden;box-sizing:border-box;margin:0;padding:0}' +
+      pre + '.nav-top-bar{height:40px!important;min-height:0!important}' + pre + '.nav-main-bar{height:60px!important;min-height:0!important}' +
+      '@media(max-width:1023px){' + pre + '.nav-top-bar{display:none}' + pre + '.nav-main-bar{height:57px!important}}';
     document.head.appendChild(crit);
     var base = NAV_SRC && /js\/nav\.js(\?[^#]*)?(#.*)?$/.test(NAV_SRC)
       ? NAV_SRC.replace(/js\/nav\.js(\?[^#]*)?(#.*)?$/, 'css/header-v2.css') : '/css/header-v2.css';
     var l = document.createElement('link');
     l.rel = 'stylesheet'; l.href = base + (header2Stamp() ? '?v=' + header2Stamp() : ''); l.setAttribute('data-header-v2', '1');
+    var shown = false;
+    function showHeader2() { if (shown) return; shown = true; document.documentElement.classList.add('h2-css'); }
+    l.onload = l.onerror = showHeader2;
+    setTimeout(showHeader2, 4000);
     document.head.appendChild(l);
   }
   function top2HTML() {
