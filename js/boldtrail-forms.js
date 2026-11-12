@@ -389,7 +389,7 @@ var BoldTrailForms = (function() {
         el.innerHTML = '\
         <div class="rf-form-wrap" id="' + id + '">\
             <h3>Find Out What Your Home Is Worth in Today\'s Market</h3>\
-            <p class="rf-subhead">We know the Labrador market. Get a free, no-obligation valuation from Karen and Roberta &mdash; the Dynamic Duo.</p>\
+            <p class="rf-subhead">We know the Labrador market. Get a free, no-obligation valuation from Karen and Roberta of the Turner Realty Team.</p>\
             <form>\
                 <div class="rf-row">\
                     <div class="rf-field"><label>First Name</label><input type="text" name="fname" required placeholder="First name"></div>\
@@ -1408,7 +1408,7 @@ function marketReport(selector) {
         var listingPrice   = el.getAttribute('data-listing-price') || '';
         var mlsNumber      = el.getAttribute('data-mls-number') || '';
         var agentEmail     = el.getAttribute('data-agent-email') || el.getAttribute('data-team-email') || '';
-        var teamName       = el.getAttribute('data-team-name') || 'The Dynamic Duo';
+        var teamName       = el.getAttribute('data-team-name') || 'Turner Realty Team';
 
         var tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
