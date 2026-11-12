@@ -592,8 +592,8 @@
     crit.textContent = '.nav-search-sheet:not(.open){display:none}' +
       pre + '.region-strip{display:none}' +
       pre + '.nav-top-bar,' + pre + '.nav-main-bar{visibility:hidden;overflow:hidden;box-sizing:border-box;margin:0;padding:0}' +
-      pre + '.nav-top-bar{height:40px}' + pre + '.nav-main-bar{height:60px}' +
-      '@media(max-width:1023px){' + pre + '.nav-top-bar{display:none}' + pre + '.nav-main-bar{height:57px}}';
+      pre + '.nav-top-bar{height:40px!important;min-height:0!important}' + pre + '.nav-main-bar{height:60px!important;min-height:0!important}' +
+      '@media(max-width:1023px){' + pre + '.nav-top-bar{display:none}' + pre + '.nav-main-bar{height:57px!important}}';
     document.head.appendChild(crit);
     var base = NAV_SRC && /js\/nav\.js(\?[^#]*)?(#.*)?$/.test(NAV_SRC)
       ? NAV_SRC.replace(/js\/nav\.js(\?[^#]*)?(#.*)?$/, 'css/header-v2.css') : '/css/header-v2.css';

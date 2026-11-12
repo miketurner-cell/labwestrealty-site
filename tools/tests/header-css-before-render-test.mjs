@@ -28,9 +28,9 @@ ok(/setTimeout\(showHeader2, \d{4}\)/.test(fn), 'a timeout shows the header even
 // held heights equal the real ones in header-v2.css
 const topH = +(/--h2-top-h:\s*(\d+)px/.exec(css) || [])[1], mainH = +(/--h2-h:\s*(\d+)px/.exec(css) || [])[1];
 const phoneMin = +(/max-width: 1023px\)[\s\S]*?\.nav-main-bar\.nav2 \{[^}]*min-height: (\d+)px/.exec(css) || [])[1];
-ok(topH > 0 && new RegExp('\\.nav-top-bar\\{height:' + topH + 'px\\}').test(fn), 'held top-line height = --h2-top-h (' + topH + 'px)');
-ok(mainH > 0 && new RegExp('\\.nav-main-bar\\{height:' + mainH + 'px\\}').test(fn), 'held main-bar height = --h2-h (' + mainH + 'px)');
-ok(phoneMin > 0 && new RegExp('max-width:1023px\\)\\{.*\\.nav-main-bar\\{height:' + (phoneMin + 1) + 'px\\}').test(fn), 'held phone main-bar height = min-height + 1px border (' + (phoneMin + 1) + 'px)');
+ok(topH > 0 && new RegExp('\\.nav-top-bar\\{height:' + topH + 'px!important;min-height:0!important\\}').test(fn), 'held top-line height = --h2-top-h (' + topH + 'px), overriding any min-height');
+ok(mainH > 0 && new RegExp('\\.nav-main-bar\\{height:' + mainH + 'px!important;min-height:0!important\\}').test(fn), 'held main-bar height = --h2-h (' + mainH + 'px), overriding any min-height');
+ok(phoneMin > 0 && new RegExp('max-width:1023px\\)\\{.*\\.nav-main-bar\\{height:' + (phoneMin + 1) + 'px!important\\}').test(fn), 'held phone main-bar height = min-height + 1px border (' + (phoneMin + 1) + 'px)');
 ok(/max-width:1023px\)\{' \+ pre \+ '\.nav-top-bar\{display:none\}/.test(fn), 'the top line is absent on phone, as in header-v2.css');
 console.log(`\n${passes} passed, ${FAIL.length} failed`);
 process.exit(FAIL.length ? 1 : 0);
