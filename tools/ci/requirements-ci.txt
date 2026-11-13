@@ -1,0 +1,4 @@
+# Python packages the Pre-deploy tests import (tools/tests/ci-requirements-test.py checks this list). Pinned to the first runner box.
+PyYAML==6.0.3
+requests==2.34.2
+pillow==12.3.0

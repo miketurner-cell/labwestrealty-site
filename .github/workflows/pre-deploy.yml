@@ -70,6 +70,15 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install test dependencies (tools/ci/requirements-ci.txt)
+        # 2026-11-13 (sites, Mike D-1113-68): the jobs run under the setup-python tool-cache interpreter, which on a fresh runner has no
+        # third-party packages (a second box failed every run with "No module named 'yaml'" while the first box's copy had them from a
+        # hand install). Declared here and installed on every runner, self-hosted or hosted, pinned to the versions the first box has.
+        run: python3 -m pip install --disable-pip-version-check --quiet -r tools/ci/requirements-ci.txt
+
+      - name: Every third-party module a test imports is declared in tools/ci/requirements-ci.txt (STRICT 3012, sites D-1113-68)
+        run: python3 tools/tests/ci-requirements-test.py
+
       - name: Full-site pre-deploy check (STRICT — errors block, warnings allowed)
         run: python3 tools/pre-deploy-check.py
 
@@ -101,9 +110,6 @@ jobs:
 
       - name: Lab West switch is wired dark (STRICT — every workflow gates on LABWEST_LISTINGS before any pull)
         run: python3 tools/tests/labwest-switch-test.py
-
-      - name: Install feed-tool imports (the scope test imports the ingest and photo-sync tools)
-        run: python3 -m pip install --quiet requests Pillow pyyaml
 
       - name: Lab West feed scope, lease drop and site config (STRICT — Labrador City + Wabush only, no leases, R2 prefix labwest/)
         run: python3 tools/tests/labwest-scope-test.py
