@@ -17,7 +17,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '.
 const file = path.join(root, 'js', 'feedback-followup.js');
 const js = fs.readFileSync(file, 'utf8');
 const sf = fs.readFileSync(path.join(root, 'js', 'site-feedback.js'), 'utf8');
-const SHA = '06d6fbfce2f17470c2ec011916dc1e1e808548a838d86448abf47c5e2407871c';
+const SHA = 'f5e5c83d6364fb4c541b710f506deec15012cc922a050e75daaa3a35ab5e3e4b';
 let fails = 0;
 const check = (c, m) => { if (c) console.log('ok   ' + m); else { fails++; console.error('FAIL ' + m); } };
 
@@ -32,8 +32,8 @@ check(/feedback-followup\.js/.test(branch) && (sf.match(/feedback-followup\.js/g
 // (2) per-site contact page + phone
 const want = {
   'realestategander.com': ['/pages/contact.html', '709-256-7999'],
-  'goosebayrealestate.ca': ['/pages/contact.html', '709-896-5001'],
-  'avalonrealestate.ca': ['/pages/contact.html', '709-725-6520'],
+  'goosebayrealestate.ca': ['/pages/contact.html', '709-349-7008'],
+  'avalonrealestate.ca': ['/pages/contact.html', '709-349-7008'],   // D-1113-86: was 709-725-6520 (Chris's cell); restore when Mike says Chris is back
   'labwestrealty.com': ['/contact.html', '709-256-7999'],
   'royallepageturner.com': ['/contact.html', '709-256-7999'],
 };

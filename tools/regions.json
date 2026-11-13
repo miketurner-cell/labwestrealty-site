@@ -158,9 +158,10 @@
       "office": {
         "name": "Royal LePage Turner Realty (Avalon)",
         "address": "",
-        "phone": "709-725-6520",
+        "phone": "709-349-7008",
         "email": "cmorrison@royallepage.ca"
       },
+      "_note_2026-11-13": "D-1113-86: was 709-725-6520 (Chris's cell); restore when Mike says Chris is back",
       "_provenance": "fb-post.py:REGION_POSTAL['avalon'] (2026-08-07-corrected, copied verbatim from avalonrealestate-site's own idx-photo-sync.py:AVALON_POSTAL_PREFIXES); tools/_fleet_config.json; tools/region-config/avalon.yml children; tools/idx-cache/live-aggregates.json; office phone/email from stjohns-site/pages/chris-morrison.html + CLAUDE.md canonical inquiry table (address was previously blank in fleet/config/avalon.json and js/turner-network.js SITE_NAP -- filled here from the same canonical table; 2026-10-09 D-1009-62: address emptied again -- Avalon has no office location (Mike: Gander is head office, Chris works from home), so no St. John's address is ever shown; js/turner-network.js omits an empty address, tools/_email.py falls back to its own value)",
       "order": 2,
       "routes": {
@@ -199,9 +200,10 @@
       "office": {
         "name": "Royal LePage Turner Realty (Happy Valley-Goose Bay)",
         "address": "371 Hamilton River Road, Suite 102, Happy Valley-Goose Bay, NL A0P 1C0",
-        "phone": "709-896-5001",
+        "phone": "709-349-7008",
         "email": "goosebay@royallepage.ca"
       },
+      "_note_2026-11-13": "Mike 2026-11-13 (\"Now\"): Goose Bay office line shown as the AI receptionist; was 709-896-5001",
       "_provenance": "fb-post.py:REGION_POSTAL['goosebay']; tools/_fleet_config.json; tools/region-config/labrador.yml children; tools/idx-cache/live-aggregates.json; office address/phone/email from CLAUDE.md canonical Office/NAP facts (was previously null in this file)",
       "order": 3,
       "routes": {

@@ -21,8 +21,8 @@
   // live 2026-10-15). An unknown host (a deploy preview, localhost) gets no card rather than another site's details.
   var SITES = {
     'realestategander.com': { contact: '/pages/contact.html', phone: '709-256-7999' },
-    'goosebayrealestate.ca': { contact: '/pages/contact.html', phone: '709-896-5001' },
-    'avalonrealestate.ca': { contact: '/pages/contact.html', phone: '709-725-6520' },
+    'goosebayrealestate.ca': { contact: '/pages/contact.html', phone: '709-349-7008' },
+    'avalonrealestate.ca': { contact: '/pages/contact.html', phone: '709-349-7008' },   // D-1113-86: was 709-725-6520 (Chris's cell); restore when Mike says Chris is back
     'labwestrealty.com': { contact: '/contact.html', phone: '709-256-7999' },
     'royallepageturner.com': { contact: '/contact.html', phone: '709-256-7999' }
   };
