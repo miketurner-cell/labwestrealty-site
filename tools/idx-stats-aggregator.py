@@ -989,6 +989,20 @@ def build_snlr(by_year_month, ledger_months, *, latest_close_date=None, today=No
         that the live union is still near-complete.
       * BOTH SIDES ABOVE THE FLOOR — see SNLR_MIN_SALES / SNLR_MIN_NEW_LISTINGS.
 
+    SMALL AREAS (series_basis == "rolling_3mo"). Of the area's sales-complete,
+    ledger-locked months, if FEWER THAN HALF pass the single-month floors the
+    area is "small": a single month there is too thin to read. Its series is
+    then a rolling three-month one (rolling_by_month). A point for month M is
+    (sales over M, M-1, M-2) / (new listings over the same three months),
+    computed as SUMS THEN ONE DIVISION (ratios are never averaged), and only
+    when all three months are consecutive ledger months that are each sales-
+    complete AND locked (the same fail-closed tests as a single month) and the
+    two three-month sums each clear the same floors. For a small area
+    rolling_3mo is the latest such point, so the stat cell, the summary
+    sentence, the PDF and the alerts read the same figure the chart ends on,
+    and `latest` (a single month) is withheld rather than contradict it.
+    Every other area keeps series_basis == "monthly", unchanged.
+
     Returns None when nothing qualifies; callers render nothing rather than
     something hedged."""
     if not by_year_month or not ledger_months:
@@ -1002,6 +1016,7 @@ def build_snlr(by_year_month, ledger_months, *, latest_close_date=None, today=No
         return str(latest_close_date)[:7] > key
 
     by_month = {}
+    complete_locked = set()
     for key in sorted(ledger_months):
         bucket = by_year_month.get(key) or {}
         sales = bucket.get("count") or 0
@@ -1024,8 +1039,64 @@ def build_snlr(by_year_month, ledger_months, *, latest_close_date=None, today=No
             rec["ratio_pct"] = round(sales / new_listings * 100, 1)
             rec.update(_snlr_condition(rec["ratio_pct"]))
         by_month[key] = rec
+        if _sales_complete(key) and bool(entry.get("locked")):
+            complete_locked.add(key)
 
     eligible_keys = [k for k in sorted(by_month) if by_month[k]["eligible"]]
+
+    # Small-area rule: fewer than half of the complete+locked months pass the
+    # single-month floors. No complete+locked month at all is NOT small (there
+    # is nothing to judge it by); that case falls through to the None below.
+    n_usable = len(complete_locked)
+    n_pass = sum(1 for k in complete_locked if by_month[k]["eligible"])
+    small_area = n_usable > 0 and n_pass * 2 < n_usable
+
+    rolling_by_month = {}
+    for key in sorted(ledger_months):
+        y, m = (int(x) for x in key.split("-")[:2])
+        window = []
+        for _ in range(3):
+            window.append(_month_key(y, m))
+            y, m = _prev_month(y, m)
+        window.reverse()                      # oldest .. key
+        if not all(w in complete_locked for w in window):
+            continue                          # a gap / unlocked / still-reporting month breaks the window
+        s = sum(by_month[w]["sales"] for w in window)
+        n = sum(by_month[w]["new_listings"] for w in window)
+        ok = s >= SNLR_MIN_SALES and n >= SNLR_MIN_NEW_LISTINGS
+        rrec = {"months": window, "sales": s, "new_listings": n, "eligible": ok}
+        if ok:
+            rrec["ratio_pct"] = round(s / n * 100, 1)
+            rrec.update(_snlr_condition(rrec["ratio_pct"]))
+        rolling_by_month[key] = rrec
+    rolling_ok = [k for k in sorted(rolling_by_month) if rolling_by_month[k]["eligible"]]
+
+    thresholds = {"buyer_max": SNLR_BUYER_MAX, "seller_min": SNLR_SELLER_MIN,
+                  "min_sales": SNLR_MIN_SALES, "min_new_listings": SNLR_MIN_NEW_LISTINGS}
+
+    if small_area:
+        if not rolling_ok:
+            return None
+        lk = rolling_ok[-1]
+        lr = rolling_by_month[lk]
+        rolling = {k: lr[k] for k in ("months", "sales", "new_listings", "ratio_pct",
+                                      "condition", "condition_label")}
+        pa = _month_key(int(lk[:4]) - 1, int(lk[5:7]))
+        prior_year = None
+        if (rolling_by_month.get(pa) or {}).get("eligible"):
+            pr = rolling_by_month[pa]
+            prior_year = {"rolling_3mo": {k: pr[k] for k in (
+                "months", "sales", "new_listings", "ratio_pct", "condition", "condition_label")}}
+        return {
+            "latest": None,
+            "rolling_3mo": rolling,
+            "prior_year": prior_year,
+            "by_month": by_month,
+            "rolling_by_month": rolling_by_month,
+            "series_basis": "rolling_3mo",
+            "thresholds": thresholds,
+        }
+
     if not eligible_keys:
         return None
 
@@ -1078,7 +1149,9 @@ def build_snlr(by_year_month, ledger_months, *, latest_close_date=None, today=No
         "rolling_3mo": rolling,
         "prior_year": prior_year,
         "by_month": by_month,
-        "thresholds": {"buyer_max": SNLR_BUYER_MAX, "seller_min": SNLR_SELLER_MIN},
+        "rolling_by_month": rolling_by_month,
+        "series_basis": "monthly",
+        "thresholds": thresholds,
     }
 
 

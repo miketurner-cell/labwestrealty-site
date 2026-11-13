@@ -3237,16 +3237,39 @@ def build_supply_trend_section(cfg, region):
     ledger only started 2026-05, so depth grows one point per month rather
     than arriving fully formed. Returns (html, chart_data) so build_chart_js
     can render the canvas the html declares; chart_data is None when '' is
-    returned, mirroring the ten_year/monthly pattern."""
+    returned, mirroring the ten_year/monthly pattern.
+
+    Small areas (the aggregator's series_basis == "rolling_3mo") plot the
+    rolling three-month series instead, each point labelled by its last month.
+    Every page carries a plain note under the chart saying what is left out;
+    its floors come from the aggregator's thresholds (the constants), the
+    literals below are only a fallback for an aggregate written before they
+    were emitted."""
     snlr = (region or {}).get("snlr") or {}
-    by_month = snlr.get("by_month") or {}
     thr = snlr.get("thresholds") or {}
+    rolling_mode = snlr.get("series_basis") == "rolling_3mo"
+    by_month = (snlr.get("rolling_by_month") if rolling_mode else snlr.get("by_month")) or {}
     eligible = sorted(k for k, v in by_month.items() if v.get("eligible"))
     if len(eligible) < 2:
         return "", None
     label = cfg.get("label", "This market")
     buyer_max = thr.get("buyer_max", 40)
     seller_min = thr.get("seller_min", 60)
+    min_sales = thr.get("min_sales", 5)
+    min_new = thr.get("min_new_listings", 5)
+    if rolling_mode:
+        chart_title = "Sales-to-New-Listings Ratio (rolling 3 months)"
+        lead = "Sales-to-new-listings ratio, rolling three-month windows"
+        note = (f"Each point covers that month and the two before it, because single months "
+                f"here are too small to read on their own. Three-month windows with fewer "
+                f"than {min_sales:g} sales or {min_new:g} new listings, or with sales still "
+                f"being reported, are left out.")
+    else:
+        chart_title = "Sales-to-New-Listings Ratio"
+        lead = "Sales-to-new-listings ratio, month by month"
+        note = (f"Months with fewer than {min_sales:g} sales or {min_new:g} new listings, or "
+                f"whose sales are still being reported, are left out, so a thin month "
+                f"doesn't read as a market shift.")
 
     color_for = {"buyer": "#60a5fa", "balanced": "#fbbf24", "seller": "#22c55e"}
     labels, data, colors = [], [], []
@@ -3264,14 +3287,15 @@ def build_supply_trend_section(cfg, region):
       <div class="ms-section-head">
         <div class="ms-eyebrow">Supply Trend</div>
         <h2>Is {label}<br><em>Shifting?</em></h2>
-        <p>Sales-to-new-listings ratio, month by month &mdash; under {buyer_max:g}% favours buyers, over {seller_min:g}% favours sellers. This is a new measure we started tracking in May 2026, so it gains one more month every month rather than showing a full year at once.</p>
+        <p>{lead} &mdash; under {buyer_max:g}% favours buyers, over {seller_min:g}% favours sellers. This is a new measure we started tracking in May 2026, so it gains one more month every month rather than showing a full year at once.</p>
       </div>
       <div class="ms-chart-wrap">
-        <div class="ms-chart-title">Sales-to-New-Listings Ratio</div>
+        <div class="ms-chart-title">{chart_title}</div>
         <div class="ms-chart-sub">{cfg.get("geo_description", label)}</div>
         <div class="ms-chart-canvas-wrap">
           <canvas id="chartSupplyTrend" height="220"></canvas>
         </div>
+        <p class="ms-chart-note" style="margin:14px 0 0;font-size:13px;line-height:1.5;color:#a0a0a0;">{note}</p>
       </div>
     </div>
   </div>'''
