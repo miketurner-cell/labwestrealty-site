@@ -13,7 +13,7 @@ window.TURNER_REGIONS = {
       "address": "",
       "email": "cmorrison@royallepage.ca",
       "name": "Royal LePage Turner Realty (Avalon)",
-      "phone": "709-725-6520"
+      "phone": "709-349-7008"
     },
     "office_key": "avalon",
     "operator": "turner",
@@ -193,7 +193,7 @@ window.TURNER_REGIONS = {
       "address": "371 Hamilton River Road, Suite 102, Happy Valley-Goose Bay, NL A0P 1C0",
       "email": "goosebay@royallepage.ca",
       "name": "Royal LePage Turner Realty (Happy Valley-Goose Bay)",
-      "phone": "709-896-5001"
+      "phone": "709-349-7008"
     },
     "office_key": "goosebay",
     "operator": "turner",
