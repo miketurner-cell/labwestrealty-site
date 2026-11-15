@@ -371,6 +371,11 @@ else:
 def _basename_passes(fname):
     if fname in EXCLUDE_FILES:
         return False
+    # Google Search Console ownership files (googlef<16 hex>.html): one line of
+    # plain text Google fetches to verify the site, never a page. Skipped so a
+    # verification file can't fail the page checks (seo, D-1115-19, 2026-11-15).
+    if re.fullmatch(r"google[0-9a-f]{16}\.html", fname):
+        return False
     for pattern in args.exclude:
         if fnmatch.fnmatch(fname, pattern):
             return False
