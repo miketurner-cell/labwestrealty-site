@@ -4337,7 +4337,7 @@ def build_listing_page(listing: dict, all_listings: list | None = None) -> str:
 
 <script src="../../js/footer.js?v=20260909-footer-converge"></script>
 <script src="/js/lead-shim.js"></script>
-<script src="../../js/boldtrail-forms.js?v=d7dca662"></script>
+<script src="../../js/boldtrail-forms.js?v=40da79f6"></script>
 <script src="../../js/regions-data.js" defer></script>
 <script src="../../js/nav-config.js" defer></script>
 <script src="../../js/nav-config-listings.js" defer></script>

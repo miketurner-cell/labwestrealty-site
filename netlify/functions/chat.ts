@@ -389,7 +389,7 @@ function findAgent(input: any): any {
     return {
       note: `${input.community} is in the Lake Melville area — covered by The Dynamic Duo at the Goose Bay office.`,
       site: "https://goosebayrealestate.ca",
-      phone: "709-896-5001",
+      phone: "709-349-7008",
     };
   }
   return {

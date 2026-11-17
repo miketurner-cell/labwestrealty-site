@@ -650,7 +650,7 @@ _SITE_TEAM_FALLBACK = {
                             "phone": "709-725-6520", "email": "cmorrison@royallepage.ca",
                             "line": "Royal LePage Turner Realty · St. John’s & the Avalon."},
     "goosebayrealestate.ca": {"name": "Karen Pomeroy & Roberta Primmer", "photo": "/images/karen-pomeroy.jpg",
-                              "phone": "709-896-5001", "email": "goosebay@royallepage.ca",
+                              "phone": "709-349-7008", "email": "goosebay@royallepage.ca",
                               "line": "The Dynamic Duo · Royal LePage Turner Realty, Happy Valley-Goose Bay."},
     # Lab West (D-1012-28/33): Mike Turner, Broker of Record, is the contact. No office address.
     "labwestrealty.com": {"name": "Mike Turner", "photo": "/images/mike-turner.jpg",
@@ -1814,7 +1814,7 @@ def build_cta(cfg):
     would have been wrong the moment a 2nd Goosebay market-stats page shipped)."""
     heading = cfg.get("cta_heading", "Know What Your Home Is Worth.")
     sub = cfg.get("cta_sub", "")
-    phone = cfg.get("cta_phone", "709-896-5001")
+    phone = cfg.get("cta_phone", "709-349-7008")
     phone_display = cfg.get("cta_phone_display", f"Call {phone}")
     phone_digits = phone.replace("-", "")
     region_key = html.escape(cfg.get("region_key", ""), quote=True)
