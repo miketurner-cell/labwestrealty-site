@@ -436,7 +436,7 @@ def build_scripts(cfg):
     # "Ask" form that build_agent_cta emits on EVERY community page, without
     # waking the page's dormant exit-intent / sticky-bar.
     lead = ('<script>(function(){var s=document.createElement("script");'
-            's.src="../js/boldtrail-forms.js?v=d7dca662";'
+            's.src="../js/boldtrail-forms.js?v=40da79f6";'
             's.onload=function(){'
             'if(window.BoldTrailForms&&BoldTrailForms.communityInquiry)'
             'BoldTrailForms.communityInquiry("#cmx-ask-' + s + '");'
@@ -658,7 +658,7 @@ def build_agent_cta(cfg, am):
     label = esc(cfg["label"])
     is_duo = a.get("variant") == "duo"
     email = a.get("email", "goosebay@royallepage.ca")
-    phone = a.get("phone", "709-896-5001")
+    phone = a.get("phone", "709-349-7008")
     pd = "".join(c for c in phone if c.isdigit())
     head = esc(a.get("headline") or f"Your {cfg['label']} expert")
     tag = esc(a.get("tagline", ""))

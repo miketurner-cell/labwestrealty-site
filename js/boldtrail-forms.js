@@ -447,7 +447,7 @@ var BoldTrailForms = (function() {
                 timeline: timeline || undefined
             }, function(error) {
                 if (error) {
-                    err.textContent = 'Something went wrong. Please call us at 709-896-5001.';
+                    err.textContent = 'Something went wrong. Please call us at 709-349-7008.';
                     err.style.display = 'block';
                     btn.disabled = false; btn.textContent = 'GET MY FREE VALUATION';
                 } else {
@@ -621,12 +621,12 @@ function marketReport(selector) {
                             '<p>We\'re preparing this month\'s ' + chosenRegionLabel + ' report &mdash; it\'ll arrive in your inbox shortly, and you\'ll get an updated one each month.</p>');
                     }
                 } else {
-                    err.textContent = 'Something went wrong. Please call us at 709-896-5001.';
+                    err.textContent = 'Something went wrong. Please call us at 709-349-7008.';
                     err.style.display = 'block';
                     btn.disabled = false; btn.textContent = 'SEND ME THE REPORT';
                 }
               }).catch(function () {
-                err.textContent = 'Something went wrong. Please call us at 709-896-5001.';
+                err.textContent = 'Something went wrong. Please call us at 709-349-7008.';
                 err.style.display = 'block';
                 btn.disabled = false; btn.textContent = 'SEND ME THE REPORT';
               });
@@ -717,7 +717,7 @@ function marketReport(selector) {
                 interest_area: area || undefined
             }, function(error) {
                 if (error) {
-                    err.textContent = 'Something went wrong. Please call us at 709-896-5001.';
+                    err.textContent = 'Something went wrong. Please call us at 709-349-7008.';
                     err.style.display = 'block';
                     btn.disabled = false; btn.textContent = 'SEND ME LISTINGS';
                 } else {
@@ -795,7 +795,7 @@ function marketReport(selector) {
                 timeline: timeline || undefined
             }, function(error) {
                 if (error) {
-                    err.textContent = 'Something went wrong. Please call us at 709-896-5001.';
+                    err.textContent = 'Something went wrong. Please call us at 709-349-7008.';
                     err.style.display = 'block';
                     btn.disabled = false; btn.textContent = 'SEND ME THE INFO PACKAGE';
                 } else {
@@ -868,7 +868,7 @@ function marketReport(selector) {
 
             safePostLead(id, data, function(error) {
                 if (error) {
-                    err.textContent = 'Something went wrong. Please call us at 709-896-5001.';
+                    err.textContent = 'Something went wrong. Please call us at 709-349-7008.';
                     err.style.display = 'block';
                     btn.disabled = false; btn.textContent = 'SEND MY INQUIRY';
                 } else {
@@ -1006,7 +1006,7 @@ function marketReport(selector) {
 
             safePostLead(id, data, function(error) {
                 if (error) {
-                    err.textContent = 'Something went wrong. Please call ' + (agentPhone || '709-896-5001') + ' directly.';
+                    err.textContent = 'Something went wrong. Please call ' + (agentPhone || '709-349-7008') + ' directly.';
                     err.style.display = 'block';
                     btn.disabled = false; btn.textContent = 'SEND MESSAGE';
                 } else {
@@ -1208,7 +1208,7 @@ function marketReport(selector) {
 
             safePostLead(id, data, function(error) {
                 if (error) {
-                    err.textContent = 'Something went wrong. Please call us at 709-896-5001.';
+                    err.textContent = 'Something went wrong. Please call us at 709-349-7008.';
                     err.style.display = 'block';
                     btn.disabled = false; btn.textContent = 'TALK TO AN AGENT';
                 } else {
@@ -1238,7 +1238,7 @@ function marketReport(selector) {
         if (/goosebay/.test(h)) return 'goosebay';
         return 'gander';
     }
-    var RECRUIT_CLOSED_HTML = 'Our online form is not available right now. Please call the office at <a href="tel:+17098965001" style="color:inherit;font-weight:600;">709-896-5001</a>.';
+    var RECRUIT_CLOSED_HTML = 'Our online form is not available right now. Please call the office at <a href="tel:+17093497008" style="color:inherit;font-weight:600;">709-349-7008</a>.';
     // 'on' | 'off' | 'unknown'. Only an explicit {enabled:false} is 'off'; 'unknown' means fail closed (post nothing).
     function recruitGate() {
         if (typeof fetch !== 'function') return Promise.resolve('unknown');
@@ -1343,13 +1343,13 @@ function marketReport(selector) {
                     try { if (typeof window.gtag === 'function') window.gtag('event', 'recruiting_inquiry', { form_name: 'confidential_broker_form', site: recruitSiteId() }); } catch (x) { /* no-op */ }
                     showSuccess(wrap, thanks);
                 } else {
-                    err.textContent = (res.j.message ? res.j.message + ' ' : 'Something went wrong. ') + 'Please call us at 709-896-5001.';
+                    err.textContent = (res.j.message ? res.j.message + ' ' : 'Something went wrong. ') + 'Please call us at 709-349-7008.';
                     err.style.display = 'block';
                     btn.disabled = false; btn.textContent = 'SUBMIT CONFIDENTIAL INQUIRY';
                 }
               })
               .catch(function() {
-                err.textContent = 'Something went wrong. Please call us at 709-896-5001.';
+                err.textContent = 'Something went wrong. Please call us at 709-349-7008.';
                 err.style.display = 'block';
                 btn.disabled = false; btn.textContent = 'SUBMIT CONFIDENTIAL INQUIRY';
               });
@@ -1387,7 +1387,7 @@ function marketReport(selector) {
 
             safePostLead(id, data, function(error) {
                 if (error) {
-                    err.textContent = 'Something went wrong. Please call us at 709-896-5001.';
+                    err.textContent = 'Something went wrong. Please call us at 709-349-7008.';
                     err.style.display = 'block';
                     btn.disabled = false; btn.textContent = 'SUBMIT CONFIDENTIAL INQUIRY';
                 } else {
@@ -1507,7 +1507,7 @@ function marketReport(selector) {
 
             safePostLead(id, data, function(error) {
                 if (error) {
-                    err.textContent = 'Something went wrong. Please call us at 709-896-5001.';
+                    err.textContent = 'Something went wrong. Please call us at 709-349-7008.';
                     err.style.display = 'block';
                     btn.disabled = false; btn.textContent = 'REQUEST SHOWING';
                 } else {
@@ -1515,7 +1515,7 @@ function marketReport(selector) {
                         '<h4>Showing Request Sent</h4>' +
                         '<p>' + replyPromise() + ' ' +
                         'For urgent same-day showings, please call us at ' +
-                        '<a href="tel:7098965001" style="color:#EA002A;">709-896-5001</a>.</p>'
+                        '<a href="tel:7093497008" style="color:#EA002A;">709-349-7008</a>.</p>'
                     );
                 }
             });
@@ -1530,7 +1530,7 @@ function marketReport(selector) {
 
         var agentName = el.getAttribute('data-agent-name') || 'the Turner Realty Team';
         var agentEmail = el.getAttribute('data-agent-email') || el.getAttribute('data-team-email') || '';
-        var agentPhone = el.getAttribute('data-agent-phone') || '709-896-5001';
+        var agentPhone = el.getAttribute('data-agent-phone') || '709-349-7008';
         var agentSlug = el.getAttribute('data-agent-slug') || '';
         var community = el.getAttribute('data-community') || 'the area';
         var communitySlug = el.getAttribute('data-community-slug') || '';
@@ -1612,7 +1612,7 @@ function marketReport(selector) {
 
         var agentName = el.getAttribute('data-agent-name') || 'our commercial team';
         var agentEmail = el.getAttribute('data-agent-email') || el.getAttribute('data-team-email') || '';
-        var agentPhone = el.getAttribute('data-agent-phone') || '709-896-5001';
+        var agentPhone = el.getAttribute('data-agent-phone') || '709-349-7008';
         var agentSlug = el.getAttribute('data-agent-slug') || '';
         var market = el.getAttribute('data-market') || 'Newfoundland and Labrador';
         var first = askNames(agentName);
