@@ -270,7 +270,7 @@ try:
     r = subprocess.run([sys.executable, "tools/ddf-generate-pages.py"], cwd=work, env=env, capture_output=True, text=True)
     check(r.returncode == 0, "B: generator failed after resetting alerts")
     subprocess.run([sys.executable, "tools/labwest-listings-state.py", "preview"], cwd=work, check=True, capture_output=True)
-    check("/text-alerts" not in (work / "_redirects").read_text(), "B: the /text-alerts redirect stays after the page is gone")
+    check("/text-alerts   /pages/text-alerts.html   200" not in (work / "_redirects").read_text(), "B: the /text-alerts redirect stays after the page is gone")  # D-1118-71: the fold block adds a /text-alerts 301 to the hub, so match the rewrite line, not the bare path
 
     # ------------------------------------------------------------ C
     idx0 = (work / "sitemap-index.xml").read_text()

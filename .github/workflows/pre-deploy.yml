@@ -194,6 +194,9 @@ jobs:
       - name: Karen Pomeroy and The Dynamic Duo are gone from every served file; the Shelter award history is allow-listed (STRICT 4741, sites D-1118-50, D-1118-53)
         # Offline. Exits 1 on drift.
         run: python3 tools/tests/karen-duo-removal-test.py
+      - name: Lab West folds into royallepageturner.com, one-hop 301s, LEAVE paths served (STRICT 4750, sites D-1118-71)
+        # Offline. Reads tools/rollup/labwest-301-map.csv against _redirects. Exits 1 on drift.
+        run: python3 tools/tests/labwest-fold-301-test.py
       - name: No served page or function shows 709-896-5001; Goose Bay office number is 709-349-7008 (STRICT 4237, sites D-1117-15)
         # Same test file as Gander's STRICT 4237. Scans tracked *.html, js/*.js and netlify/functions/*.ts for any 896-5001 form. Offline. Exits 1 on drift.
         run: python3 tools/tests/gb-office-phone-test.py

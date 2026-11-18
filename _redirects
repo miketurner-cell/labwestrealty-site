@@ -5,21 +5,69 @@
 
 /agent                       https://realestategander.com/agent/  301!
 
-# Footer legal links (site worker, 2026-09-28): the shared Tier-1 js/footer.js
-# links /pages/privacy-policy.html, /pages/terms-of-use.html and
-# /pages/accessibility.html, but this site keeps those pages at the root, so
-# all three 404'd on every page (site audit 2026-09-28).
-/pages/privacy-policy.html   /privacy-policy.html   301
-/pages/terms-of-use.html     /terms-of-use.html     301
-/pages/accessibility.html    /accessibility.html    301
-
-# Top-bar address link (site worker, 2026-10-08): the shared Tier-1 js/nav.js hard-codes
-# p=/pages/ in topBarHTML(), so the address link points at /pages/contact.html,
-# but this site keeps contact.html at the root. 404 on every page (site audit 2026-10-08).
-# Source fix belongs in the fleet canonical nav.js; this is the per-site fix + safety net for old links.
-/pages/contact.html   /contact.html   301
+# The footer legal links and /pages/contact.html rules that lived here (2026-09-28, 2026-10-08) now point straight at the hub in the fold block below (D-1118-71), so there is no chain.
 
 # Karen Pomeroy's old links (D-1118-50, Mike 2026-11-18): her licence ended; send them to the Labrador West page, never a 404.
-/karen-pomeroy            /labrador-west.html    301!
-/pages/karen-pomeroy.html /labrador-west.html    301!
-/pages/dynamic-duo.html   /labrador-west.html    301!
+/karen-pomeroy             https://royallepageturner.com/pages/labrador-west  301!
+/pages/karen-pomeroy.html  https://royallepageturner.com/pages/labrador-west  301!
+/pages/dynamic-duo.html    https://royallepageturner.com/pages/labrador-west  301!
+
+# BEGIN LABWEST-FOLD MANAGED BLOCK (D-1118-71; from tools/rollup/labwest-301-map.csv, 301 rows only; rollback = revert the fold PR)
+# Held until the hub section is live: rows whose target is /join-our-team#labrador-west (why-join, 4 URL forms) keep serving as today.
+# www rows are host-specific so www is one hop (the www -> apex rule would otherwise make it two).
+
+# www forms first (host-specific)
+https://www.labwestrealty.com/  https://royallepageturner.com/pages/labrador-west  301!
+https://www.labwestrealty.com/index.html  https://royallepageturner.com/pages/labrador-west  301!
+https://www.labwestrealty.com/index  https://royallepageturner.com/pages/labrador-west  301!
+https://www.labwestrealty.com/contact.html  https://royallepageturner.com/join-our-team#join-form  301!
+https://www.labwestrealty.com/contact  https://royallepageturner.com/join-our-team#join-form  301!
+https://www.labwestrealty.com/about-turner.html  https://royallepageturner.com/about  301!
+https://www.labwestrealty.com/about-turner  https://royallepageturner.com/about  301!
+https://www.labwestrealty.com/labrador-west.html  https://royallepageturner.com/pages/labrador-west  301!
+https://www.labwestrealty.com/labrador-west  https://royallepageturner.com/pages/labrador-west  301!
+https://www.labwestrealty.com/market-stats.html  https://royallepageturner.com/pages/labrador-west  301!
+https://www.labwestrealty.com/market-stats  https://royallepageturner.com/pages/labrador-west  301!
+https://www.labwestrealty.com/become-a-realtor.html  https://royallepageturner.com/become-a-realtor  301!
+https://www.labwestrealty.com/become-a-realtor  https://royallepageturner.com/become-a-realtor  301!
+https://www.labwestrealty.com/privacy-policy.html  https://royallepageturner.com/privacy-policy  301!
+https://www.labwestrealty.com/privacy-policy  https://royallepageturner.com/privacy-policy  301!
+https://www.labwestrealty.com/terms-of-use.html  https://royallepageturner.com/terms-of-use  301!
+https://www.labwestrealty.com/terms-of-use  https://royallepageturner.com/terms-of-use  301!
+https://www.labwestrealty.com/accessibility.html  https://royallepageturner.com/accessibility  301!
+https://www.labwestrealty.com/accessibility  https://royallepageturner.com/accessibility  301!
+https://www.labwestrealty.com/pages/privacy-policy.html  https://royallepageturner.com/privacy-policy  301!
+https://www.labwestrealty.com/pages/terms-of-use.html  https://royallepageturner.com/terms-of-use  301!
+https://www.labwestrealty.com/pages/accessibility.html  https://royallepageturner.com/accessibility  301!
+https://www.labwestrealty.com/pages/contact.html  https://royallepageturner.com/join-our-team#join-form  301!
+
+# apex forms
+/  https://royallepageturner.com/pages/labrador-west  301!
+/index.html  https://royallepageturner.com/pages/labrador-west  301!
+/index  https://royallepageturner.com/pages/labrador-west  301!
+/contact.html  https://royallepageturner.com/join-our-team#join-form  301!
+/contact  https://royallepageturner.com/join-our-team#join-form  301!
+/about-turner.html  https://royallepageturner.com/about  301!
+/about-turner  https://royallepageturner.com/about  301!
+/labrador-west.html  https://royallepageturner.com/pages/labrador-west  301!
+/labrador-west  https://royallepageturner.com/pages/labrador-west  301!
+/market-stats.html  https://royallepageturner.com/pages/labrador-west  301!
+/market-stats  https://royallepageturner.com/pages/labrador-west  301!
+/become-a-realtor.html  https://royallepageturner.com/become-a-realtor  301!
+/become-a-realtor  https://royallepageturner.com/become-a-realtor  301!
+/privacy-policy.html  https://royallepageturner.com/privacy-policy  301!
+/privacy-policy  https://royallepageturner.com/privacy-policy  301!
+/terms-of-use.html  https://royallepageturner.com/terms-of-use  301!
+/terms-of-use  https://royallepageturner.com/terms-of-use  301!
+/accessibility.html  https://royallepageturner.com/accessibility  301!
+/accessibility  https://royallepageturner.com/accessibility  301!
+/pages/privacy-policy.html  https://royallepageturner.com/privacy-policy  301!
+/pages/terms-of-use.html  https://royallepageturner.com/terms-of-use  301!
+/pages/accessibility.html  https://royallepageturner.com/accessibility  301!
+/pages/contact.html  https://royallepageturner.com/join-our-team#join-form  301!
+/listings/  https://royallepageturner.com/pages/labrador-west  301!
+/listings/sold/  https://royallepageturner.com/pages/labrador-west  301!
+/text-alerts.html  https://royallepageturner.com/pages/text-alerts  301!
+/text-alerts  https://royallepageturner.com/pages/text-alerts  301!
+
+# END LABWEST-FOLD MANAGED BLOCK
