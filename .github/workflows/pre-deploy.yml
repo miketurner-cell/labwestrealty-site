@@ -191,6 +191,9 @@ jobs:
         # "Highest sale this month" line, no highest_sale_record milestone, median/average still render. Offline. Exits 1 on drift.
         run: python3 tools/tests/market-no-highest-sale-test.py
 
+      - name: Karen Pomeroy and The Dynamic Duo are gone from every served file; the Shelter award history is allow-listed (STRICT 4741, sites D-1118-50, D-1118-53)
+        # Offline. Exits 1 on drift.
+        run: python3 tools/tests/karen-duo-removal-test.py
       - name: No served page or function shows 709-896-5001; Goose Bay office number is 709-349-7008 (STRICT 4237, sites D-1117-15)
         # Same test file as Gander's STRICT 4237. Scans tracked *.html, js/*.js and netlify/functions/*.ts for any 896-5001 form. Offline. Exits 1 on drift.
         run: python3 tools/tests/gb-office-phone-test.py

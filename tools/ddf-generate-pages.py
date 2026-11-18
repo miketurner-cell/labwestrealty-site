@@ -676,10 +676,10 @@ def fmt_postal(p):
 # When a listing's idx_list_agent_full_name matches an entry here, the
 # generator surfaces "Listed by <Agent>" on cards + a full agent card
 # (photo + cell + email + profile link) on the detail page right-rail
-# sidebar instead of the generic "Inquiries handled by The Dynamic Duo"
+# sidebar instead of the generic team
 # byline.
 #
-# Goosebay sees its own 2 agents (Karen + Roberta) most often but the
+# Goosebay sees its own agents most often but the
 # full fleet roster is mirrored verbatim so the byline still works when
 # a Turner-network listing appears in HVGB feed (cross-territory referral
 # situations, agent vacations, etc.). Convention #15 byte-symmetric
@@ -4787,7 +4787,7 @@ def build_listing_card(listing: dict, prefix: str) -> str:
         )
     else:
         # Default team byline for non-Turner-team listings (P3 task #22).
-        # The Dynamic Duo (Karen Pomeroy + Roberta Primmer) handles buyer-side
+        # The Goose Bay office handles buyer-side
         # inquiries for HVGB-area cards we did not list ourselves.
         # Convention #15 sibling pattern: Gander emits Turner Realty Team byline,
         # Avalon emits Chris Morrison's Team byline.

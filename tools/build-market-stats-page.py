@@ -649,9 +649,9 @@ _SITE_TEAM_FALLBACK = {
     "avalonrealestate.ca": {"name": "Chris Morrison", "photo": "/images/chris-morrison.jpg",
                             "phone": "709-725-6520", "email": "cmorrison@royallepage.ca",
                             "line": "Royal LePage Turner Realty · St. John’s & the Avalon."},
-    "goosebayrealestate.ca": {"name": "Karen Pomeroy & Roberta Primmer", "photo": "/images/karen-pomeroy.jpg",
+    "goosebayrealestate.ca": {"name": "Mike Turner", "photo": "/images/mike-turner.jpg",
                               "phone": "709-349-7008", "email": "goosebay@royallepage.ca",
-                              "line": "The Dynamic Duo · Royal LePage Turner Realty, Happy Valley-Goose Bay."},
+                              "line": "Royal LePage Turner Realty, Happy Valley-Goose Bay office."},
     # Lab West (D-1012-28/33): Mike Turner, Broker of Record, is the contact. No office address.
     "labwestrealty.com": {"name": "Mike Turner", "photo": "/images/mike-turner.jpg",
                           "phone": "709-256-7999", "email": "miketurner@royallepage.ca",
@@ -756,7 +756,7 @@ def _hero_agent(cfg):
     name = entry.get("agent_name") or fb["name"]
     photos = [entry.get("photo") or fb["photo"]]
     if entry.get("variant") == "duo" and not entry.get("photo"):
-        photos = ["/images/karen-pomeroy.jpg", "/images/roberta-primmer.jpg"]
+        photos = [fb["photo"]]   # D-1118-50/-55: the pair is gone
     phone = entry.get("phone") or fb["phone"]
     email = entry.get("email") or fb["email"]
     line = entry.get("tagline") or fb["line"]
