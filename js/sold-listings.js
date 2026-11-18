@@ -105,7 +105,7 @@ function turnerCalDate(s, opts) {
     area:    "",     // matches dropdown_key (major centre) OR region (inclusive, see AREA below)
     sort:    "date-desc",
     // Per-agent widget click-through filters (Ship 3, 2026-05-17).
-    team:    "",     // slug like "turner-realty-team" or "dynamic-duo"
+    team:    "",     // slug like "turner-realty-team" or "turner-realty-team"
     agent:   "",     // slug like "crystal-hynes"
     // Search-this-area bounds box (2026-08-06). {south, west, north, east}
     // or null. Cleared by an area-select change or Clear all -- NOT by

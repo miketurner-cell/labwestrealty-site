@@ -18,3 +18,8 @@
 # but this site keeps contact.html at the root. 404 on every page (site audit 2026-10-08).
 # Source fix belongs in the fleet canonical nav.js; this is the per-site fix + safety net for old links.
 /pages/contact.html   /contact.html   301
+
+# Karen Pomeroy's old links (D-1118-50, Mike 2026-11-18): her licence ended; send them to the Labrador West page, never a 404.
+/karen-pomeroy            /labrador-west.html    301!
+/pages/karen-pomeroy.html /labrador-west.html    301!
+/pages/dynamic-duo.html   /labrador-west.html    301!

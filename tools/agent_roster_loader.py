@@ -64,7 +64,7 @@ def widget_display_maps(agents):
     Maps the per-agent-widget MATCH/JOIN keys (widget_name + team_widget, which must
     stay aligned to the NLAR feed name + the aggregator by_team cache) back to the
     friendly canonical DISPLAY names (name + team). Lets the rendered widget show
-    "Matt Wheaton" / "The Dynamic Duo" while every lookup, join and sold-filter slug
+    "Matt Wheaton" / "Turner Realty Team" while every lookup, join and sold-filter slug
     stays on the keys. Convention #74: callers .get(key, key) so an unmapped key
     falls back to the matched name (current behaviour).
     """
