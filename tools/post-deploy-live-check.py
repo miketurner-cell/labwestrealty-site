@@ -336,8 +336,13 @@ def check_source_paths(rep, cfg, base, repo, get):  # cfg["key"] is the site key
     top, deep = source_candidates(repo)
     probes = top + deep + [".git/config", ".git/HEAD", ".env", ".env.local", "node_modules/.package-lock.json"]
     bad = 0
+    redirected = 0
     for rel in probes:
-        st, ct, body, final = get(base + "/" + rel)
+        # follow=False: a 3xx means this host does not serve the file (a rolled-up site 301s every path to the hub page, whose 200 HTML would
+        # otherwise read as a served /.git/config); only a direct 200 can be a leak.
+        st, ct, body, final = get(base + "/" + rel, follow=False)
+        if 300 <= st < 400:
+            redirected += 1
         if st != 200:
             continue
         html = "html" in ct.lower()
@@ -355,6 +360,8 @@ def check_source_paths(rep, cfg, base, repo, get):  # cfg["key"] is the site key
             continue
         bad += 1
         rep.fail(f"served source path /{rel}", f"HTTP 200 {ct.split(';')[0]}, {len(body)} bytes: a source/data file is publicly served")
+    if redirected:
+        rep.note("served source paths: redirects", f"{redirected} of {len(probes)} probes answered 3xx (not served on this host, not a leak)")
     if not bad:
         rep.passed("served source paths", f"{len(probes)} source/data paths probed, none served (known-public ones are NOTEd)")
 
@@ -626,6 +633,21 @@ def self_test():
             globals()["source_candidates"] = _sc
         chk("community-agent-map.json (js/agent-card.js) is a NOTE on gander/avalon/goosebay and still a FAIL on labwest/hub",
             ok_sites == [("gander", 0), ("avalon", 0), ("goosebay", 0), ("labwest", 1), ("hub", 1)])
+        _sc2 = globals()["source_candidates"]
+        globals()["source_candidates"] = lambda repo: ([], [])
+        try:
+            hub = (200, "text/html", b"<h1>Labrador West</h1>", "https://hub.test/pages/labrador-west")
+            redir = lambda url, follow=True: (301, "text/plain", b"Redirecting", url) if not follow else hub  # noqa: E731
+            rep10 = Report()
+            check_source_paths(rep10, {"key": "labwest"}, "https://x.test", d, redir)
+            chk("a 301 to the hub page is not a served .git/config (probe does not follow redirects) and the redirects are counted in a NOTE",
+                rep10.fails == 0 and any(l.startswith("NOTE served source paths: redirects") for l in rep10.lines))
+            served = lambda url, follow=True: (200, "text/plain", b"[core]\n", url) if url.endswith(".git/config") else (404, "text/html", b"nf", url)  # noqa: E731
+            rep11 = Report()
+            check_source_paths(rep11, {"key": "labwest"}, "https://x.test", d, served)
+            chk("a real 200 of /.git/config is still a FAIL", rep11.fails == 1 and ".git/config" in " ".join(rep11.lines))
+        finally:
+            globals()["source_candidates"] = _sc2
         chk("a dotfile path (images/listings/1/.meta.json) is never a served-file probe; a normal asset still is",
             not is_served("images/listings/1/.meta.json") and not is_served(".well-known/x.json") and is_served("images/listings/1/a.json"))
         chk("every site config has a domain and pages", all(c["domain"] and c["pages"] for c in SITES.values()))
