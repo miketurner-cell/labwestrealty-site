@@ -11,7 +11,7 @@ name: Pre-deploy quality check
 
 on:
   push:
-    branches: [main, master]
+    branches: [main]  # 2026-11-19 (sites, D-1119-145 (6) row 5): no master branch exists; push runs only after a merge to main
     paths:
       - "*.html"
       - "css/**"
