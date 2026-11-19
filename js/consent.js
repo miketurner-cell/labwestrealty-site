@@ -98,12 +98,27 @@
   }
   function flush() { var q = queue; queue = []; for (var i = 0; i < q.length; i++) { try { q[i](); } catch (e) { /* ignore */ } } }
 
+  // Google Analytics only on a production host (SEO ask, D-1119-147: 579 "users" from localhost / 127.0.0.1 and
+  // Netlify deploy previews polluted GA4). Bare domain and www. only; anything else never requests gtag.js.
+  // Byte-identical on all sites, so the list holds every fleet production domain; tools/tests/ga-production-host-only-test.py pins it.
+  var GA_HOSTS = ['realestategander.com', 'goosebayrealestate.ca', 'avalonrealestate.ca', 'labwestrealty.com', 'royallepageturner.com'];
+  function gaHostOk() {
+    var h = '';
+    try { h = String(window.location.hostname || '').toLowerCase().replace(/^www\./, ''); } catch (e) { return false; }
+    for (var i = 0; i < GA_HOSTS.length; i++) if (GA_HOSTS[i] === h) return true;
+    return false;
+  }
+
   function release() {
     var nodes = document.querySelectorAll('script[type="text/plain"][data-consent]');
     for (var i = 0; i < nodes.length; i++) {
       var o = nodes[i];
       if (o.getAttribute('data-consent-done')) continue;
       o.setAttribute('data-consent-done', '1');
+      if (/googletagmanager\.com\/gtag\/js/.test(o.getAttribute('data-src') || '') && !gaHostOk()) {
+        try { console.info('GA4 skipped: not a production host'); } catch (e) { /* ignore */ }
+        continue;
+      }
       var s = document.createElement('script');
       for (var j = 0; j < o.attributes.length; j++) {
         var n = o.attributes[j].name;
@@ -135,6 +150,8 @@
     '#tn-consent button:focus-visible{outline:3px solid #ffbf47;outline-offset:2px}' +
     'html.tn-consent-open #tnr-install-cta,html.tn-consent-open #tc-bubble,html.tn-consent-open #tc-panel{display:none!important}' +
     'html.tn-consent-on [data-consent-settings]{display:inline!important}' +
+    // The listings filter drawer is fixed top:0/bottom:0 and its Apply button sat under the banner: cap the drawer's height so it ends above the banner (it scrolls), banner untouched.
+    '@media (max-width:1279px){html.tn-consent-open .ldisc-shell--filter-open .ldisc-rail{max-height:calc(100vh - var(--tn-consent-h,0px));max-height:calc(100dvh - var(--tn-consent-h,0px))}}' +
     '@media (min-width:769px){#tn-consent{left:16px;right:auto;bottom:16px;margin:0;width:420px}}';
 
   function placeBanner() {
