@@ -41,7 +41,8 @@ for ln in (ROOT / "_redirects").read_text().splitlines():
 rows = list(csv.DictReader(open(ROOT / "tools/rollup/labwest-301-map.csv")))
 ship = [r for r in rows if r["action"] == "301" and not r["target_url"].endswith(HOLD)]
 held = [r for r in rows if r["action"] == "301" and r["target_url"].endswith(HOLD)]
-check("map has 54 x 301 rows (50 ship, 4 held)", len(ship) == 50 and len(held) == 4, f"{len(ship)}/{len(held)}")
+# D-1119-80 (c): the 4 why-join rows now ship (to /join-our-team, no #labrador-west anchor): 54 ship, 0 held.
+check("map has 54 x 301 rows (54 ship, 0 held)", len(ship) == 54 and len(held) == 0, f"{len(ship)}/{len(held)}")
 
 bad = []
 for r in ship:
