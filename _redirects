@@ -80,13 +80,12 @@ https://www.labwestrealty.com/pages/contact.html  https://royallepageturner.com/
 # END LABWEST-FOLD MANAGED BLOCK
 
 # BEGIN LABWEST-FINAL BLOCK (D-1119-87, Mike 2026-11-19: Lab West is completely rolled up into the provincial site; nothing deleted)
-# Files that stay served (Search Console verification, IndexNow key, robots, sitemaps, Netlify functions); a 200 to itself passes them through before the catch-all.
+# Files that stay served (Search Console verification, IndexNow key, robots, sitemaps); a 200 to itself passes them through before the catch-all.
 /robots.txt  /robots.txt  200
 /sitemap.xml  /sitemap.xml  200
 /sitemap-index.xml  /sitemap-index.xml  200
 /googlef17627a5b2522f03.html  /googlef17627a5b2522f03.html  200
 /45ca068ef0440f52c7b5bf2618184366.txt  /45ca068ef0440f52c7b5bf2618184366.txt  200
-/.netlify/*  /.netlify/:splat  200
 https://www.labwestrealty.com/robots.txt  https://www.labwestrealty.com/robots.txt  200
 https://www.labwestrealty.com/sitemap.xml  https://www.labwestrealty.com/sitemap.xml  200
 https://www.labwestrealty.com/sitemap-index.xml  https://www.labwestrealty.com/sitemap-index.xml  200
