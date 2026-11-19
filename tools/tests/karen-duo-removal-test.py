@@ -13,7 +13,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 NOT_SERVED = {"tools", "_research", "4-reference", ".github", "netlify", "_ops", "docs", "fleet", "node_modules", ".git", ".claude", "tests"}
 EXT = {".html", ".js", ".json", ".css", ".xml", ".txt", ".svg", ".webmanifest", ".md", ".map"}
-PAT = re.compile(r"Karen Pomeroy|karen-pomeroy|Karen and Roberta|Roberta and Karen|Dynamic Duo|dynamic-duo|899-1778|Karen &amp; Roberta")
+PAT = re.compile(r"Karen Pomeroy|karen-pomeroy|Karen and Roberta|Roberta and Karen|Dynamic Duo|dynamic-duo|899-1778|Karen &amp; Roberta|Roberta Primmer|roberta-primmer|896-7509")
 HISTORY_ALLOW_PREFIX = ("pages/listing-presentation-",)   # the Shelter 2018 award paragraph (dated history, D-1118-53)
 fails = []
 

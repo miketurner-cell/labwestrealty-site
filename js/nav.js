@@ -9,7 +9,7 @@
   // NOTE (2026-08-26): the prior header here claimed this file "replaces
   // js/mobile-nav.js... removing it is a no-op behaviourally" -- that was
   // WRONG. 5 live pages (happy-valley-goose-bay, labrador,
-  // north-west-river, roberta-primmer) still load js/mobile-nav.js instead
+  // north-west-river) still load js/mobile-nav.js instead
   // of this renderer and were never converted. Flagged, not fixed here --
   // converting those 5 is its own follow-up, not bundled into this ship.
   //

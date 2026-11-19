@@ -5050,7 +5050,7 @@ document.addEventListener("DOMContentLoaded", function () {{
 #
 # Routing (Mike 2026-07-24): Avalon -> Chris, Gander -> Mike, Goosebay ->
 # the Duo. Goosebay leaves data-agent-email EMPTY so lead-receive's
-# goosebayDefaultSlug() round-robins Karen/Roberta — the same
+# goosebayDefaultSlug() round-robins the Goose Bay agents — the same
 # fall-through the Duo community cards use.
 #
 # Agent NAP is read from TURNER_AGENT_CARD (canonical agent_roster.json)
@@ -5058,7 +5058,7 @@ document.addEventListener("DOMContentLoaded", function () {{
 COMMERCIAL_CONTACT = {
     # Goose Bay posts as the Dynamic Duo. agent_name stays EMPTY so
     # data-agent-email renders blank and lead-receive's
-    # goosebayDefaultSlug() round-robins Karen/Roberta — the same
+    # goosebayDefaultSlug() round-robins the Goose Bay agents — the same
     # fall-through the Duo community cards use.
     "agent_name":   "Mike Turner",
     "display_name": "Mike Turner, Broker",
@@ -8381,7 +8381,7 @@ def main() -> int:
     # ── emit_team_listings_fragment (Convention #15 from Gander) ──
     # Mike 2026-05-19: agent profile "Active inventory" section should
     # show only Turner Realty team's actual listings, not all Goosebay-area
-    # DDF brokerages. Filter by Karen Pomeroy + Roberta Primmer.
+    # DDF brokerages. Filter by the Goose Bay agents.
     def _emit_team_listings_fragment():
         # TEAM_NAMES / _is_team: module level since 2026-10-08 (shared with --counts-only).
         team_pool = [L for L in _sort_listings_for_display(listings) if _is_team(L)]
