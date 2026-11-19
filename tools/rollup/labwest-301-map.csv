@@ -60,7 +60,9 @@ https://labwestrealty.com/robots.txt,service,LEAVE,,,robots.txt on origin/main; 
 "https://labwestrealty.com/sitemap.xml, /sitemap-index.xml",service,LEAVE,,,keep the old sitemap up so Google recrawls the old URLs and sees the 301s
 https://labwestrealty.com/googlef17627a5b2522f03.html,service,LEAVE,,,Search Console verification file; must stay 200 for Change of Address
 https://labwestrealty.com/45ca068ef0440f52c7b5bf2618184366.txt,service,LEAVE,,,IndexNow key file (tools/indexnow-submit.py)
-https://labwestrealty.com/404.html,other,LEAVE,,,system page
-https://labwestrealty.com/fragments/careers-template.html,other,LEAVE,,,"partial, not a page; not in sitemap"
-https://labwestrealty.com/fragments/recruiting-tech-for-agents.html,other,LEAVE,,,"partial, not a page; not in sitemap"
+https://labwestrealty.com/404.html,other,301,https://royallepageturner.com/pages/labrador-west,yes,"D-1119-87: no Lab West page is served; was LEAVE, now one-hop 301 to the Lab West page"
+https://labwestrealty.com/fragments/careers-template.html,other,301,https://royallepageturner.com/pages/labrador-west,yes,"D-1119-87: no Lab West page is served; was LEAVE, now one-hop 301 to the Lab West page"
+https://labwestrealty.com/fragments/recruiting-tech-for-agents.html,other,301,https://royallepageturner.com/pages/labrador-west,yes,"D-1119-87: no Lab West page is served; was LEAVE, now one-hop 301 to the Lab West page"
 "https://labwestrealty.com/images/*, /css/*, /js/*, /data/*, favicons",service,KEEP,,,assets keep serving; no catch-all
+https://labwestrealty.com/*,catch-all,301,https://royallepageturner.com/pages/labrador-west,yes,"D-1119-87 final catch-all, LAST rule; every mapped page and the kept-served files above it win first"
+https://www.labwestrealty.com/*,catch-all,301,https://royallepageturner.com/pages/labrador-west,yes,D-1119-87 www catch-all (host-specific so www is one hop)
