@@ -4,7 +4,7 @@
 Reads tools/rollup/labwest-301-map.csv (SEO's map). Checks: every 301 row is in _redirects with the exact target and
 status 301! (www rows host-specific), except rows targeting /join-our-team#labrador-west, which are HELD and must NOT be
 redirected yet; no chains (no target path on this site is itself redirected); LEAVE paths are never redirected; /agent keeps
-its KEEP rule; no catch-all (no splat or bare * source).
+its KEEP rule; the only catch-alls are the two D-1119-87 ones, last, to the Lab West page; kept-served files have 200 pass-through rules.
 """
 import csv
 import sys
@@ -42,7 +42,7 @@ rows = list(csv.DictReader(open(ROOT / "tools/rollup/labwest-301-map.csv")))
 ship = [r for r in rows if r["action"] == "301" and not r["target_url"].endswith(HOLD)]
 held = [r for r in rows if r["action"] == "301" and r["target_url"].endswith(HOLD)]
 # D-1119-80 (c): the 4 why-join rows now ship (to /join-our-team, no #labrador-west anchor): 54 ship, 0 held.
-check("map has 54 x 301 rows (54 ship, 0 held)", len(ship) == 54 and len(held) == 0, f"{len(ship)}/{len(held)}")
+check("map has 59 x 301 rows (59 ship, 0 held)", len(ship) == 59 and len(held) == 0, f"{len(ship)}/{len(held)}")
 
 bad = []
 for r in ship:
@@ -61,7 +61,7 @@ host_sites = ("labwestrealty.com", "www.labwestrealty.com")
 chains = []
 for (h, p), (dst, st) in rules.items():
     u = urlparse(dst)
-    if u.netloc in host_sites or (not u.netloc and dst.startswith("/")):
+    if st.startswith("301") and (u.netloc in host_sites or (not u.netloc and dst.startswith("/"))):
         if ("", u.path) in rules and not dst.startswith("/.netlify"):
             chains.append((p, dst))
 for r in ship:
@@ -71,14 +71,18 @@ for r in ship:
 check("no chains: no target on this site is itself redirected", not chains, str(chains[:3]))
 
 leave = ["/.netlify/functions/x", "/robots.txt", "/sitemap.xml", "/sitemap-index.xml", "/googlef17627a5b2522f03.html",
-         "/45ca068ef0440f52c7b5bf2618184366.txt", "/404.html", "/fragments/careers-template.html",
-         "/fragments/recruiting-tech-for-agents.html"]
-lv = [p for p in leave if ("", p) in rules or ("www.labwestrealty.com", p) in rules]
-check("LEAVE paths are not redirected", not lv, str(lv))
+         "/45ca068ef0440f52c7b5bf2618184366.txt"]
+# D-1119-87: kept-served files have only a pass-through 200 rule (never a 301) and it sits before the catch-all.
+lv = [p for p in leave for h in ("", "www.labwestrealty.com") if (h, p) in rules and rules[(h, p)][1] != "200"]
+check("kept-served paths are never redirected (only 200 pass-through)", not lv, str(lv))
+check("kept-served pass-through rules exist", all(("", p) in rules for p in leave[1:5] + leave[5:]))
 leave_rows = {urlparse(r["source_url"] if r["source_url"].startswith("http") else "https://x/" + r["source_url"]).path for r in rows if r["action"] == "LEAVE"}
-check("map LEAVE rows exist (8)", sum(1 for r in rows if r["action"] == "LEAVE") == 8)
+check("map LEAVE rows exist (5)", sum(1 for r in rows if r["action"] == "LEAVE") == 5)
 check("/agent KEEP rule intact", rules.get(("", "/agent")) == ("https://realestategander.com/agent/", "301!"))
-check("no catch-all or splat redirect to the hub", not [k for k, v in rules.items() if "*" in k[1] and "royallepageturner.com" in v[0]])
+hubwild = [k for k, v in rules.items() if "*" in k[1] and "royallepageturner.com" in v[0]]
+check("only the two D-1119-87 catch-alls point at the hub", sorted(hubwild) == [("", "/*"), ("www.labwestrealty.com", "/*")], str(hubwild))
+lines = [l.split() for l in (ROOT / "_redirects").read_text().splitlines() if l.strip() and not l.strip().startswith("#")]
+check("catch-alls are the last two rules, apex last", [l[0] for l in lines[-2:]] == ["https://www.labwestrealty.com/*", "/*"] and lines[-1][2] == "301!" and lines[-1][1] == "https://royallepageturner.com/pages/labrador-west")
 check("/tools/* and /netlify/* stay 404!", rules.get(("", "/tools/*"), ("", ""))[1] == "404!" and rules.get(("", "/netlify/*"), ("", ""))[1] == "404!")
 
 print("FAIL: %d" % len(fails) if fails else "OK")
