@@ -7,10 +7,13 @@
 
 # The footer legal links and /pages/contact.html rules that lived here (2026-09-28, 2026-10-08) now point straight at the hub in the fold block below (D-1118-71), so there is no chain.
 
-# Karen Pomeroy's old links (D-1118-50, Mike 2026-11-18): her licence ended; send them to the Labrador West page, never a 404.
-/karen-pomeroy             https://royallepageturner.com/pages/labrador-west  301!
-/pages/karen-pomeroy.html  https://royallepageturner.com/pages/labrador-west  301!
-/pages/dynamic-duo.html    https://royallepageturner.com/pages/labrador-west  301!
+# Karen Pomeroy, Roberta Primmer and The Dynamic Duo old links (D-1118-50, D-1119-122): both licences ended; ONE hop to the hub's Goose Bay page, never a 404 or a chain.
+/karen-pomeroy              https://royallepageturner.com/pages/happy-valley-goose-bay  301!
+/pages/karen-pomeroy.html   https://royallepageturner.com/pages/happy-valley-goose-bay  301!
+/roberta-primmer            https://royallepageturner.com/pages/happy-valley-goose-bay  301!
+/pages/roberta-primmer.html https://royallepageturner.com/pages/happy-valley-goose-bay  301!
+/pages/dynamic-duo.html     https://royallepageturner.com/pages/happy-valley-goose-bay  301!
+/dynamic-duo                https://royallepageturner.com/pages/happy-valley-goose-bay  301!
 
 # BEGIN LABWEST-FOLD MANAGED BLOCK (D-1118-71; from tools/rollup/labwest-301-map.csv, 301 rows only; rollback = revert the fold PR)
 # D-1119-80 (c): contact goes to the hub contact page; why-join goes to /join-our-team (the #labrador-west section is not required).
