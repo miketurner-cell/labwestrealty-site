@@ -13,7 +13,7 @@ window.TURNER_REGIONS = {
       "address": "",
       "email": "cmorrison@royallepage.ca",
       "name": "Royal LePage Turner Realty (Avalon)",
-      "phone": "709-349-7008"
+      "phone": "709-725-6520"
     },
     "office_key": "avalon",
     "operator": "turner",

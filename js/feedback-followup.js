@@ -22,7 +22,7 @@
   var SITES = {
     'realestategander.com': { contact: '/pages/contact.html', phone: '709-256-7999' },
     'goosebayrealestate.ca': { contact: '/pages/contact.html', phone: '709-349-7008' },
-    'avalonrealestate.ca': { contact: '/pages/contact.html', phone: '709-349-7008' },   // D-1113-86: was 709-725-6520 (Chris's cell); restore when Mike says Chris is back
+    'avalonrealestate.ca': { contact: '/pages/contact.html', phone: '709-725-6520' },   // D-1118-117: Chris (Rec.), reverses D-1113-86
     'labwestrealty.com': { contact: '/contact.html', phone: '709-256-7999' },
     'royallepageturner.com': { contact: '/contact.html', phone: '709-256-7999' }
   };
