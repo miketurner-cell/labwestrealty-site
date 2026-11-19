@@ -13,15 +13,17 @@
 /pages/dynamic-duo.html    https://royallepageturner.com/pages/labrador-west  301!
 
 # BEGIN LABWEST-FOLD MANAGED BLOCK (D-1118-71; from tools/rollup/labwest-301-map.csv, 301 rows only; rollback = revert the fold PR)
-# Held until the hub section is live: rows whose target is /join-our-team#labrador-west (why-join, 4 URL forms) keep serving as today.
+# D-1119-80 (c): contact goes to the hub contact page; why-join goes to /join-our-team (the #labrador-west section is not required).
 # www rows are host-specific so www is one hop (the www -> apex rule would otherwise make it two).
 
 # www forms first (host-specific)
 https://www.labwestrealty.com/  https://royallepageturner.com/pages/labrador-west  301!
 https://www.labwestrealty.com/index.html  https://royallepageturner.com/pages/labrador-west  301!
 https://www.labwestrealty.com/index  https://royallepageturner.com/pages/labrador-west  301!
-https://www.labwestrealty.com/contact.html  https://royallepageturner.com/join-our-team#join-form  301!
-https://www.labwestrealty.com/contact  https://royallepageturner.com/join-our-team#join-form  301!
+https://www.labwestrealty.com/contact.html  https://royallepageturner.com/contact  301!
+https://www.labwestrealty.com/contact  https://royallepageturner.com/contact  301!
+https://www.labwestrealty.com/why-join.html  https://royallepageturner.com/join-our-team  301!
+https://www.labwestrealty.com/why-join  https://royallepageturner.com/join-our-team  301!
 https://www.labwestrealty.com/about-turner.html  https://royallepageturner.com/about  301!
 https://www.labwestrealty.com/about-turner  https://royallepageturner.com/about  301!
 https://www.labwestrealty.com/labrador-west.html  https://royallepageturner.com/pages/labrador-west  301!
@@ -39,14 +41,16 @@ https://www.labwestrealty.com/accessibility  https://royallepageturner.com/acces
 https://www.labwestrealty.com/pages/privacy-policy.html  https://royallepageturner.com/privacy-policy  301!
 https://www.labwestrealty.com/pages/terms-of-use.html  https://royallepageturner.com/terms-of-use  301!
 https://www.labwestrealty.com/pages/accessibility.html  https://royallepageturner.com/accessibility  301!
-https://www.labwestrealty.com/pages/contact.html  https://royallepageturner.com/join-our-team#join-form  301!
+https://www.labwestrealty.com/pages/contact.html  https://royallepageturner.com/contact  301!
 
 # apex forms
 /  https://royallepageturner.com/pages/labrador-west  301!
 /index.html  https://royallepageturner.com/pages/labrador-west  301!
 /index  https://royallepageturner.com/pages/labrador-west  301!
-/contact.html  https://royallepageturner.com/join-our-team#join-form  301!
-/contact  https://royallepageturner.com/join-our-team#join-form  301!
+/contact.html  https://royallepageturner.com/contact  301!
+/contact  https://royallepageturner.com/contact  301!
+/why-join.html  https://royallepageturner.com/join-our-team  301!
+/why-join  https://royallepageturner.com/join-our-team  301!
 /about-turner.html  https://royallepageturner.com/about  301!
 /about-turner  https://royallepageturner.com/about  301!
 /labrador-west.html  https://royallepageturner.com/pages/labrador-west  301!
@@ -64,7 +68,7 @@ https://www.labwestrealty.com/pages/contact.html  https://royallepageturner.com/
 /pages/privacy-policy.html  https://royallepageturner.com/privacy-policy  301!
 /pages/terms-of-use.html  https://royallepageturner.com/terms-of-use  301!
 /pages/accessibility.html  https://royallepageturner.com/accessibility  301!
-/pages/contact.html  https://royallepageturner.com/join-our-team#join-form  301!
+/pages/contact.html  https://royallepageturner.com/contact  301!
 /listings/  https://royallepageturner.com/pages/labrador-west  301!
 /listings/sold/  https://royallepageturner.com/pages/labrador-west  301!
 /text-alerts.html  https://royallepageturner.com/pages/text-alerts  301!
