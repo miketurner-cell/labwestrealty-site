@@ -47,7 +47,7 @@ UA = "Mozilla/5.0 (compatible; TurnerPostDeployCheck/1.0; signed-out)"
 
 # --- per-site configuration (paths verified live 2026-10-21) -------------------------------------------------
 AGENT_PAGES = ["/agent/", "/agent/deals.html", "/agent/broker.html", "/agent/market.html", "/agent/office.html",
-               "/agent/approvals.html", "/agent/cma.html"]
+               "/agent/cma.html"]
 GANDER_GATES = [  # signed-out GET must be 401/403 (read endpoints that need a token; none acts on a GET)
     "/.netlify/functions/agent-home", "/.netlify/functions/broker-queue", "/.netlify/functions/approvals",
     "/.netlify/functions/deal-actions", "/.netlify/functions/portal-profile", "/.netlify/functions/contact-actions",
