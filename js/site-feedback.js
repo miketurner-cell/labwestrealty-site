@@ -76,7 +76,9 @@
       '@media(max-width:1023px){.tsf-tab{bottom:calc(56px + 12px + env(safe-area-inset-bottom,0px));}' +
         '.tsf-card{left:8px;right:8px;width:auto;max-width:none;bottom:calc(131px + env(safe-area-inset-bottom,0px));max-height:calc(100vh - 180px);}}' +
       '@media(max-width:767px){.tsf-tab{left:18px;bottom:calc(56px + 15px + env(safe-area-inset-bottom,0px));width:44px;height:44px;min-height:44px;padding:0;justify-content:center;border-radius:50%;gap:0;}' +
-        '.tsf-tab .tsf-lbl{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}.tsf-tab svg{width:20px;height:20px;}}' +
+        '.tsf-tab .tsf-lbl{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}.tsf-tab svg{width:20px;height:20px;}' +
+        // D-1120-53 (2): where the page leaves less than the tab needs at the bottom (tab bottom 56+15, 44 high, 12 gap = 127px), mount() adds tsf-pad and the page ends clear of the tab; pages that already pad more keep their own.
+        'html body.tsf-pad,html body.tsf-pad.mab-active{padding-bottom:calc(127px + env(safe-area-inset-bottom,0px)) !important;}}' +
       '@media print{.tsf-tab,.tsf-card{display:none;}}';
     document.head.appendChild(st);
   }
@@ -109,6 +111,7 @@
       '<div class="tsf-thanks" hidden><h2 id="tsf-thanks-h" tabindex="-1">Feedback sent</h2><p>Thanks — we read every note.</p>' +
         '<div class="tsf-followup" data-feedback-followup hidden></div></div>');
     document.body.appendChild(tab);
+    try { if (window.matchMedia('(max-width:767px)').matches && parseFloat(getComputedStyle(document.body).paddingBottom) < 127) document.body.classList.add('tsf-pad'); } catch (e) { /* the tab is optional */ }
     document.body.appendChild(card);
 
     var form = card.querySelector('.tsf-form'), thanks = card.querySelector('.tsf-thanks');
