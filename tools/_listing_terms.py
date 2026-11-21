@@ -243,7 +243,7 @@ def heartbeat(counts):
 #                 not closed)
 # The page carries the key as data-status and the plain label; the badge
 # styling and any explanation sentence are the redesign session's.
-STATUS_LABELS = {"available": "Available", "conditional": "Conditional", "pending": "Pending"}
+STATUS_LABELS = {"available": "Available", "conditional": "Conditional", "pending": "Firm"}  # D-1121-67: firm reads "Firm"
 _PENDINGISH_RE = re.compile(r"pending|under contract|conditional|stfrm|stcos", re.IGNORECASE)
 
 
