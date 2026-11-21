@@ -387,7 +387,7 @@
     var pending = String(l.status || "").indexOf("Pending") !== -1;
     var badges = "";
     if (dropPct != null) badges += '<span class="fav-badge fav-badge--drop">Price drop &minus;' + dropPct + '%</span>';
-    if (pending) badges += '<span class="fav-badge fav-badge--pending">Pending</span>';
+    if (pending) badges += '<span class="fav-badge fav-badge--pending">' + (/under contract|stcos|\bsst\b|\bcond\.? pending\b/i.test(String(l.status || "")) ? 'Conditional' : 'Firm') + '</span>';  /* D-1121-67 */
     badges = badges ? '<div class="fav-card-badges">' + badges + '</div>' : "";
     var img = photo
       ? '<img src="' + esc(photo) + '" alt="' + esc(addr || "Saved listing") + '" loading="lazy" ' +

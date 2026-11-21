@@ -29,7 +29,7 @@ from pathlib import Path
 
 PENDING_RE = re.compile(r"pending|under contract|conditional|stfrm|stcos", re.IGNORECASE)
 
-PENDING_LABEL = "conditional/pending"
+PENDING_LABEL = "under offer"  # D-1121-67: conditional + firm together
 NL_TZ_NAME = "America/St_Johns"
 
 

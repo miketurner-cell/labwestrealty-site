@@ -3293,9 +3293,11 @@ def build_inquiry_card(listing: dict) -> str:
         _pd = (_prec["phone"] if _prec else "7092567999")
         _pname = he(_prec["name"] if _prec else "Mike Turner, Broker")
         _city = city_display_name(listing["city_slug"])
+        # D-1121-67: a firm listing says "firm"; "under contract" stays the conditional wording.
+        _head = "This one\'s firm" if _lr.status_key(listing.get("status")) == "pending" else "This one\'s under contract"
         return f"""
 <div class="lst-cta-card">
-  <h3>This one\'s under contract</h3>
+  <h3>{_head}</h3>
   <p style="margin:0 0 14px;color:#b9b9b9;font-size:.9rem;line-height:1.5;">An offer has been accepted, so it\'s no longer available for showings. If something like it is what you\'re after, we can show you what else is on the market in {he(_city)}.</p>
   <a href="{he(listing.get('_city_link') or f"../../listings/{listing['city_slug']}/")}" class="xx-btn xx-btn-primary" style="display:block;text-align:center;">{he(listing.get('_city_link_label') or f"See active homes in {_city}")}</a>
 </div>

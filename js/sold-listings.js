@@ -1156,8 +1156,8 @@ function turnerCalDate(s, opts) {
                                 : "";
     var ptype = r.psub || r.ptype || "";
     var badgeClass = isPending ? "sold-badge sold-badge-pending" : "sold-badge";
-    var badgeText  = isPending ? "Pending" : "Sold";
-    var dateLabel  = isPending ? "Pending since " : "Sold ";
+    var badgeText  = isPending ? "Firm" : "Sold";  // D-1121-67
+    var dateLabel  = isPending ? "Firm since " : "Sold ";
 
     var imgArea;
     if (r.photo) {
