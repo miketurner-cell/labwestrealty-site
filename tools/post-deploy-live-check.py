@@ -67,10 +67,10 @@ SITES = {
     "goosebay": {"domain": "goosebayrealestate.ca", "team": True, "listing_index": "/listings/",
                  "pages": [("home", "/"), ("listings index", "/listings/"), ("sold index", "/listings/sold/"),
                            ("market stats", "/pages/market-stats.html")],
-                 "agent_pages": [], "gates": SOLD_GATES, "agent_redirect": True},
+                 "agent_pages": [], "gates": SOLD_GATES, "agent_redirect": True, "redirect": True},
     "labwest": {"domain": "labwestrealty.com", "team": False, "listing_index": None,
                 "pages": [("home", "/"), ("market stats", "/market-stats.html")],
-                "agent_pages": [], "gates": [], "agent_redirect": True},
+                "agent_pages": [], "gates": [], "agent_redirect": True, "redirect": True},
     "hub": {"domain": "royallepageturner.com", "team": False, "hub": True, "listing_index": None,
             "pages": [("home", "/"), ("market stats", "/market-stats")],
             "agent_pages": [], "gates": [], "agent_redirect": True},
@@ -156,7 +156,9 @@ def http_get(url, follow=True, timeout=25, retries=3, sleep=time.sleep):
                 last = e
                 sleep(3)
                 continue
-            return e.code, (e.headers.get("Content-Type", "") if e.headers else ""), (e.read(2_000_000) if e.fp else b""), url
+            loc = e.headers.get("Location") if e.headers and 300 <= e.code < 400 else None  # 3xx with follow=False: final = absolute Location
+            return (e.code, (e.headers.get("Content-Type", "") if e.headers else ""), (e.read(2_000_000) if e.fp else b""),
+                    urllib.parse.urljoin(url, loc) if loc else url)
         except (urllib.error.URLError, TimeoutError, OSError) as e:
             last = e
             if i < retries - 1:
@@ -323,6 +325,103 @@ def check_agent_gates(rep, cfg, base, get):
             rep.warn("agent hop /agent/", f"HTTP {st}, expected a redirect to Gander")
 
 
+# --- redirect mode (rolled-up sites: every path 301s to the hub; page content is never sampled) -------------------
+def parse_redirect_rules(repo, wild=None):
+    """-> (exact {path: (to, status)}, catchall (to, status) | None) from <repo>/_redirects then netlify.toml [[redirects]], first rule wins.
+    If `wild` is a list, prefix rows `/dir/*` with a plain 3xx target are appended to it as (prefix, to, status). Only path-form `from` rows count (host-specific rows, :placeholders and other wildcards are skipped); `/*` is the catch-all."""
+    rows = []
+    rp = os.path.join(repo, "_redirects")
+    if os.path.exists(rp):
+        for ln in open(rp, encoding="utf-8", errors="replace"):
+            t = ln.split("#", 1)[0].split()
+            if len(t) >= 3 and re.fullmatch(r"\d{3}!?", t[2]) and t[0].startswith("/"):
+                rows.append((t[0], t[1], int(t[2].rstrip("!"))))
+    tp = os.path.join(repo, "netlify.toml")
+    if os.path.exists(tp):
+        for blk in open(tp, encoding="utf-8", errors="replace").read().split("[[redirects]]")[1:]:
+            blk = re.split(r"^\s*\[", blk, maxsplit=1, flags=re.M)[0]
+            f, t, st = (re.search(rf'^\s*{k}\s*=\s*"?([^"\n]+?)"?\s*$', blk, re.M) for k in ("from", "to", "status"))
+            if f and t and f.group(1).startswith("/"):
+                rows.append((f.group(1), t.group(1), int(st.group(1)) if st else 301))
+    exact, catch = {}, None
+    for frm, to, st in rows:
+        if frm == "/*":
+            catch = catch or (to, st)
+        elif "*" not in frm and ":" not in frm:
+            exact.setdefault(frm, (to, st))
+        elif wild is not None and frm.endswith("/*") and "*" not in frm[:-1] and ":" not in frm and ":splat" not in to and st in (301, 308):
+            wild.append((frm[:-1], to, st))
+    return exact, catch
+
+
+def _norm_loc(url):
+    """Absolute URL with the check's own cache-buster removed, for comparing a Location to its rule target."""
+    u = urllib.parse.urlsplit(url)
+    q = "&".join(x for x in u.query.split("&") if x and not x.startswith("_cb="))
+    return urllib.parse.urlunsplit((u.scheme, u.netloc.lower(), u.path, q, ""))
+
+
+def repo_page_paths(repo):
+    out = []
+    for root, dirs, files in os.walk(repo):
+        dirs[:] = [d for d in dirs if not d.startswith(".") and d not in ("node_modules", "tools", "netlify", "_research", "_ops", "fleet")]
+        for f in files:
+            if f.endswith(".html"):
+                rel = os.path.relpath(os.path.join(root, f), repo).replace(os.sep, "/")
+                out.append("/" + rel if f != "index.html" else "/" + rel[:-len("index.html")])
+    return out
+
+
+def check_redirects(rep, cfg, base, repo, get, k=40):
+    """Redirect mode: each sampled path must answer its rule's 3xx (301/308), unfollowed, with the Location its rule names."""
+    wild = []
+    exact, catch = parse_redirect_rules(repo, wild)
+
+    def rule_for(path):
+        return exact.get(path) or exact.get(path.rstrip("/")) or next(((t, st) for pre, t, st in wild if path.startswith(pre)), None) or catch
+    site_to = (catch or exact.get("/") or (None, 0))[0]
+    if not site_to:
+        rep.fail("redirect map", "no `/*` catch-all or `/` rule in _redirects/netlify.toml: cannot derive the site-level target")
+        return
+    redirs = {p: v for p, v in exact.items() if v[1] in (301, 308)}
+    cands = set(redirs) | {"/"} | {p for _, p in cfg["pages"]} | set(repo_page_paths(repo))
+    pick, unmapped = [], 0
+    for p in sample(sorted(cands), k):
+        rule = exact.get(p) or exact.get(p.rstrip("/")) or (catch if catch and catch[1] in (301, 308) else None)
+        if rule is None or rule[1] not in (301, 308):
+            unmapped += 1       # no redirect rule covers this path (e.g. a plain 404 by design): not asserted
+            continue
+        pick.append((p, rule))
+    if "/" not in dict(pick):
+        pick.insert(0, ("/", exact.get("/") or catch or (site_to, 301)))
+    bad = 0
+    for p, (to, st) in pick:
+        s, ct, body, final = get(base + p, follow=False)
+        wants = [_norm_loc(urllib.parse.urljoin(base + p, to))]
+        for _ in range(3):   # a rule may point at a same-site path that has its own redirect (e.g. /property/x -> /property/town/ -> hub): either hop is right
+            nxt = urllib.parse.urlsplit(wants[-1])
+            if nxt.netloc != urllib.parse.urlsplit(base).netloc:
+                break
+            r2 = rule_for(nxt.path)
+            if not r2 or r2[1] not in (301, 308) or nxt.path == p:
+                break
+            wants.append(_norm_loc(urllib.parse.urljoin(base + p, r2[0])))
+        want = wants[0]
+        if s not in (301, 308) or s != st:
+            bad += 1
+            rep.fail(f"redirect {p}", f"HTTP {s}, expected {st} to {want}")
+        elif _norm_loc(final) not in wants:
+            bad += 1
+            rep.fail(f"redirect {p}", f"HTTP {s} but Location is {_norm_loc(final)}, expected {' or '.join(wants)}")
+    n = len(pick)
+    detail = (f"{n - bad}/{n} sampled paths answer their rule's 301 to its mapped target ({len(redirs)} redirect rules read, "
+              f"site-level target {site_to}; {unmapped} sampled paths have no rule and were not asserted)")
+    if bad:
+        rep.fail("redirect mode", f"REDIRECT MODE RAN: {bad} of {n} sampled paths wrong ({len(redirs)} redirect rules read)")
+    else:
+        rep.passed("redirect mode", "REDIRECT MODE RAN: " + detail)
+
+
 def source_candidates(repo):
     tracked = git(repo, "ls-files").splitlines()
     top = [f for f in tracked if "/" not in f and (f.lower().endswith(SOURCE_EXT) or f in ("package.json", "package-lock.json")) and f != "netlify.toml"]
@@ -429,6 +528,10 @@ def check_deploy(rep, cfg, base, repo, get, wait, since_hours, head_ref, sleep=t
         return
     skipped_after = rows[:rows.index(build_commit)]
     bc = build_commit["sha"]
+    if cfg.get("redirect"):   # rolled-up site: every path 301s, so served-file content can never match; the deploy record is the proof
+        rep.note("deployed commit", f"redirect mode: live content compare skipped (every path redirects); build commit {bc[:7]}, main head {head[:7]}")
+        api_deploy_record(rep, bc)
+        return
     files = [(st, p) for st, p in changed(repo, build_commit["parent"], bc) if is_served(p)] if build_commit["parent"] else []
     adds = [p for st, p in files if st in ("A", "M") and not any(fnmatch.fnmatch(p, g) for g in inc)]   # included_files = gated function data
     if not adds:
@@ -651,6 +754,51 @@ def self_test():
         chk("a dotfile path (images/listings/1/.meta.json) is never a served-file probe; a normal asset still is",
             not is_served("images/listings/1/.meta.json") and not is_served(".well-known/x.json") and is_served("images/listings/1/a.json"))
         chk("every site config has a domain and pages", all(c["domain"] and c["pages"] for c in SITES.values()))
+        # redirect mode (rolled-up sites)
+        rd = os.path.join(d, "redir")
+        os.makedirs(rd)
+        open(os.path.join(rd, "_redirects"), "w").write(
+            "# c\n/budget/  https://hub.test/pages/b  301!\n/old  /new  308\nhttps://www.x.test/*  https://x.test/:splat  301!\n"
+            "/l/*  /.netlify/functions/s/:splat  200\n/  https://hub.test/home/  301!\n/*  https://hub.test/pages/all  301!\n")
+        ex, ca = parse_redirect_rules(rd)
+        chk("redirect rules parse: exact rows, catch-all, no host/wildcard rows",
+            ex == {"/budget/": ("https://hub.test/pages/b", 301), "/old": ("/new", 308), "/": ("https://hub.test/home/", 301)}
+            and ca == ("https://hub.test/pages/all", 301))
+        rcfg = {"key": "goosebay", "pages": [("home", "/")]}
+
+        def rget(table):
+            return lambda url, follow=True: table.get(urllib.parse.urlparse(url).path, (404, "text/html", b"nf", url))
+        good = {"/": (301, "", b"", "https://hub.test/home/?_cb=1"), "/budget/": (301, "", b"", "https://hub.test/pages/b?_cb=2"),
+                "/old": (308, "", b"", "https://x.test/new")}
+        rr = Report()
+        check_redirects(rr, rcfg, "https://x.test", rd, rget(good))
+        chk("redirect mode: right 301/308 + Location (cache-buster ignored) passes and says it ran with a count",
+            rr.fails == 0 and any("REDIRECT MODE RAN: 3/" in ln for ln in rr.lines))
+        rr = Report()
+        check_redirects(rr, rcfg, "https://x.test", rd, rget({**good, "/budget/": (301, "", b"", "https://hub.test/pages/WRONG")}))
+        chk("redirect mode: a wrong Location is a FAIL", rr.fails >= 1 and any("WRONG" in ln for ln in rr.lines))
+        rr = Report()
+        check_redirects(rr, rcfg, "https://x.test", rd, rget({**good, "/budget/": (200, "text/html", b"page", "https://x.test/budget/")}))
+        chk("redirect mode: a 200 page (no redirect) is a FAIL", rr.fails >= 1)
+        rr = Report()
+        check_redirects(rr, rcfg, "https://x.test", rd, rget({**good, "/old": (404, "", b"", "https://x.test/old")}))
+        chk("redirect mode: a missing redirect (404) is a FAIL", rr.fails >= 1)
+        rr = Report()
+        check_redirects(rr, rcfg, "https://x.test", rd, rget({**good, "/old": (301, "", b"", "https://x.test/new")}))
+        chk("redirect mode: 301 where the rule says 308 is a FAIL", rr.fails >= 1)
+        os.makedirs(os.path.join(d, "empty"))
+        rr = Report()
+        check_redirects(rr, rcfg, "https://x.test", os.path.join(d, "empty"), rget(good))
+        open(os.path.join(rd, "_redirects"), "a").write("/chain  /hop/  301\n/hop/  https://hub.test/end/  301!\n")
+        r2 = Report()
+        check_redirects(r2, rcfg, "https://x.test", rd, rget({**good, "/hop/": (301, "", b"", "https://hub.test/end/"), "/chain": (301, "", b"", "https://hub.test/end/")}))
+        chk("redirect mode: a rule that points at a same-site path with its own redirect accepts the final hub hop", r2.fails == 0)
+        r2 = Report()
+        check_redirects(r2, rcfg, "https://x.test", rd, rget({**good, "/hop/": (301, "", b"", "https://hub.test/end/"), "/chain": (301, "", b"", "https://hub.test/elsewhere/")}))
+        chk("redirect mode: a chained rule landing somewhere else is a FAIL", r2.fails >= 1)
+        chk("redirect mode: no rules at all fails loud, never a silent green", rr.fails == 1)
+        chk("goosebay and labwest run in redirect mode; the other sites do not",
+            [k for k, c in SITES.items() if c.get("redirect")] == ["goosebay", "labwest"])
     finally:
         shutil.rmtree(d, ignore_errors=True)
     return 0 if ok else 1
@@ -673,11 +821,16 @@ def main(argv=None):
     base, repo = "https://" + cfg["domain"], os.path.abspath(a.repo_dir)
     print(f"post-deploy live check (D-1021-07): {cfg['domain']} signed out, cache-busted, {time.strftime('%Y-%m-%d %H:%M:%SZ', time.gmtime())}", flush=True)
     try:
-        fetched = check_pages(rep, cfg, base, http_get)
-        check_listing(rep, cfg, base, fetched, http_get)
-        check_agent_gates(rep, cfg, base, http_get)
-        check_source_paths(rep, cfg, base, repo, http_get)
-        check_gone_paths(rep, cfg, base, repo, http_get)
+        if cfg.get("redirect"):
+            print("REDIRECT MODE: rolled-up site, page/listing/agent/source content checks replaced by unfollowed 301 + Location checks", flush=True)
+            check_redirects(rep, cfg, base, repo, http_get)
+            check_gone_paths(rep, cfg, base, repo, http_get)
+        else:
+            fetched = check_pages(rep, cfg, base, http_get)
+            check_listing(rep, cfg, base, fetched, http_get)
+            check_agent_gates(rep, cfg, base, http_get)
+            check_source_paths(rep, cfg, base, repo, http_get)
+            check_gone_paths(rep, cfg, base, repo, http_get)
         check_deploy(rep, cfg, base, repo, http_get, a.wait, a.since_hours, a.head)
     except Exception as e:  # noqa: BLE001 -- fail loud, never a silent green (always-on #7)
         rep.fail("check crashed", f"{type(e).__name__}: {str(e)[:200]}")
